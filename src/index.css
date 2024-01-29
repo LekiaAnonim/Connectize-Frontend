@@ -5,9 +5,60 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  border-radius: 10px;
+  background: #EEE;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+:root{
+  --font-drk-600: #242424;
+  --gold: #F1C644;
+  --grey: #828282;
+  --light-grey: #E5E5E5;
+  --mid-grey: #373737;
+}
+
+.page-container{
+  display: flex;
+}
+.feed-page-container{
+  margin-top: 20px;
+}
+
+.feed-page-container .css-hip9hq-MuiPaper-root-MuiAppBar-root {
+  
+  box-shadow: none !important;
+  background-color: #ffffff00 !important;
+  color: #000;
+}
+.header-text{
+  color: #000;
+  font-size: 30px !important;
+  font-weight: 600 !important;
+  text-transform: capitalize;
+}
+.header-search{
+  width: 358px !important;
+  flex-shrink: 0;
+  border-radius: 100px !important;
+  background: #FFF !important;
+}
+.btn-primary{
+  display: flex;
+  padding: 5px 34px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px !important;
+  background: var(--gold) !important;
+  color: #000 !important;
+  text-transform: capitalize !important;
 }

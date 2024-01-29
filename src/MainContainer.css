@@ -1,0 +1,99 @@
+.avatar-input{
+    display: flex;
+    align-items: center;
+}
+
+.create-feed-container .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+    border-style: none;
+}
+.create-feed-container .media{
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.create-feed-container .media-post{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* border: solid; */
+    margin-top: 30px;
+}
+
+.create-feed-container .post-btn{
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+.create-feed-container{
+    border-radius: 10px;
+    background: var(--white, #FFF);
+    box-shadow: 5px 10px 10px 0px rgba(0, 0, 0, 0.05);
+    padding: 12px 30px 30px 30px;
+    margin-top: 30px;
+}
+.recommended-product-container .product-react{
+    display: flex;
+    align-items: center;
+    gap: 19px;
+}
+.recommended-product-container .avatar{
+    width: 28.9px;
+    height: 28.9px;
+    
+}
+
+.recommended-product-container .product-image-title{
+    display: flex;
+    align-items: flex-start;
+}
+.recommended-product-container .product-image-title img{
+    max-width: 217.266px;
+    max-height: 168px;
+    border-radius: 10px;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.recommended-product-container{
+    display: flex;
+    max-width: 793px;
+    padding: 28px 47px;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100% !important;
+    border-radius: 10px;
+    border: 1px solid #F9F9F9;
+    background: #FFF;
+    box-shadow: 0px 5px 10px 0px rgba(189, 189, 189, 0.10);
+    margin-top: 36px;
+    margin-bottom: 36px;
+}
+.recommended-product-container h3{
+    color: #000;
+    font-size: 25px;
+    font-weight: 600;
+    text-transform: capitalize;
+    margin-bottom: 30px;
+    
+}
+
+.recommended-product-container h4{
+    color: var(--font-drk-600);
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 21px;
+}
+
+.recommended-product-container .product-people{
+    float: left;
+    
+}
+.recommended-product-container .product-react{
+    float: right;
+    margin-top: -60px;
+}
+.product-image-title-react{
+    
+    width: 100% !important;
+}
