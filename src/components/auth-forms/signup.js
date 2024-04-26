@@ -10,14 +10,14 @@ import {Link} from "react-router-dom"
 function Signup() {
   return (
     <>
-    <div className='d-flex bg-dark'>
+    <div className='row'>
         <div className='d-flex bg-white row' 
         style={{width:"80%", marginLeft:"10%",paddingLeft:"5%"}}>
         <div className='col-md-6'>
             <Navbar expand="md" className="bg-body-white">
             <Container>
                 <Navbar.Brand href="#home">
-                    <img src='/images/logo.png'style={{height:"50px"}} alt='logo'/>
+                    <img src='/images/logo.png'style={{height:"60px"}} alt='logo'/>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
@@ -47,19 +47,19 @@ function Signup() {
                 <div>
                     <h1 style={{marginTop:"10%"}}>Create new account</h1><br/>
                     <label>Company email</label><br/><br/>
-                    <input type='text' className='form-control w-75' placeholder='Example@gmail.com' required/><br/>
+                    <input type='text' className='form-control w-75' placeholder='Company@example.com' required/><br/>
                     <label>Password</label><br/><br/>
                     <input type='password' className='form-control w-75'  placeholder='**********' required /><br/>
                     <label>Confirm Password</label><br/><br/>
                     <input type='password' className='form-control w-75' placeholder='**********' required/><br/>
                     <input type='checkbox' /> I agree to <a><b>Terms and Condition</b></a><br/><br/>
-                    <button className='btn btn-dark w-75 rounded-pill'>Sign up</button><br/><br/>
-                    {/* Don't have an account <a><b>Sign up</b></a> */}
+                    <Link to={"/successpage"} className='btn btn-dark w-75 rounded-pill'>Sign up</Link><br/><br/>
+                    <div>Don't have an account <a href='#' className='text-black'><b>Sign up</b></a></div>
                 </div>
             </form>
         </div>
         <div className='ps-4 col-md-6 text-white'>
-            <img src="./images/signup-image.png" className='w-100' alt='pics' />
+            <img src="./images/signup-image.png" className='w-100 h-100' alt='pics' />
             <div className='d-flex' style={{marginTop:"-30%",marginLeft:"10%"}}>
                 <h2 >Already have an <br/> account?</h2> 
                 <Link to="/login" className='btn btn-warning rounded-pill h-25 w-25 ms-4'
