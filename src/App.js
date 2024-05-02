@@ -16,6 +16,11 @@ import SuccessPage from './components/auth-forms/successpage';
 import Overview from './components/profile/overview';
 import CompanyBioOne from './components/profile/companyBioOne';
 import CompanyBioTwo from './components/profile/companyBioTwo';
+import CompanyBioThree from './components/profile/companyBioThree';
+import CompanyBioFour from './components/profile/companyBioFour';
+import Services from './pages/service/service';
+import ServiceOverView from './pages/service/serviceOverview';
+import ServiceAdmin from './pages/service/serviceAdmin';
 
 function App() {
   return (
@@ -34,7 +39,11 @@ function App() {
           <Route path='overview' element={<Overview />}/>
           <Route path='bioone' element={<CompanyBioOne />}/>
           <Route path='biotwo' element={<CompanyBioTwo />}/>
-          {/* <Route path='bioone' element={<CompanyBioOne />}/> */}
+          <Route path='biothree' element={<CompanyBioThree />}/>
+          <Route path='biofour' element={<CompanyBioFour />}/>
+          <Route path='service' element={<Services/>}/>
+          <Route path='serviceoverview' element={<ServiceOverView/>}/>
+          <Route path='serviceadmin' element={<ServiceAdmin/>}/>
           <Route path='*' element={<NoPage />} />
         </Route>
       </Routes>
