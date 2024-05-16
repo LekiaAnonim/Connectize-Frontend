@@ -21,6 +21,9 @@ import CompanyBioFour from './components/profile/companyBioFour';
 import Services from './pages/service/service';
 import ServiceOverView from './pages/service/serviceOverview';
 import ServiceAdmin from './pages/service/serviceAdmin';
+import Market from './pages/market/market';
+import Product from './pages/market/product';
+import Analysis from './pages/market/analysis';
 
 function App() {
   return (
@@ -44,6 +47,9 @@ function App() {
           <Route path='service' element={<Services/>}/>
           <Route path='serviceoverview' element={<ServiceOverView/>}/>
           <Route path='serviceadmin' element={<ServiceAdmin/>}/>
+          <Route path='market' element={<Market/>}/>
+          <Route path='product' element={<Product/>}/>
+          <Route path='analysis' element={<Analysis/>}/>
           <Route path='*' element={<NoPage />} />
         </Route>
       </Routes>

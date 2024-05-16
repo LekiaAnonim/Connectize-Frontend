@@ -4,7 +4,6 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import React from 'react'
 import { Home, Message,Notification,Chartbar,Building,
         Usergroup,Setting} from '../../../icon';
@@ -15,7 +14,7 @@ function Navigationbar() {
         <Navbar expand="md" className="bg-body-white">
             <Container>
                 <Navbar.Brand href="#home">
-                    <img src='/images/logo.png' style={{height:"60px"}} alt='logo'/>
+                    <img src='/images/logo.png' style={{width:"60px"}} alt='logo'/>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
@@ -40,7 +39,7 @@ function Navigationbar() {
                     <Nav.Link href="#market"><Setting/></Nav.Link>
                 </Nav>
                 <Nav className='ms-auto'>
-                    <img src='/images/passportimg.png' alt='#' className='w-75 h-75'/>
+                    <img src='/images/passportimg.png' alt='#' style={{width:"50%"}}/>
                 </Nav>
                 </Navbar.Collapse>
             </Container>

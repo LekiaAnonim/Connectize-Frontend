@@ -4,7 +4,7 @@ import { Building,CircleFill,Dollar,GreaterThan,History,Notification, Squares, }
 function Sidebar() {
   return (
     <div className='mb-5'>
-        <div className='bg-white ps-4 pt-4 pb-5 shadow rounded'>
+        <div className=' bg-white ps-4 pt-4 pb-5 shadow rounded'>
             <h3>Services</h3>
             <div className='d-flex'>
                 <p><Building/></p>
@@ -22,7 +22,7 @@ function Sidebar() {
                 <p><History/></p>
                 <p className='ms-2'>History</p>
             </div>
-            <button className='rounded-pill bg-warning border border-none py-1 mb-3 w-75'>List new product | <GreaterThan/></button>
+            <button className='rounded-pill bg-dark text-white px-2 border border-none py-1 mb-3'>List new product | <GreaterThan/></button>
             <div className='d-flex'>
                 <p><Squares/></p>
                 <p className='ms-2'>Categories</p>
