@@ -5,13 +5,13 @@ function ServiceMain() {
   return (
     <div>
         <div className='bg-white p-3 rounded shadow'>
-            <button className='rounded-pill bg-warning py-2 px-4 border border-none'>Featured</button>
+            <button className='rounded-pill bg-warning py-2 px-4 border border-none mb-3'>Featured</button>
             <button className='rounded-pill py-2 px-4 bg-white mx-5 border border-none'>Most Recent</button>
             <button className='rounded-pill p-2 px-4 bg-white border border-none'>Best Matches</button>
         </div>
         <div className='bg-white p-3 my-4'>
             <div className='row '>
-                <div className='col-6'>
+                <div className='col-sm-12 col-md-6 mb-4'>
                     <div className='mx-2 rounded p-3' style={{background:"#f0d77f"}}>
                         <div className='d-flex '>
                             <h6>Remote Monitoring and <br/> Control</h6>
@@ -26,7 +26,7 @@ function ServiceMain() {
                         </div>
                     </div>
                 </div>
-                <div className='col-6'>
+                <div className='col-sm-12 col-md-6'>
                     <div className='mx-2 rounded p-3' style={{background:"#faf9f7"}}>
                         <div className='d-flex '>
                             <h6>Remote Monitoring and <br/> Control</h6>
@@ -43,7 +43,7 @@ function ServiceMain() {
                 </div>
             </div>
             <div className='row my-4'>
-                <div className='col-6'>
+                <div className='col-sm-12 col-md-6 mb-4'>
                     <div className='mx-2 rounded p-3' style={{background:"#faf9f7"}}>
                         <div className='d-flex '>
                             <h6>Remote Monitoring and <br/> Control</h6>
@@ -58,7 +58,7 @@ function ServiceMain() {
                         </div>
                     </div>
                 </div>
-                <div className='col-6'>
+                <div className='col-sm-12 col-md-6'>
                     <div className='mx-2 rounded p-3' style={{background:"#faf9f7"}}>
                         <div className='d-flex '>
                             <h6>Remote Monitoring and <br/> Control</h6>
@@ -75,7 +75,7 @@ function ServiceMain() {
                 </div>
             </div>
             <div className='row'>
-                <div className='col-6'>
+                <div className='col-sm-12 col-md-6 mb-4'>
                     <div className='mx-2 rounded p-3' style={{background:"#faf9f7"}}>
                         <div className='d-flex '>
                             <h6>Remote Monitoring and <br/> Control</h6>
@@ -90,7 +90,7 @@ function ServiceMain() {
                         </div>
                     </div>
                 </div>
-                <div className='col-6'>
+                <div className='col-sm-12 col-md-6'>
                     <div className='mx-2 rounded p-3' style={{background:"#faf9f7"}}>
                         <div className='d-flex '>
                             <h6>Remote Monitoring and <br/> Control</h6>

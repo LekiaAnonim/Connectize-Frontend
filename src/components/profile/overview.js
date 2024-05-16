@@ -1,7 +1,7 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
+// import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import {Link} from "react-router-dom"
 import { GreaterThan,ArrowLeft,ArrowDown } from '../../icon';
@@ -21,7 +21,7 @@ function Overview() {
                 <p className='text-black-50'>please make your details are correct</p>
             </div>
             <div className='d-flex'>
-                <img src='/images/passportFour.png' />
+                <img src='/images/passportFour.png' alt='#' />
                 <div className='ms-3' style={{marginTop:"5%"}}>
                     <h4>Salahudeen Danesi</h4>
                     <p className='text-black-50'>Abuja, Nigeria</p>

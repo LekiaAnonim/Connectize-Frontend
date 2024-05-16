@@ -31,7 +31,7 @@ function Home() {
                 <p className='text-black-50'>Please fill in the details below</p>
             </div>
             <div>
-                <img src='/images/pasportTwo.png' className='py-4' style={{width:"10%"}} />
+                <img src='/images/pasportTwo.png' alt='#' className='py-4' style={{width:"10%"}} />
             </div>
             <form>
                 <div className='row form-group'>
