@@ -1,9 +1,9 @@
 import React from "react";
-import './index.css';
 import { Leftsidebar } from "./Leftsidebar";
 import PrimarySearchAppBar from "./Header";
 import { Rightsidebar } from "./Rightsidebar";
 import MainContainer from "./MainContainer";
+import './index.css';
 
 export default function FeedPage() {
     return(
