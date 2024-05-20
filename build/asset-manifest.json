@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Connectize-Frontend/static/css/main.f0c21092.css",
+    "main.js": "/Connectize-Frontend/static/js/main.bd0882e6.js",
+    "static/js/488.f75a9403.chunk.js": "/Connectize-Frontend/static/js/488.f75a9403.chunk.js",
+    "index.html": "/Connectize-Frontend/index.html",
+    "main.f0c21092.css.map": "/Connectize-Frontend/static/css/main.f0c21092.css.map",
+    "main.bd0882e6.js.map": "/Connectize-Frontend/static/js/main.bd0882e6.js.map",
+    "488.f75a9403.chunk.js.map": "/Connectize-Frontend/static/js/488.f75a9403.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f0c21092.css",
+    "static/js/main.bd0882e6.js"
+  ]
+}
