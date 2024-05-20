@@ -1,7 +1,7 @@
 {
   "name": "connectize",
   "version": "0.1.0",
-  "homepage": "https://gitname.github.io/Connectize-Frontend",
+  "homepage": "https://lekiaanonim.github.io/Connectize-Frontend",
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
