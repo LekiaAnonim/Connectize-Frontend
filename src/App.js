@@ -1,7 +1,8 @@
 // import logo from './logo.svg';
 // import './App.css';
 // import {Leftsidebar} from './Leftsidebar'
-import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 import FeedPage from './FeedPage';
 import Signup from './components/auth-forms/signup';

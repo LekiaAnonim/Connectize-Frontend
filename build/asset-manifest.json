@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Connectize-Frontend/static/css/main.f0c21092.css",
-    "main.js": "/Connectize-Frontend/static/js/main.bd0882e6.js",
-    "static/js/488.f75a9403.chunk.js": "/Connectize-Frontend/static/js/488.f75a9403.chunk.js",
-    "index.html": "/Connectize-Frontend/index.html",
-    "main.f0c21092.css.map": "/Connectize-Frontend/static/css/main.f0c21092.css.map",
-    "main.bd0882e6.js.map": "/Connectize-Frontend/static/js/main.bd0882e6.js.map",
-    "488.f75a9403.chunk.js.map": "/Connectize-Frontend/static/js/488.f75a9403.chunk.js.map"
+    "main.css": "/static/css/main.d1ca93e1.css",
+    "main.js": "/static/js/main.1060d7f4.js",
+    "static/js/488.f75a9403.chunk.js": "/static/js/488.f75a9403.chunk.js",
+    "index.html": "/index.html",
+    "main.d1ca93e1.css.map": "/static/css/main.d1ca93e1.css.map",
+    "main.1060d7f4.js.map": "/static/js/main.1060d7f4.js.map",
+    "488.f75a9403.chunk.js.map": "/static/js/488.f75a9403.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f0c21092.css",
-    "static/js/main.bd0882e6.js"
+    "static/css/main.d1ca93e1.css",
+    "static/js/main.1060d7f4.js"
   ]
 }
