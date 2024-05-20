@@ -1,7 +1,7 @@
 // import logo from './logo.svg';
 // import './App.css';
 // import {Leftsidebar} from './Leftsidebar'
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 // import './App.css';
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 import FeedPage from './FeedPage';
@@ -28,6 +28,10 @@ import Analysis from './pages/market/analysis';
 
 function App() {
   return (
+    <>
+    <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"></link>
+    </head>
     <BrowserRouter>
       <Routes>
         <Route>
@@ -55,6 +59,7 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    </>
   );
 }
 
