@@ -1,0 +1,15 @@
+@media (max-width: 576.98px){
+    .rounded-pill{
+      width: 10%;
+    }
+    .passport{
+        width: 10px;
+        margin-left: 35px;
+    }
+    .message{
+        margin-left: -35%;
+    }
+    .sidebar{
+        width: 50%;
+    }
+  }

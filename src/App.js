@@ -1,8 +1,4 @@
-// import logo from './logo.svg';
-// import './App.css';
-// import {Leftsidebar} from './Leftsidebar'
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import './App.css';
+//import 'bootstrap/dist/css/bootstrap.min.css'
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 import FeedPage from './FeedPage';
 import Signup from './components/auth-forms/signup';
@@ -25,6 +21,7 @@ import ServiceAdmin from './pages/service/serviceAdmin';
 import Market from './pages/market/market';
 import Product from './pages/market/product';
 import Analysis from './pages/market/analysis';
+import Listing from './pages/market/listing';
 
 function App() {
   return (
@@ -55,6 +52,7 @@ function App() {
           <Route path='market' element={<Market/>}/>
           <Route path='product' element={<Product/>}/>
           <Route path='analysis' element={<Analysis/>}/>
+          <Route path='listing' element={<Listing/>}/>
           <Route path='*' element={<NoPage />} />
         </Route>
       </Routes>
