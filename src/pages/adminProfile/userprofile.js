@@ -1,10 +1,11 @@
 import React from 'react'
 import Navigationbar from '../../components/admin/services/navbar'
 import Sidebar from '../../components/admin/markets/sidebar'
-import NewListing from '../../components/admin/listing/newListing'
+import Trends from '../../components/admin/analysis/trends'
+import Chart from '../../components/admin/analysis/chart'
 
 
-export default function Listing() {
+export default function Analysis() {
   return (
     <div style={{background:"#faf9f7"}} >
         <div className='container'>
@@ -14,7 +15,8 @@ export default function Listing() {
                     <Sidebar/>
                 </div>
                 <div className='col-9'>
-                    <NewListing/>
+                    <Trends/>
+                    <Chart/>
                 </div>
             </div>
         </div>
