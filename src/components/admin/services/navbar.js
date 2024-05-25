@@ -10,11 +10,11 @@ import './navbar.css'
 
 function Navigationbar() {
   return (
-    <div>
+    <div className='small'>
         <Navbar expand="md" className="bg-body-white">
             <Container>
                 <Navbar.Brand href="#home">
-                    <img src='/images/logo.png' style={{width:"60%"}} alt='logo'/>
+                    <img src='/images/logo.png' style={{width:"60px"}} alt='logo'/>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
@@ -25,7 +25,7 @@ function Navigationbar() {
                         <Form.Control
                         type="search"
                         placeholder="Search anything"
-                        className="rounded-pill text-black-50"
+                        className="rounded-pill text-black-50 search"
                         style={{width:"300px"}}
                         aria-label="Search"
                         />
