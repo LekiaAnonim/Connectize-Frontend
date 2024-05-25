@@ -1,7 +1,4 @@
 @media (max-width: 576.98px){
-    .rounded-pill{
-      width: 10%;
-    }
     .passport{
         width: 10px;
         margin-left: 35px;
@@ -10,6 +7,12 @@
         margin-left: -35%;
     }
     .sidebar{
-        width: 50%;
+        width: 60%;
+    }
+    .small{
+        width: 40%;
+    }
+    .search{
+        width: 160px !important;
     }
   }

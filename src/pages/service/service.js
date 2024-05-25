@@ -9,7 +9,7 @@ export default function Services() {
         <div className='container'>
             <Navigationbar/>
             <div className='row'>
-                <div className='col-md-3 col-sm-6'>
+                <div className='col-md-3 col-sm-5'>
                     <Sidebar />
                 </div>
                 <div className='col-9'>
