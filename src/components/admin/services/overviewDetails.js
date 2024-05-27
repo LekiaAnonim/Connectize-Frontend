@@ -5,7 +5,7 @@ export default function OverviewDetails() {
   return (
     <div className='bg-white p-4 rounded pb-5'>
         <div className='d-flex align-items-center justify-content-around'>
-            <img src='images/BMWProfilePic.png'/>
+            <img src='images/bmwprofilepicture.png'/>
             <div>
                 <h5> Senior Process Engineer - Oil Refinery</h5>
                 <div className='my-2'>
