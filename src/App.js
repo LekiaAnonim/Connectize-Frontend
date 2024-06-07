@@ -22,6 +22,7 @@ import Market from './pages/market/market';
 import Product from './pages/market/product';
 import Analysis from './pages/market/analysis';
 import Listing from './pages/market/listing';
+import UserProfile from "./pages/userProfile/userProfile";
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
           <Route path='product' element={<Product/>}/>
           <Route path='analysis' element={<Analysis/>}/>
           <Route path='listing' element={<Listing/>}/>
+          <Route path='userprofile' element={<UserProfile/>}/>
           <Route path='*' element={<NoPage />} />
         </Route>
       </Routes>

@@ -7,11 +7,14 @@
         margin-left: -35%;
     }
     .sidebar{
-        width: 60%;
+        width: 180px;
     }
     .small{
         width: 40%;
     }
+    /* .navcon .navcontwo{
+        display: none;
+    } */
     .search{
         width: 160px !important;
     }

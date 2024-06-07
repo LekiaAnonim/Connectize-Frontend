@@ -11,8 +11,8 @@ function Login() {
     <>
     <div className='d-flex'>
         <div className='d-flex bg-white row' 
-        style={{width:"80%", marginLeft:"10%",paddingLeft:"5%",width:"1000px"}}>
-            <div className='col-md-6'>
+        style={{paddingLeft:"5%"}}>
+            <div className='col-md-7 pe-5'>
                 <Navbar expand="md" className="bg-body-white">
                 <Container>
                     <Navbar.Brand href="#home">
@@ -32,21 +32,23 @@ function Login() {
                 </Navbar>
 
                 
-                <form className='pe-20 mb-3'>
+                <form>
                     <div>
                         <h1 style={{marginTop:"10%"}}>Login to your account</h1><br/>
                         <label>Company email</label><br/><br/>
-                        <input type='text' className='form-control w-75'  placeholder='Company@example.com' /><br/>
+                        <input type='text' className='form-control w-100' style={{height:"50px"}}  placeholder='Company@example.com' /><br/>
                         <label>Password</label><br/><br/>
-                        <input type='password' className='form-control w-75'  placeholder='********' /><br/>
+                        <input type='password' className='form-control w-100' style={{height:"50px"}}  placeholder='********' /><br/>
                         <input type='checkbox' /> I agree to <a><b>Terms and Condition</b></a><br/><br/>
-                        <button className='btn btn-warning w-75 rounded-pill'>Login</button><br/><br/>
+                        <button className='btn btn-warning w-100 rounded-pill' style={{height:"50px"}}>Login</button><br/><br/>
                         Don't have an accout<Link to="/signup" className='text-dark ms-2'> <b>Signup</b></Link>
                     </div>
                 </form>
             </div>
-            <div className='ps-3 col-md-6 text-white'>
-                <img src="./images/signup-image.png" className='h-75' style={{width:"140%"}} alt='pics' />
+            <div className='col-md-5 text-white'>
+                <div className='w-100 '>
+                    <img src="./images/signup-image.png" className='#' style={{width:"162%", height:"650px"}} alt='pics' />
+                </div>
                 <div style={{marginTop:"-30%",marginLeft:"10%"}}>
                     <h2>
                         Don't have an account ?  

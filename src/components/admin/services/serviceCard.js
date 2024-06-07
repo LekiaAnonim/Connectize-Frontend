@@ -11,7 +11,7 @@ export default function ServiceCard({remote,control,tweet,image,westland,view,bo
             <p>{tweet} </p>
             <hr/>
             <div className='d-flex align-items-center'>
-                <img src={image} width={"50px"}/>
+                <img src={image} width={"50px"} alt='#'/>
                 <p className='ms-3'>{westland}</p>
                 <button className='rounded-pill ms-auto bg-warning w-25 px-2 py-1 border border-none'>{view}</button>
             </div>

@@ -23,7 +23,7 @@ function Sidebar() {
                 <p><History/></p>
                 <p className='ms-2'>History</p>
             </div>
-            <button className='rounded-pill bg-dark text-white px-2 border border-none py-1 mb-3 sidebar'>List new product | <GreaterThan/></button>
+            <button className='rounded-pill bg-dark text-white px-2 border border-none py-1 mb-3 sidebar'>List new product |<GreaterThan/></button>
             <div className='d-flex'>
                 <p><Squares/></p>
                 <p className='ms-2'>Categories</p>
