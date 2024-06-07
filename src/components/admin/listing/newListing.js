@@ -52,19 +52,6 @@ export default function NewListing() {
                             <option value="Los Angeles"/>
                             <option value="Chicago"/>
                     </datalist>   
-                        {/* <label for="exampleDataList" className="form-label">Choose category</label>
-                        <input className="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search..." style={{height:"50px",background:"#EEE"}}/>
-                        <div style={{marginLeft:"-25px",marginTop:"5%"}}>
-                            <ArrowDown  />
-                        </div>
-                        <datalist id="datalistOptions">
-                            <option value="San Francisco"/>
-                            <option value="New York"/>
-                            <option value="Seattle"/>
-                            <option value="Los Angeles"/>
-                            <option value="Chicago"/>
-                        </datalist> */}
-                       
                     
                 </div>
                 <div className='row'>

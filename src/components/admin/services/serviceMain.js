@@ -22,7 +22,7 @@ function ServiceMain() {
                         <p>This is a tweet. It can be long, or short. Depends on what you have to say. It can have some hashtags too. </p>
                         <hr/>
                         <div className='d-flex align-items-center'>
-                            <img src='images/bmwprofilepicture.png' width={"50px"}/>
+                            <img src='images/bmwprofilepicture.png' width={"50px"} alt='#'/>
                             <p className='ms-3'>West Land Oil</p>
                             <button className='rounded-pill ms-auto bg-warning w-25 px-2 py-1 border border-none'>View</button>
                         </div>

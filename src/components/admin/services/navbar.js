@@ -13,9 +13,11 @@ function Navigationbar() {
     <div className='small'>
         <Navbar expand="md" className="bg-body-white">
             <Container>
+        
                 <Navbar.Brand href="#home">
                     <img src='/images/logo.png' style={{width:"60px"}} alt='logo'/>
                 </Navbar.Brand>
+                
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ms-5">
@@ -42,6 +44,7 @@ function Navigationbar() {
                     <img src='/images/passportimg.png'className='passport' alt='#' style={{width:"40px"}}/>
                 </Nav>
                 </Navbar.Collapse>
+            
             </Container>
         </Navbar>
     </div>
