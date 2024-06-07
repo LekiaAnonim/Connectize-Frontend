@@ -50,7 +50,7 @@ export default function UserProfile() {
                         <p className='ms-auto'><MoreHorizIcon/></p>
                     </div>
                     <ProductCard
-                        image = "images/rectangle11.png"
+                        image = "images/Rectangle11.png"
                         image1 = "images/Ellipse1.png"
                         text = "Lorem ipsum dolor sit"
                         icon = {<MoreHorizIcon/>}
@@ -61,7 +61,7 @@ export default function UserProfile() {
                         connect ="connect"
                     />
                     <ProductCardTwo
-                        image = "images/rectangle12.png"
+                        image = "images/Rectangle12.png"
                         image1 = "images/Ellipse2.png"
                         text = "Lorem ipsum dolor sit"
                         icon = {<MoreHorizIcon/>}
@@ -74,7 +74,7 @@ export default function UserProfile() {
                         connect ="connect"
                     />
                     <ProductCardThree
-                        image = "images/rectangle13.png"
+                        image = "images/Rectangle13.png"
                         image1 = "images/Ellipse3.png"
                         text = "Lorem ipsum dolor sit"
                         icon = {<MoreHorizIcon/>}
