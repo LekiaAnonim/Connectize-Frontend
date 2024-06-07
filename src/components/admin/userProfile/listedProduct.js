@@ -33,30 +33,3 @@ export default function ProductCard({image,image1,text,icon,icon1,icon2,image2,i
     </>
   )
 }
-
-// let ImageTwo=({image2,image3})=>{
-//   return(
-//     <>
-//       <img src={image3} alt='#'/>
-//       <img src={image2} style={{marginLeft:"-5px"}} alt='#'/>
-//     </>
-//   )
-// }
-// let ImageFour=({image2,image3})=>{
-//   return(
-//     <>
-//       <img src={image3} alt='#'/>
-//       <img src={image2} style={{marginLeft:"-5px"}} alt='#'/>
-//       <img src={image4} style={{marginLeft:"-5px",width:"28px"}} alt='#'/>
-//       <img src={image5} style={{marginLeft:"-5px"}} alt='#'/>
-//     </>
-//   )
-// }
-// {let product = true;
-
-//   if(product === true){
-//     return <ImageTwo/>
-//   }else{
-//     return<ImageFour/>
-//   }
-// }

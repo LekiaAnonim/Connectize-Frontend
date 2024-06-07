@@ -70,7 +70,7 @@ function Summary() {
         <div>
             
         <ProductCard
-                        image = "images/rectangle11.png"
+                        image = "images/Rectangle11.png"
                         image1 = "images/Ellipse1.png"
                         text = "Lorem ipsum dolor sit"
                         icon = {<MoreHorizoneIcon/>}
@@ -84,7 +84,7 @@ function Summary() {
         <div className='mt-5'>
             
         <ProductCard
-                        image = "images/rectangle11.png"
+                        image = "images/Rectangle11.png"
                         image1 = "images/Ellipse1.png"
                         text = "Lorem ipsum dolor sit"
                         icon = {<MoreHorizoneIcon/>}
