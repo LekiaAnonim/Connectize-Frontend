@@ -1,6 +1,6 @@
 //import 'bootstrap/dist/css/bootstrap.min.css'
 import {BrowserRouter,Routes,Route} from "react-router-dom";
-import FeedPage from './FeedPage';
+import FeedPage from './pages/feedPages/feedPage';
 import Signup from './components/auth-forms/signup';
 import Login from './components/auth-forms/login';
 import NoPage from './components/NoPage';
@@ -22,7 +22,9 @@ import Market from './pages/market/market';
 import Product from './pages/market/product';
 import Analysis from './pages/market/analysis';
 import Listing from './pages/market/listing';
-import UserProfile from "./pages/userProfile/userProfile";
+import UserProfile from "./pages/feedPages/userProfile";
+import AdminProfile from "./pages/feedPages/adminProfile";
+import NewsFeed from "./pages/feedPages/newsFeed";
 
 function App() {
   return (
@@ -33,7 +35,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route>
-          <Route index element={<FeedPage/>} />
+          <Route index element={<NewsFeed/>} />
           <Route path='signup' element={<Signup />} />
           <Route path='login' element={<Login />} />
           <Route path='successpage' element={<SuccessPage />} />
@@ -55,6 +57,8 @@ function App() {
           <Route path='analysis' element={<Analysis/>}/>
           <Route path='listing' element={<Listing/>}/>
           <Route path='userprofile' element={<UserProfile/>}/>
+          <Route path='adminprofile' element={<AdminProfile/>}/>
+          <Route path='feedpage' element={<FeedPage/>}/>
           <Route path='*' element={<NoPage />} />
         </Route>
       </Routes>

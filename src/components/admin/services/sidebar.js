@@ -1,6 +1,7 @@
 import React from 'react'
 import { Building,CircleFill,Dollar,GreaterThan,History,Notification, Squares, } from '../../../icon'
 import './navbar.css'
+import { Link } from 'react-router-dom'
 
 function Sidebar() {
   return (
@@ -9,7 +10,7 @@ function Sidebar() {
             <h3>Services</h3>
             <div className='d-flex'>
                 <p><Building/></p>
-                <p className='ms-2'>Market</p>
+                <Link to={"/market"} className='text-decoration-none text-black'><p className='ms-2'>Market</p></Link>
             </div>
             <div className='d-flex'>
                 <p><Notification/></p>
