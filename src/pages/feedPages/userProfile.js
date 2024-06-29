@@ -3,12 +3,12 @@ import Navigationbar from '../../components/admin/services/navbar'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ShareIcon from '@mui/icons-material/Share';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ProductCard from '../../components/admin/userProfile/listedProduct';
-import ProductCardTwo from '../../components/admin/userProfile/listedProductTwo';
-import ProductCardThree from '../../components/admin/userProfile/listedProductThree';
-import Reviews from '../../components/admin/userProfile/reviews';
-import Summary from '../../components/admin/userProfile/summary';
-import Suggested from '../../components/admin/userProfile/suggested';
+import ProductCard from '../../components/admin/feeds/listedProduct';
+import ProductCardTwo from '../../components/admin/feeds/listedProductTwo';
+import ProductCardThree from '../../components/admin/feeds/listedProductThree';
+import Reviews from '../../components/admin/feeds/reviews';
+import Summary from '../../components/admin/feeds/summary';
+import Suggested from '../../components/admin/feeds/suggested';
 
 
 export default function UserProfile() {

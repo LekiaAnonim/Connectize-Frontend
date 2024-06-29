@@ -1,9 +1,11 @@
 import React from 'react'
 
-export default function ServiceCard({remote,control,tweet,image,westland,view,bookmark}) {
+export default function ServiceCard(props) {
+  let {remote,control,tweet,image,westland,view,bookmark,bg} = props
   return (
     <div>
-        <div className='mx-2 rounded p-3' style={{background:"#faf9f7"}}>
+        {/* <div className='mx-2 rounded p-3' style={{background:"#faf9f7"}}> */}
+        <div className='mx-2 rounded p-3' style={bg}>
             <div className='d-flex '>
                 <h6>{remote}<br/>{control}</h6>
                 <div className='ms-auto'>{bookmark}</div>

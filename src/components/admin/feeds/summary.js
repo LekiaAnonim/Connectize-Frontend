@@ -56,7 +56,7 @@ function Summary() {
             <button className='py-2 px-4 border border-none rounded-pill'>Reviews</button>
         </div>
         <h3 className='py-5'>Activities</h3>
-        <div className='shadow p-5 rounded mb-5'>
+        <div className='p-5 rounded mb-5'style={{boxShadow:"0px 7px 1px 0px #FFC96F"}}>
             <h4>What is happening</h4>
             <hr />
             <div className='d-flex gap-2'>
