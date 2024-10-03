@@ -1,9 +1,9 @@
 import React from 'react'
 import Navigationbar from '../../components/admin/services/navbar'
-import Sidebar from '../../components/admin/markets/sidebar'
+import SidebarMenu from '../../components/admin/markets/sidebar'
 import Productdetails from '../../components/admin/products/productdetails'
 import NewProducts from '../../components/admin/products/newProducts'
-
+import { Sidebar} from "@asphalt-react/sidebar"
 
 
 export default function Product() {
@@ -13,7 +13,9 @@ export default function Product() {
             <Navigationbar/>
             <div className='row'>
                 <div className='col-md-3 col-sm-6'>
-                    <Sidebar/>
+                    <Sidebar>
+                        <SidebarMenu/>
+                    </Sidebar>
                 </div>
                 <div className='col-9'>
                     <Productdetails/>

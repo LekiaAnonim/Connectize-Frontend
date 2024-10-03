@@ -24,9 +24,10 @@ function FeedSlider() {
         }
       },
       {
-        breakpoint: 600,
+        //breakpoint: 600,
+        breakpoint:768,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 1,
           initialSlide: 2
         }
@@ -42,8 +43,8 @@ function FeedSlider() {
   };
   let Slide=()=>{
     return(
-      <>
-        <div className="me-3 card-body card" style={{background:"#faf9f7"}}>
+      <div className="ms-4">
+        <div className="card-body card" style={{background:"#faf9f7"}}>
             <div className="d-flex">
                 <h6>Remote Monitoring and<br/> Control</h6>
                 <div className="ms-auto"><Bookmark /></div>
@@ -67,7 +68,7 @@ function FeedSlider() {
             </div>
         </div>
         
-      </>
+      </div>
     )
   }
   return (

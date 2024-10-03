@@ -1,12 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 
 function Login() {
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const navigate = useNavigate('')
+
+    axios.defaults.withCredentials=true;
+    const handleSubmit=(e)=>{
+        e.preventDefault()
+        axios.post("https://connectize.co/api/auth/login/",{username,email, password})
+        .then(res=>{
+            if(res){
+                console.log(res)
+                alert('Login Succesfull')
+                navigate('/profile')
+                //return res.json()
+            }
+        })
+        .catch(err=>console.log(err))
+    }
   return (
     <>
     <div className='d-flex'>
@@ -16,7 +36,7 @@ function Login() {
                 <Navbar expand="md" className="bg-body-white">
                 <Container>
                     <Navbar.Brand href="#home">
-                        <img src='/images/logo.png' style={{height:"60px"}} alt='logo'/>
+                        <img src='/images/logo.png' style={{height:"60px"}} alt='company-logo'/>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
@@ -32,16 +52,33 @@ function Login() {
                 </Navbar>
 
                 
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div>
                         <h1 style={{marginTop:"10%"}}>Login to your account</h1><br/>
-                        <label>Company email</label><br/><br/>
-                        <input type='text' className='form-control w-100' style={{height:"50px"}}  placeholder='Company@example.com' /><br/>
-                        <label>Password</label><br/><br/>
-                        <input type='password' className='form-control w-100' style={{height:"50px"}}  placeholder='********' /><br/>
-                        <input type='checkbox' /> I agree to <a><b>Terms and Condition</b></a><br/><br/>
-                        <button className='btn btn-warning w-100 rounded-pill' style={{height:"50px"}}>Login</button><br/><br/>
-                        Don't have an accout<Link to="/signup" className='text-dark ms-2'> <b>Signup</b></Link>
+                        <div>
+                            <label>Username</label><br/><br/>
+                            <input type='email' className='form-control w-100' style={{height:"50px"}}  placeholder='Company@example.com'
+                            onChange={(e)=>setUsername(e.target.value)} />
+                        </div>
+                        <div>
+                            <label>Company email</label><br/><br/>
+                            <input type='email' className='form-control w-100' style={{height:"50px"}}  placeholder='Company@example.com'
+                            onChange={(e)=>setEmail(e.target.value)} />
+                        </div>
+                        <div>
+                            <label>Password</label><br/><br/>
+                            <input type='password' className='form-control w-100' style={{height:"50px"}}  placeholder='********' 
+                            onChange={(e)=>setPassword(e.target.value)}/>
+                        </div>
+                        <div>
+                            <input type='checkbox' /> I agree to <a><b>Terms and Condition</b></a>
+                        </div>
+                        <div>
+                            <button type='submit' className='btn btn-warning w-100 rounded-pill' style={{height:"50px"}}>Login</button>
+                        </div>
+                        <div>
+                            Don't have an accout<Link to="/signup" className='text-dark ms-2'> <b>Signup</b></Link>
+                        </div>
                     </div>
                 </form>
             </div>

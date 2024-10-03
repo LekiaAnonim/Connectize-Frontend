@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default function ServiceCard(props) {
   let {remote,control,tweet,image,westland,view,bookmark,bg} = props
@@ -15,7 +16,7 @@ export default function ServiceCard(props) {
             <div className='d-flex align-items-center'>
                 <img src={image} width={"50px"} alt='#'/>
                 <p className='ms-3'>{westland}</p>
-                <button className='rounded-pill ms-auto bg-warning w-25 px-2 py-1 border border-none'>{view}</button>
+                <Link to={"/serviceoverview"} className='rounded-pill ms-auto bg-warning px-2 py-1 border border-none text-decoration-none text-black'>{view}</Link>
             </div>
         </div>
     </div>

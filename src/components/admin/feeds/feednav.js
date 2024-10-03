@@ -12,7 +12,7 @@ export default function Feednav() {
     <div>
         <Navbar expand="lg" className="bg-body-tertiary">
             <Container>
-                <Navbar.Brand href="/">
+                <Navbar.Brand href="userprofile">
                     <img src='images/iconloveclip.PNG' className='rounded-pill' style={{width:"3rem"}} alt='#'/>
                         <img src='images/iconprofile.PNG' className='rounded-pill' alt='#' style={{marginLeft:"-10px",width:"3rem"}}/>
                 </Navbar.Brand>
@@ -20,8 +20,8 @@ export default function Feednav() {
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mx-auto gap-4">
                     <Form className='d-flex'>
-                        <input type='text' className="border border-none form-control rounded-pill text-black-50" placeholder='      search anything' style={{width:"30rem"}}/> 
-                        <div className='text-black-50 mt-2'><Search style={{marginLeft:"-29rem"}}/></div>
+                        <input type='text' className="border border-none form-control rounded-pill text-black-50" placeholder='      search anything' style={{width:"20rem"}}/> 
+                        <div className='text-black-50 mt-2'><Search style={{marginLeft:"-19rem"}}/></div>
                     </Form>
                     <Nav.Link href="#action1" className='text-black'><FeedsModal/></Nav.Link>
                     <Nav.Link href="/analysis" className='text-black'><Chartbar/></Nav.Link>

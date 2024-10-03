@@ -12,9 +12,11 @@ function Summary() {
           <>
             <div className='bg-white p-4' style={{marginTop:"-5%",borderRadius:"5%"}}>
                <h3>Recomended Products</h3>
-                  <div className='d-flex py-3 px-2 rounded' style={{background:"#faf9f7"}}>
-                    <img src={image}style={{width:"170%",height:"140%"}} alt='#' />
-                    <div className='ms-2'>
+                  <div className='row py-3 px-2 rounded' style={{background:"#faf9f7"}}>
+                    <div className='col-sm-12 col-md-12 col-lg-6 mb-2'>
+                      <img src={image} style={{width:"100%",height:"100%"}} alt='#' />
+                    </div>
+                    <div className='col-sm-12 col-md-12 col-lg-6'>
                       <div className='d-flex'>
                         <img src={image1} className='my-2 me-2' style={{height:"30px"}} alt='#'/>
                         <p>{text}</p>
@@ -55,45 +57,32 @@ function Summary() {
             <button className='py-2 px-4 me-3 border border-none rounded-pill'>Products</button>
             <button className='py-2 px-4 border border-none rounded-pill'>Reviews</button>
         </div>
-        <h3 className='py-5'>Activities</h3>
+        <h3 className='pt-5'>Activities</h3>
         <div className='p-5 rounded mb-5'style={{boxShadow:"0px 7px 1px 0px #FFC96F"}}>
             <h4>What is happening</h4>
             <hr />
-            <div className='d-flex gap-2'>
-                <button className='text-success py-2 px-3 border border-none'><InsertPhotoOutlinedIcon/></button>
-                <button className='py-2 px-3 border border-none rounded'><GifBoxOutlinedIcon className='text-warning'/></button>
-                <button className='py-2 px-3 border border-none rounded'><ArticleOutlinedIcon className='text-primary'/></button>
-                <button className='py-2 px-3 border border-none rounded'><InsertEmoticonIcon className='text-warning'/></button>
-                <button className='py-1 px-3 border border-none rounded-pill ms-auto bg-warning'>create post</button>
+            <div>
+              <div className='row gap-2'>
+                  <button className='text-success py-2 px-3 border border-none col-sm-6 col-md-4 col-lg-2'><InsertPhotoOutlinedIcon/></button>
+                  <button className='py-2 px-3 border border-none rounded col-sm-6 col-md-4 col-lg-2'><GifBoxOutlinedIcon className='text-warning'/></button>
+                  <button className='py-2 px-3 border border-none rounded col-sm-6 col-md-4 col-lg-2'><ArticleOutlinedIcon className='text-primary'/></button>
+                  <button className='py-2 px-3 border border-none rounded col-sm-6 col-md-4 col-lg-2'><InsertEmoticonIcon className='text-warning'/></button>
+                  <button className=' py-2 border border-none rounded-pill bg-warning col-lg-3 col-md-8'>create post</button>
+              </div>
             </div>
         </div>
-        <div>
-            
-        <ProductCard
-                        image = "images/Rectangle11.png"
-                        image1 = "images/Ellipse1.png"
-                        text = "Lorem ipsum dolor sit"
-                        icon = {<MoreHorizoneIcon/>}
-                        icon1 ={<FavoriteIcon/>}
-                        icon2={<ShareIcon/>}
-                        image2 = "images/passport5.png"
-                        image3 = "images/passport6.png"
-                        connect ="connect"
-                    />
-        </div>
-        <div className='mt-5'>
-            
-        <ProductCard
-                        image = "images/Rectangle11.png"
-                        image1 = "images/Ellipse1.png"
-                        text = "Lorem ipsum dolor sit"
-                        icon = {<MoreHorizoneIcon/>}
-                        icon1 ={<FavoriteIcon/>}
-                        icon2={<ShareIcon/>}
-                        image2 = "images/passport5.png"
-                        image3 = "images/passport6.png"
-                        connect ="connect"
-                    />
+        <div> 
+          <ProductCard
+            image = "images/produc_drum.jpeg"
+            image1 = "images/Ellipse1.png"
+            text = "Lorem ipsum dolor sit"
+            icon = {<MoreHorizoneIcon/>}
+            icon1 ={<FavoriteIcon/>}
+            icon2={<ShareIcon/>}
+            image2 = "images/passport5.png"
+            image3 = "images/passport6.png"
+            connect ="connect"
+          />
         </div>
     </div>
   )

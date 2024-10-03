@@ -1,24 +1,25 @@
 import React from 'react'
 
 
-export default function ProductCard({image,image1,text,icon,icon1,icon2,image2,image3,connect}){
+export default function ProductCard(props){
+  let {image,image1,text,icon,icon1,icon2,connect,gallery}=props
+  
   return(
     <>
-      <div className='bg-white p-3' style={{marginTop:"-5%",borderRadius:"5%"}}>
-            <div className='d-flex py-3 px-2 rounded' style={{background:"#faf9f7"}}>
-              <img src={image}style={{width:"150px",height:"160px"}} alt='#' />
-              <div className='ms-2'>
+      <div className='bg-white p-4 mb-3' style={{marginTop:"-2rem"}}>
+            <div className='row py-3' style={{background:"#faf9f7"}}>
+              <div className='col-sm-12 col-md-12 col-lg-4'>
+                <img src={image} style={{width:"100%",height:"80%",borderRadius:"20px"}} alt='#' />
+              </div>
+              <div className='col-sm-12 col-md-12 col-lg-7 me-2'>
                 <div className='d-flex'>
-                  <img src={image1} className='my-2 me-2' style={{height:"30px"}} alt='#'/>
+                  <img src={image1} className='my-2 me-2 rounded-pill' style={{height:"35px"}} alt='#'/>
                   <p>{text}</p>
                   <p className='ms-5'>{icon}</p>
                 </div>
                 <hr style={{marginTop:"-2px"}}/>
                 <div className='d-flex'>
-                  <div>
-                    <img src={image3} alt='#'/>
-                    <img src={image2} style={{marginLeft:"-5px"}} alt='#'/>
-                  </div>
+                  {gallery}
                   <div className='ms-auto d-flex'>
                     {icon1}
                     178k

@@ -25,6 +25,8 @@ import Listing from './pages/market/listing';
 import UserProfile from "./pages/feedPages/userProfile";
 import AdminProfile from "./pages/feedPages/adminProfile";
 import NewsFeed from "./pages/feedPages/newsFeed";
+import Testing from "./pages/feedPages/testing";
+import Navbar from "./pages/feedPages/antway";
 
 function App() {
   return (
@@ -59,6 +61,8 @@ function App() {
           <Route path='userprofile' element={<UserProfile/>}/>
           <Route path='adminprofile' element={<AdminProfile/>}/>
           <Route path='feedpage' element={<FeedPage/>}/>
+          <Route path='testing' element={<Testing/>}/>
+          <Route path='antway' element={<Navbar/>}/>
           <Route path='*' element={<NoPage />} />
         </Route>
       </Routes>

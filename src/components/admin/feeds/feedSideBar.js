@@ -2,7 +2,7 @@ import Home from '@mui/icons-material/Home'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Building, Usergroup } from '../../../icon'
-import { Analytics, ChatRounded, ContactPage, DesignServices} from '@mui/icons-material'
+import { AccountCircle, Analytics, ChatRounded, ContactPage, DesignServices} from '@mui/icons-material'
 
 
 export default function FeedSideBar() {
@@ -34,13 +34,15 @@ export default function FeedSideBar() {
     <div>
         <div className='bg-white rounded p-3'>
             <div>
-                <img src='images/logo.png' className='d-flex mx-auto' alt='logo'/>
+                <Link to={'/adminprofile'}> 
+                    <img src='images/logo.png' className='d-flex mx-auto' alt='logo'/>
+                </Link>
             </div>
             <div style={{background:"#faf9f7"}} className='p-4 rounded'>
                 <div>
                     <Feed
                         icon ={<Home/>}
-                        link = {'/newsfeed'}
+                        link = {'/'}
                         text ="Feeds"
                         textColor={'text-warning text-decoration-none'}
                         bg={{background:"black"}}
@@ -92,6 +94,14 @@ export default function FeedSideBar() {
                         icon ={<ContactPage/>}
                         link = {'/contact'}
                         text ="Contact"
+                        textColor={'text-black text-decoration-none'}
+                    />
+                </div>
+                <div>
+                    <Feed
+                        icon ={<AccountCircle/>}
+                        link = {'/signup'}
+                        text ="Profile"
                         textColor={'text-black text-decoration-none'}
                     />
                 </div>

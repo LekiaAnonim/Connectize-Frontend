@@ -1,47 +1,47 @@
 import React from 'react'
-import { Building,CircleFill,Dollar,GreaterThan,History,Notification, Squares, } from '../../../icon'
+import { Building,CircleFill,GreaterThan,Squares, Usergroup, } from '../../../icon'
 import './navbar.css'
 import { Link } from 'react-router-dom'
+import { Analytics, ChatRounded, ContactPage, DesignServices } from '@mui/icons-material'
 
-function Sidebar() {
+function SidebarMenu() {
   return (
     <div className='mb-5'>
-        <div className='bg-white ps-4 pt-4 pb-5 rounded'>
+        <div className='bg-white px-3 pt-4 pb-5 rounded'>
             <h3>Services</h3>
             <div className='d-flex'>
                 <p><Building/></p>
                 <Link to={"/market"} className='text-decoration-none text-black'><p className='ms-2'>Market</p></Link>
             </div>
-            <div className='d-flex'>
-                <p><Notification/></p>
-                <p className='ms-2'>Notification</p>
-            </div>
-            <div className='d-flex'>
-                <p><Dollar /></p>
-                <p className='ms-2'>Wish-list</p>
-            </div>
-            <div className='d-flex'>
-                <p><History/></p>
-                <p className='ms-2'>History</p>
-            </div>
-            <button className='rounded-pill bg-warning border border-none px-2 py-1 mb-3 sidebar'>List new product | <GreaterThan/></button>
-            <div className='d-flex'>
+            <Link to={"/organization"} className='d-flex text-black text-decoration-none'>
+                <p><Usergroup/></p>
+                <p className='ms-2'>Organization</p>
+            </Link>
+            <Link to={"/service"} className='d-flex text-black text-decoration-none'>
+                <p><DesignServices/></p>
+                <p className='ms-2'>Services</p>
+            </Link>
+            <Link to={"/analysis"} className='d-flex text-black text-decoration-none'>
+                <p><Analytics/></p>
+                <p className='ms-2'>Analytics</p>
+            </Link>
+            <Link to={"/listing"} className='rounded-pill bg-warning border border-none px-2 py-1 mb-3 sidebar text-decoration-none text-black'>List new product<GreaterThan/></Link>
+            <div className='d-flex mt-3'>
                 <p><Squares/></p>
                 <p className='ms-2'>Categories</p>
             </div>
-            <div className='d-flex'>
-                <p><CircleFill/></p>
-                <p className='ms-2'>Remote Services</p>
+            <Link to={"/chat"} className='d-flex text-black text-decoration-none'>
+                <p><ChatRounded/></p>
+                <p className='ms-2'>Chat</p>
+            </Link>
+            <Link to={"/contact"} className='d-flex text-black text-decoration-none'>
+                <p><ContactPage/></p>
+                <p className='ms-2'>Contact</p>
+            </Link>
+            <div>
+                <Link to={"/serviceadmin"} className='rounded-pill bg-black border border-none px-2 py-1 mb-3 sidebar text-decoration-none text-white'>List new service<GreaterThan/></Link>
             </div>
-            <div className='d-flex'>
-                <p><CircleFill/></p>
-                <p className='ms-2'>Marketplaces</p>
-            </div>
-            <div className='d-flex'>
-                <p><CircleFill/></p>
-                <p className='ms-2'>Marketplaces</p>
-            </div>
-            <div className='d-flex'>
+            <div className='d-flex mt-2'>
                 <p><CircleFill/></p>
                 <p className='ms-2'>Marketplaces</p>
             </div>
@@ -58,4 +58,4 @@ function Sidebar() {
   )
 }
 
-export default Sidebar
+export default SidebarMenu
