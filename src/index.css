@@ -1,58 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  width: 100vw;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   border-radius: 10px;
-  background: #EEE;
+  background: #eee;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
-*{
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
-:root{
+:root {
   --font-drk-600: #242424;
-  --gold: #F1C644;
+  --gold: #f1c644;
   --grey: #828282;
-  --light-grey: #E5E5E5;
+  --light-grey: #e5e5e5;
   --mid-grey: #373737;
 }
 
-.page-container{
+.page-container {
   display: flex;
 }
-.feed-page-container{
+.feed-page-container {
   margin-top: 20px;
 }
 
 .feed-page-container .css-hip9hq-MuiPaper-root-MuiAppBar-root {
-  
   box-shadow: none !important;
   background-color: #ffffff00 !important;
   color: #000;
 }
-.header-text{
+.header-text {
   color: #000;
   font-size: 30px !important;
   font-weight: 600 !important;
   text-transform: capitalize;
 }
-.header-search{
+.header-search {
   width: 358px !important;
   flex-shrink: 0;
   border-radius: 100px !important;
-  background: #FFF !important;
+  background: #fff !important;
 }
-.btn-primary{
+.btn-primary {
   display: flex;
   padding: 5px 34px;
   justify-content: center;
@@ -62,5 +66,3 @@ code {
   color: #000 !important;
   text-transform: capitalize !important;
 }
-
-

@@ -27,6 +27,7 @@ import AdminProfile from "./pages/feedPages/adminProfile";
 import NewsFeed from "./pages/feedPages/newsFeed";
 import Testing from "./pages/feedPages/testing";
 import Navbar from "./pages/feedPages/antway";
+import AuthLayout from "./pages/authentication/AuthLayout/AuthLayout";
 
 function App() {
   return (
@@ -39,39 +40,39 @@ function App() {
           crossorigin="anonymous"
         ></link>
       </head>
-      <BrowserRouter>
-        <Routes>
-          <Route>
-            <Route index element={<NewsFeed />} />
-            <Route path="signup" element={<Signup />} />
-            <Route path="login" element={<Login />} />
-            <Route path="success" element={<SuccessPage />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="home" element={<Home />} />
-            <Route path="contact" element={<Contact />} />
-            <Route path="address" element={<Address />} />
-            <Route path="bio" element={<Bio />} />
-            <Route path="overview" element={<Overview />} />
-            <Route path="bioone" element={<CompanyBioOne />} />
-            <Route path="biotwo" element={<CompanyBioTwo />} />
-            <Route path="biothree" element={<CompanyBioThree />} />
-            <Route path="biofour" element={<CompanyBioFour />} />
-            <Route path="service" element={<Services />} />
-            <Route path="serviceoverview" element={<ServiceOverView />} />
-            <Route path="serviceadmin" element={<ServiceAdmin />} />
-            <Route path="market" element={<Market />} />
-            <Route path="product" element={<Product />} />
-            <Route path="analysis" element={<Analysis />} />
-            <Route path="listing" element={<Listing />} />
-            <Route path="userprofile" element={<UserProfile />} />
-            <Route path="adminprofile" element={<AdminProfile />} />
-            <Route path="feedpage" element={<FeedPage />} />
-            <Route path="testing" element={<Testing />} />
-            <Route path="antway" element={<Navbar />} />
-            <Route path="*" element={<NoPage />} />
+      <Routes>
+        <Route>
+          <Route path="/" element={<NewsFeed />} />
+          <Route path="/" element={<AuthLayout />}>
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/success" element={<SuccessPage />} />
           </Route>
-        </Routes>
-      </BrowserRouter>
+          <Route path="profile" element={<Profile />} />
+          <Route path="home" element={<Home />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="address" element={<Address />} />
+          <Route path="bio" element={<Bio />} />
+          <Route path="overview" element={<Overview />} />
+          <Route path="bioone" element={<CompanyBioOne />} />
+          <Route path="biotwo" element={<CompanyBioTwo />} />
+          <Route path="biothree" element={<CompanyBioThree />} />
+          <Route path="biofour" element={<CompanyBioFour />} />
+          <Route path="service" element={<Services />} />
+          <Route path="serviceoverview" element={<ServiceOverView />} />
+          <Route path="serviceadmin" element={<ServiceAdmin />} />
+          <Route path="market" element={<Market />} />
+          <Route path="product" element={<Product />} />
+          <Route path="analysis" element={<Analysis />} />
+          <Route path="listing" element={<Listing />} />
+          <Route path="userprofile" element={<UserProfile />} />
+          <Route path="adminprofile" element={<AdminProfile />} />
+          <Route path="feedpage" element={<FeedPage />} />
+          <Route path="testing" element={<Testing />} />
+          <Route path="antway" element={<Navbar />} />
+          <Route path="*" element={<NoPage />} />
+        </Route>
+      </Routes>
     </>
   );
 }
