@@ -16,7 +16,14 @@ function Login() {
     axios.defaults.withCredentials=true;
     const handleSubmit=(e)=>{
         e.preventDefault()
-        axios.post("https://connectize.co/api/auth/login/",{username,email, password})
+        axios.post("https://connectize.co/api/auth/login/",
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: JSON.stringify({username,email, password})
+            })
         .then(res=>{
             if(res){
                 console.log(res)
@@ -29,10 +36,10 @@ function Login() {
     }
   return (
     <>
-    <div className='d-flex'>
+    <div>
         <div className='d-flex bg-white row' 
-        style={{paddingLeft:"5%"}}>
-            <div className='col-md-7 pe-5'>
+        style={{}}>
+            <div className='col-md-5 offset-1 pe-5'>
                 <Navbar expand="md" className="bg-body-white">
                 <Container>
                     <Navbar.Brand href="#home">
@@ -82,16 +89,16 @@ function Login() {
                     </div>
                 </form>
             </div>
-            <div className='col-md-5 text-white'>
-                <div className='w-100 '>
+            <div className='col-md-3 position-relative text-white'>
+                <div className='w-100'>
                     <img src="./images/signup-image.png" className='#' style={{width:"162%", height:"650px"}} alt='pics' />
                 </div>
-                <div style={{marginTop:"-30%",marginLeft:"10%"}}>
+                <div style={{marginTop:"-15rem",marginLeft:"3rem"}} className='position-absolute justify-content-center'>
                     <h2>
-                        Don't have an account ?  
+                        Don't have an account?  
                     </h2>
                     <p>
-                        <Link to={'/signup'} className='text-white'>Register</Link> to access all the features of our services and manage your business all in one platform 
+                        <Link to={'/signup'} className=''>Register</Link> to access all the features of our services and manage your business all in one platform 
                     </p>
                 </div>
             </div>
