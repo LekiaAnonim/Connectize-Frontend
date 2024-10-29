@@ -1,34 +1,79 @@
-import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useEffect } from "react";
+import * as Yup from "yup";
+import Form from "../form";
+import { useFormik } from "formik";
+import { REGISTER_EMAIL_KEY } from "../../lib/helpers";
+import useRedirect from "../../hooks/useRedirect";
+import { authenticationService } from "../../api-services/authentication";
+import CheckAgreement from "../form/checkAgreement";
+
+const validationSchema = Yup.object().shape({
+  companyName: Yup.string()
+    .matches(/^[a-zA-Z0-9]+$/, "Only alphanumeric characters are allowed.")
+    .required("Fill in your Company's Name"),
+  email: Yup.string().email("Invalid Email").required("Fill in your Email"),
+  companyPhoneNumber: Yup.string()
+    .matches(/^[a-zA-Z0-9]+$/, "Only alphanumeric characters are allowed.")
+    .required("Fill in your  Company's phone number"),
+  companyLocation: Yup.string()
+    .matches(/^[a-zA-Z0-9\s-]+$/, "Only alphanumeric characters are allowed.")
+    .required("Fill in your Company's location"),
+  password: Yup.string()
+    .matches(
+      /^[a-zA-Z0-9!#$%^&*()]+$/,
+      "Only letters, numbers and some specific punctuations allowed."
+    )
+    .required("Fill in your password"),
+  confirmPassword: Yup.string()
+    .required("Password confirmation is required")
+    .test("passwords-match", "Passwords must match", function (value) {
+      return this.parent.password === value;
+    }),
+  isChecked: Yup.boolean().oneOf(
+    [true],
+    "You must accept the terms and conditions"
+  ),
+});
 
 function Signup() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password1, setPassword1] = useState("");
-  const [password2, setPassword2] = useState("");
-  const navigate = useNavigate();
+  const hasEmail = localStorage.getItem(REGISTER_EMAIL_KEY) !== null;
 
-  //axios.defaults.withCredentials=true;
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios
-      .post("https://connectize.co/api/auth/registration/", {
-        username,
-        email,
-        password1,
-        password2,
-      })
-      .then((res) => {
-        if (res) {
-          console.log(res);
+  useRedirect(hasEmail, "/confirm-email");
 
-          navigate("/success");
-        }
-      })
-      .catch((err) => console.log(err));
+  const formValues = {
+    companyName: "",
+    email: "",
+    companyPhoneNumber: "",
+    companyLocation: "",
+    password: "",
+    confirmPassword: "",
+    isChecked: false,
   };
+
+  const formik = useFormik({
+    initialValues: formValues,
+    validationSchema: validationSchema,
+    onSubmit: async (
+      { email, companyEmail, password1, password2 },
+      { resetForm }
+    ) =>
+      await authenticationService({
+        values: {
+          companyEmail,
+          email,
+          password1,
+          password2,
+        },
+        url: "registration/",
+        resetForm,
+        type: "register",
+      }),
+  });
+
+  useEffect(() => {
+    formik.setValues(formValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fields = [
     {
@@ -59,85 +104,18 @@ function Signup() {
   return (
     <section>
       <h1 style={{ marginTop: "4%" }}>Create new account</h1>
-      <form onSubmit={handleSubmit} className="w-full">
-        <div>
-          <br />
-          <div>
-            <label htmlFor="username">Username</label>
-            <br />
-            <br />
-            <input
-              type="email"
-              className="form-control"
-              style={{ height: "50px" }}
-              placeholder="Username@example.com"
-              required
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          <br />
-          <div>
-            <label>Company email</label>
-            <br />
-            <br />
-            <input
-              type="text"
-              className="form-control"
-              style={{ height: "50px" }}
-              placeholder="Company@example.com"
-              required
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <br />
-          <div>
-            <label>Password</label>
-            <br />
-            <br />
-            <input
-              type="password"
-              className="form-control"
-              style={{ height: "50px" }}
-              placeholder="**********"
-              required
-              onChange={(e) => setPassword1(e.target.value)}
-            />
-          </div>
-          <br />
-          <div>
-            <label>Confirm Password</label>
-            <br />
-            <br />
-            <input
-              type="password"
-              className="form-control"
-              style={{ height: "50px" }}
-              placeholder="**********"
-              required
-              onChange={(e) => setPassword2(e.target.value)}
-            />
-          </div>
-          <br />
-          <div>
-            <input type="checkbox" /> I agree to{" "}
-            <a>
-              <Link to="/">
-                <b>Terms and Condition</b>
-              </Link>
-            </a>
-          </div>
-          <br />
-          <div>
-            <button
-              type="submit"
-              className="btn btn-dark w-75 rounded-pill"
-              style={{ height: "50px" }}
-            >
-              Sign up
-            </button>
-          </div>
-        </div>
-      </form>
+      <Form
+        formik={formik}
+        status={"none"}
+        inputArray={fields}
+        bottomCustomComponents={<CheckAgreement formik={formik} />}
+        button={{
+          type: "submit",
+          text: "Create my account",
+          submitText: "Creating account...",
+          style: "!md:w-[60%] my-4",
+        }}
+      />
     </section>
   );
 }
