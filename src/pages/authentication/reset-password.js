@@ -25,13 +25,9 @@ function ResetPasswordPage() {
 
       // const success =
       await authenticationService({
-        values: {
-          username: "user@connectize.com",
-          email,
-        },
-        url: "login/",
+        values: { email },
+        url: "retrieve-password/",
         resetForm,
-        type: "login",
       });
 
       //   if (success) navigate("/");
