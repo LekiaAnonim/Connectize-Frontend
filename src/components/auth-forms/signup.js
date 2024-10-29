@@ -102,8 +102,8 @@ function Signup() {
     },
   ];
   return (
-    <section>
-      <h1 style={{ marginTop: "4%" }}>Create new account</h1>
+    <section className="space-y-4">
+      <h1>Create new account</h1>
       <Form
         formik={formik}
         status={"none"}

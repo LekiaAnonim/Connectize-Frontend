@@ -21,7 +21,7 @@ export default function Form({
             {type === "grid" ? (
               <div className={`grid md:grid-cols-2 gap-2`}>
                 {gridInputs.map(({ name, type, label, placeholder }) => (
-                  <div className="mb-2" key={name}>
+                  <div className="mb-3" key={name}>
                     <label htmlFor={type}>{label}</label>
                     <CustomInput
                       type={type}

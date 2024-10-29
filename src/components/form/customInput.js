@@ -1,15 +1,5 @@
 import React, { useState } from "react";
 
-// interface inputProperties {
-//   type: string;
-//   placeholder?: string;
-//   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-//   onBlur?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-//   value?: string;
-//   name?: string;
-//   style?: string;
-// }
-
 export default function CustomInput({
   type,
   placeholder,
@@ -17,7 +7,7 @@ export default function CustomInput({
   onBlur,
   value,
   name,
-  style,
+  className,
 }) {
   const [isPassword, setIsPassword] = useState(true);
   const [passWordType, setPasswordType] = useState("password");
@@ -27,9 +17,9 @@ export default function CustomInput({
     setPasswordType(!isPassword ? "password" : "text");
   };
   return (
-    <div className="relative flex items-center justify-center">
+    <div className="relative flex items-center justify-center w-full">
       <input
-        className={`relative mt-2 ${style}`}
+        className={`relative w-full border h-[40px] rounded-lg border-gray-100 hover:ring-1 p-2  ${className}`}
         type={type === "password" ? passWordType : type}
         placeholder={placeholder}
         onChange={onChange}
