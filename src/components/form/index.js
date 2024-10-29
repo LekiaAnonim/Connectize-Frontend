@@ -21,7 +21,7 @@ export default function Form({
             {type === "grid" ? (
               <div className={`grid md:grid-cols-2 gap-2`}>
                 {gridInputs.map(({ name, type, label, placeholder }) => (
-                  <div className="mb-3" key={name}>
+                  <div className="mb-2" key={name}>
                     <label htmlFor={type}>{label}</label>
                     <CustomInput
                       type={type}
@@ -36,8 +36,8 @@ export default function Form({
                 ))}
               </div>
             ) : (
-              <div className="my-2">
-                <label htmlFor={type} className="mb-4">
+              <div className="my-4">
+                <label htmlFor={type} className="mb-1">
                   {label}
                 </label>
                 <CustomInput
@@ -62,9 +62,9 @@ export default function Form({
           {button && (
             <button
               type={button ? button.type : "submit"}
-              className={`w-full ${button.style} ${
-                formik.isSubmitting ? "opacity-50 pointer-events-none" : ""
-              }`}
+              className={`w-full bg-black rounded-md hover:opacity-70 transition-all duration-300 text-white px-3 py-2.5 ${
+                button.style
+              } ${formik.isSubmitting ? "opacity-50 pointer-events-none" : ""}`}
             >
               {formik.isSubmitting ? (
                 // <div className="boxes_loader"></div>

@@ -17,9 +17,9 @@ export default function CustomInput({
     setPasswordType(!isPassword ? "password" : "text");
   };
   return (
-    <div className="relative flex items-center justify-center w-full">
+    <div className="relative flex items-center justify-center w-full max-w-md">
       <input
-        className={`relative w-full border h-[40px] rounded-lg border-gray-100 hover:ring-1 p-2  ${className}`}
+        className={`relative mt-2 w-full border border-gray-100 p-2 xs:py-1.5 rounded-md placeholder:text-sm ${className}`}
         type={type === "password" ? passWordType : type}
         placeholder={placeholder}
         onChange={onChange}
