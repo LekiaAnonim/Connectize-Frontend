@@ -22,6 +22,8 @@ code {
 
 a {
   text-decoration: none;
+  color: var(--gold) !important;
+  text-decoration-line: none !important;
   transition: all;
   transition-duration: 350ms;
 }

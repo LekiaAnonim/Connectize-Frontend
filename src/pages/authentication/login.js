@@ -34,7 +34,7 @@ function Login() {
       // const success =
       await authenticationService({
         values: {
-          username: "user@connectize.com",
+          username: email,
           email,
           password,
         },
@@ -90,11 +90,11 @@ function Login() {
           type: "submit",
           text: "Login",
           submitText: "Checking...",
-          style: "!md:w-[60%] my-4",
+          style: "!md:w-[60%] mt-4",
         }}
       />
 
-      <p>
+      <p className="text-center xs:text-sm">
         Don't have an account?{" "}
         <Link to="/signup" className="no-underline text-gold">
           Register here!

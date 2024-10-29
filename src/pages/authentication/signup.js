@@ -122,15 +122,15 @@ function Signup() {
         button={{
           type: "submit",
           text: "Create my account",
-          submitText: "Creating your connectize account...",
-          style: "!md:w-[60%] my-4",
+          submitText: "Creating your account...",
+          style: "!md:w-[60%] mt-4",
         }}
       />
 
-      <p>
+      <p className="text-center xs:text-sm">
         Already have an account?{" "}
         <Link to="/login" className="no-underline">
-          Register here!
+          Login
         </Link>
       </p>
     </section>
