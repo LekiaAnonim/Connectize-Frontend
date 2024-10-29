@@ -14,12 +14,16 @@ function AuthLayout({ redirectUrl = "/" }) {
     <main className="md:flex gap-6">
       <section className="flex flex-col items-center md:items-start justify-center py-8 px-4">
         <Logo />
-        <section className="w-full flex items-center justify-center">
+        <section className="w-full flex items-center justify-center shrink-0">
           <Outlet />
         </section>
       </section>
 
-      <img src="/images/signup-image.png" className="w-1/2 hidden md:block" />
+      <img
+        src="/images/signup-image.png"
+        alt="Oil dripping for connectize"
+        className="size-full hidden md:block"
+      />
     </main>
   );
 }
