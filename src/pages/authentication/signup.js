@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 import * as Yup from "yup";
-import Form from "../form";
+import Form from "../../components/form";
 import { useFormik } from "formik";
 import { REGISTER_EMAIL_KEY } from "../../lib/helpers";
 import useRedirect from "../../hooks/useRedirect";
 import { authenticationService } from "../../api-services/authentication";
-import CheckAgreement from "../form/checkAgreement";
+import CheckAgreement from "../../components/form/checkAgreement";
+import { Link, useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
-  username1: Yup.string()
-    .matches(/^[a-zA-Z0-9]+$/, "Only alphanumeric characters are allowed.")
-    .required("Fill in your username"),
+  // username1: Yup.string()
+  //   .matches(/^[a-zA-Z0-9]+$/, "Only alphanumeric characters are allowed.")
+  //   .required("Fill in your username"),
   email: Yup.string()
     .email("Invalid Email Address")
     .required("Fill in a valid email address"),
@@ -40,9 +41,11 @@ const validationSchema = Yup.object().shape({
 });
 
 function Signup() {
-  const hasEmail = localStorage.getItem(REGISTER_EMAIL_KEY) !== null;
+  // const hasEmail = localStorage.getItem(REGISTER_EMAIL_KEY) !== null;
 
-  useRedirect(hasEmail, "/confirm-email");
+  // useRedirect(hasEmail, "/success");
+
+  const navigate = useNavigate();
 
   const formValues = {
     username: "",
@@ -59,9 +62,9 @@ function Signup() {
       { email, username, password, confirmPassword },
       { resetForm }
     ) => {
-      console.log("Auth data ", { email, username, password, confirmPassword });
+      // console.log("Auth data ", { email, username, password, confirmPassword });
 
-      await authenticationService({
+      const success = await authenticationService({
         values: {
           username,
           email,
@@ -72,6 +75,8 @@ function Signup() {
         resetForm,
         type: "register",
       });
+
+      if (success) navigate("/success");
     },
   });
 
@@ -117,10 +122,17 @@ function Signup() {
         button={{
           type: "submit",
           text: "Create my account",
-          submitText: "Creating account...",
+          submitText: "Creating your connectize account...",
           style: "!md:w-[60%] my-4",
         }}
       />
+
+      <p>
+        Already have an account?{" "}
+        <Link to="/login" className="no-underline">
+          Register here!
+        </Link>
+      </p>
     </section>
   );
 }

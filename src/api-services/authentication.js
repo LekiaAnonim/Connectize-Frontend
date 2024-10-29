@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import { makeApiRequest, REGISTER_EMAIL_KEY } from "../lib/helpers";
-import { getSession, setSession } from "../lib/session";
+import { setSession } from "../lib/session";
 
 export const authenticationService = async ({
   url,
@@ -18,19 +18,10 @@ export const authenticationService = async ({
       type,
     });
 
-    if (type === "login" && result) {
-      setSession(result);
-    } else if (type === "register" && values?.email && result) {
+    if (type === "login") {
+      setSession();
+    } else if (type === "register" && values?.email) {
       localStorage.setItem(REGISTER_EMAIL_KEY, values.email);
-    } else if (type === "refresh-token" && result) {
-      const session = getSession();
-
-      if (session !== null)
-        setSession({
-          ...session,
-          refreshToken: result.refreshToken,
-          token: result.token,
-        });
     }
     return true;
   } catch (error) {

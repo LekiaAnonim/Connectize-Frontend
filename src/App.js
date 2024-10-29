@@ -1,15 +1,15 @@
 //import 'bootstrap/dist/css/bootstrap.min.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FeedPage from "./pages/feedPages/feedPage";
-import Signup from "./components/auth-forms/signup";
-import Login from "./components/auth-forms/login";
+import Signup from "./pages/authentication/signup";
+import Login from "./pages/authentication/login";
 import NoPage from "./components/NoPage";
 import Profile from "./components/profile/profile";
 import Home from "./components/profile/home";
 import Contact from "./components/profile/contact";
 import Address from "./components/profile/address";
 import Bio from "./components/profile/bio";
-import SuccessPage from "./components/auth-forms/successpage";
+import SuccessPage from "./pages/authentication/successpage";
 import Overview from "./components/profile/overview";
 import CompanyBioOne from "./components/profile/companyBioOne";
 import CompanyBioTwo from "./components/profile/companyBioTwo";
@@ -27,7 +27,8 @@ import AdminProfile from "./pages/feedPages/adminProfile";
 import NewsFeed from "./pages/feedPages/newsFeed";
 import Testing from "./pages/feedPages/testing";
 import Navbar from "./pages/feedPages/antway";
-import AuthLayout from "./pages/authentication/AuthLayout/AuthLayout";
+import AuthLayout from "./pages/authentication/AuthLayout";
+import ResetPasswordPage from "./pages/authentication/reset-password";
 
 function App() {
   return (
@@ -44,10 +45,12 @@ function App() {
         <Route>
           <Route path="/" element={<NewsFeed />} />
           <Route path="/" element={<AuthLayout />}>
+            {/* authentication routes */}
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/success" element={<SuccessPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
           </Route>
+          <Route path="/success" element={<SuccessPage />} />
           <Route path="profile" element={<Profile />} />
           <Route path="home" element={<Home />} />
           <Route path="contact" element={<Contact />} />

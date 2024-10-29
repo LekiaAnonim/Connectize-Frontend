@@ -20,11 +20,18 @@ code {
     monospace;
 }
 
+a {
+  text-decoration: none;
+  transition: all;
+  transition-duration: 350ms;
+}
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
+
 :root {
   --font-drk-600: #242424;
   --gold: #f1c644;

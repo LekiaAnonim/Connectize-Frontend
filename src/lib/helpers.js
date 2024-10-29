@@ -13,7 +13,7 @@ export function sleep(ms) {
 export async function makeApiRequest({ url, method, data, resetForm, type }) {
   try {
     const { data: apiResponse } = await axios({
-      url: `${connectizeApiBaseUrl}/${url}`,
+      url: `${connectizeApiBaseUrl}${url}`,
       method,
       data,
       headers:
@@ -35,7 +35,7 @@ export async function makeApiRequest({ url, method, data, resetForm, type }) {
     }
   } catch (error) {
     const errorMsg =
-      error?.response?.data?.errors?.[0]?.message || "Something went wrong!";
+      error?.response?.data?.username?.[0] || "Something went wrong!";
     toast.error(errorMsg);
     console.error("API request failed:", error);
   }
