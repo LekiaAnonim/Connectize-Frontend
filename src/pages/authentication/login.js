@@ -49,6 +49,7 @@ function Login() {
 
   useEffect(() => {
     formik.setValues(formValues);
+    // window.title = "Login to connectize";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const fields = [
