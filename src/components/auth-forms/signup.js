@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -60,86 +57,88 @@ function Signup() {
     },
   ];
   return (
-    <form onSubmit={handleSubmit} className="w-full">
-      <div>
-        <h1 style={{ marginTop: "4%" }}>Create new account</h1>
-        <br />
+    <section>
+      <h1 style={{ marginTop: "4%" }}>Create new account</h1>
+      <form onSubmit={handleSubmit} className="w-full">
         <div>
-          <label htmlFor="username">Username</label>
           <br />
+          <div>
+            <label htmlFor="username">Username</label>
+            <br />
+            <br />
+            <input
+              type="email"
+              className="form-control"
+              style={{ height: "50px" }}
+              placeholder="Username@example.com"
+              required
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
           <br />
-          <input
-            type="email"
-            className="form-control"
-            style={{ height: "50px" }}
-            placeholder="Username@example.com"
-            required
-            onChange={(e) => setUsername(e.target.value)}
-          />
+          <div>
+            <label>Company email</label>
+            <br />
+            <br />
+            <input
+              type="text"
+              className="form-control"
+              style={{ height: "50px" }}
+              placeholder="Company@example.com"
+              required
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <br />
+          <div>
+            <label>Password</label>
+            <br />
+            <br />
+            <input
+              type="password"
+              className="form-control"
+              style={{ height: "50px" }}
+              placeholder="**********"
+              required
+              onChange={(e) => setPassword1(e.target.value)}
+            />
+          </div>
+          <br />
+          <div>
+            <label>Confirm Password</label>
+            <br />
+            <br />
+            <input
+              type="password"
+              className="form-control"
+              style={{ height: "50px" }}
+              placeholder="**********"
+              required
+              onChange={(e) => setPassword2(e.target.value)}
+            />
+          </div>
+          <br />
+          <div>
+            <input type="checkbox" /> I agree to{" "}
+            <a>
+              <Link to="/">
+                <b>Terms and Condition</b>
+              </Link>
+            </a>
+          </div>
+          <br />
+          <div>
+            <button
+              type="submit"
+              className="btn btn-dark w-75 rounded-pill"
+              style={{ height: "50px" }}
+            >
+              Sign up
+            </button>
+          </div>
         </div>
-        <br />
-        <div>
-          <label>Company email</label>
-          <br />
-          <br />
-          <input
-            type="text"
-            className="form-control"
-            style={{ height: "50px" }}
-            placeholder="Company@example.com"
-            required
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <br />
-        <div>
-          <label>Password</label>
-          <br />
-          <br />
-          <input
-            type="password"
-            className="form-control"
-            style={{ height: "50px" }}
-            placeholder="**********"
-            required
-            onChange={(e) => setPassword1(e.target.value)}
-          />
-        </div>
-        <br />
-        <div>
-          <label>Confirm Password</label>
-          <br />
-          <br />
-          <input
-            type="password"
-            className="form-control"
-            style={{ height: "50px" }}
-            placeholder="**********"
-            required
-            onChange={(e) => setPassword2(e.target.value)}
-          />
-        </div>
-        <br />
-        <div>
-          <input type="checkbox" /> I agree to{" "}
-          <a>
-            <Link to="/">
-              <b>Terms and Condition</b>
-            </Link>
-          </a>
-        </div>
-        <br />
-        <div>
-          <button
-            type="submit"
-            className="btn btn-dark w-75 rounded-pill"
-            style={{ height: "50px" }}
-          >
-            Sign up
-          </button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </section>
   );
 }
 

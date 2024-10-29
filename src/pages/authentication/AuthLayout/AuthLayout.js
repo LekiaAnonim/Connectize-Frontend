@@ -12,7 +12,7 @@ function AuthLayout({ redirectUrl = "/" }) {
 
   return (
     <main className="md:flex gap-6">
-      <section className="flex flex-col items-center justify-center py-8 px-4">
+      <section className="flex flex-col items-center md:items-start justify-center py-8 px-4">
         <Logo />
         <section className="w-full flex items-center justify-center">
           <Outlet />
