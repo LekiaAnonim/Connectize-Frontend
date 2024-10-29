@@ -29,7 +29,9 @@ const validationSchema = Yup.object().shape({
     .test(
       "passwords-match",
       "Password and confirm password must match",
-      (value) => this.parent.password === value
+      function (value) {
+        return this.parent.password === value;
+      }
     ),
   isChecked: Yup.boolean().oneOf(
     [true],
@@ -54,20 +56,23 @@ function Signup() {
     initialValues: formValues,
     validationSchema: validationSchema,
     onSubmit: async (
-      { email, companyEmail, password1, password2 },
+      { email, username, password, confirmPassword },
       { resetForm }
-    ) =>
+    ) => {
+      console.log("Auth data ", { email, username, password, confirmPassword });
+
       await authenticationService({
         values: {
-          companyEmail,
+          username,
           email,
-          password1,
-          password2,
+          password1: password,
+          password2: confirmPassword,
         },
         url: "registration/",
         resetForm,
         type: "register",
-      }),
+      });
+    },
   });
 
   useEffect(() => {

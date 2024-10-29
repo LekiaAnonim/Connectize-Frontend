@@ -19,6 +19,7 @@ export default function CustomInput({
   return (
     <div className="relative flex items-center justify-center w-full max-w-md">
       <input
+        autoComplete
         className={`relative mt-2 w-full border border-gray-100 p-2 xs:py-1.5 rounded-md placeholder:text-sm ${className}`}
         type={type === "password" ? passWordType : type}
         placeholder={placeholder}

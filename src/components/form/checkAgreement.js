@@ -4,7 +4,7 @@ import FormikErrorResponse from "../form/formError";
 export default function CheckAgreement({ formik }) {
   return (
     <>
-      <div className="flex items-center space-x-2 my-4">
+      <div className="flex items-center space-x-2 my-1">
         <input
           className="w-4 h-4 cursor-pointer"
           name="isChecked"
