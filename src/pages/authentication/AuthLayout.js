@@ -12,8 +12,8 @@ function AuthLayout({ redirectUrl = "/" }) {
 
   return (
     <main className="flex justify-center">
-      <section className="flex flex-col items-center justify-center py-8 px-4 md:basis-1/2 shrink-0">
-        <section className="!w-full max-w-sm md:max-w-md">
+      <section className="flex flex-col items-center justify-center py-8 px-4 lg:basis-1/2 shrink-0">
+        <section className="!w-full max-w-sm lg:max-w-md">
           <Logo />
           <section className="w-full flex items-center justify-center mt-4">
             <Outlet />
@@ -21,11 +21,11 @@ function AuthLayout({ redirectUrl = "/" }) {
         </section>
       </section>
 
-      <div className="hidden md:block basis-1/2">
+      <div className="hidden lg:block basis-1/2">
         <img
           src="/images/signup-image.png"
           alt="Oil dripping for connectize"
-          className="w-full"
+          className="w-full aspect-square "
         />
       </div>
     </main>
