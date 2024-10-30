@@ -58,6 +58,7 @@ function Signup() {
       const success = await authenticationService({
         values: {
           email,
+          username: email,
           password1: password,
           password2: confirmPassword,
         },
