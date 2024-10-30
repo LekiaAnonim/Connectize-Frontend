@@ -7,15 +7,12 @@ import CheckAgreement from "../../components/form/checkAgreement";
 import { Link, useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
-  // username1: Yup.string()
-  //   .matches(/^[a-zA-Z0-9]+$/, "Only alphanumeric characters are allowed.")
-  //   .required("Fill in your username"),
   email: Yup.string()
     .email("Invalid Email Address")
     .required("Fill in a valid email address"),
-  username: Yup.string()
-    .email("Fill in a valid email address")
-    .required("Fill in a valid email address"),
+  // username: Yup.string()
+  //   .email("Fill in a valid email address")
+  //   .required("Fill in a valid email address"),
 
   password: Yup.string()
     .matches(

@@ -12,25 +12,25 @@ export function sleep(ms) {
 
 export async function makeApiRequest({ url, method, data, resetForm, type }) {
   try {
-    const { data: apiResponse } = await axios({
+    const response = await axios({
       url: `${connectizeApiBaseUrl}${url}`,
       method,
       data,
-      headers:
-        getSession() && type !== "refresh-token"
-          ? {
-              Authorization: `Bearer ${getSession()?.token}`,
-            }
-          : undefined,
+      // headers:
+      //   getSession() && type !== "refresh-token"
+      //     ? {
+      //         Authorization: `Bearer ${getSession()?.token}`,
+      //       }
+      //     : undefined,
     });
 
-    const { result, error, success } = apiResponse;
-
-    if (success) {
+    if (data) {
       resetForm?.();
-      return result;
+      console.log("Worked here for api request: ", response);
+
+      return response.data;
     } else {
-      const errorMessage = error?.[0]?.message || "Unknown error occurred";
+      const errorMessage = "Unknown error occurred";
       throw new Error(errorMessage);
     }
   } catch (error) {

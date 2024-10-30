@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Logo() {
   return (
-    <Link to="/">
+    <Link to="/" className="w-fit">
       <img
         src="/images/logo.png"
         style={{ height: "60px" }}

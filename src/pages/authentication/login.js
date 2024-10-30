@@ -62,7 +62,7 @@ function Login() {
     {
       name: "email",
       type: "email",
-      label: "Email Address",
+      label: "Company email",
       placeholder: "Enter a valid email address",
     },
     {
