@@ -26,7 +26,7 @@ function ResetPasswordPage() {
       // const success =
       await authenticationService({
         values: { email },
-        url: "reset-password/",
+        url: "password/reset/",
         resetForm,
       });
 
@@ -80,8 +80,8 @@ function ResetPasswordPage() {
 
       <p className="text-center xs:text-sm">
         Don't have an account?{" "}
-        <Link to="/signup" className="text-gold">
-          Register here!
+        <Link to="/signup" className="font-bold text-black">
+          Sign Up
         </Link>
       </p>
     </section>

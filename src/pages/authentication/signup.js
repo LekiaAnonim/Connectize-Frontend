@@ -114,9 +114,9 @@ function Signup() {
         }}
       />
 
-      <p className="text-center xs:text-sm">
+      <p className="text-center xs:text-sm font-[400]">
         Already have an account?{" "}
-        <Link to="/login" className="no-underline">
+        <Link to="/login" className="font-bold text-black">
           Login
         </Link>
       </p>

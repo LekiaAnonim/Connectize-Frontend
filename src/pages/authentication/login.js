@@ -74,14 +74,17 @@ function Login() {
   ];
   return (
     <section className="space-y-4">
-      <h1>Log in to your account</h1>
+      <h1>Login to your account</h1>
       <Form
         formik={formik}
         status={"none"}
         bottomCustomComponents={
           <div className="flex justify-between gap-4 text-sm">
             <span>Forgot Password?</span>
-            <Link to="/reset-password" className="no-underline text-gold">
+            <Link
+              to="/reset-password"
+              className="font-bold text-black no-underline"
+            >
               Retrieve it
             </Link>
           </div>
@@ -97,8 +100,8 @@ function Login() {
 
       <p className="text-center xs:text-sm">
         Don't have an account?{" "}
-        <Link to="/signup" className="no-underline text-gold">
-          Register here!
+        <Link to="/signup" className="text-black font-bold no-underline">
+          Sign Up
         </Link>
       </p>
     </section>

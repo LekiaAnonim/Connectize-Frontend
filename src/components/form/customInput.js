@@ -28,6 +28,7 @@ export default function CustomInput({
         value={value}
         name={name}
       />
+
       {type === "password" && isPassword ? (
         <span
           className="absolute top-5 right-3 cursor-pointer text-xs"
