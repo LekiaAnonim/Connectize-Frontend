@@ -17,7 +17,7 @@ export default function Form({
 
       {inputArray.map(
         ({ name, type, label, placeholder, gridInputs }, index) => (
-          <div key={index}>
+          <div key={index} className="w-full">
             {type === "grid" ? (
               <div className={`grid md:grid-cols-2 gap-2`}>
                 {gridInputs.map(({ name, type, label, placeholder }) => (
@@ -36,7 +36,7 @@ export default function Form({
                 ))}
               </div>
             ) : (
-              <div className="my-3">
+              <div className="my-3 w-full">
                 <label htmlFor={type}>{label}</label>
                 <CustomInput
                   type={type}
@@ -60,7 +60,7 @@ export default function Form({
           {button && (
             <button
               type={button ? button.type : "submit"}
-              className={`w-full bg-black rounded-md hover:opacity-70 transition-all duration-300 text-white px-3 py-2.5 ${
+              className={`w-full bg-black rounded-full hover:opacity-70 transition-all duration-300 text-white px-3 py-2.5 ${
                 button.style
               } ${formik.isSubmitting ? "opacity-50 pointer-events-none" : ""}`}
             >

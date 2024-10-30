@@ -6,28 +6,19 @@ export default function CheckAgreement({ formik }) {
     <>
       <div className="flex items-center space-x-2 my-1">
         <input
-          className="w-4 h-4 cursor-pointer"
+          className="size-3.5 cursor-pointer"
           name="isChecked"
           type="checkbox"
           onChange={formik.handleChange}
         />
         <label
-          className="!text-[0.9rem] text-gray-500 font-[400]"
+          className="!text-[0.89rem] text-gray-500 font-[400]"
           htmlFor="terms"
         >
-          I have read and understood Connectize{" "}
-          <Link className="text-custom_link underline" to="/">
-            Terms
+          I agree to{" "}
+          <Link className="text-black font-bold" to="/">
+            Terms and Conditions
           </Link>
-          ,{" "}
-          <Link className="text-custom_link underline" to="/">
-            Conditions
-          </Link>{" "}
-          and{" "}
-          <Link className="text-custom_link underline" to="/">
-            Policies
-          </Link>
-          .
         </label>
       </div>
       <FormikErrorResponse formik={formik} name={"isChecked"} />

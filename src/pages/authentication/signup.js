@@ -2,8 +2,6 @@ import { useEffect } from "react";
 import * as Yup from "yup";
 import Form from "../../components/form";
 import { useFormik } from "formik";
-import { REGISTER_EMAIL_KEY } from "../../lib/helpers";
-import useRedirect from "../../hooks/useRedirect";
 import { authenticationService } from "../../api-services/authentication";
 import CheckAgreement from "../../components/form/checkAgreement";
 import { Link, useNavigate } from "react-router-dom";
@@ -48,7 +46,6 @@ function Signup() {
   const navigate = useNavigate();
 
   const formValues = {
-    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -58,15 +55,11 @@ function Signup() {
   const formik = useFormik({
     initialValues: formValues,
     validationSchema: validationSchema,
-    onSubmit: async (
-      { email, username, password, confirmPassword },
-      { resetForm }
-    ) => {
+    onSubmit: async ({ email, password, confirmPassword }, { resetForm }) => {
       // console.log("Auth data ", { email, username, password, confirmPassword });
 
       const success = await authenticationService({
         values: {
-          username,
           email,
           password1: password,
           password2: confirmPassword,
@@ -87,22 +80,16 @@ function Signup() {
 
   const fields = [
     {
-      name: "username",
-      type: "email",
-      label: "Username",
-      placeholder: "Enter Username",
-    },
-    {
       name: "email",
       type: "email",
-      label: "Email Address",
-      placeholder: "Enter a valid email address",
+      label: "Company email",
+      placeholder: "Example@companymail.com",
     },
     {
       name: "password",
       type: "password",
       label: "Password",
-      placeholder: "Enter a 8 digit password",
+      placeholder: "At least 8 digit",
     },
     {
       name: "confirmPassword",
@@ -121,7 +108,7 @@ function Signup() {
         bottomCustomComponents={<CheckAgreement formik={formik} />}
         button={{
           type: "submit",
-          text: "Create my account",
+          text: "Sign up",
           submitText: "Creating your account...",
           style: "!md:w-[60%] mt-4",
         }}

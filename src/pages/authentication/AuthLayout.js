@@ -12,10 +12,10 @@ function AuthLayout({ redirectUrl = "/" }) {
 
   return (
     <main className="flex justify-center">
-      <section className="flex flex-col items-center justify-center py-8 px-4 lg:basis-1/2 shrink-0">
-        <section className="!w-full max-w-sm lg:max-w-md">
+      <section className="w-full flex flex-col items-center justify-center py-8 px-4 lg:basis-1/2 shrink-0">
+        <section className="w-full max-w-sm lg:max-w-md">
           <Logo />
-          <section className="w-full flex items-center justify-center mt-4">
+          <section className="w-full mt-4">
             <Outlet />
           </section>
         </section>

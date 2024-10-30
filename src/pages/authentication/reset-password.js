@@ -26,7 +26,7 @@ function ResetPasswordPage() {
       // const success =
       await authenticationService({
         values: { email },
-        url: "retrieve-password/",
+        url: "reset-password/",
         resetForm,
       });
 
@@ -59,9 +59,13 @@ function ResetPasswordPage() {
     //   placeholder: "Enter a 8 digit password",
     // },
   ];
+
   return (
     <section className="space-y-4">
-      <h1>Retrieve your password</h1>
+      <h1>Password recovery</h1>
+      <p className="text-custom_grey">
+        Please enter your email address to send a password recovery email.
+      </p>
       <Form
         formik={formik}
         status={"none"}

@@ -17,10 +17,10 @@ export default function CustomInput({
     setPasswordType(!isPassword ? "password" : "text");
   };
   return (
-    <div className="relative flex items-center justify-center w-full max-w-md">
+    <div className="relative w-full max-w-md">
       <input
         autoComplete="true"
-        className={`relative mt-2 w-full border border-gray-100 p-2 xs:py-1.5 rounded-md placeholder:text-sm ${className}`}
+        className={`relative mt-2 !w-full border border-gray-300 bg-light_grey p-2 px-2.5 xs:py-1.5 rounded-md placeholder:text-sm ${className} transition-all duration-300 focus:border-mid_grey`}
         type={type === "password" ? passWordType : type}
         placeholder={placeholder}
         onChange={onChange}
