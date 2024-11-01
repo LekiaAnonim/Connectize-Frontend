@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import clsx from "clsx";
 
-function Logo() {
+function Logo({ className, url = "/", height = "60px", width = "60px" }) {
   return (
-    <Link to="/" className="w-fit">
+    <Link to={url} className={clsx("w-fit", className)}>
       <img
         src="/images/logo.png"
-        style={{ height: "60px" }}
+        style={{ height, width }}
         alt="connectize logo"
       />
     </Link>

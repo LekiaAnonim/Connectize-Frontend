@@ -5,8 +5,6 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import FeedSideBar from './feedSideBar';
 import { Check, List } from '@mui/icons-material';
 import {Nav,NavItem} from "@asphalt-react/sidebar";
-import { Link } from 'react-router-dom';
-import { Download } from '@mui/icons-material';
 
 function SidebarLinear() {
   const [show, setShow] = useState(false);
