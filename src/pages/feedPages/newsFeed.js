@@ -9,13 +9,18 @@ export default function NewsFeed() {
   const { navOpen } = useNav();
   return (
     <div
-      className={clsx("flex flex-col md:flex-row p-2 gap-2 bg-[#EEEEEE]", {
-        "overflow-y-hidden h-screen": navOpen,
-      })}
+      className={clsx(
+        "flex flex-col md:flex-row p-2 gap-2 xl:gap-0 bg-[#EEEEEE]",
+        {
+          "overflow-y-hidden h-screen": navOpen,
+        }
+      )}
     >
       <Sidebar />
-      <DiscoverFeed />
-      <NotificationsSuggestions />
+      <div className="max-xl:flex-col flex gap-2 md:py-2 max-md:container max-sm:!px-0">
+        <DiscoverFeed />
+        <NotificationsSuggestions />
+      </div>
     </div>
   );
 }

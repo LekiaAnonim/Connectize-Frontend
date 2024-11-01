@@ -2,7 +2,7 @@ import React from "react";
 
 const NotificationsSuggestions = () => {
   return (
-    <div className="bg-gray-50 rounded p-4 w-full md:w-1/4 lg:w-1/5">
+    <div className="bg-gray-50 rounded p-4 h-fit w-full xl:w-1/4 flex flex-col md:flex-row xl:flex-col shrink-0 gap-4">
       <div className="mb-6">
         <h2 className="text-lg font-bold">Notifications</h2>
         <ul>

@@ -12,7 +12,7 @@ const Sidebar = () => {
   return (
     <div
       className={clsx(
-        "max-md:absolute max-md:top-0 max-md:left-0 max-md:h-screen bg-gray-50 rounded p-4 max-w-[450px] md:w-1/4 lg:w-1/5 min-h-screen max-md:transition-all duration-500",
+        "max-md:absolute max-md:top-0 max-md:left-0 max-md:h-screen bg-gray-50 rounded p-4 shrink-0 max-w-[350px] md:w-[240px] lg:w-[260px] 2xl:w-[280px] min-h-screen max-md:transition-all duration-500",
         {
           "max-md:overflow-y-auto max-md:min-w-[300px] max-md:w-[50%] z-[20000]":
             navOpen,
