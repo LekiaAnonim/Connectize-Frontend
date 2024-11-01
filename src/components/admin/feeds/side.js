@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState } from "react";
 //import Alert from 'react-bootstrap/Alert';
-import Button from 'react-bootstrap/Button';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import FeedSideBar from './feedSideBar';
-import { Check, List } from '@mui/icons-material';
-import {Nav,NavItem} from "@asphalt-react/sidebar";
+import Button from "react-bootstrap/Button";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import FeedSideBar from "./feedSideBar";
+import { Check, List } from "@mui/icons-material";
+import { Nav, NavItem } from "@asphalt-react/sidebar";
 
 function SidebarLinear() {
   const [show, setShow] = useState(false);
@@ -15,85 +15,111 @@ function SidebarLinear() {
   return (
     <>
       <Button variant="" className="d-lg-none d-md-none" onClick={handleShow}>
-        <List/>
+        <List />
       </Button>
 
       <div variant="" className="d-none d-lg-block">
-        <FeedSideBar/>
+        <FeedSideBar />
       </div>
-        <Offcanvas show={show} onHide={handleClose} responsive="md lg">
+      <Offcanvas show={show} onHide={handleClose} responsive="md lg">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>James Ogbonna</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           {/* <div className='rounded' style={{background:"#2F3645",color:"#ffffff"}}> */}
-          <div className='ps-3' style={{background:"#fff",color:"#"}}>
+          <div className="ps-3" style={{ background: "#fff", color: "#" }}>
             <Nav>
-            <NavItem >
-                <img src='images/Jamespicsnobg.png' className='w-50 rounded-pill ms-4 mt-4 bg-primary' alt='profile'/>
-            </NavItem>
-            <NavItem>
-                <h4 style={{color:'orangered'}}>Ogbonna James</h4>
-            </NavItem>
-            <NavItem>
+              <NavItem>
+                <img
+                  src="images/Jamespicsnobg.png"
+                  className="w-50 rounded-pill ms-4 mt-4 bg-primary"
+                  alt="profile"
+                />
+              </NavItem>
+              <NavItem>
+                <h4 style={{ color: "orangered" }}>Ogbonna James</h4>
+              </NavItem>
+              <NavItem>
                 <p>Fullstack Developer</p>
-            </NavItem>
-            <NavItem>
-              <hr/>
-             {/* <div className='d-flex bg-success p-2 text-white bg-opacity-50'> */}
-             <div className='row'>
-                <h6 className='col-md-4'>Location:</h6>
-                <p className='col-md-6'>Lagos, Nigeria</p>
-             </div>
-             <hr/>
-            </NavItem>
-            <NavItem>
-                <div className='d-flex gap-2'>
-                    <div className='text-warning'><Check/></div>
-                    <p>HTML, CSS</p>
+              </NavItem>
+              <NavItem>
+                <hr />
+                {/* <div className='d-flex bg-success p-2 text-white bg-opacity-50'> */}
+                <div className="row">
+                  <h6 className="col-md-4">Location:</h6>
+                  <p className="col-md-6">Lagos, Nigeria</p>
                 </div>
-                <div className='d-flex gap-2'>
-                    <div className='text-warning'><Check/></div>
-                    <p>Bootstrap, Tailwind</p>
+                <hr />
+              </NavItem>
+              <NavItem>
+                <div className="d-flex gap-2">
+                  <div className="text-warning">
+                    <Check />
+                  </div>
+                  <p>HTML, CSS</p>
                 </div>
-                <div className='d-flex gap-2'>
-                    <div className='text-warning'><Check/></div>
-                    <p>Material UI, React Bootstrap,</p>
+                <div className="d-flex gap-2">
+                  <div className="text-warning">
+                    <Check />
+                  </div>
+                  <p>Bootstrap, Tailwind</p>
                 </div>
-                <div className='d-flex gap-2'>
-                    <div className='text-warning'><Check/></div>
-                    <p>Slick, AOS</p>
+                <div className="d-flex gap-2">
+                  <div className="text-warning">
+                    <Check />
+                  </div>
+                  <p>Material UI, React Bootstrap,</p>
                 </div>
-                <div className='d-flex gap-2'>
-                    <div className='text-warning'><Check/></div>
-                    <p>Reactjs, Nextjs</p>
+                <div className="d-flex gap-2">
+                  <div className="text-warning">
+                    <Check />
+                  </div>
+                  <p>Slick, AOS</p>
                 </div>
-                <div className='d-flex gap-2'>
-                    <div className='text-warning'><Check/></div>
-                    <p>JavaScript, Nodejs, Expressjs</p>
+                <div className="d-flex gap-2">
+                  <div className="text-warning">
+                    <Check />
+                  </div>
+                  <p>Reactjs, Nextjs</p>
                 </div>
-                <div className='d-flex gap-2'>
-                    <div className='text-warning'><Check/></div>
-                    <p>C#,.NET 6.0, .NET Core MVC, EFcore</p>
+                <div className="d-flex gap-2">
+                  <div className="text-warning">
+                    <Check />
+                  </div>
+                  <p>JavaScript, Nodejs, Expressjs</p>
                 </div>
-                <div className='d-flex gap-2'>
-                    <div className='text-warning'><Check/></div>
-                    <p>Swagger, Postman, Tunder client</p>
+                <div className="d-flex gap-2">
+                  <div className="text-warning">
+                    <Check />
+                  </div>
+                  <p>C#,.NET 6.0, .NET Core MVC, EFcore</p>
                 </div>
-                <div className='d-flex gap-2'>
-                    <div className='text-warning'><Check/></div>
-                    <p>Sql, Msql, Mongoo, MSsql</p>
+                <div className="d-flex gap-2">
+                  <div className="text-warning">
+                    <Check />
+                  </div>
+                  <p>Swagger, Postman, Tunder client</p>
                 </div>
-                <div className='d-flex gap-2'>
-                    <div className='text-warning'><Check/></div>
-                    <p>REST API</p>
+                <div className="d-flex gap-2">
+                  <div className="text-warning">
+                    <Check />
+                  </div>
+                  <p>Sql, Msql, Mongoo, MSsql</p>
                 </div>
-                <div className='d-flex gap-2'>
-                    <div className='text-warning'><Check/></div>
-                    <p>vercel, netlify, Version control(Git)</p>
+                <div className="d-flex gap-2">
+                  <div className="text-warning">
+                    <Check />
+                  </div>
+                  <p>REST API</p>
                 </div>
-            </NavItem>
-          </Nav>
+                <div className="d-flex gap-2">
+                  <div className="text-warning">
+                    <Check />
+                  </div>
+                  <p>vercel, netlify, Version control(Git)</p>
+                </div>
+              </NavItem>
+            </Nav>
           </div>
         </Offcanvas.Body>
       </Offcanvas>
@@ -103,21 +129,9 @@ function SidebarLinear() {
 
 export default SidebarLinear;
 
-
-
-
-
-
-
-
-
-
-
-
-
 // import Home from '@mui/icons-material/Home'
 // import { Link } from 'react-router-dom'
-// import { Building, Usergroup } from '../../../icon'
+// import { Building, UserGroup } from '../../../icon'
 // import { AccountCircle, Analytics, ChatRounded, ContactPage, DesignServices,List} from '@mui/icons-material'
 // import { useState } from 'react';
 // import Button from 'react-bootstrap/Button';
@@ -166,7 +180,7 @@ export default SidebarLinear;
 //         <Offcanvas.Body>
 //             <div className='bg-white rounded p-3'>
 //                 <div>
-//                     <Link to={'/adminprofile'}> 
+//                     <Link to={'/adminprofile'}>
 //                         <img src='images/logo.png' className='d-flex mx-auto' alt='logo'/>
 //                     </Link>
 //                 </div>
@@ -190,12 +204,12 @@ export default SidebarLinear;
 //                     </div>
 //                     <div>
 //                         <Feed
-//                             icon ={<Usergroup/>}
+//                             icon ={<UserGroup/>}
 //                             link = {'/organization'}
 //                             text ="Organization"
 //                             textColor={'text-black text-decoration-none'}
 //                         />
-                        
+
 //                     </div>
 //                     <div>
 //                         <Feed

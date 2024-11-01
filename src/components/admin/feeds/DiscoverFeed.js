@@ -3,7 +3,7 @@ import React from "react";
 
 const DiscoverFeed = () => {
   return (
-    <div className="p-4 w-full md:w-1/2 lg:w-3/5">
+    <div className="rounded p-4 w-full md:w-1/2 lg:w-3/5">
       <div className="mb-6">
         <h2 className="text-2xl font-bold">Discover</h2>
         <input

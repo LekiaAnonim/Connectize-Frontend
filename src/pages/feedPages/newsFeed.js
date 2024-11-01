@@ -5,7 +5,7 @@ import NotificationsSuggestions from "../../components/admin/feeds/Notifications
 
 export default function NewsFeed() {
   return (
-    <div className="flex flex-col md:flex-row p-3 bg-light_grey">
+    <div className="flex flex-col md:flex-row p-2 gap-2 bg-light_grey">
       <Sidebar />
       <DiscoverFeed />
       <NotificationsSuggestions />

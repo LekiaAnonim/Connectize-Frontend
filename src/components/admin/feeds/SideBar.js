@@ -27,7 +27,7 @@ const Sidebar = () => {
       </nav>
 
       <div>
-        <h2 className="font-semibold mb-4">Companies</h2>
+        <h3 className="font-semibold mb-4">Companies</h3>
         <ul>
           {["Dell", "Huawei", "Starbucks", "NASA"].map((company) => (
             <li key={company} className="flex items-center mb-4">

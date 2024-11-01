@@ -1,4 +1,12 @@
-import { Message } from "../icon";
+import {
+  ChartBar,
+  Home,
+  HomeIcon,
+  MarketIcon,
+  Message,
+  UserGroup,
+  VideoIcon,
+} from "../icon";
 
 export const months = [
   "January",
@@ -27,11 +35,11 @@ export const days = [
 export const connectizeApiBaseUrl = "https://connectize.co/api/";
 
 export const feedNavItems = [
-  { name: "Feeds", to: "/feeds", icon: <Message /> },
+  { name: "Feeds", to: "/feeds", icon: <HomeIcon /> },
   { name: "Messages", to: "/Messages", icon: <Message /> },
-  { name: "Organization", to: "/Organization", icon: <Message /> },
-  { name: "Market", to: "/Market", icon: <Message /> },
-  { name: "Analysis", to: "/Analysis", icon: <Message /> },
+  { name: "Organization", to: "/Organization", icon: <UserGroup /> },
+  { name: "Market", to: "/Market", icon: <MarketIcon /> },
+  { name: "Analysis", to: "/Analysis", icon: <ChartBar /> },
   { name: "Photos", to: "/Photos", icon: <Message /> },
-  { name: "Videos", to: "/Videos", icon: <Message /> },
+  { name: "Videos", to: "/Videos", icon: <VideoIcon /> },
 ];
