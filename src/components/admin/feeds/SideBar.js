@@ -4,10 +4,15 @@ import { feedNavItems } from "../../../lib/data";
 import Logo from "../../logo";
 import clsx from "clsx";
 import { useNav } from "../../../context/navContext";
+import { useMediaQuery } from "react-responsive";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
-  const { navOpen } = useNav();
+  const { navOpen, toggleNav } = useNav();
+
+  const isTablet = useMediaQuery({ minWidth: 768 });
+
+  if (isTablet) toggleNav(false);
 
   return (
     <div
