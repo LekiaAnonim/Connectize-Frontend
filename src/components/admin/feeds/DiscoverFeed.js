@@ -5,13 +5,20 @@ const DiscoverFeed = () => {
   return (
     <div className="rounded md:w-full">
       <ResponsiveNav />
-      <div className="mb-6">
-        <h1 className="text-3xl font-medium">Discover</h1>
+      <h1 className="text-3xl font-[400]">Discover</h1>
+      <div className="my-6 bg-white px-2 xs:px-4 py-4 rounded border-b-[5px] border-gold">
         <input
           type="text"
           placeholder="What's happening"
-          className="w-full mt-2 p-2 border-b border-gray-300 bg-transparent"
+          className="w-full pb-2 border-b border-gray-300 bg-transparent focus:outline-0 text-xl"
         />
+
+        <div className="mt-4 flex items-center justify-between">
+          <div></div>
+          <button className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-4 transition-opacity duration-300">
+            create post
+          </button>
+        </div>
       </div>
 
       <div className="flex justify-between items-center mb-4">

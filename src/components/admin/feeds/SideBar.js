@@ -21,7 +21,8 @@ const Sidebar = () => {
         {
           "max-md:overflow-y-auto max-md:min-w-[300px] max-md:w-[50%] z-[20000]":
             navOpen,
-          "max-md:overflow-hidden max-md:-left-[100%]": !navOpen,
+          "max-md:overflow-hidden max-md:-left-[100%] max-md:opacity-0":
+            !navOpen,
         }
       )}
     >
