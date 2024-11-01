@@ -1,21 +1,22 @@
 import React from "react";
-import { Leftsidebar } from "../../components/admin/feeds/home/Leftsidebar";
+import { LeftSideBar } from "../../components/admin/feeds/home/LeftSideBar";
 import PrimarySearchAppBar from "../../components/admin/feeds/home/Header";
-import { Rightsidebar } from "../../components/admin/feeds/home/Rightsidebar";
+import { RightSideBar } from "../../components/admin/feeds/home/RightSideBar";
 import MainContainer from "../../components/admin/feeds/home/MainContainer";
-import '../../index.css';
+import "../../index.css";
 
 export default function FeedPage() {
-    return(
-        <div className="page-container feed-page-container mt-0" 
-        style={{background:"#faf9f7"}}>
-            <Leftsidebar />
-            <div>
-            <PrimarySearchAppBar/>
-            <MainContainer/>
-            </div>
-            <Rightsidebar />
-        </div>
-        
-    )
+  return (
+    <div
+      className="page-container feed-page-container mt-0"
+      style={{ background: "#faf9f7" }}
+    >
+      <LeftSideBar />
+      <div>
+        <PrimarySearchAppBar />
+        <MainContainer />
+      </div>
+      <RightSideBar />
+    </div>
+  );
 }

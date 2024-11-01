@@ -1,17 +1,14 @@
-import * as React from 'react';
+import * as React from "react";
 
-import './Rightsidebar.css';
-import TopServiceCard from './TopServiceCard';
-import SuggestedUserCard from './SuggestUser';
+import "./RightSideBar.css";
+import TopServiceCard from "./TopServiceCard";
+import SuggestedUserCard from "./SuggestUser";
 
-export function Rightsidebar() {
-  
-    
-
+export function RightSideBar() {
   return (
-    <section className='right-sidebar-container mt-5'>
-        <TopServiceCard />
-      <div className='right-sidebar-suggested-container'>
+    <section className="right-sidebar-container mt-5">
+      <TopServiceCard />
+      <div className="right-sidebar-suggested-container">
         <h3>Suggested</h3>
         <SuggestedUserCard />
         <SuggestedUserCard />
