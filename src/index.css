@@ -62,5 +62,7 @@ code {
   color: #000 !important;
   text-transform: capitalize !important;
 }
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 

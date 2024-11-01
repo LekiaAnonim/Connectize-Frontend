@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import Slider from "react-slick";
+import { GreaterThan } from "../../../icon";
 function PauseOnHover() {
   var settings = {
     dots: true,
@@ -35,47 +37,57 @@ function PauseOnHover() {
       }
     ]
   };
+  let Card=(props)=>{
+    let {img} =props
+    return(
+      <div>
+        <div className="card px-1 mx-2 pb-4">
+            <img src={img} className="card-body w-100" style={{height:"300px"}} alt="#"/>
+            <div className="d-flex card-body text-white" style={{marginTop:"-6rem"}}>
+              <h3 className="bg-secondary rounded" style={{opacity:"80%"}}>Efficiency Unlished:<br/>Mid-Tier Blend</h3>
+              <Link to={"/product"} style={{height:"40px"}} className="btn btn-dark text-white rounded-pill ms-auto">Visit store <GreaterThan/></Link>
+            </div>
+          </div>
+      </div>
+    )
+  }
   return (
     <div className="container p-2">
       <Slider {...settings}>
         <div>
-          <div className="card px-1 mx-2">
-            <img src="images/Rectangle1.png" className="card-body w-100" style={{height:"250px"}} alt="#"/>
-            <div className="card-body">
-              <h3>Sweet Cookie</h3>
-              <p>Enjoy the yommy taste of our ever fresh cookie</p>
-            </div>
-          </div>
+          <Card
+            img="images/Rectangle1.png"
+          />
         </div>
-        <div className="card px-1 mx-2">
-          <img src="images/Rectangle2.png" className="card-body w-100" style={{height:"250px"}} alt="#"/>
-          <h3>Onion Cookie</h3>
-          <p>Enjoy the yommy taste of our ever fresh cookie</p>
+        <div>
+        <Card
+            img="images/Rectangle2.png"
+          />
         </div>
-        <div className="card px-1 mx-2">
-          <img src="images/Rectangle3.png" className="card-body w-100" style={{height:"250px"}} alt="#"/>
-          <h3>Pinapple Cookie</h3>
-          <p>Enjoy the yommy taste of our ever fresh cookie</p>
+        <div>
+        <Card
+            img="images/Rectangle3.png"
+          />
         </div>
-        <div className="card px-1 mx-2">
-          <img src="images/Rectangle4.png" className="card-body w-100" style={{height:"250px"}} alt="#"/>
-          <h3>Berry Cookie</h3>
-          <p>Enjoy the yommy taste of our ever fresh cookie</p>
+        <div>
+        <Card
+            img="images/Rectangle4.png"
+          />
         </div>
-        <div className="card px-1 mx-2">
-          <img src="images/Rectangle5.png" className="card-body w-100" style={{height:"250px"}} alt="#"/>
-          <h3>Pumpkin Cookie</h3>
-          <p>Enjoy the yommy taste of our ever fresh cookie</p>
+        <div>
+        <Card
+            img="images/Rectangle5.png"
+          />
         </div>
-        <div className="card px-1 mx-2">
-          <img src="images/Rectangle6.png" className="card-body w-100" style={{height:"250px"}} alt="#"/>
-          <h3>Cherry Cookie</h3>
-          <p>Enjoy the yommy taste of our ever fresh cookie</p>
+        <div>
+        <Card
+            img="images/Rectangle6.png"
+          />
         </div>
-        <div className="card px-2 mx-2">
-          <img src="images/Rectangle7.png" className="card-body w-100 rounded" style={{height:"250px"}} alt="#"/>
-          <h3>Tomatos Cookie</h3>
-          <p>Enjoy the yommy taste of our ever fresh cookie</p>
+        <div>
+        <Card
+            img="images/Rectangle7.png"
+          />
         </div>
       </Slider>
     </div>

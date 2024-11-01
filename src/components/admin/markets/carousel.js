@@ -15,14 +15,6 @@ function Carousel() {
       <div>
         <h3 className='mb-5'>Recomended</h3>
         <PauseOnHover/>
-        {/* <div className='row'>
-          <div className='col-6'>
-            <img src='images/Rectangle1.png' className='w-100' alt='#'/>
-          </div>
-          <div className='col-6'>
-            <img src='images/Rectangle3.png' className='w-100' alt='#'/>
-          </div>
-        </div> */}
       </div>
     </div>
   )

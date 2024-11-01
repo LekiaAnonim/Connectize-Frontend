@@ -5,9 +5,9 @@ function NewlyListed() {
     let ListCard=({image,gold,reserve,chat}) =>{
         return (
           <div>
-              <img src={image} className='w-100' alt='#'/>
+              <img src={image} className='w-100 h-100 rounded' alt='#'/>
               <p>{gold}<br/> {reserve}</p>
-              <button className='bg-dark text-white rounded-pill px-1'>{chat}</button>
+              <button className=' btn btn-dark text-white px-1'>{chat}</button>
           </div>
         )
       }
@@ -18,7 +18,7 @@ function NewlyListed() {
             <p className='ms-auto'>See All <GreaterThan/></p>
         </div>
         <div className='row'>
-            <div className='col-sm-6 col-md-3 mb-3'>
+            <div className='col-sm-6 col-md-6 col-lg-3 mb-3'>
                 <ListCard 
                     image="images/Rectangle2.png"
                     gold="Premium Black Gold"
@@ -26,7 +26,7 @@ function NewlyListed() {
                     chat="Chat seller"
                 />
             </div>
-            <div className='col-sm-6 col-md-3 mb-3'>
+            <div className='col-sm-6 col-md-6 col-lg-3 mb-3'>
                 <ListCard 
                     image="images/Rectangle4.png"
                     gold="Premium Black Gold"
@@ -34,7 +34,7 @@ function NewlyListed() {
                     chat="Chat seller"
                 />
             </div>
-            <div className='col-sm-6 col-md-3 mb-3'>
+            <div className='col-sm-6 col-md-6 col-lg-3 mb-3'>
                 <ListCard 
                     image="images/Rectangle5.png"
                     gold="Premium Black Gold"
@@ -42,7 +42,7 @@ function NewlyListed() {
                     chat="Chat seller"
                 />
             </div>
-            <div className='col-sm-6 col-md-3 mb-3'>
+            <div className='col-sm-6 col-md-6 col-lg-3 mb-3'>
                 <ListCard 
                     image="images/Rectangle6.png"
                     gold="Premium Black Gold"
@@ -53,7 +53,7 @@ function NewlyListed() {
         </div>
 
         <div className='row'>
-            <div className='col-sm-6 col-md-3 mb-3'>
+            <div className='col-sm-6 col-md-6 col-lg-3 mb-3'>
                 <ListCard 
                     image="images/Rectangle7.png"
                     gold="Premium Black Gold"
@@ -61,7 +61,7 @@ function NewlyListed() {
                     chat="Chat seller"
                 />
             </div>
-            <div className='col-sm-6 col-md-3 mb-3'>
+            <div className='col-sm-6 col-md-6 col-lg-3 mb-3'>
                 <ListCard 
                     image="images/Rectangle8.png"
                     gold="Premium Black Gold"
@@ -69,7 +69,7 @@ function NewlyListed() {
                     chat="Chat seller"
                 />
             </div>
-            <div className='col-sm-6 col-md-3 mb-3'>
+            <div className='col-sm-6 col-md-6 col-lg-3 mb-3'>
                 <ListCard 
                     image="images/Rectangle9.png"
                     gold="Premium Black Gold"
@@ -77,7 +77,7 @@ function NewlyListed() {
                     chat="Chat seller"
                 />
             </div>
-            <div className='col-sm-6 col-md-3 mb-3'>
+            <div className='col-sm-6 col-md-6 col-lg-3 mb-3'>
                 <ListCard 
                     image="images/Rectangle10.png"
                     gold="Premium Black Gold"
