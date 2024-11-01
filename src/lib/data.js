@@ -1,9 +1,11 @@
 import {
+  AnalysisIcon,
   ChartBar,
   Home,
   HomeIcon,
   MarketIcon,
   Message,
+  PhotosIcon,
   UserGroup,
   VideoIcon,
 } from "../icon";
@@ -35,11 +37,11 @@ export const days = [
 export const connectizeApiBaseUrl = "https://connectize.co/api/";
 
 export const feedNavItems = [
-  { name: "Feeds", to: "/feeds", icon: <HomeIcon /> },
-  { name: "Messages", to: "/Messages", icon: <Message /> },
-  { name: "Organization", to: "/Organization", icon: <UserGroup /> },
-  { name: "Market", to: "/Market", icon: <MarketIcon /> },
-  { name: "Analysis", to: "/Analysis", icon: <ChartBar /> },
-  { name: "Photos", to: "/Photos", icon: <Message /> },
-  { name: "Videos", to: "/Videos", icon: <VideoIcon /> },
+  { name: "Feeds", to: "/", icon: <HomeIcon /> },
+  { name: "Messages", to: "/messages", icon: <Message /> },
+  { name: "Organization", to: "/organization", icon: <UserGroup /> },
+  { name: "Market", to: "/market", icon: <MarketIcon /> },
+  { name: "Analysis", to: "/analysis", icon: <AnalysisIcon /> },
+  { name: "Photos", to: "/photos", icon: <PhotosIcon /> },
+  { name: "Videos", to: "/videos", icon: <VideoIcon /> },
 ];

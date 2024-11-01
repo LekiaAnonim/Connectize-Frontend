@@ -1,11 +1,15 @@
-export const List = () => (
+export const List = ({
+  width = "24",
+  height = "24",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    fill="currentColor"
+    width={width}
+    height={height}
+    fill={color}
     class="bi bi-justify"
-    viewBox="0 0 16 16"
+    viewBox={`0 0 ${width} ${height}`}
   >
     <path
       fill-rule="evenodd"
@@ -13,14 +17,18 @@ export const List = () => (
     />
   </svg>
 );
-export const Heart = () => (
+export const Heart = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    fill="currentColor"
+    width={width}
+    height={height}
+    fill={color}
     class="bi bi-heart-fill"
-    viewBox="0 0 16 16"
+    viewBox={`0 0 ${width} ${height}`}
   >
     <path
       fill-rule="evenodd"
@@ -28,60 +36,81 @@ export const Heart = () => (
     />
   </svg>
 );
-export const Threedot = () => (
+export const Threedot = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    fill="currentColor"
+    width={width}
+    height={height}
+    fill={color}
     class="bi bi-three-dots"
-    viewBox="0 0 16 16"
+    viewBox={`0 0 ${width} ${height}`}
   >
     <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
   </svg>
 );
-export const Check = () => (
+export const Check = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    fill="currentColor"
+    width={width}
+    height={height}
+    fill={color}
     class="bi bi-patch-check-fill"
-    viewBox="0 0 16 16"
+    viewBox={`0 0 ${width} ${height}`}
   >
     <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708" />
   </svg>
 );
-export const Linkedin = () => (
+
+export const Linkedin = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    fill="currentColor"
+    width={width}
+    height={height}
+    fill={color}
     class="bi bi-linkedin"
-    viewBox="0 0 16 16"
+    viewBox={`0 0 ${width} ${height}`}
   >
     <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z" />
   </svg>
 );
-export const Instagram = () => (
+export const Instagram = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    height="22"
-    width="22"
+    width={width}
+    height={height}
     viewBox="0 0 448 512"
   >
     <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
   </svg>
 );
-export const Pencil = () => (
+export const Pencil = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    fill="currentColor"
+    width={width}
+    height={height}
+    fill={color}
     class="bi bi-pencil-square"
-    viewBox="0 0 16 16"
+    viewBox={`0 0 ${width} ${height}`}
   >
     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
     <path
@@ -90,14 +119,18 @@ export const Pencil = () => (
     />
   </svg>
 );
-export const GreaterThan = () => (
+export const GreaterThan = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    fill="currentColor"
+    width={width}
+    height={height}
+    fill={color}
     class="bi bi-chevron-right"
-    viewBox="0 0 16 16"
+    viewBox={`0 0 ${width} ${height}`}
   >
     <path
       fill-rule="evenodd"
@@ -105,14 +138,18 @@ export const GreaterThan = () => (
     />
   </svg>
 );
-export const ArrowDown = () => (
+export const ArrowDown = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    fill="currentColor"
+    width={width}
+    height={height}
+    fill={color}
     class="bi bi-chevron-down"
-    viewBox="0 0 16 16"
+    viewBox={`0 0 ${width} ${height}`}
   >
     <path
       fill-rule="evenodd"
@@ -120,14 +157,18 @@ export const ArrowDown = () => (
     />
   </svg>
 );
-export const ArrowLeft = () => (
+export const ArrowLeft = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    fill="currentColor"
+    width={width}
+    height={height}
+    fill={color}
     class="bi bi-chevron-left me-3"
-    viewBox="0 0 16 16"
+    viewBox={`0 0 ${width} ${height}`}
   >
     <path
       fill-rule="evenodd"
@@ -135,47 +176,63 @@ export const ArrowLeft = () => (
     />
   </svg>
 );
-export const Home = () => (
+export const Home = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="22"
-    fill="currentColor"
+    width={width}
+    height={height}
+    fill={color}
     class="bi bi-house-door-fill me-3"
-    viewBox="0 0 16 16"
+    viewBox={`0 0 ${width} ${height}`}
   >
     <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5" />
   </svg>
 );
-export const Message = () => (
+export const Message = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="22"
-    height="22"
+    width={width}
+    height={height}
     viewBox="0 0 24 24"
-    fill="currentColor"
+    fill={color}
   >
     <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 0 0-1.032-.211 50.89 50.89 0 0 0-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 0 0 2.433 3.984L7.28 21.53A.75.75 0 0 1 6 21v-4.03a48.527 48.527 0 0 1-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979Z" />
     <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 0 0 1.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.94v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0 0 15.75 7.5Z" />
   </svg>
 );
-export const Notification = () => (
+export const Notification = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="22"
     height="22"
-    fill="currentColor"
+    fill={color}
     class="bi bi-bell-fill"
-    viewBox="0 0 16 16"
+    viewBox={`0 0 ${width} ${height}`}
   >
     <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901" />
   </svg>
 );
-export const ChartBar = () => (
+export const ChartBar = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    fill="currentColor"
+    fill={color}
     width="22"
     height="22"
   >
@@ -186,11 +243,15 @@ export const ChartBar = () => (
     />
   </svg>
 );
-export const Setting = () => (
+export const Setting = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    fill="currentColor"
+    fill={color}
     width="22"
     height="22"
   >
@@ -201,13 +262,17 @@ export const Setting = () => (
     />
   </svg>
 );
-export const UserGroup = () => (
+export const UserGroup = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    fill="currentColor"
-    width="22"
-    height="22"
+    fill={color}
+    width={width}
+    height={height}
   >
     <path
       fill-rule="evenodd"
@@ -217,11 +282,15 @@ export const UserGroup = () => (
     <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
   </svg>
 );
-export const Building = () => (
+export const Building = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    fill="currentColor"
+    fill={color}
     width="22"
     height="22"
   >
@@ -233,11 +302,15 @@ export const Building = () => (
     />
   </svg>
 );
-export const Dollar = () => (
+export const Dollar = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    fill="currentColor"
+    fill={color}
     width="22"
     height="22"
   >
@@ -249,11 +322,15 @@ export const Dollar = () => (
     />
   </svg>
 );
-export const History = () => (
+export const History = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    fill="currentColor"
+    fill={color}
     width="22"
     height="22"
   >
@@ -265,11 +342,15 @@ export const History = () => (
     />
   </svg>
 );
-export const Squares = () => (
+export const Squares = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    fill="currentColor"
+    fill={color}
     width="22"
     height="22"
   >
@@ -280,37 +361,49 @@ export const Squares = () => (
     />
   </svg>
 );
-export const Bookmark = () => (
+export const Bookmark = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
     height="24"
-    fill="currentColor"
+    fill={color}
     class="bi bi-bookmark"
-    viewBox="0 0 16 16"
+    viewBox={`0 0 ${width} ${height}`}
   >
     <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z" />
   </svg>
 );
-export const CircleFill = () => (
+export const CircleFill = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    fill="currentColor"
+    width={width}
+    height={height}
+    fill={color}
     class="bi bi-circle-fill"
-    viewBox="0 0 16 16"
+    viewBox={`0 0 ${width} ${height}`}
   >
     <circle cx="8" cy="8" r="8" />
   </svg>
 );
-export const Location = () => (
+export const Location = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    fill="currentColor"
-    width="16"
-    height="16"
+    fill={color}
+    width={width}
+    height={height}
   >
     <path
       fill-rule="evenodd"
@@ -320,10 +413,14 @@ export const Location = () => (
   </svg>
 );
 
-export const VideoIcon = () => (
+export const VideoIcon = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
-    width="20"
-    height="20"
+    width={width}
+    height={height}
     viewBox="0 0 20 20"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -332,34 +429,103 @@ export const VideoIcon = () => (
       fill-rule="evenodd"
       clip-rule="evenodd"
       d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM9.5547 7.16795C9.24784 6.96338 8.8533 6.94431 8.52814 7.11833C8.20298 7.29235 8 7.63121 8 8V12C8 12.3688 8.20298 12.7077 8.52814 12.8817C8.8533 13.0557 9.24784 13.0366 9.5547 12.8321L12.5547 10.8321C12.8329 10.6466 13 10.3344 13 10C13 9.66565 12.8329 9.35342 12.5547 9.16795L9.5547 7.16795Z"
-      fill="#262626"
+      fill={color}
     />
   </svg>
 );
 
-export const PhotosIcon = () => <></>;
-
-export const HomeIcon = () => <></>;
-
-export const MarketIcon = () => (
+export const PhotosIcon = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
   <svg
-    width="20"
-    height="20"
+    width={width}
+    height={height}
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M2 6C2 4.89543 2.89543 4 4 4H10C11.1046 4 12 4.89543 12 6V14C12 15.1046 11.1046 16 10 16H4C2.89543 16 2 15.1046 2 14V6Z"
+      fill={color}
+    />
+    <path
+      d="M14.5528 7.10557C14.214 7.27497 14 7.62123 14 8V12C14 12.3788 14.214 12.725 14.5528 12.8944L16.5528 13.8944C16.8628 14.0494 17.2309 14.0329 17.5257 13.8507C17.8205 13.6684 18 13.3466 18 13V7C18 6.65342 17.8205 6.33156 17.5257 6.14935C17.2309 5.96714 16.8628 5.95058 16.5528 6.10557L14.5528 7.10557Z"
+      fill={color}
+    />
+  </svg>
+);
+
+export const HomeIcon = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
+  <svg
+    width="15"
+    height="16"
+    viewBox="0 0 15 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M13.524 4.98955L9.20828 1.09235C8.03196 0.0285966 6.22626 0.0866194 5.09491 1.21807L1.34116 4.99922C0.591909 5.75352 0 7.3008 0 8.51923V15.1919C0 17.6578 1.55095 19.6693 3.46154 19.6693H11.5385C13.449 19.6693 15 17.6675 15 15.2015V8.64494C15 7.33948 14.3482 5.73418 13.524 4.98955ZM8.06193 15.8011C8.06193 16.1976 7.80718 16.5264 7.49999 16.5264C7.1928 16.5264 6.93805 16.1976 6.93805 15.8011V12.9C6.93805 12.5035 7.1928 12.1747 7.49999 12.1747C7.80718 12.1747 8.06193 12.5035 8.06193 12.9V15.8011Z"
+      fill={color}
+    />
+  </svg>
+);
+
+export const MarketIcon = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
+  <svg
+    width={width}
+    height={height}
     viewBox="0 0 20 20"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
       d="M3 1C2.44772 1 2 1.44772 2 2C2 2.55228 2.44772 3 3 3H4.21922L4.52478 4.22224C4.52799 4.23637 4.5315 4.25039 4.5353 4.26429L5.89253 9.69321L4.99995 10.5858C3.74002 11.8457 4.63235 14 6.41416 14H15C15.5522 14 16 13.5523 16 13C16 12.4477 15.5522 12 15 12L6.41417 12L7.41416 11H14C14.3788 11 14.725 10.786 14.8944 10.4472L17.8944 4.44721C18.0494 4.13723 18.0329 3.76909 17.8507 3.47427C17.6684 3.17945 17.3466 3 17 3H6.28078L5.97014 1.75746C5.85885 1.3123 5.45887 1 5 1H3Z"
-      fill="#262626"
+      fill={color}
     />
     <path
       d="M16 16.5C16 17.3284 15.3284 18 14.5 18C13.6716 18 13 17.3284 13 16.5C13 15.6716 13.6716 15 14.5 15C15.3284 15 16 15.6716 16 16.5Z"
-      fill="#262626"
+      fill={color}
     />
     <path
       d="M6.5 18C7.32843 18 8 17.3284 8 16.5C8 15.6716 7.32843 15 6.5 15C5.67157 15 5 15.6716 5 16.5C5 17.3284 5.67157 18 6.5 18Z"
-      fill="#262626"
+      fill={color}
+    />
+  </svg>
+);
+
+export const AnalysisIcon = ({
+  width = "16",
+  height = "16",
+  color = "currentColor",
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 20 20"
+    fill={color}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M2 11C2 10.4477 2.44772 10 3 10H5C5.55228 10 6 10.4477 6 11V16C6 16.5523 5.55228 17 5 17H3C2.44772 17 2 16.5523 2 16V11Z"
+      fill={color}
+    />
+    <path
+      d="M8 7C8 6.44772 8.44772 6 9 6H11C11.5523 6 12 6.44772 12 7V16C12 16.5523 11.5523 17 11 17H9C8.44772 17 8 16.5523 8 16V7Z"
+      fill={color}
+    />
+    <path
+      d="M14 4C14 3.44772 14.4477 3 15 3H17C17.5523 3 18 3.44772 18 4V16C18 16.5523 17.5523 17 17 17H15C14.4477 17 14 16.5523 14 16V4Z"
+      fill={color}
     />
   </svg>
 );

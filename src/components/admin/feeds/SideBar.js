@@ -1,22 +1,40 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { feedNavItems } from "../../../lib/data";
 import Logo from "../../logo";
+import clsx from "clsx";
+import { useNav } from "../../../context/navContext";
 
 const Sidebar = () => {
+  const { pathname } = useLocation();
+  const { navOpen } = useNav();
+
   return (
-    <div className="bg-gray-50 rounded p-4 w-full md:w-1/4 lg:w-1/5 min-h-screen">
-      <div className="flex items-center mb-4">
-        <Logo />
-      </div>
+    <div
+      className={clsx(
+        "max-md:absolute max-md:top-0 max-md:left-0 max-md:h-screen bg-gray-50 rounded p-4 max-w-[450px] md:w-1/4 lg:w-1/5 min-h-screen max-md:transition-all duration-500",
+        {
+          "max-md:overflow-y-auto max-md:min-w-[300px] max-md:w-[50%] z-[20000]":
+            navOpen,
+          "max-md:overflow-hidden max-md:-left-1/2 opacity-": !navOpen,
+        }
+      )}
+    >
+      <Logo className="mb-4 md:mx-auto" height="70px" width="70px" />
       <nav className="mb-8">
-        <ul className="space-y-2 xs:text-sm">
-          {feedNavItems.map((item) => (
-            <li className="transition-colors duration-300">
+        <ul className="space-y-1 xs:text-sm px-0">
+          {feedNavItems.map((item, index) => (
+            <li className="">
               <Link
-                key={item.to}
+                key={index}
                 to={item.to.toLowerCase()}
-                className="mb-2 text-black cursor-pointer flex gap-2 items-center"
+                className={clsx(
+                  "flex gap-2 items-center transition-colors duration-300 p-2 rounded  hover:text-mid_grey text-custom_grey",
+                  {
+                    "!text-gold bg-mid_grey pointer-events-none":
+                      item.to === pathname,
+                  }
+                )}
               >
                 <>{item.icon}</>
                 <span>{item.name}</span>

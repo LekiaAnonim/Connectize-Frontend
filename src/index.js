@@ -5,12 +5,15 @@ import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "sonner";
+import { NavProvider } from "./context/navContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <React.StrictMode>
-      <App />
+      <NavProvider>
+        <App />
+      </NavProvider>
       <Toaster />
     </React.StrictMode>
   </BrowserRouter>
