@@ -2,6 +2,10 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    container: {
+      padding: "1rem",
+      center: true,
+    },
     extend: {
       screens: {
         xs: "480px",

@@ -5,7 +5,7 @@ import Logo from "../../logo";
 
 const Sidebar = () => {
   return (
-    <div className="bg-gray-50 p-4 w-full md:w-1/4 lg:w-1/5 min-h-screen">
+    <div className="bg-gray-50 rounded p-4 w-full md:w-1/4 lg:w-1/5 min-h-screen">
       <div className="flex items-center mb-4">
         <Logo />
       </div>
