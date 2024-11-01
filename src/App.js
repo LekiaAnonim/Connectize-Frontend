@@ -1,6 +1,5 @@
 //import 'bootstrap/dist/css/bootstrap.min.css'
 import {BrowserRouter,Routes,Route} from "react-router-dom";
-import FeedPage from './pages/feedPages/feedPage';
 import Signup from './components/auth-forms/signup';
 import Login from './components/auth-forms/login';
 import NoPage from './components/NoPage';
@@ -25,8 +24,7 @@ import Listing from './pages/market/listing';
 import UserProfile from "./pages/feedPages/userProfile";
 import AdminProfile from "./pages/feedPages/adminProfile";
 import NewsFeed from "./pages/feedPages/newsFeed";
-import Testing from "./pages/feedPages/testing";
-import Navbar from "./pages/feedPages/antway";
+
 
 function App() {
   return (
@@ -60,9 +58,6 @@ function App() {
           <Route path='listing' element={<Listing/>}/>
           <Route path='userprofile' element={<UserProfile/>}/>
           <Route path='adminprofile' element={<AdminProfile/>}/>
-          <Route path='feedpage' element={<FeedPage/>}/>
-          <Route path='testing' element={<Testing/>}/>
-          <Route path='antway' element={<Navbar/>}/>
           <Route path='*' element={<NoPage />} />
         </Route>
       </Routes>
