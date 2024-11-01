@@ -6,7 +6,7 @@ const DiscoverFeed = () => {
     <div className="rounded md:w-full">
       <ResponsiveNav />
       <div className="mb-6">
-        <h2 className="text-2xl font-bold">Discover</h2>
+        <h1 className="text-3xl font-medium">Discover</h1>
         <input
           type="text"
           placeholder="What's happening"

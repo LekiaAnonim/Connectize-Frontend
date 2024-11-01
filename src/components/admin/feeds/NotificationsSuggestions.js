@@ -2,8 +2,8 @@ import React from "react";
 
 const NotificationsSuggestions = () => {
   return (
-    <div className="bg-gray-50 rounded p-4 h-fit w-full xl:w-1/4 flex flex-col md:flex-row xl:flex-col shrink-0 gap-4">
-      <div className="mb-6">
+    <div className=" h-fit w-full xl:w-1/4 flex flex-col md:flex-row xl:flex-col shrink-0 gap-2">
+      <div className="bg-white rounded p-4">
         <h2 className="text-lg font-bold">Notifications</h2>
         <ul>
           {["Disney", "MasterCard", "IBM"].map((company, index) => (
@@ -14,7 +14,7 @@ const NotificationsSuggestions = () => {
         </ul>
       </div>
 
-      <div>
+      <div className="bg-white rounded p-4">
         <h2 className="text-lg font-bold mb-2">Suggested</h2>
         <ul>
           {["McFly", "JohnDoe", "Janis Joplin"].map((user) => (
