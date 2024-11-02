@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import clsx from "clsx";
-import { Bookmark, StarFilledIcon, StarOutlinedIcon } from "../../../icon";
+import {
+  Bookmark,
+  StarFilledIcon,
+  StarOutlinedIcon,
+  VerifiedIcon,
+} from "../../../icon";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -9,6 +14,7 @@ import "swiper/css/navigation";
 import { Pagination, Autoplay } from "swiper/modules";
 import { useMediaQuery } from "react-responsive";
 import { ConJoinedImages } from "../../ResponsiveNav";
+import { Link } from "react-router-dom";
 
 function DiscoverPost() {
   const tabsStyle = "w-full rounded";
@@ -71,7 +77,7 @@ const Posts = ({ array }) => {
                 <Bookmark />
               </button>
             </div>
-            <div className="flex mb-2">
+            <div className="flex mt-2">
               {[1, 2, 3].map((_, index) => (
                 <StarFilledIcon key={index} />
               ))}
@@ -79,7 +85,8 @@ const Posts = ({ array }) => {
                 <StarOutlinedIcon key={index} />
               ))}
             </div>
-            <p className="text-gray-500 mb-2">
+
+            <p className="text-gray-500 my-3">
               This is a tweet. It can be long, or short. Depends on what you
               have to say. It can have some hashtags too.
             </p>
@@ -95,9 +102,23 @@ const Posts = ({ array }) => {
               ]}
             />
 
-            <div className="flex items-center justify-between mt-2">
-              <span className="text-sm text-gray-400">West Land Oil</span>
-              <button className="text-blue-500">View</button>
+            <div className="flex items-center justify-between mt-4 py-3 border-t">
+              <div className="flex gap-2 items-center">
+                <div className="relative">
+                  <img
+                    src="/images/bmw.PNG"
+                    alt="bmw"
+                    className="rounded-full"
+                    width={50}
+                  />
+                  <VerifiedIcon className="absolute bottom-0 right-0" />
+                </div>
+                <h4 className="text-sm font-bold">West Land Oil</h4>
+              </div>
+
+              <Link to="/" className="bg-gold rounded-full py-2 px-4 text-sm">
+                View
+              </Link>
             </div>
           </div>
         </SwiperSlide>

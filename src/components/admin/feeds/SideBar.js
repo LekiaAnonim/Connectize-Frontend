@@ -5,6 +5,7 @@ import Logo from "../../logo";
 import clsx from "clsx";
 import { useNav } from "../../../context/navContext";
 import { useMediaQuery } from "react-responsive";
+import FeedSearch from "./FeedSearch";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
@@ -19,14 +20,16 @@ const Sidebar = () => {
       className={clsx(
         "max-md:absolute max-md:top-0 max-md:left-0 max-md:h-screen bg-gray-50 rounded p-4 shrink-0 max-w-[350px] md:w-[240px] lg:w-[260px] 2xl:w-[280px] min-h-screen max-md:transition-all duration-500",
         {
-          "max-md:overflow-y-auto max-md:min-w-[300px] max-md:w-[50%] z-[20000]":
+          "max-md:overflow-y-auto max-md:min-w-[300px] max-md:w-[60%] z-[20000]":
             navOpen,
-          "max-md:overflow-hidden max-md:-left-[100%] max-md:opacity-0":
-            !navOpen,
+          "max-md:overflow-hidden max-md:-left-full max-md:opacity-": !navOpen,
         }
       )}
     >
-      <Logo className="mb-4 md:mx-auto" height="70px" width="70px" />
+      <Logo className="md:mx-auto mb-4" height="70px" width="70px" />
+
+      <FeedSearch className="sm:hidden mb-4" />
+
       <nav className="mb-8">
         <ul className="space-y-1 xs:text-sm px-0">
           {feedNavItems.map((item, index) => (
