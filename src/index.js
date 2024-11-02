@@ -6,13 +6,16 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "sonner";
 import { NavProvider } from "./context/navContext";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <React.StrictMode>
       <NavProvider>
-        <App />
+        <ChakraProvider>
+          <App />
+        </ChakraProvider>
       </NavProvider>
       <Toaster />
     </React.StrictMode>
