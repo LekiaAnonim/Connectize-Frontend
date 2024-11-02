@@ -1,90 +1,112 @@
-import React,{ useState } from 'react';
-import { MenuFoldOutlined,
-    MenuUnfoldOutlined,LaptopOutlined,MessageOutlined,PicCenterOutlined,
-     BellOutlined,LoginOutlined,ProfileOutlined, UserOutlined, ContainerOutlined, 
-     AppstoreOutlined,RightCircleOutlined,TableOutlined, BarChartOutlined,
-     SketchOutlined,QuestionCircleOutlined,IdcardOutlined} from '@ant-design/icons';
-import { Avatar, Button, Input, Layout, Menu, theme,Badge } from 'antd';
-import Anthome from '../../components/admin/feeds/anthome';
-import FeedSideBar from '../../components/admin/feeds/feedSideBar';
-// import Image from 'next/image';
-// import ProfileImg from '../image/test2.PNG'
-// import Home from '@/app/page';
+import React, { useState } from "react";
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  MessageOutlined,
+  BellOutlined,
+} from "@ant-design/icons";
+import { Avatar, Button, Input, Layout, Menu, theme, Badge } from "antd";
+import Anthome from "../../components/admin/feeds/anthome";
+import FeedSideBar from "../../components/admin/feeds/feedSideBar";
 
 const { Header, Content, Sider } = Layout;
-const {Search} = Input;
+const { Search } = Input;
 
 const Navbar = () => {
-    const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgContainer },
   } = theme.useToken();
   return (
     <Layout>
       <Header
-        
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          background:"white",
-          padding: '0 50px',
+          display: "flex",
+          alignItems: "center",
+          background: "white",
+          padding: "0 50px",
         }}
       >
         {/* <div className="demo-logo" /> */}
         <div>
-            {/* <Image 
+          {/* <Image 
             src={ProfileImg} 
             alt='ProfileImg'
             className='w-16 rounded-full'
             /> */}
         </div>
-        <div className='text-blue-900 ml-4 hidden sm:inline'>
-            <h2 className='text-xl font-bold'>Dashboard</h2>
+        <div className="text-blue-900 ml-4 hidden sm:inline">
+          <h2 className="text-xl font-bold">Dashboard</h2>
         </div>
-          <div>
-            <Button
-                type="text"
-                icon={collapsed ? <MenuUnfoldOutlined className='fw-bold h1 w-100'/> : <MenuFoldOutlined className='fw-bold h1  w-100'/>}
-                onClick={() => setCollapsed(!collapsed)}
-                style={{
-                fontSize: '30px',
-                width: 50,
-                height: 50,
-                // color: 'white'
-                }}
-                className='ms-4 me-4'
-            />
-          </div>
-          {/* search bar */}
-        <div className=' ms-4 mt-3' style={{width:"35rem"}}>
-                {/* <Input.Search type='text' placeholder='Search ...' className='min-w-full'/> */}
-            <Search placeholder="Search..." size='large' onSearch={value => console.log(value)} enterButton className='w-full '/>
+        <div>
+          <Button
+            type="text"
+            icon={
+              collapsed ? (
+                <MenuUnfoldOutlined className="fw-bold h1 w-100" />
+              ) : (
+                <MenuFoldOutlined className="fw-bold h1  w-100" />
+              )
+            }
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              fontSize: "30px",
+              width: 50,
+              height: 50,
+              // color: 'white'
+            }}
+            className="ms-4 me-4"
+          />
+        </div>
+        {/* search bar */}
+        <div className=" ms-4 mt-3" style={{ width: "35rem" }}>
+          {/* <Input.Search type='text' placeholder='Search ...' className='min-w-full'/> */}
+          <Search
+            placeholder="Search..."
+            size="large"
+            onSearch={(value) => console.log(value)}
+            enterButton
+            className="w-full "
+          />
         </div>
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={['2']}
+          defaultSelectedKeys={["2"]}
           //items={items1}
           style={{
             flex: 1,
             minWidth: 0,
           }}
         />
-        <div className='hidden sm:inline'>
-            {/* <Button type="primary" icon={<BellOutlined/>} style={{marginRight: 8}}/> */}
-            <Badge count={2} color='green'>
-              <Avatar icon={<BellOutlined/>} style={{marginRight: 8}} className='bg-blue-900'/>
-            </Badge>
-            
-            <Badge count={5} color='green'>
-              <Avatar icon={<MessageOutlined />} style={{marginRight: 8}} className='bg-blue-900' />
-            </Badge>
+        <div className="hidden sm:inline">
+          {/* <Button type="primary" icon={<BellOutlined/>} style={{marginRight: 8}}/> */}
+          <Badge count={2} color="green">
+            <Avatar
+              icon={<BellOutlined />}
+              style={{ marginRight: 8 }}
+              className="bg-blue-900"
+            />
+          </Badge>
+
+          <Badge count={5} color="green">
+            <Avatar
+              icon={<MessageOutlined />}
+              style={{ marginRight: 8 }}
+              className="bg-blue-900"
+            />
+          </Badge>
         </div>
-        <Button type="primary" icon={<Avatar src={<img src='{ProfileImg}' alt="avatar"/>} />} />
+        <Button
+          type="primary"
+          icon={<Avatar src={<img src="{ProfileImg}" alt="avatar" />} />}
+        />
       </Header>
       <Layout>
         <Sider
-        trigger={null} collapsible collapsed={collapsed}
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
           width={250}
           style={{
             background: colorBgContainer,
@@ -92,18 +114,18 @@ const Navbar = () => {
           //you can remove this to allow icons on small screens
           breakpoint="lg"
           collapsedWidth="0"
-          className='pt-5 mt-1 px-2'
+          className="pt-5 mt-1 px-2"
         >
-          <FeedSideBar/>
+          <FeedSideBar />
           <Menu
             mode="inline"
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
+            defaultSelectedKeys={["1"]}
+            defaultOpenKeys={["sub1"]}
             style={{
               //height: '100%',
               borderRight: 0,
             }}
-            
+
             // items={[
             //     {
             //       key: '1',
@@ -280,20 +302,17 @@ const Navbar = () => {
             //       icon:<LoginOutlined />,
             //       label:'Login',
             //     }
-  
+
             // ]}
             // //items={items2}
           />
-          
         </Sider>
         <Layout
           style={{
-            padding: '24px',
+            padding: "24px",
           }}
-
-          className='bg-blue-50'
+          className="bg-blue-50"
         >
-            
           <Content
             style={{
               //padding: 24,
@@ -302,11 +321,10 @@ const Navbar = () => {
               // background: colorBgContainer,
               // borderRadius: borderRadiusLG,
             }}
-            className='bg-blue-50'
-            
+            className="bg-blue-50"
           >
             {/* <Home/> */}
-            <Anthome/>
+            <Anthome />
           </Content>
         </Layout>
       </Layout>

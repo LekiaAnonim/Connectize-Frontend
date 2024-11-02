@@ -1,9 +1,9 @@
 import React from "react";
-import { LeftSideBar } from "../../components/admin/feeds/home/LeftSideBar";
 import PrimarySearchAppBar from "../../components/admin/feeds/home/Header";
 import { RightSideBar } from "../../components/admin/feeds/home/RightSideBar";
 import MainContainer from "../../components/admin/feeds/home/MainContainer";
 import "../../index.css";
+import { LeftSideBar } from "../../components/admin/feeds/home/LeftSideBar";
 
 export default function FeedPage() {
   return (
