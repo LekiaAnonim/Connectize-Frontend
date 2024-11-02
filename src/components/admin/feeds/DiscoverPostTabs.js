@@ -16,7 +16,7 @@ import { useMediaQuery } from "react-responsive";
 import { ConJoinedImages } from "../../ResponsiveNav";
 import { Link } from "react-router-dom";
 
-function DiscoverPost() {
+function DiscoverPostTabs() {
   const tabsStyle = "w-full rounded";
   const selectedStyle = { color: "black", bg: "gray.100" };
   return (
@@ -32,19 +32,19 @@ function DiscoverPost() {
 
       <TabPanels className="!w-full">
         <TabPanel className="p-0 !w-full">
-          <Posts />
+          <PostSlider />
         </TabPanel>
         <TabPanel className="p-0 !w-full">
-          <Posts />
+          <PostSlider />
         </TabPanel>
       </TabPanels>
     </Tabs>
   );
 }
 
-export default DiscoverPost;
+export default DiscoverPostTabs;
 
-const Posts = ({ array }) => {
+const PostSlider = ({ array }) => {
   const newArray = array || [1, 2, 3, 4, 5, 6];
 
   const [loading, setLoading] = useState(true);
@@ -92,7 +92,7 @@ const Posts = ({ array }) => {
             </p>
 
             <ConJoinedImages
-              size={20}
+              size={30}
               array={[
                 "/images/passport9.PNG",
                 "/images/passport10.PNG",

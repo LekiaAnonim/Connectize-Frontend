@@ -12,7 +12,7 @@ function ResponsiveNav() {
     <div className="flex justify-between items-center gap-2 sm:gap-4 w-full mb-4 max-md:mt-2">
       <ConJoinedImages array={images} />
 
-      <FeedSearch className="max-sm:hidden" />
+      <FeedSearch className="max-xs:hidden" />
 
       <div className="flex items-center gap-3 sm:gap-5 pr-2">
         <button>

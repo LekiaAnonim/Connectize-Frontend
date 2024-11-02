@@ -7,7 +7,7 @@ function FeedSearch({ className }) {
       type="text"
       placeholder="Search anything..."
       className={clsx(
-        "w-full max-w-[250px] py-1.5 px-3 border border-gray-200 rounded-full placeholder:text-sm text-sm focus:outline-1 outline-gold transition-all duration-300",
+        "w-full xs:max-w-[200px] sm:max-w-[250px] max-w-[250px] py-1.5 px-3 border border-gray-200 rounded-full placeholder:text-sm text-sm focus:outline-1 outline-gold transition-all duration-300",
         className
       )}
     />

@@ -1,36 +1,161 @@
+import clsx from "clsx";
 import React from "react";
+import { VerifiedIcon } from "../../../icon";
 
 const NotificationsSuggestions = () => {
-  return (
-    <div className=" h-fit w-full xl:w-1/4 flex flex-col md:flex-row xl:flex-col shrink-0 gap-2">
-      <div className="bg-white rounded p-4">
-        <h2 className="text-lg font-bold">Notifications</h2>
-        <ul>
-          {["Disney", "MasterCard", "IBM"].map((company, index) => (
-            <li key={index} className="mb-2 text-gray-700">
-              <span className="text-sm">{company}</span> tagged you in a post
-            </li>
-          ))}
-        </ul>
-      </div>
+  const notificationMessages = [
+    {
+      company: "The Walt Disney Company",
+      src: "/images/passport7.PNG",
+      message: "Tagged you in post",
+      timeStamp: "12mins ago",
+    },
+    {
+      company: "MasterCard",
+      src: "/images/passport7.PNG",
+      message: "Added you to  a community",
+      timeStamp: "12mins ago",
+    },
+    {
+      company: "IBM",
+      src: "/images/passport7.PNG",
+      message: "commented on a post you’re featured in",
+      timeStamp: "12mins ago",
+    },
+  ];
 
-      <div className="bg-white rounded p-4">
-        <h2 className="text-lg font-bold mb-2">Suggested</h2>
-        <ul>
-          {["McFly", "JohnDoe", "Janis Joplin"].map((user) => (
-            <li key={user} className="flex items-center mb-4">
-              <img
-                src={`${user.toLowerCase()}.png`}
-                alt={user}
-                className="h-8 w-8 rounded-full mr-2"
-              />
-              <span className="text-gray-700">{user}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+  const suggestions = [
+    {
+      user: "McFly",
+      src: "/images/passport13.PNG",
+      hashtag: "@levraimcfly",
+      isVerified: true,
+    },
+    {
+      user: "JohnDoe",
+      src: "/images/passport14.PNG",
+      hashtag: "@johndoe",
+      isVerified: true,
+    },
+    {
+      user: "Janis Joplin",
+      src: "/images/passport15.PNG",
+      hashtag: "@realjanice",
+      isVerified: true,
+    },
+    {
+      user: "McFly",
+      src: "/images/passport13.PNG",
+      hashtag: "@levraimcfly",
+      isVerified: true,
+    },
+    {
+      user: "JohnDoe",
+      src: "/images/passport14.PNG",
+      hashtag: "@johndoe",
+      isVerified: true,
+    },
+    {
+      user: "Janis Joplin",
+      src: "/images/passport15.PNG",
+      hashtag: "@realjanice",
+      isVerified: true,
+    },
+    {
+      user: "McFly",
+      src: "/images/passport13.PNG",
+      hashtag: "@levraimcfly",
+      isVerified: true,
+    },
+    {
+      user: "JohnDoe",
+      src: "/images/passport14.PNG",
+      hashtag: "@johndoe",
+      isVerified: true,
+    },
+    {
+      user: "Janis Joplin",
+      src: "/images/passport15.PNG",
+      hashtag: "@realjanice",
+      isVerified: true,
+    },
+  ];
+
+  return (
+    <div className=" h-fit w-full xl:w-1/4 flex flex-col md:flex-row xl:flex-col shrink-0 gap-4">
+      <Notifications notificationMessages={notificationMessages} />
+
+      <Suggestions suggestions={suggestions} />
     </div>
   );
 };
 
 export default NotificationsSuggestions;
+
+export function Notifications({ notificationMessages, className }) {
+  return (
+    <div className={clsx("bg-white rounded p-4 space-y-4", className)}>
+      <div className="flex justify-between items-center gap-2">
+        <h2 className="text-xl font-bold">Notifications</h2>
+        <button className="text-gray-500 hover:text-black transition-colors duration-300 underline">
+          Clear All
+        </button>
+      </div>
+      <div className="space-y-4">
+        {notificationMessages.map(
+          ({ company, src, message, timeStamp }, index) => (
+            <div key={index} className="flex items-center gap-3">
+              <img
+                src={src}
+                alt={company}
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+              <div className="space-y-0">
+                <h3 className="text-lg leading-tight m-0">{company}</h3>
+                <p className="text-sm text-gray-700 line-clamp-1">{message}</p>
+                <small className="text-gray-400 text-xs">{timeStamp}</small>
+              </div>
+            </div>
+          )
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function Suggestions({
+  suggestions = [
+    {
+      user: "Janis Joplin",
+      src: "/images/passport15.PNG",
+      hashtag: "@realjanice",
+      isVerified: true,
+    },
+  ],
+}) {
+  return (
+    <div className="bg-white rounded p-4 space-y-4">
+      <h2 className="text-xl font-bold">Suggested</h2>
+      <div className="space-y-2.5 divide-y divide-gray-100">
+        {suggestions.map(({ user, src, hashtag, isVerified }) => (
+          <div key={user} className="flex items-center gap-2.5 pt-2.5">
+            <img src={src} alt={user} className="size-10 rounded-full block " />
+            <div>
+              <div className="flex items-center gap-x-0.5">
+                <span className="text-lg xs:leading-tight text-gray-700">
+                  {user}
+                </span>
+                {isVerified && (
+                  <VerifiedIcon color="black" height="18" width="18" />
+                )}
+              </div>
+              <p className="text-sm text-gray-400">{hashtag}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

@@ -10,14 +10,14 @@ export default function NewsFeed() {
   return (
     <div
       className={clsx(
-        "flex flex-col md:flex-row p-2 gap-2 xl:gap-0 bg-[#EEEEEE]",
+        "flex flex-col md:flex-row p-3 gap-2 xl:gap-0 bg-[#EEEEEE]",
         {
           "overflow-y-hidden h-screen": navOpen,
         }
       )}
     >
       <Sidebar />
-      <div className="max-xl:flex-col flex gap-2 md:py-2 max-md:container max-sm:!px-0">
+      <div className="max-xl:flex-col flex gap-x-2 gap-y-6 md:py-2 max-md:container max-sm:!px-0">
         <DiscoverFeed />
         <NotificationsSuggestions />
       </div>
