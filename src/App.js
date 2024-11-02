@@ -1,6 +1,6 @@
 //import 'bootstrap/dist/css/bootstrap.min.css'
 import { Routes, Route } from "react-router-dom";
-import FeedPage from "./pages/feedPages/feedPage";
+// import FeedPage from "./pages/feedPages/feedPage";
 import Signup from "./pages/authentication/signup";
 import Login from "./pages/authentication/login";
 import NoPage from "./components/NoPage";
@@ -62,7 +62,7 @@ function App() {
           <Route path="listing" element={<Listing />} />
           <Route path="userprofile" element={<UserProfile />} />
           <Route path="adminprofile" element={<AdminProfile />} />
-          <Route path="feedpage" element={<FeedPage />} />
+          {/* <Route path="feedpage" element={<FeedPage />} /> */}
           <Route path="testing" element={<Testing />} />
           <Route path="antway" element={<Navbar />} />
           <Route path="*" element={<NoPage />} />
