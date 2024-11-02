@@ -6,9 +6,10 @@ import { ChartBar, Notification, Setting } from "../icon";
 
 function ResponsiveNav() {
   const { navOpen, toggleNav } = useNav();
+  const images = ["/images/iconlove.png", "/images/iconprofile.PNG"];
   return (
     <div className="flex justify-between items-center gap-2 sm:gap-4 w-full mb-4 max-md:mt-2">
-      <ConJoinedImages />
+      <ConJoinedImages array={images} />
       <input
         type="text"
         placeholder="Search anything..."
@@ -36,17 +37,19 @@ function ResponsiveNav() {
 
 export default ResponsiveNav;
 
-export const ConJoinedImages = () => {
-  const styles = "size-10 rounded-full";
+export const ConJoinedImages = ({ size = 40, array }) => {
   return (
     <div className="flex">
-      {/* <Logo className="" /> */}
-      <img src="/images/iconlove.png" alt="love" className={clsx(styles)} />
-      <img
-        src="/images/iconprofile.PNG"
-        alt="love"
-        className={clsx(styles, "-translate-x-3")}
-      />
+      {array.map((src, index) => (
+        <img
+          key={index}
+          src={src}
+          alt="images row joined together"
+          width={size}
+          height={size}
+          className={clsx("rounded-full -translate-x-3 first:translate-x-0")}
+        />
+      ))}
     </div>
   );
 };

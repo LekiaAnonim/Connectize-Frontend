@@ -70,7 +70,7 @@ const Posts = ({ array }) => {
                 <Bookmark />
               </button>
             </div>
-            <div className="flex">
+            <div className="flex mb-2">
               {[1, 2, 3].map((_, index) => (
                 <StarFilledIcon key={index} />
               ))}
