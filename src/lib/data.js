@@ -1,3 +1,4 @@
+import { ProfileFilled } from "@ant-design/icons";
 import {
   AnalysisIcon,
   ChartBar,
@@ -9,6 +10,7 @@ import {
   UserGroup,
   VideoIcon,
 } from "../icon";
+import { PersonIcon } from "@radix-ui/react-icons";
 
 export const months = [
   "January",
@@ -44,4 +46,5 @@ export const feedNavItems = [
   { name: "Analysis", to: "/analysis", icon: <AnalysisIcon /> },
   { name: "Photos", to: "/photos", icon: <PhotosIcon /> },
   { name: "Videos", to: "/videos", icon: <VideoIcon /> },
+  { name: "Profile", to: "/login", icon: <PersonIcon /> },
 ];

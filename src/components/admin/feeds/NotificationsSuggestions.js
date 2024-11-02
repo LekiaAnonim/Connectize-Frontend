@@ -95,16 +95,16 @@ export default NotificationsSuggestions;
 export function Notifications({ notificationMessages, className }) {
   return (
     <div className={clsx("bg-white rounded p-4 space-y-4 w-full", className)}>
-      <div className="flex justify-between items-center gap-2">
+      <header className="flex justify-between items-center gap-2">
         <h2 className="text-xl font-bold">Notifications</h2>
         <button className="text-gray-500 hover:text-black transition-colors duration-300 underline">
           Clear All
         </button>
-      </div>
+      </header>
       <div className="space-y-4">
         {notificationMessages.map(
           ({ company, src, message, timeStamp }, index) => (
-            <div key={index} className="flex items-center gap-3">
+            <div key={index} className="flex items-center gap-2">
               <img
                 src={src}
                 alt={company}
@@ -113,9 +113,11 @@ export function Notifications({ notificationMessages, className }) {
                 className="rounded-full"
               />
               <div className="space-y-0">
-                <h3 className="text-lg leading-tight m-0">{company}</h3>
+                <h3 className="text-base leading-[1.125] font-bold m-0">
+                  {company}
+                </h3>
                 <p className="text-sm text-gray-700 line-clamp-1">{message}</p>
-                <small className="text-gray-400 text-xs">{timeStamp}</small>
+                <small className="text-gray-400 text-xs m-0">{timeStamp}</small>
               </div>
             </div>
           )
@@ -125,26 +127,17 @@ export function Notifications({ notificationMessages, className }) {
   );
 }
 
-export function Suggestions({
-  suggestions = [
-    {
-      user: "Janis Joplin",
-      src: "/images/passport15.PNG",
-      hashtag: "@realjanice",
-      isVerified: true,
-    },
-  ],
-}) {
+export function Suggestions({ suggestions }) {
   return (
     <div className="bg-white rounded p-4 space-y-4 w-full">
       <h2 className="text-xl font-bold">Suggested</h2>
       <ul className="space-y-2 divide-y divide-gray-100 p-0">
-        {suggestions.map(({ user, src, hashtag, isVerified }) => (
-          <li key={user} className="flex items-center gap-2.5 pt-2">
+        {suggestions.map(({ user, src, hashtag, isVerified }, index) => (
+          <li key={index} className="flex items-center gap-2.5 pt-2">
             <img src={src} alt={user} className="size-10 rounded-full" />
             <div className="">
               <div className="flex items-center gap-x-0.5">
-                <span className="text-base xs:leading-tight text-gray-700">
+                <span className="text-base xs:leading-tight text-gray-700 font-bold">
                   {user}
                 </span>
                 {isVerified && (

@@ -31,8 +31,7 @@ function Login() {
     onSubmit: async ({ email, password }, { resetForm }) => {
       // console.log("Auth data ", { email, username, password, confirmPassword });
 
-      // const success =
-      await authenticationService({
+      const success = await authenticationService({
         values: {
           username: email,
           email,
@@ -43,7 +42,7 @@ function Login() {
         type: "login",
       });
 
-      //   if (success) navigate("/");
+      if (success) navigate("/");
     },
   });
 

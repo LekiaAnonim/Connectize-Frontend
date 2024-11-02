@@ -85,28 +85,26 @@ export default Sidebar;
 
 function NavigationSection({ pathname }) {
   return (
-    <nav className="mb-8">
-      <ul className="space-y-1 xs:text-sm px-0">
-        {feedNavItems.map((item, index) => (
-          <li className="">
-            <Link
-              key={index}
-              to={item.to}
-              className={clsx(
-                "flex gap-2 items-center transition-colors duration-300 p-2 rounded  hover:text-mid_grey text-custom_grey",
-                {
-                  "!text-gold bg-mid_grey pointer-events-none":
-                    item.to === pathname,
-                }
-              )}
-            >
-              <>{item.icon}</>
-              <span>{item.name}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <ul className="mb-6 space-y-1 xs:text-sm p-2 bg-[#eee] rounded">
+      {feedNavItems.map((item, index) => (
+        <li className="">
+          <Link
+            key={index}
+            to={item.to}
+            className={clsx(
+              "flex gap-2 items-center transition-colors duration-300 p-2 rounded  hover:text-mid_grey text-gray-500",
+              {
+                "!text-gold bg-mid_grey pointer-events-none":
+                  item.to === pathname,
+              }
+            )}
+          >
+            <>{item.icon}</>
+            <span>{item.name}</span>
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }
 
