@@ -15,6 +15,49 @@ const Sidebar = () => {
 
   if (isTablet) toggleNav(false);
 
+  const companyArray = [
+    {
+      name: "Jenny Wilson",
+      src: "/images/icondell.PNG",
+      description: "Sed ut perspiciatis unde omnis iste natus ",
+    },
+    {
+      name: "Albert Flores",
+      src: "/images/huawei.PNG",
+      description: "Sed ut perspiciatis unde omnis iste natus ",
+    },
+    {
+      name: "Bessie Cooper",
+      src: "/images/iconcooper.PNG",
+      description: "Sed ut perspiciatis unde omnis iste natus ",
+    },
+    {
+      name: "Darlene Robertson",
+      src: "/images/icondalene.PNG",
+      description: "Sed ut perspiciatis unde omnis iste natus ",
+    },
+    {
+      name: "Esther Howard",
+      src: "/images/iconnorth.PNG",
+      description: "Sed ut perspiciatis unde omnis iste natus ",
+    },
+    {
+      name: "Annette Black",
+      src: "/images/nasa.PNG",
+      description: "Sed ut perspiciatis unde omnis iste natus ",
+    },
+    {
+      name: "Bessie Cooper",
+      src: "/images/iconcooper.PNG",
+      description: "Sed ut perspiciatis unde omnis iste natus ",
+    },
+    {
+      name: "Cody Fisher",
+      src: "/images/iconcody.PNG",
+      description: "Sed ut perspiciatis unde omnis iste natus ",
+    },
+  ];
+
   return (
     <div
       className={clsx(
@@ -31,46 +74,59 @@ const Sidebar = () => {
 
       <FeedSearch className="xs:hidden mb-4" />
 
-      <nav className="mb-8">
-        <ul className="space-y-1 xs:text-sm px-0">
-          {feedNavItems.map((item, index) => (
-            <li className="">
-              <Link
-                key={index}
-                to={item.to}
-                className={clsx(
-                  "flex gap-2 items-center transition-colors duration-300 p-2 rounded  hover:text-mid_grey text-custom_grey",
-                  {
-                    "!text-gold bg-mid_grey pointer-events-none":
-                      item.to === pathname,
-                  }
-                )}
-              >
-                <>{item.icon}</>
-                <span>{item.name}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <NavigationSection pathname={pathname} />
 
-      <div>
-        <h3 className="font-semibold mb-4">Companies</h3>
-        <ul>
-          {["Dell", "Huawei", "Starbucks", "NASA"].map((company) => (
-            <li key={company} className="flex items-center mb-4">
-              <img
-                src={`/images/${company.toLowerCase()}.png`}
-                alt={company}
-                className="size-8 mr-2"
-              />
-              <span className="text-gray-700">{company}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Companies companyArray={companyArray} />
     </div>
   );
 };
 
 export default Sidebar;
+
+function NavigationSection({ pathname }) {
+  return (
+    <nav className="mb-8">
+      <ul className="space-y-1 xs:text-sm px-0">
+        {feedNavItems.map((item, index) => (
+          <li className="">
+            <Link
+              key={index}
+              to={item.to}
+              className={clsx(
+                "flex gap-2 items-center transition-colors duration-300 p-2 rounded  hover:text-mid_grey text-custom_grey",
+                {
+                  "!text-gold bg-mid_grey pointer-events-none":
+                    item.to === pathname,
+                }
+              )}
+            >
+              <>{item.icon}</>
+              <span>{item.name}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
+function Companies({ companyArray }) {
+  return (
+    <div className="space-y-3">
+      <h3 className="font-semibold text-xl">Companies</h3>
+      <ul className="space-y-2 divide-y divide-gray-100 xs:text-sm p-0">
+        {companyArray.map(({ name, src, description }, index) => (
+          <li key={index} className="flex items-center gap-2 pt-2">
+            <img src={src} alt={name} className="size-10" />
+            <div className="">
+              <h1 className="text-base font-semibold leading-normal m-0">
+                {name}
+              </h1>
+              <span className="text-gray-500 text-sm">{description}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

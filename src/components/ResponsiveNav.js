@@ -42,7 +42,7 @@ export const ConJoinedImages = ({ size = 40, array, animate = true }) => {
         <img
           key={index}
           src={src}
-          alt="images row joined together"
+          alt="joined together"
           style={{ transform: `translateX(-${5 * index}px)` }}
           width={size}
           height={size}

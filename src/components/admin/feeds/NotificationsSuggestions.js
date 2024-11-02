@@ -138,24 +138,24 @@ export function Suggestions({
   return (
     <div className="bg-white rounded p-4 space-y-4 w-full">
       <h2 className="text-xl font-bold">Suggested</h2>
-      <div className="space-y-2.5 divide-y divide-gray-100">
+      <ul className="space-y-2 divide-y divide-gray-100 p-0">
         {suggestions.map(({ user, src, hashtag, isVerified }) => (
-          <div key={user} className="flex items-center gap-2.5 pt-2.5">
-            <img src={src} alt={user} className="size-10 rounded-full block " />
-            <div>
+          <li key={user} className="flex items-center gap-2.5 pt-2">
+            <img src={src} alt={user} className="size-10 rounded-full" />
+            <div className="">
               <div className="flex items-center gap-x-0.5">
-                <span className="text-lg xs:leading-tight text-gray-700">
+                <span className="text-base xs:leading-tight text-gray-700">
                   {user}
                 </span>
                 {isVerified && (
                   <VerifiedIcon color="black" height="18" width="18" />
                 )}
               </div>
-              <p className="text-sm text-gray-400">{hashtag}</p>
+              <p className="text-sm text-gray-400 m-0">{hashtag}</p>
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }

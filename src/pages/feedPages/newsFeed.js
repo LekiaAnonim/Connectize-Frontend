@@ -10,7 +10,7 @@ export default function NewsFeed() {
   return (
     <section
       className={clsx(
-        "flex flex-col items-start md:flex-row p-3 gap-2 xl:gap-0 bg-[#EEEEEE]",
+        "flex flex-col items-start md:flex-row p-3 gap-3 bg-[#EEEEEE]",
         {
           "overflow-y-hidden h-screen": navOpen,
         }
@@ -18,7 +18,7 @@ export default function NewsFeed() {
     >
       <Sidebar />
 
-      <section className="w-full grid grid-cols-1 xl:grid-cols-3 gap-2 py-2">
+      <section className="w-full grid grid-cols-1 xl:grid-cols-3 gap-3 py-2">
         <DiscoverFeed />
         <NotificationsSuggestions />
       </section>
