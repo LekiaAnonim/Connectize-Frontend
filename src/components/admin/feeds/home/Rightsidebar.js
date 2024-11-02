@@ -4,7 +4,7 @@ import "./RightSideBar.css";
 import TopServiceCard from "./TopServiceCard";
 import SuggestedUserCard from "./SuggestUser";
 
-export function RightSideBar() {
+export default function RightSideBar() {
   return (
     <section className="right-sidebar-container mt-5">
       <TopServiceCard />
