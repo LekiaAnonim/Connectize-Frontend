@@ -36,7 +36,7 @@ function ResponsiveNav() {
 
 export default ResponsiveNav;
 
-const ConJoinedImages = () => {
+export const ConJoinedImages = () => {
   const styles = "size-10 rounded-full";
   return (
     <div className="flex">
