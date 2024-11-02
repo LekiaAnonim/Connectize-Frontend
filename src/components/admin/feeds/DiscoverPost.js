@@ -8,6 +8,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Autoplay } from "swiper/modules";
 import { useMediaQuery } from "react-responsive";
+import { ConJoinedImages } from "../../ResponsiveNav";
 
 function DiscoverPost() {
   const tabsStyle = "w-full rounded";
@@ -82,7 +83,19 @@ const Posts = ({ array }) => {
               This is a tweet. It can be long, or short. Depends on what you
               have to say. It can have some hashtags too.
             </p>
-            <div className="flex items-center justify-between">
+
+            <ConJoinedImages
+              size={20}
+              array={[
+                "/images/passport9.PNG",
+                "/images/passport10.PNG",
+                "/images/passport11.PNG",
+                "/images/passport12.PNG",
+                "/images/iconprofile.PNG",
+              ]}
+            />
+
+            <div className="flex items-center justify-between mt-2">
               <span className="text-sm text-gray-400">West Land Oil</span>
               <button className="text-blue-500">View</button>
             </div>

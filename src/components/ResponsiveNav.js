@@ -45,9 +45,10 @@ export const ConJoinedImages = ({ size = 40, array }) => {
           key={index}
           src={src}
           alt="images row joined together"
+          style={{ transform: `translateX(-${5 * index}px)` }}
           width={size}
           height={size}
-          className={clsx("rounded-full -translate-x-3 first:translate-x-0")}
+          className={"rounded-full"}
         />
       ))}
     </div>
