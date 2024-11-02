@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import clsx from "clsx";
-import { Bookmark } from "../../../icon";
+import { Bookmark, StarFilledIcon, StarOutlinedIcon } from "../../../icon";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -70,9 +70,12 @@ const Posts = ({ array }) => {
                 <Bookmark />
               </button>
             </div>
-            <div>
+            <div className="flex">
               {[1, 2, 3].map((_, index) => (
-                <StarFilledIcon />
+                <StarFilledIcon key={index} />
+              ))}
+              {[1, 2].map((_, index) => (
+                <StarOutlinedIcon key={index} />
               ))}
             </div>
             <p className="text-gray-500 mb-2">
