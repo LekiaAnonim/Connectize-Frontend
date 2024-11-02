@@ -5,7 +5,7 @@ import DiscoverPost from "./DiscoverPost";
 
 const DiscoverFeed = () => {
   return (
-    <section className="rounded md:w-full">
+    <section className="md:w-full shrink-0">
       <ResponsiveNav />
       <h1 className="text-3xl font-light">Discover</h1>
 
