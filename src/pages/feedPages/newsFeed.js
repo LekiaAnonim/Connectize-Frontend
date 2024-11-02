@@ -8,19 +8,20 @@ import clsx from "clsx";
 export default function NewsFeed() {
   const { navOpen } = useNav();
   return (
-    <div
+    <section
       className={clsx(
-        "flex flex-col md:flex-row p-3 gap-2 xl:gap-0 bg-[#EEEEEE]",
+        "flex flex-col items-start md:flex-row p-3 gap-2 xl:gap-0 bg-[#EEEEEE]",
         {
           "overflow-y-hidden h-screen": navOpen,
         }
       )}
     >
       <Sidebar />
-      <div className="max-xl:flex-col flex gap-x-2 gap-y-6 md:py-2 max-md:container max-sm:!px-0">
+
+      <section className="w-full grid grid-cols-1 xl:grid-cols-3 gap-2 py-2">
         <DiscoverFeed />
         <NotificationsSuggestions />
-      </div>
-    </div>
+      </section>
+    </section>
   );
 }

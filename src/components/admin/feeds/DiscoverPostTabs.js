@@ -50,7 +50,7 @@ const PostSlider = ({ array }) => {
   const [loading, setLoading] = useState(true);
   const [slidesPerView, setSlidesPerView] = useState(1);
 
-  const isTabletScreen = useMediaQuery({ minWidth: 763 });
+  const isTabletScreen = useMediaQuery({ minWidth: 920 });
 
   useEffect(() => {
     setLoading(false);
@@ -70,7 +70,7 @@ const PostSlider = ({ array }) => {
     >
       {newArray.map((_, index) => (
         <SwiperSlide key={index}>
-          <div className="border p-3 sm:p-4 rounded-md bg-white">
+          <div className="p-3 sm:p-4 rounded-md bg-white">
             <div className="flex items-start justify-between gap-2">
               <h3 className="font-bold">Remote Monitoring and Control</h3>
               <button>

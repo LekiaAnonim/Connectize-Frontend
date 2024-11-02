@@ -82,7 +82,7 @@ const NotificationsSuggestions = () => {
   ];
 
   return (
-    <div className=" h-fit w-full xl:w-1/4 flex flex-col md:flex-row xl:flex-col shrink-0 gap-4">
+    <div className="h-fit w-full flex items-start flex-col sm:flex-row md:flex-col lg:flex-row xl:flex-col gap-4">
       <Notifications notificationMessages={notificationMessages} />
 
       <Suggestions suggestions={suggestions} />
@@ -94,7 +94,7 @@ export default NotificationsSuggestions;
 
 export function Notifications({ notificationMessages, className }) {
   return (
-    <div className={clsx("bg-white rounded p-4 space-y-4", className)}>
+    <div className={clsx("bg-white rounded p-4 space-y-4 w-full", className)}>
       <div className="flex justify-between items-center gap-2">
         <h2 className="text-xl font-bold">Notifications</h2>
         <button className="text-gray-500 hover:text-black transition-colors duration-300 underline">
@@ -136,7 +136,7 @@ export function Suggestions({
   ],
 }) {
   return (
-    <div className="bg-white rounded p-4 space-y-4">
+    <div className="bg-white rounded p-4 space-y-4 w-full">
       <h2 className="text-xl font-bold">Suggested</h2>
       <div className="space-y-2.5 divide-y divide-gray-100">
         {suggestions.map(({ user, src, hashtag, isVerified }) => (
