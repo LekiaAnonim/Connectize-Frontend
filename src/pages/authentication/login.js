@@ -42,7 +42,7 @@ function Login() {
         type: "login",
       });
 
-      if (success) navigate("/");
+      if (success) navigate("/profile");
     },
   });
 

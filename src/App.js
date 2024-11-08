@@ -29,6 +29,7 @@ import Testing from "./pages/feedPages/testing";
 import Navbar from "./pages/feedPages/antway";
 import AuthLayout from "./pages/authentication/AuthLayout";
 import ResetPasswordPage from "./pages/authentication/reset-password";
+import ProfileLayout from "./components/profile/layout";
 
 function App() {
   return (
@@ -44,15 +45,17 @@ function App() {
           </Route>
           <Route path="/success" element={<SuccessPage />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="home" element={<Home />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="address" element={<Address />} />
-          <Route path="bio" element={<Bio />} />
+          <Route path="/" element={<ProfileLayout />}>
+            <Route path="home" element={<Home />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="address" element={<Address />} />
+            <Route path="bio" element={<Bio />} />
+          </Route>
           <Route path="overview" element={<Overview />} />
-          <Route path="bioone" element={<CompanyBioOne />} />
-          <Route path="biotwo" element={<CompanyBioTwo />} />
-          <Route path="biothree" element={<CompanyBioThree />} />
-          <Route path="biofour" element={<CompanyBioFour />} />
+          <Route path="bio-one" element={<CompanyBioOne />} />
+          <Route path="bio-two" element={<CompanyBioTwo />} />
+          <Route path="bio-three" element={<CompanyBioThree />} />
+          <Route path="bio-four" element={<CompanyBioFour />} />
           <Route path="service" element={<Services />} />
           <Route path="serviceoverview" element={<ServiceOverView />} />
           <Route path="serviceadmin" element={<ServiceAdmin />} />
