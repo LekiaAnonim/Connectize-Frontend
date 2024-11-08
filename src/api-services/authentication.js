@@ -19,9 +19,7 @@ export const authenticationService = async ({
     });
 
     if (type === "login") {
-
       setSession(result.key.trim());
-      console.log("Worked here to get key", result.key);
     } else if (type === "register" && values?.email) {
       localStorage.setItem(REGISTER_EMAIL_KEY, values.email);
     }

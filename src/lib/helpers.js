@@ -1,6 +1,7 @@
 import { connectizeApiBaseUrl } from "./data";
 import axios from "axios";
 import { toast } from "sonner";
+import { getSession } from "./session";
 
 export const REGISTER_EMAIL_KEY = "register_email";
 export const EMAIL_VERIFIED_KEY = "email_verified";
@@ -15,17 +16,16 @@ export async function makeApiRequest({ url, method, data, resetForm, type }) {
       url: `${connectizeApiBaseUrl}${url}`,
       method,
       data,
-      // headers:
-      //   getSession() && type !== "refresh-token"
-      //     ? {
-      //         Authorization: `Bearer ${getSession()?.token}`,
-      //       }
-      //     : undefined,
+      headers:
+        getSession() && type !== "refresh-token"
+          ? {
+              Authorization: `Token ${getSession()}`,
+            }
+          : undefined,
     });
 
     if (data) {
       resetForm?.();
-      console.log("Worked here for api request: ", response);
 
       return response.data;
     } else {
