@@ -22,8 +22,7 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
   return (
     <article
       className={clsx(
-        "first:bg-white border-t border-gray-300 first:border-0 first:rounded p-3",
-        {}
+        "first:bg-white border-t border-gray-300 first:border-0 first:rounded p-3"
       )}
     >
       <header className="flex items-center justify-between">
@@ -62,7 +61,12 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
               "/images/company2.PNG",
               "/images/company3.PNG",
             ].map((src) => (
-              <img src={src} className="size-full" alt="some images for post" />
+              <img
+                key={src}
+                src={src}
+                className="size-full"
+                alt="some images for post"
+              />
             ))}
           </div>
           <div className="flex items-center gap-2 justify-between mt-4">

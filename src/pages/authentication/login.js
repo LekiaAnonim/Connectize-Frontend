@@ -4,6 +4,8 @@ import Form from "../../components/form";
 import { useFormik } from "formik";
 import { authenticationService } from "../../api-services/authentication";
 import { Link, useNavigate } from "react-router-dom";
+import useRedirect from "../../hooks/useRedirect";
+import { getSession } from "../../lib/session";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -19,6 +21,7 @@ const validationSchema = Yup.object().shape({
 
 function Login() {
   const navigate = useNavigate();
+
   const formValues = {
     username: "",
     email: "",

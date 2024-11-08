@@ -64,40 +64,45 @@ function Home() {
 
   const fields = [
     {
-      name: "first_name",
-      type: "text",
-      label: "First Name",
-      placeholder: "Enter your first name",
-    },
-    {
-      name: "last_name",
-      type: "text",
-      label: "Last Name",
-      placeholder: "Enter your last name",
-    },
-    {
-      name: "company_name",
-      type: "text",
-      label: "Company Name",
-      placeholder: "Enter your company's name",
-    },
-    {
-      name: "gender",
-      type: "text",
-      label: "Gender",
-      placeholder: "Male/Female",
-    },
-    {
-      name: "role",
-      type: "text",
-      label: "Role",
-      placeholder: "What is your role as a representative",
-    },
-    {
-      name: "age",
-      type: "date",
-      label: "Age",
-      placeholder: "What is your role as a representative",
+      type: "grid",
+      gridInputs: [
+        {
+          name: "first_name",
+          type: "text",
+          label: "First Name",
+          placeholder: "Enter your first name",
+        },
+        {
+          name: "last_name",
+          type: "text",
+          label: "Last Name",
+          placeholder: "Enter your last name",
+        },
+        {
+          name: "company_name",
+          type: "text",
+          label: "Company Name",
+          placeholder: "Enter your company's name",
+        },
+        {
+          name: "gender",
+          type: "text",
+          label: "Gender",
+          placeholder: "Male/Female",
+        },
+        {
+          name: "role",
+          type: "text",
+          label: "Role",
+          placeholder: "What is your role as a representative",
+        },
+        {
+          name: "age",
+          type: "date",
+          label: "Age",
+          placeholder: "What is your role as a representative",
+        },
+      ],
     },
   ];
 
@@ -111,7 +116,7 @@ function Home() {
         <img
           src="/images/pasportTwo.png"
           alt="placeholder avatar"
-          className="py-4 size-32 aspect-square"
+          className="py-4 w-24"
         />
       </div>
 

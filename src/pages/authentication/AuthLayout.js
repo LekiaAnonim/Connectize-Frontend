@@ -1,13 +1,16 @@
 import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import Logo from "../../components/logo";
 import { getSession } from "../../lib/session";
 
 function AuthLayout({ redirectUrl = "/" }) {
   const session = getSession();
+  const { pathname } = useLocation();
 
   if (session) {
-    return <Navigate to={redirectUrl} replace />;
+    return (
+      <Navigate to={pathname === "/login" ? "/profile" : redirectUrl} replace />
+    );
   }
 
   return (
