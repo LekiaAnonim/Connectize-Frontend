@@ -88,7 +88,7 @@ function Contact() {
           stepText="Back"
           doStepChange={doStepChange}
         />
-        <StepButton doStepChange={doStepChange} />
+        <StepButton doStepChange={doStepChange} nextStep="address" />
       </div>
     </section>
   );
