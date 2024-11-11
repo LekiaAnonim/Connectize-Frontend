@@ -2,6 +2,7 @@ import React from "react";
 import { ArrowLeft, GreaterThan } from "../../icon";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import clsx from "clsx";
 
 function StepButton({
   nextStep = "contact",
@@ -21,7 +22,13 @@ function StepButton({
 
         if (canMove) navigate(`/${nextStep}`);
       }}
-      className="!bg-gold shadow-sm flex items-center gap-1 p-4 hover:opacity-60 transition-all duration-300"
+      className={clsx(
+        "shadow-sm flex justify-center items-center gap-1 p-4 hover:opacity-60 transition-all duration-300",
+        {
+          "!bg-gold": stepDirection === "next",
+          "flex-row-reverse": stepDirection === "back",
+        }
+      )}
     >
       <span>{stepText}</span>
       {stepDirection === "next" ? <GreaterThan /> : <ArrowLeft />}

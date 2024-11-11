@@ -92,8 +92,6 @@ function Home() {
   });
 
   const doStepChange = () => {
-    formik.handleSubmit();
-
     const hasUndefined = Object.values(formik.values).some(
       (value) => value === undefined || value === "" || value === null
     );
@@ -192,14 +190,8 @@ function Home() {
         status={"none"}
         inputArray={fields}
         hasButton={false}
-        button={{
-          type: "submit",
-          text: "Login",
-          submitText: "Checking...",
-          style: "!md:w-[60%] mt-4",
-        }}
       />
-      <div>
+      <div className="flex justify-end my-6">
         <StepButton doStepChange={doStepChange} />
       </div>
     </section>

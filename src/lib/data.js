@@ -51,6 +51,7 @@ export const feedNavItems = [
   },
 ];
 
+// personal information
 export const first_nameKey = "first_name";
 export const last_nameKey = "last_name";
 export const company_nameKey = "company_name";
@@ -58,3 +59,6 @@ export const genderKey = "gender";
 export const roleKey = "role";
 export const ageKey = "age";
 export const imageKey = "image";
+// contact
+export const personal_emailKey = "personal_email";
+export const phone_numberKey = "phone_number";
