@@ -7,9 +7,18 @@ import HeadingText from "../HeadingText";
 import LightParagraph from "../ParagraphText";
 import FormikErrorResponse from "../form/formError";
 import StepButton from "./StepButton";
+import {
+  ageKey,
+  company_nameKey,
+  first_nameKey,
+  genderKey,
+  imageKey,
+  last_nameKey,
+  roleKey,
+} from "../../lib/data";
 
 const validationSchema = Yup.object().shape({
-  image: Yup.string().optional(),
+  image: Yup.string().required("Image field is required"),
   first_name: Yup.string().required("First name field is required"),
   last_name: Yup.string().required("Last name field is required"),
   company_name: Yup.string().required("Company name field is required"),
@@ -26,25 +35,63 @@ const validationSchema = Yup.object().shape({
       }
     ),
   role: Yup.string().required("Role field is required"),
-  age: Yup.string().required("Age field is required"),
+  age: Yup.string()
+    .required("Age field is required")
+    .test("compare-age", "You have to be at least 18 years", function (value) {
+      const inputDate = new Date(value);
+
+      const today = new Date();
+      const tenYearsAgo = new Date();
+      tenYearsAgo.setFullYear(today.getFullYear() - 17);
+
+      today.setHours(0, 0, 0, 0);
+      tenYearsAgo.setHours(0, 0, 0, 0);
+      inputDate.setHours(0, 0, 0, 0);
+
+      // Check that the date is not today, not 17 years ago, and not in the future
+      return (
+        inputDate.getTime() !== today.getTime() &&
+        inputDate.getTime() !== tenYearsAgo.getTime() &&
+        inputDate <= today
+      );
+    }),
 });
 
 function Home() {
-  //   const navigate = useNavigate();
   const formValues = {
-    image: "",
-    first_name: "",
-    last_name: "",
-    company_name: "",
-    gender: "",
-    role: "",
-    age: "",
+    image: localStorage.getItem(imageKey) || "",
+    first_name: localStorage.getItem(first_nameKey) || "",
+    last_name: localStorage.getItem(last_nameKey) || "",
+    company_name: localStorage.getItem(company_nameKey) || "",
+    gender: localStorage.getItem(genderKey) || "",
+    role: localStorage.getItem(roleKey) || "",
+    age: localStorage.getItem(ageKey) || "",
   };
 
   const formik = useFormik({
     initialValues: formValues,
     validationSchema: validationSchema,
   });
+
+  const doStepChange = () => {
+    formik.handleSubmit();
+
+    console.log(formik.values);
+
+    const hasUndefined = Object.values(formik.values).some(
+      (value) => value === undefined
+    );
+
+    if (hasUndefined) return false;
+
+    for (let value in formik.values) {
+      const key = value;
+      const keyValue = formik.values[value];
+
+      localStorage.setItem(key, keyValue);
+    }
+    return true;
+  };
 
   useEffect(() => {
     formik.setValues(formValues);
@@ -98,7 +145,7 @@ function Home() {
   ];
 
   return (
-    <>
+    <section className="">
       <div className="my-4">
         <HeadingText>Help us know more about you</HeadingText>
         <LightParagraph>Please fill in the details below</LightParagraph>
@@ -121,7 +168,7 @@ function Home() {
           onBlur={formik.handleBlur}
           className="hidden"
         />
-        <FormikErrorResponse formik={formik} name={formik.values.image} />
+        <FormikErrorResponse formik={formik} name={formik.values["image"]} />
       </div>
 
       <Form
@@ -136,8 +183,10 @@ function Home() {
           style: "!md:w-[60%] mt-4",
         }}
       />
-      <StepButton />
-    </>
+      <div>
+        <StepButton doStepChange={doStepChange} />
+      </div>
+    </section>
   );
 }
 

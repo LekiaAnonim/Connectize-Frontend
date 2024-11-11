@@ -15,10 +15,10 @@ function ProfileLayout() {
   return (
     <>
       <ProfileNavBar />
-      <main className="container">
+      <main className="container max-w-screen-lg mx-auto">
         <Outlet />
       </main>
-      <footer className="text-center py-5">
+      <footer className="text-center py-6 text-sm">
         <p>ALL RIGHT RESERVED &copy; {currentYear}</p>
       </footer>
     </>

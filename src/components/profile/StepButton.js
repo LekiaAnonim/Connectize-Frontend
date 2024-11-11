@@ -7,14 +7,15 @@ function StepButton({
   nextStep = "contact",
   stepText = "Next",
   stepDirection = "next",
-  doStepChange = () => {},
+  doStepChange = () => false,
 }) {
   const navigate = useNavigate();
   return (
     <Button
       onClick={() => {
-        navigate(`/${nextStep}`);
-        doStepChange();
+        const canMove = doStepChange();
+
+        if (canMove) navigate(`/${nextStep}`);
       }}
       className="!bg-gold shadow-sm flex items-center gap-1 p-4 hover:opacity-60 transition-all duration-300"
     >
