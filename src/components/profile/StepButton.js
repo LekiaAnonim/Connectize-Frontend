@@ -26,7 +26,7 @@ function StepButton({
         "shadow-sm flex justify-center items-center gap-1 p-4 hover:opacity-60 transition-all duration-300",
         {
           "!bg-gold": stepDirection === "next",
-          "flex-row-reverse": stepDirection === "back",
+          "flex-row-reverse !bg-custom_yellow": stepDirection === "back",
         }
       )}
     >

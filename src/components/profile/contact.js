@@ -26,6 +26,7 @@ function Contact() {
   });
 
   const doStepChange = () => {
+    formik.handleSubmit();
     const hasUndefined = Object.values(formik.values).some(
       (value) => value === undefined || value === "" || value === null
     );
