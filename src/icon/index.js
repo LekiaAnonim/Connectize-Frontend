@@ -120,8 +120,8 @@ export const Pencil = ({
   </svg>
 );
 export const GreaterThan = ({
-  width = "16",
-  height = "16",
+  width = "14",
+  height = "14",
   color = "currentColor",
 }) => (
   <svg
