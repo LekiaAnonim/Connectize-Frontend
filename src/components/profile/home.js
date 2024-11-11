@@ -18,7 +18,7 @@ import {
 } from "../../lib/data";
 
 const validationSchema = Yup.object().shape({
-  image: Yup.string().required("Image field is required"),
+  image: Yup.string().optional(),
   first_name: Yup.string().required("First name field is required"),
   last_name: Yup.string().required("Last name field is required"),
   company_name: Yup.string().required("Company name field is required"),
@@ -59,7 +59,7 @@ const validationSchema = Yup.object().shape({
 
 function Home() {
   const formValues = {
-    image: localStorage.getItem(imageKey) || "",
+    image: localStorage.getItem(imageKey) || "null",
     first_name: localStorage.getItem(first_nameKey) || "",
     last_name: localStorage.getItem(last_nameKey) || "",
     company_name: localStorage.getItem(company_nameKey) || "",
@@ -74,12 +74,8 @@ function Home() {
   });
 
   const doStepChange = () => {
-    formik.handleSubmit();
-
-    console.log(formik.values);
-
     const hasUndefined = Object.values(formik.values).some(
-      (value) => value === undefined
+      (value) => value === undefined || value === "" || value === null
     );
 
     if (hasUndefined) return false;

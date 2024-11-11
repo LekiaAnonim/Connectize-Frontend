@@ -20,7 +20,7 @@ export default function CustomInput({
     <div className="relative w-full max-w-md">
       <input
         autoComplete="true"
-        className={`relative mt-2 !w-full bg-[#eee] py-2.5 px-3 rounded-md placeholder:text-sm ${className} transition-all duration-300 focus:border-mid_grey`}
+        className={`relative mt-2 !w-full bg-[#eee] py-2.5 px-3 rounded-md placeholder:text-sm text-sm ${className} transition-all duration-300 focus:border-mid_grey`}
         type={type === "password" ? passWordType : type}
         placeholder={placeholder}
         onChange={onChange}
