@@ -84,12 +84,14 @@ const Sidebar = () => {
 export default Sidebar;
 
 function NavigationSection({ pathname }) {
+  const { toggleNav } = useNav();
   return (
     <ul className="mb-6 space-y-1 xs:text-sm p-2 bg-[#eee] rounded">
       {feedNavItems.map((item, index) => (
         <li className="" key={index}>
           <Link
             to={item.to}
+            onClick={() => toggleNav(false)}
             className={clsx(
               "flex gap-2 items-center transition-colors duration-300 p-2 rounded  hover:text-mid_grey text-gray-500",
               {

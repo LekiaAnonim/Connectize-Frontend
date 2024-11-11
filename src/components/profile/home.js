@@ -4,9 +4,13 @@ import Form from "../../components/form";
 import { useFormik } from "formik";
 
 import { Link } from "react-router-dom";
-import { GreaterThan, ArrowDown } from "../../icon";
+import { GreaterThan } from "../../icon";
+import HeadingText from "../HeadingText";
+import LightParagraph from "../ParagraphText";
+import FormikErrorResponse from "../form/formError";
 
 const validationSchema = Yup.object().shape({
+  image: Yup.string().optional(),
   first_name: Yup.string().required("First name field is required"),
   last_name: Yup.string().required("Last name field is required"),
   company_name: Yup.string().required("Company name field is required"),
@@ -29,6 +33,7 @@ const validationSchema = Yup.object().shape({
 function Home() {
   //   const navigate = useNavigate();
   const formValues = {
+    image: "",
     first_name: "",
     last_name: "",
     company_name: "",
@@ -107,23 +112,37 @@ function Home() {
   ];
 
   return (
-    <section className="container">
+    <>
       <div className="my-4">
-        <h4>Help us know more about you</h4>
-        <p className="text-black-50">Please fill in the details below</p>
+        <HeadingText>Help us know more about you</HeadingText>
+        <LightParagraph>Please fill in the details below</LightParagraph>
       </div>
+
       <div>
-        <img
-          src="/images/pasportTwo.png"
-          alt="placeholder avatar"
-          className="py-4 w-24"
+        <label htmlFor="image">
+          <img
+            src="/images/pasportTwo.png"
+            alt="placeholder avatar"
+            className="py-4 w-24"
+          />
+        </label>
+        <input
+          name="image"
+          id="image"
+          type="file"
+          accept="image/*"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          className="hidden"
         />
+        <FormikErrorResponse formik={formik} name={formik.values.image} />
       </div>
 
       <Form
         formik={formik}
         status={"none"}
         inputArray={fields}
+        hasButton={false}
         button={{
           type: "submit",
           text: "Login",
@@ -246,7 +265,7 @@ function Home() {
                 <span className="glyphicon glyphicon-th"></span>
             </div>
             </div> */}
-    </section>
+    </>
   );
 }
 

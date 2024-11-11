@@ -1,8 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../logo";
+import { getSession } from "../../lib/session";
+import useRedirect from "../../hooks/useRedirect";
 
 function Profile() {
+  const session = getSession();
+  useRedirect(!session, "/login");
   return (
     <main>
       <div className="container py-4">
