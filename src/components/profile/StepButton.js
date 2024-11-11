@@ -13,6 +13,10 @@ function StepButton({
   return (
     <Button
       onClick={() => {
+        if (stepDirection === "back") {
+          navigate(`/${nextStep}`);
+          return;
+        }
         const canMove = doStepChange();
 
         if (canMove) navigate(`/${nextStep}`);

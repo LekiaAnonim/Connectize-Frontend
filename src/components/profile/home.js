@@ -17,8 +17,26 @@ import {
   roleKey,
 } from "../../lib/data";
 
+const FILE_SIZE = 4 * 1024 * 1024; // 2MB
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
+
 const validationSchema = Yup.object().shape({
-  image: Yup.string().optional(),
+  image: Yup.mixed()
+    .required("File is required")
+    .test(
+      "file-size",
+      "File size is too large, only images less than 4mb is allowed",
+      (value) => {
+        return value && value.size <= FILE_SIZE;
+      }
+    )
+    .test(
+      "file-format",
+      "Unsupported file format, only PNGs, JPEGs and JPGs are allowed",
+      (value) => {
+        return value && SUPPORTED_FORMATS.includes(value.type);
+      }
+    ),
   first_name: Yup.string().required("First name field is required"),
   last_name: Yup.string().required("Last name field is required"),
   company_name: Yup.string().required("Company name field is required"),
@@ -59,7 +77,7 @@ const validationSchema = Yup.object().shape({
 
 function Home() {
   const formValues = {
-    image: localStorage.getItem(imageKey) || "null",
+    image: localStorage.getItem(imageKey) || "/images/pasportTwo.png",
     first_name: localStorage.getItem(first_nameKey) || "",
     last_name: localStorage.getItem(last_nameKey) || "",
     company_name: localStorage.getItem(company_nameKey) || "",
@@ -74,6 +92,8 @@ function Home() {
   });
 
   const doStepChange = () => {
+    formik.handleSubmit();
+
     const hasUndefined = Object.values(formik.values).some(
       (value) => value === undefined || value === "" || value === null
     );
@@ -101,37 +121,37 @@ function Home() {
       type: "grid",
       gridInputs: [
         {
-          name: "first_name",
+          name: first_nameKey,
           type: "text",
           label: "First Name",
           placeholder: "Enter your first name",
         },
         {
-          name: "last_name",
+          name: last_nameKey,
           type: "text",
           label: "Last Name",
           placeholder: "Enter your last name",
         },
         {
-          name: "company_name",
+          name: company_nameKey,
           type: "text",
           label: "Company Name",
           placeholder: "Enter your company's name",
         },
         {
-          name: "gender",
+          name: genderKey,
           type: "text",
           label: "Gender",
           placeholder: "Male/Female",
         },
         {
-          name: "role",
+          name: roleKey,
           type: "text",
           label: "Role",
           placeholder: "What is your role as a representative",
         },
         {
-          name: "age",
+          name: ageKey,
           type: "date",
           label: "Age",
           placeholder: "What is your role as a representative",
@@ -150,9 +170,9 @@ function Home() {
       <div>
         <label htmlFor="image">
           <img
-            src="/images/pasportTwo.png"
+            src={formik.values.image}
             alt="placeholder avatar"
-            className="py-4 w-24"
+            className="py-4 w-24 h-auto"
           />
         </label>
         <input
