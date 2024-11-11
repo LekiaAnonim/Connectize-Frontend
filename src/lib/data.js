@@ -62,3 +62,9 @@ export const imageKey = "image";
 // contact
 export const personal_emailKey = "personal_email";
 export const phone_numberKey = "phone_number";
+// address
+export const nationalityKey = "nationality";
+export const stateKey = "state";
+export const cityKey = "city";
+export const postal_codeKey = "postal_code";
+export const company_addressKey = "company_address";
