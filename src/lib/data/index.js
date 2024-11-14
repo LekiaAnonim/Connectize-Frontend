@@ -6,9 +6,9 @@ import {
   PhotosIcon,
   UserGroup,
   VideoIcon,
-} from "../icon";
+} from "../../icon";
 import { PersonIcon } from "@radix-ui/react-icons";
-import { getSession } from "./session";
+import { getSession } from "../session";
 
 export const months = [
   "January",

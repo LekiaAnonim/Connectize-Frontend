@@ -5,8 +5,6 @@ import {
   cityKey,
   company_addressKey,
   nationalityKey,
-  personal_emailKey,
-  phone_numberKey,
   postal_codeKey,
   stateKey,
 } from "../../lib/data";
