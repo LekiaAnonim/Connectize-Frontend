@@ -9,10 +9,12 @@ function StepButton({
   stepText = "Next",
   stepDirection = "next",
   doStepChange = () => false,
+  disabled = false,
 }) {
   const navigate = useNavigate();
   return (
     <Button
+      disabled={disabled}
       onClick={() => {
         if (stepDirection === "back") {
           navigate(`/${nextStep}`);
@@ -27,6 +29,7 @@ function StepButton({
         {
           "!bg-gold": stepDirection === "next",
           "flex-row-reverse !bg-custom_yellow": stepDirection === "back",
+          "cursor-not-allowed bg-opacity-50": disabled,
         }
       )}
     >

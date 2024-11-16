@@ -37,12 +37,9 @@ const validationSchema = Yup.object().shape({
         return value && SUPPORTED_FORMATS.includes(value.type);
       }
     ),
-  first_name: Yup.string().required("First name field is required"),
-  last_name: Yup.string().required("Last name field is required"),
-  company_name: Yup.string().required("Company name field is required"),
   gender: Yup.string()
     .trim()
-    .required("Gender field is required")
+    .optional()
     .test(
       "correct-gender",
       "Only genders, ie male or female is allowed.",
@@ -52,9 +49,8 @@ const validationSchema = Yup.object().shape({
         );
       }
     ),
-  role: Yup.string().required("Role field is required"),
   age: Yup.string()
-    .required("Age field is required")
+    .optional()
     .test("compare-age", "You have to be at least 18 years", function (value) {
       const inputDate = new Date(value);
 

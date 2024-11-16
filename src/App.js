@@ -50,8 +50,8 @@ function App() {
             <Route path="contact" element={<Contact />} />
             <Route path="address" element={<Address />} />
             <Route path="bio" element={<Bio />} />
+            <Route path="overview" element={<Overview />} />
           </Route>
-          <Route path="overview" element={<Overview />} />
           <Route path="bio-one" element={<CompanyBioOne />} />
           <Route path="bio-two" element={<CompanyBioTwo />} />
           <Route path="bio-three" element={<CompanyBioThree />} />

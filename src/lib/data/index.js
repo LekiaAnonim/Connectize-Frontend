@@ -61,6 +61,7 @@ export const ageKey = "age";
 export const imageKey = "image";
 // contact
 export const personal_emailKey = "personal_email";
+export const company_emailKey = "company_email";
 export const phone_numberKey = "phone_number";
 // address
 export const nationalityKey = "nationality";
@@ -68,3 +69,7 @@ export const stateKey = "state";
 export const cityKey = "city";
 export const postal_codeKey = "postal_code";
 export const company_addressKey = "company_address";
+// bio
+export const bioKey = "bio";
+export const website_urlKey = "website_url";
+export const social_media_urlKey = "social_media_url";

@@ -9,17 +9,8 @@ import {
   stateKey,
 } from "../../lib/data";
 import Form from "../form";
-import * as Yup from "yup";
 import { useFormik } from "formik";
 import StepButton from "./StepButton";
-
-const validationSchema = Yup.object().shape({
-  nationality: Yup.string().required("nationality field is required"),
-  state: Yup.string().required("State field is required"),
-  city: Yup.string().required("City field is required"),
-  postal_code: Yup.string().required("Postal code field is required"),
-  company_address: Yup.string().required("Company address field is required"),
-});
 
 function Address() {
   const formValues = {
@@ -32,7 +23,6 @@ function Address() {
 
   const formik = useFormik({
     initialValues: formValues,
-    validationSchema: validationSchema,
   });
 
   const doStepChange = () => {

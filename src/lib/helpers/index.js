@@ -1,7 +1,7 @@
-import { connectizeApiBaseUrl } from "./data";
+import { connectizeApiBaseUrl } from "../data";
 import axios from "axios";
 import { toast } from "sonner";
-import { getSession } from "./session";
+import { getSession } from "../session";
 
 export const REGISTER_EMAIL_KEY = "register_email";
 export const EMAIL_VERIFIED_KEY = "email_verified";

@@ -44,7 +44,7 @@ function Contact() {
 
   useEffect(() => {
     formik.setValues(formValues);
-    document.title = "Complete your profile - Contact | connectize";
+    document.title = "Complete your profile - Contact information | connectize";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const fields = [

@@ -16,7 +16,7 @@ export default function Form({
       {topCustomComponents}
 
       {inputArray.map(
-        ({ name, type, label, placeholder, gridInputs }, index) => (
+        ({ name, type, label, placeholder, gridInputs, disabled }, index) => (
           <div key={index} className="w-full">
             {type === "grid" ? (
               <div className={`grid md:grid-cols-2 gap-2`}>
@@ -25,6 +25,9 @@ export default function Form({
                     <label htmlFor={type}>{label}</label>
                     <CustomInput
                       type={type}
+                      className={
+                        disabled ? "opacity-80 pointer-events-none" : ""
+                      }
                       name={name}
                       placeholder={placeholder}
                       onChange={formik.handleChange}
