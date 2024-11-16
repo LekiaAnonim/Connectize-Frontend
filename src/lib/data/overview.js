@@ -19,6 +19,35 @@ import {
 } from ".";
 import { getLocalData } from "../helpers/overview";
 
+/* 
+
+User payload PUT
+
+{
+    "id": 22,
+    "first_name": null,
+    "last_name": null,
+    "email": "crushclever1@gmail.com",
+    "gender": null,
+    "date_of_birth": null,
+    "bio": null,
+    "role": null,
+    "company": null,
+    "verified": false,
+    "country": null,
+    "city": null,
+    "phone_number": null,
+    "region": null,
+    "address": null,
+    "avatar": null,
+    "companies": []
+}
+
+*/
+
+
+
+
 export const overviewFields = [
   {
     type: "grid",
