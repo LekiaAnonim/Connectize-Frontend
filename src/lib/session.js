@@ -4,7 +4,7 @@ const AUTH_SESSION_COOKIE = "connectize_spicy_auth_cookie";
 
 // Get session cookie
 export const setSession = (data = "") => {
-  Cookies.set(AUTH_SESSION_COOKIE, data);
+  Cookies.set(AUTH_SESSION_COOKIE, JSON.stringify(data));
 };
 
 // Get session cookie
