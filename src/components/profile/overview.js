@@ -16,6 +16,7 @@ import { useFormik } from "formik";
 import StepButton from "./StepButton";
 import { overviewFields, overviewFormValues } from "../../lib/data/overview";
 import { getLocalData, setLocalData } from "../../lib/helpers/overview";
+import axios from "axios";
 
 function Overview() {
   const fullName =
@@ -25,15 +26,21 @@ function Overview() {
     initialValues: overviewFormValues,
   });
 
-  const doStepChange = () => {
-    for (let value in formik.values) {
-      const key = value;
-      const keyValue = formik.values[value];
+  const doStepChange = async () => {
+    const res = await axios.put("http://localhost:8000/api/users/1/", {
+      data:{ ...formik.values, email: formik.values.personal_email, gender: "male"},
+    });
 
-      setLocalData(key, keyValue);
-    }
+    console.log(res);
 
-    return true;
+    // for (let value in formik.values) {
+    //   const key = value;
+    //   const keyValue = formik.values[value];
+
+    //   setLocalData(key, keyValue);
+    // }
+
+    return false;
   };
 
   useEffect(() => {

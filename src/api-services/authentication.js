@@ -1,4 +1,3 @@
-import { toast } from "sonner";
 import { makeApiRequest, REGISTER_EMAIL_KEY } from "../lib/helpers";
 import { setSession } from "../lib/session";
 
@@ -10,8 +9,8 @@ export const authenticationService = async ({
   resetForm,
 }) => {
   try {
-    const result = await makeApiRequest({
-      url: `auth/${url}`,
+    const { results, errors } = await makeApiRequest({
+      url: `api/auth/${url}/`,
       method,
       data: values,
       resetForm,
@@ -19,16 +18,15 @@ export const authenticationService = async ({
     });
 
     if (type === "login") {
-      console.log(result);
-
-      setSession(result);
+      setSession(results);
     } else if (type === "register" && values?.email) {
       localStorage.setItem(REGISTER_EMAIL_KEY, values.email);
+    } else if (errors) {
+      throw errors;
     }
     return true;
   } catch (error) {
     console.error("Auth submission error:", error);
-    toast.error("Failed to submit form");
     return false;
   }
 };

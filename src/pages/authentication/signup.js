@@ -10,9 +10,6 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid Email Address")
     .required("Fill in a valid email address"),
-  // username: Yup.string()
-  //   .email("Fill in a valid email address")
-  //   .required("Fill in a valid email address"),
 
   password: Yup.string()
     .matches(
@@ -36,10 +33,6 @@ const validationSchema = Yup.object().shape({
 });
 
 function Signup() {
-  // const hasEmail = localStorage.getItem(REGISTER_EMAIL_KEY) !== null;
-
-  // useRedirect(hasEmail, "/success");
-
   const navigate = useNavigate();
 
   const formValues = {
@@ -53,8 +46,6 @@ function Signup() {
     initialValues: formValues,
     validationSchema: validationSchema,
     onSubmit: async ({ email, password, confirmPassword }, { resetForm }) => {
-      // console.log("Auth data ", { email, username, password, confirmPassword });
-
       const success = await authenticationService({
         values: {
           email,
@@ -62,7 +53,7 @@ function Signup() {
           password1: password,
           password2: confirmPassword,
         },
-        url: "registration/",
+        url: "registration",
         resetForm,
         type: "register",
       });
@@ -73,6 +64,7 @@ function Signup() {
 
   useEffect(() => {
     formik.setValues(formValues);
+    document.title = "Account Registration portal | connectize";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

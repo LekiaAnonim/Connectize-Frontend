@@ -38,7 +38,7 @@ function Login() {
           email,
           password,
         },
-        url: "login/",
+        url: "login",
         resetForm,
         type: "login",
       });
@@ -49,16 +49,11 @@ function Login() {
 
   useEffect(() => {
     formik.setValues(formValues);
-    // window.title = "Login to connectize";
+    document.title = "Login to connectize";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const fields = [
-    // {
-    //   name: "username",
-    //   type: "email",
-    //   label: "Username",
-    //   placeholder: "Enter Username",
-    // },
+
     {
       name: "email",
       type: "email",

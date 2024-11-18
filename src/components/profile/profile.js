@@ -6,7 +6,11 @@ import useRedirect from "../../hooks/useRedirect";
 
 function Profile() {
   const session = getSession();
+  // console.log(session, session.is_first_time_user);
+
   useRedirect(!session, "/login");
+
+  useRedirect(session && !session?.is_first_time_user, "/");
   return (
     <main>
       <div className="container py-4">

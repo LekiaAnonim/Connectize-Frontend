@@ -1,14 +1,61 @@
 import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
 
 const AUTH_SESSION_COOKIE = "connectize_spicy_auth_cookie";
 
-// Get session cookie
-export const setSession = (data = "") => {
-  Cookies.set(AUTH_SESSION_COOKIE, JSON.stringify(data));
+const ENCRYPTION_KEY = process.env.REACT_APP_AUTH_COOKIES_ENCRYPTION_KEY;
+
+console.log(ENCRYPTION_KEY);
+
+/*
+ * export type UserSession = {
+ *  id: number,
+ *  email: string,
+ *  tokens: {
+ *    refresh: string,
+ *   access: string,
+ *  },
+ *} | null;
+ */
+
+// Encrypt the data using AES encryption
+const encryptData = (data) =>
+  CryptoJS.AES.encrypt(data, ENCRYPTION_KEY).toString();
+
+// Decrypt the data using AES decryption
+const decryptData = (encryptedData) => {
+  const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
+  return bytes.toString(CryptoJS.enc.Utf8);
 };
 
-// Get session cookie
-export const getSession = () => Cookies.get(AUTH_SESSION_COOKIE);
+// Set session cookie with encryption
+export const setSession = (value, expiresInDays = 10) => {
+  const sessionString = JSON.stringify(value);
+  const encryptedSession = encryptData(sessionString);
+
+  Cookies.set(AUTH_SESSION_COOKIE, encryptedSession, {
+    expires: expiresInDays,
+  });
+};
+
+// Get session cookie with decryption
+export const getSession = () => {
+  try {
+    const encryptedSession = Cookies.get(AUTH_SESSION_COOKIE);
+    if (!encryptedSession) return null; // Return null if no session cookie exists
+
+    const decryptedSession = decryptData(encryptedSession);
+    const session = JSON.parse(decryptedSession);
+
+    // Optionally refresh the session expiration by resetting the cookie
+    setSession(session);
+
+    return session;
+  } catch (error) {
+    console.error("Error reading or decrypting session cookie:", error);
+    return null; // Return null on decryption or parsing error
+  }
+};
 
 // Remove session cookie
 export const removeSession = () => Cookies.remove(AUTH_SESSION_COOKIE);
