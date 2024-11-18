@@ -4,19 +4,16 @@ import App from "./App";
 // import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "sonner";
-import { NavProvider } from "./context/navContext";
-import { ChakraProvider } from "@chakra-ui/react";
 import "./index.css";
+import MyProvider from "./context/provider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <React.StrictMode>
-      <NavProvider>
-        <ChakraProvider>
-          <App />
-        </ChakraProvider>
-      </NavProvider>
+      <MyProvider>
+        <App />
+      </MyProvider>
       <Toaster />
     </React.StrictMode>
   </BrowserRouter>
