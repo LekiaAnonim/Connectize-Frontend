@@ -8,7 +8,6 @@ import {
   social_media_urlKey,
   personal_emailKey,
   phone_numberKey,
-  company_emailKey,
   nationalityKey,
   stateKey,
   cityKey,
@@ -16,6 +15,7 @@ import {
   company_addressKey,
   postal_codeKey,
   bioKey,
+  imageKey,
 } from ".";
 import { getLocalData } from "../helpers/overview";
 
@@ -45,26 +45,11 @@ User payload PUT
 
 */
 
-
-
-
 export const overviewFields = [
   {
     type: "grid",
-    disabled:true,
+    disabled: true,
     gridInputs: [
-      // {
-      //   name: first_nameKey,
-      //   type: "text",
-      //   label: "First Name",
-      //   placeholder: "Enter your first name",
-      // },
-      // {
-      //   name: last_nameKey,
-      //   type: "text",
-      //   label: "Last Name",
-      //   placeholder: "Enter your last name",
-      // },
       {
         name: company_nameKey,
         type: "text",
@@ -129,4 +114,5 @@ export const overviewFormValues = {
   postal_code: getLocalData(postal_codeKey),
   role: getLocalData(roleKey),
   bio: getLocalData(bioKey),
+  // image: getLocalData(imageKey),
 };

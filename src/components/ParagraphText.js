@@ -5,7 +5,7 @@ export default function LightParagraph({ children, center }) {
   return (
     <p
       className={clsx(
-        "max-w-md lg:max-w-lg text-gray-500 text-sm xl:text-base text-balance",
+        "max-w-screen-xs lg:max-w-screen-sm text-gray-500 text-sm xl:text-base text-balance",
         {
           "text-center": center,
         }

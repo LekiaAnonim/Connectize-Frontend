@@ -4,7 +4,11 @@ import Form from "../../components/form";
 import { useFormik } from "formik";
 import { authenticationService } from "../../api-services/authentication";
 import { Link, useNavigate } from "react-router-dom";
-import { RESET_PASSWORD_KEY } from "../../lib/data/authentication";
+import {
+  RESET_PASSWORD_EMAIL_KEY,
+  RESET_PASSWORD_KEY,
+  SUCCESS_TYPE_KEY,
+} from "../../lib/data/authentication";
 import HeadingText from "../../components/HeadingText";
 import LightParagraph from "../../components/ParagraphText";
 
@@ -30,8 +34,11 @@ function ResetPasswordPage() {
         resetForm,
       });
 
+      console.log(success);
+
       if (success) {
-        localStorage.setItem(RESET_PASSWORD_KEY, true);
+        localStorage.setItem(SUCCESS_TYPE_KEY, RESET_PASSWORD_KEY);
+        localStorage.setItem(RESET_PASSWORD_EMAIL_KEY, email);
         navigate("/success");
       }
     },

@@ -45,7 +45,7 @@ const validationSchema = Yup.object().shape({
       "Only genders, ie male or female is allowed.",
       function (value) {
         return (
-          value.toLowerCase() === "male" || value.toLowerCase() === "female"
+          value?.toLowerCase() === "male" || value?.toLowerCase() === "female"
         );
       }
     ),
@@ -73,7 +73,7 @@ const validationSchema = Yup.object().shape({
 
 function Home() {
   const formValues = {
-    image: localStorage.getItem(imageKey) || "/images/pasportTwo.png",
+    image: localStorage.getItem(imageKey) || "",
     first_name: localStorage.getItem(first_nameKey) || "",
     last_name: localStorage.getItem(last_nameKey) || "",
     company_name: localStorage.getItem(company_nameKey) || "",
@@ -88,12 +88,6 @@ function Home() {
   });
 
   const doStepChange = () => {
-    const hasUndefined = Object.values(formik.values).some(
-      (value) => value === undefined || value === "" || value === null
-    );
-
-    if (hasUndefined) return false;
-
     for (let value in formik.values) {
       const key = value;
       const keyValue = formik.values[value];
@@ -162,22 +156,30 @@ function Home() {
       </div>
 
       <div>
-        <label htmlFor="image">
+        <label>
           <img
-            src={formik.values.image}
+            src={"/images/pasportTwo.png"}
             alt="placeholder avatar"
             className="py-4 w-24 h-auto"
           />
+          <input
+            name="image"
+            id="image"
+            type="file"
+            accept="image/*"
+            onChange={(e) =>
+              formik.setFieldValue(
+                imageKey,
+                e.currentTarget.files[0].webkitRelativePath
+              )
+            }
+            onBlur={(e) =>
+              formik.setFieldValue(imageKey, e.currentTarget.files[0])
+            }
+            className="hidden"
+          />
         </label>
-        <input
-          name="image"
-          id="image"
-          type="file"
-          accept="image/*"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className="hidden"
-        />
+
         <FormikErrorResponse formik={formik} name={formik.values["image"]} />
       </div>
 

@@ -20,6 +20,7 @@ function StepButton({
           navigate(`/${nextStep}`);
           return;
         }
+        
         const canMove = doStepChange();
 
         if (canMove) navigate(`/${nextStep}`);

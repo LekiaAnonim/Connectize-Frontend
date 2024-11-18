@@ -4,6 +4,9 @@ import Form from "../../components/form";
 import { useFormik } from "formik";
 import { authenticationService } from "../../api-services/authentication";
 import { Link, useNavigate } from "react-router-dom";
+import HeadingText from "../../components/HeadingText";
+import { getSession } from "../../lib/session";
+import { useAuth } from "../../context/userContext";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -19,6 +22,7 @@ const validationSchema = Yup.object().shape({
 
 function Login() {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const formValues = {
     username: "",
@@ -30,8 +34,6 @@ function Login() {
     initialValues: formValues,
     validationSchema: validationSchema,
     onSubmit: async ({ email, password }, { resetForm }) => {
-      // console.log("Auth data ", { email, username, password, confirmPassword });
-
       const success = await authenticationService({
         values: {
           username: email,
@@ -50,10 +52,11 @@ function Login() {
   useEffect(() => {
     formik.setValues(formValues);
     document.title = "Login to connectize";
+
+    return () => setUser(getSession()?.user || null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const fields = [
-
     {
       name: "email",
       type: "email",
@@ -69,7 +72,7 @@ function Login() {
   ];
   return (
     <section className="space-y-4">
-      <h1>Login to your account</h1>
+      <HeadingText>Login to your account</HeadingText>
       <Form
         formik={formik}
         status={"none"}

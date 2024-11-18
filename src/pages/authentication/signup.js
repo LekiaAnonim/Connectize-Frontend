@@ -5,6 +5,9 @@ import { useFormik } from "formik";
 import { authenticationService } from "../../api-services/authentication";
 import CheckAgreement from "../../components/form/checkAgreement";
 import { Link, useNavigate } from "react-router-dom";
+import { SUCCESS_TYPE_KEY } from "../../lib/data/authentication";
+import { REGISTER_EMAIL_KEY } from "../../lib/helpers";
+import HeadingText from "../../components/HeadingText";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -16,6 +19,7 @@ const validationSchema = Yup.object().shape({
       /^[a-zA-Z0-9!#$%^&*()]+$/,
       "Only letters, numbers and some specific punctuations allowed."
     )
+    .min(8, "Password must be at least 8 characters long")
     .required("Fill in your password"),
   confirmPassword: Yup.string()
     .required("Password confirmation is required")
@@ -58,7 +62,10 @@ function Signup() {
         type: "register",
       });
 
-      if (success) navigate("/success");
+      if (success) {
+        localStorage.setItem(SUCCESS_TYPE_KEY, REGISTER_EMAIL_KEY);
+        navigate("/success");
+      }
     },
   });
 
@@ -90,7 +97,7 @@ function Signup() {
   ];
   return (
     <section className="space-y-4">
-      <h1>Create new account</h1>
+      <HeadingText>Create new account</HeadingText>
       <Form
         formik={formik}
         status={"none"}

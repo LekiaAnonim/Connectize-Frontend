@@ -16,28 +16,26 @@ axios.defaults.baseURL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:8000"; // Django API URL
 axios.defaults.withCredentials = true;
 
-async function refreshTokenIfNeeded() {
+export async function refreshTokenIfNeeded() {
   const session = getSession();
-  console.log(session);
 
   if (session?.tokens.refresh && session?.tokens) {
     try {
-      const { data: apiResponse } = await axios.post("api/auth/refresh-token", {
+      const { data } = await axios.post("api/auth/refresh-token/", {
         refresh: session.tokens.refresh,
       });
-
-      const { result } = apiResponse;
-      console.log("Refresh tokens", result);
 
       setSession({
         ...session,
         tokens: {
-          access: result.access,
-          refresh: result.refresh,
+          access: data.access,
+          refresh: data.refresh,
         },
       });
 
-      return { Authorization: "Bearer " + result.access };
+      console.log("tokens refreshed");
+
+      return { Authorization: "Bearer " + data.access };
     } catch (error) {
       console.error("Token refresh failed:", error);
       throw new Error("Failed to refresh token");
@@ -45,6 +43,8 @@ async function refreshTokenIfNeeded() {
   }
   return undefined;
 }
+
+setTimeout(() => refreshTokenIfNeeded(), 250000);
 
 export async function makeApiRequest({ url, method, data, resetForm, type }) {
   try {
@@ -64,8 +64,6 @@ export async function makeApiRequest({ url, method, data, resetForm, type }) {
       if (response.data.success && response.data.message)
         toast.success(response.data.message);
       return response.data;
-    } else {
-      throw new Error("Unknown error occurred");
     }
   } catch (error) {
     const errorMsg =
@@ -73,6 +71,8 @@ export async function makeApiRequest({ url, method, data, resetForm, type }) {
       error?.response?.data?.errors?.[0]?.__all__?.[0] ||
       error?.response?.data?.errors?.[0]?.username?.[0] ||
       error?.response?.data?.errors?.[0]?.email?.[0] ||
+      error?.response?.data?.errors?.[0]?.password2?.[0] ||
+      error?.response?.data?.errors?.[0]?.gender?.[0] ||
       error?.response?.data?.errors?.[0]?.non_field_errors?.[0] ||
       error?.response?.data?.detail ||
       "Something went wrong!";

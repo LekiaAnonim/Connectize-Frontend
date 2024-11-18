@@ -6,6 +6,10 @@ import { authenticationService } from "../../api-services/authentication";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import HeadingText from "../../components/HeadingText";
 import useRedirect from "../../hooks/useRedirect";
+import {
+  CONFIRM_RESET_PASSWORD_KEY,
+  SUCCESS_TYPE_KEY,
+} from "../../lib/data/authentication";
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -49,7 +53,10 @@ function ConfirmResetPassword() {
         resetForm,
       });
 
-      if (success) navigate("/success");
+      if (success) {
+        localStorage.setItem(SUCCESS_TYPE_KEY, CONFIRM_RESET_PASSWORD_KEY);
+        navigate("/success");
+      }
     },
   });
 
@@ -91,7 +98,7 @@ function ConfirmResetPassword() {
       />
 
       <p className="text-center xs:text-sm">
-        I Remembered my password?{" "}
+        I remembered my password?{" "}
         <Link to="/login" className="font-bold text-black">
           Login
         </Link>

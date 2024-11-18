@@ -55,7 +55,5 @@ export const useAuth = () => {
     throw new Error("useAuth must be used within a User Provider");
   }
 
-  console.log("Use Context: ", userContext);
-
   return userContext;
 };

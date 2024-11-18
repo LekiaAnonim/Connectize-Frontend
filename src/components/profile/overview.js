@@ -15,37 +15,63 @@ import Form from "../form";
 import { useFormik } from "formik";
 import StepButton from "./StepButton";
 import { overviewFields, overviewFormValues } from "../../lib/data/overview";
-import { getLocalData, setLocalData } from "../../lib/helpers/overview";
-import axios from "axios";
+import { getLocalData } from "../../lib/helpers/overview";
+import { makeApiRequest } from "../../lib/helpers";
+import { useAuth } from "../../context/userContext";
+import { setSession } from "../../lib/session";
 
 function Overview() {
+  const { user } = useAuth();
+
   const fullName =
     getLocalData(first_nameKey) + " " + getLocalData(last_nameKey);
 
   const formik = useFormik({
     initialValues: overviewFormValues,
+    onSubmit: async () => await doStepChange(),
   });
 
   const doStepChange = async () => {
-    const res = await axios.put("http://localhost:8000/api/users/1/", {
-      data:{ ...formik.values, email: formik.values.personal_email, gender: "male"},
+    const values = formik.values;
+
+    console.log("formik values: ", values);
+
+    const response = await makeApiRequest({
+      url: `api/users/${user.id}/`,
+      method: "PUT",
+      data: {
+        first_name: values.first_name,
+        last_name: values.last_name,
+        email: user.email,
+        gender: values.gender.toLowerCase(),
+        date_of_birth: values.age,
+        bio: values.bio,
+        role: values.role,
+        is_first_time_user: false,
+        company: values.company_name,
+        country: values.nationality,
+        city: values.city,
+        phone_number: values.phone_number,
+        region: values.state,
+        address: values.company_address,
+        avatar: null,
+        companies: [],
+      },
     });
 
-    console.log(res);
+    const userData = { ...response, is_first_time_user: false };
 
-    // for (let value in formik.values) {
-    //   const key = value;
-    //   const keyValue = formik.values[value];
+    setSession(userData);
 
-    //   setLocalData(key, keyValue);
-    // }
+    for (let value in formik.values) {
+      localStorage.removeItem(value);
+    }
 
     return false;
   };
 
   useEffect(() => {
     formik.setValues(overviewFormValues);
-    console.log("formik values: ", formik.values);
 
     document.title = "Overview | connectize";
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,13 +80,13 @@ function Overview() {
     <div className="container">
       <div className="my-4">
         <HeadingText>Overview</HeadingText>
-        <LightParagraph>Please make your details are correct</LightParagraph>
+        <LightParagraph>Please ensure your details are correct</LightParagraph>
       </div>
       <div className="flex gap-3 mb-4">
         <img
-          src="/images/passportFour.png"
+          src="/images/pasportTwo.png"
           alt={fullName || "User profile"}
-          className="w-1/2 max-w-40"
+          className="w-1/2 max-w-36"
         />
         <div className="mt-4 capitalize">
           <h4>{fullName || "No name"}</h4>
@@ -98,9 +124,10 @@ function Overview() {
           doStepChange={doStepChange}
         />
         <StepButton
-          doStepChange={doStepChange}
-          nextStep=""
-          stepText={formik.isSubmitting ? "Submitting..." : "Submit"}
+          doStepChange={formik.handleSubmit}
+          nextStep="/profile"
+          disabled={formik.isSubmitting}
+          stepText={formik.isSubmitting ? "Updating..." : "Submit"}
         />
       </div>
     </div>

@@ -9,7 +9,7 @@ export const authenticationService = async ({
   resetForm,
 }) => {
   try {
-    const { results, errors } = await makeApiRequest({
+    const { results } = await makeApiRequest({
       url: `api/auth/${url}/`,
       method,
       data: values,
@@ -21,9 +21,7 @@ export const authenticationService = async ({
       setSession(results);
     } else if (type === "register" && values?.email) {
       localStorage.setItem(REGISTER_EMAIL_KEY, values.email);
-    } else if (errors) {
-      throw errors;
-    }
+    } 
     return true;
   } catch (error) {
     console.error("Auth submission error:", error);

@@ -8,17 +8,6 @@ const ENCRYPTION_KEY =
     ? "9803037e608561b4485fa127ed2c0788578605492c15942944bf34868adf2c4f"
     : process.env.REACT_APP_AUTH_COOKIES_ENCRYPTION_KEY;
 
-/*
- * export type UserSession = {
- *  id: number,
- *  email: string,
- *  tokens: {
- *    refresh: string,
- *   access: string,
- *  },
- *} | null;
- */
-
 // Encrypt the data using AES encryption
 const encryptData = (data) =>
   CryptoJS.AES.encrypt(data, ENCRYPTION_KEY).toString();
@@ -30,7 +19,7 @@ const decryptData = (encryptedData) => {
 };
 
 // Set session cookie with encryption
-export const setSession = (value, expiresInDays = 10) => {
+export const setSession = (value, expiresInDays = 7) => {
   const sessionString = JSON.stringify(value);
   const encryptedSession = encryptData(sessionString);
 
