@@ -19,7 +19,7 @@ axios.defaults.withCredentials = true;
 export async function refreshTokenIfNeeded() {
   const session = getSession();
 
-  if (session?.tokens.refresh && session?.tokens) {
+  if (session?.tokens?.refresh && session?.tokens) {
     try {
       const { data } = await axios.post("api/auth/refresh-token/", {
         refresh: session.tokens.refresh,
