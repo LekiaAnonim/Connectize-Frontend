@@ -69,11 +69,10 @@ export async function makeApiRequest({ url, method, data, resetForm, type }) {
     }
   } catch (error) {
     const errorMsg =
-      error?.response?.data?.errors?.[0].__all__?.[0] ||
-      error?.response?.data?.errors?.username?.[0] ||
-      error?.response?.data?.email?.[0] ||
-      error?.response?.data?.errors?.email?.[0] ||
-      error?.response?.data?.non_field_errors?.[0] ||
+      error?.response?.data?.errors?.[0]?.__all__?.[0] ||
+      error?.response?.data?.errors?.[0]?.username?.[0] ||
+      error?.response?.data?.errors?.[0]?.email?.[0] ||
+      error?.response?.data?.errors?.[0]?.non_field_errors?.[0] ||
       error?.response?.data?.detail ||
       "Something went wrong!";
 

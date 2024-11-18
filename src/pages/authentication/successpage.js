@@ -1,9 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../../components/logo";
+import { REGISTER_EMAIL_KEY } from "../../lib/helpers";
+import useRedirect from "../../hooks/useRedirect";
 
 function SuccessPage() {
   const year = new Date().getFullYear();
+
+  const hasEmail = localStorage.getItem(REGISTER_EMAIL_KEY);
+
+  useRedirect(!hasEmail, "/login");
+
   return (
     <div className="p-4 flex flex-col items-center  text-center min-h-screen">
       <div className="w-full self-start">
@@ -19,7 +26,11 @@ function SuccessPage() {
           Congratulations your registration was successful
         </h1>
 
-        <Link to="/login" className="text-white no-underline btn-primary mt-2">
+        <Link
+          to="/login"
+          className="text-white no-underline btn-primary mt-2"
+          onClick={() => localStorage.removeItem(REGISTER_EMAIL_KEY)}
+        >
           Login
         </Link>
       </div>

@@ -22,7 +22,7 @@ export const UserProvider = ({ children }) => {
       first_name: null,
       full_name: "",
       gender: null,
-      id: 4,
+      id: 0,
       is_active: true,
       is_admin: false,
       is_first_time_user: true,
