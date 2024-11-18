@@ -69,6 +69,7 @@ export async function makeApiRequest({ url, method, data, resetForm, type }) {
     }
   } catch (error) {
     const errorMsg =
+      error?.response?.data?.errors?.[0]?.message ||
       error?.response?.data?.errors?.[0]?.__all__?.[0] ||
       error?.response?.data?.errors?.[0]?.username?.[0] ||
       error?.response?.data?.errors?.[0]?.email?.[0] ||

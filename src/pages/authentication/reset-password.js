@@ -4,6 +4,9 @@ import Form from "../../components/form";
 import { useFormik } from "formik";
 import { authenticationService } from "../../api-services/authentication";
 import { Link, useNavigate } from "react-router-dom";
+import { RESET_PASSWORD_KEY } from "../../lib/data/authentication";
+import HeadingText from "../../components/HeadingText";
+import LightParagraph from "../../components/ParagraphText";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -21,51 +24,40 @@ function ResetPasswordPage() {
     initialValues: formValues,
     validationSchema: validationSchema,
     onSubmit: async ({ email }, { resetForm }) => {
-      // console.log("Auth data ", { email, username, password, confirmPassword });
-
-      // const success =
-      await authenticationService({
+      const success = await authenticationService({
         values: { email },
-        url: "password/reset/",
+        url: "password-reset",
         resetForm,
       });
 
-      //   if (success) navigate("/");
+      if (success) {
+        localStorage.setItem(RESET_PASSWORD_KEY, true);
+        navigate("/success");
+      }
     },
   });
 
   useEffect(() => {
     formik.setValues(formValues);
+    document.title = "Reset your password | connectize";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fields = [
-    // {
-    //   name: "username",
-    //   type: "email",
-    //   label: "Username",
-    //   placeholder: "Enter Username",
-    // },
     {
       name: "email",
       type: "email",
       label: "Email Address",
       placeholder: "Enter a valid email address",
     },
-    // {
-    //   name: "password",
-    //   type: "password",
-    //   label: "Password",
-    //   placeholder: "Enter a 8 digit password",
-    // },
   ];
 
   return (
     <section className="space-y-4">
-      <h1>Password recovery</h1>
-      <p className="text-custom_grey">
+      <HeadingText>Password recovery</HeadingText>
+      <LightParagraph className="text-custom_grey">
         Please enter your email address to send a password recovery email.
-      </p>
+      </LightParagraph>
       <Form
         formik={formik}
         status={"none"}

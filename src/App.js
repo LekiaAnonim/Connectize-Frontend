@@ -30,6 +30,7 @@ import Navbar from "./pages/feedPages/antway";
 import AuthLayout from "./pages/authentication/AuthLayout";
 import ResetPasswordPage from "./pages/authentication/reset-password";
 import ProfileLayout from "./components/profile/layout";
+import ConfirmResetPassword from "./pages/authentication/confirmPasswordReset";
 
 function App() {
   return (
@@ -42,6 +43,10 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route
+              path="/confirm-reset-password"
+              element={<ConfirmResetPassword />}
+            />
           </Route>
           <Route path="/success" element={<SuccessPage />} />
           <Route path="profile" element={<Profile />} />
