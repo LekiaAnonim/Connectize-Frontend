@@ -79,7 +79,7 @@ function Companies({ companyArray }) {
     <div className="space-y-3">
       <h3 className="font-semibold text-xl">Companies</h3>
       <ul className="space-y-2 divide-y divide-gray-100/80 xs:text-sm p-0">
-        {companyArrayData.length < 1 ? (
+        {companyArrayData?.length < 1 ? (
           <LightParagraph>No company yet...</LightParagraph>
         ) : (
           companyArrayData?.map(

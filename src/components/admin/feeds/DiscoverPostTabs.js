@@ -15,6 +15,7 @@ import { Pagination, Autoplay } from "swiper/modules";
 import { useMediaQuery } from "react-responsive";
 import { ConJoinedImages } from "../../ResponsiveNav";
 import { Link } from "react-router-dom";
+import HeadingText from "../../HeadingText";
 
 function DiscoverPostTabs() {
   const tabsStyle = "w-full rounded";
@@ -70,59 +71,68 @@ const PostSlider = ({ array }) => {
     >
       {newArray.map((_, index) => (
         <SwiperSlide key={index}>
-          <div className="p-3 sm:p-4 rounded-md bg-white">
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="font-bold">Remote Monitoring and Control</h3>
-              <button>
-                <Bookmark />
-              </button>
-            </div>
-            <div className="flex mt-2">
-              {[1, 2, 3].map((_, index) => (
-                <StarFilledIcon key={index} />
-              ))}
-              {[1, 2].map((_, index) => (
-                <StarOutlinedIcon key={index} />
-              ))}
-            </div>
-
-            <p className="text-gray-500 my-3">
-              This is a tweet. It can be long, or short. Depends on what you
-              have to say. It can have some hashtags too.
-            </p>
-
-            <ConJoinedImages
-              size={30}
-              array={[
-                "/images/passport9.PNG",
-                "/images/passport10.PNG",
-                "/images/passport11.PNG",
-                "/images/passport12.PNG",
-                "/images/iconprofile.PNG",
-              ]}
-            />
-
-            <div className="flex items-center justify-between mt-4 py-3 border-t">
-              <div className="flex gap-2 items-center">
-                <div className="relative">
-                  <img
-                    src="/images/bmw.PNG"
-                    alt="bmw"
-                    className="rounded-full"
-                    width={50}
-                  />
-                  <VerifiedIcon className="absolute bottom-0 right-0" />
-                </div>
-                <h4 className="text-sm font-bold">West Land Oil</h4>
-              </div>
-
-              <Link to="/" className="bg-gold rounded-full py-2 px-4 text-sm">
-                View
-              </Link>
-            </div>
-          </div>
+          <PostCard />
         </SwiperSlide>
       ))}
     </Swiper>
   );
 };
+
+export function PostCard() {
+  return (
+    <div className="p-3 sm:p-4 rounded-md bg-white">
+      <div className="mb-3">
+        <HeadingText>Top Services</HeadingText>
+      </div>
+      <div className="flex items-start justify-between gap-2">
+        <h3 className="font-bold">Remote Monitoring and Control</h3>
+        <button>
+          <Bookmark />
+        </button>
+      </div>
+      <div className="flex mt-2">
+        {[1, 2, 3].map((_, index) => (
+          <StarFilledIcon key={index} />
+        ))}
+        {[1, 2].map((_, index) => (
+          <StarOutlinedIcon key={index} />
+        ))}
+      </div>
+
+      <p className="text-gray-500 my-3">
+        This is a tweet. It can be long, or short. Depends on what you have to
+        say. It can have some hashtags too.
+      </p>
+
+      <ConJoinedImages
+        size={30}
+        array={[
+          "/images/passport9.PNG",
+          "/images/passport10.PNG",
+          "/images/passport11.PNG",
+          "/images/passport12.PNG",
+          "/images/iconprofile.PNG",
+        ]}
+      />
+
+      <div className="flex items-center justify-between mt-4 py-3 border-t">
+        <div className="flex gap-2 items-center">
+          <div className="relative">
+            <img
+              src="/images/bmw.PNG"
+              alt="bmw"
+              className="rounded-full"
+              width={50}
+            />
+            <VerifiedIcon className="absolute bottom-0 right-0" />
+          </div>
+          <h4 className="text-sm font-bold">West Land Oil</h4>
+        </div>
+
+        <Link to="/" className="bg-gold rounded-full py-2 px-4 text-sm">
+          View
+        </Link>
+      </div>
+    </div>
+  );
+}

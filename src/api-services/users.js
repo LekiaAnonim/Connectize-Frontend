@@ -11,9 +11,7 @@ export const getAllUsers = async () => {
 };
 
 export const getSuggestedUsersForCurrentUser = async () => {
-  const { user: currentUser } = getSession();
-
-  console.log(currentUser);
+  const currentUser = getSession();
 
   const allUsers = await getAllUsers();
 
@@ -22,6 +20,7 @@ export const getSuggestedUsersForCurrentUser = async () => {
       user.first_name &&
       (user.city === currentUser.city || user.region === currentUser.region)
   );
+
   return allUsersInLocation;
 };
 

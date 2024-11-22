@@ -23,7 +23,7 @@ export const getCompanies = async () => {
     method: "GET",
   });
 
-  return results;
+  return results || [];
 };
 
 export const createCompany = async (data) => {

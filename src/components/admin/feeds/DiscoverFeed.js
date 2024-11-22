@@ -1,8 +1,9 @@
 import React from "react";
 import ResponsiveNav from "../../ResponsiveNav";
 import CreatePost from "./CreatePost";
-import DiscoverPostTabs from "./DiscoverPostTabs";
+// import DiscoverPostTabs from "./DiscoverPostTabs";
 import DiscoverPosts from "./DiscoverPosts";
+import RecommendedProducts from "../products/recommendedProducts";
 
 const DiscoverFeed = () => {
   return (
@@ -12,7 +13,8 @@ const DiscoverFeed = () => {
 
       <CreatePost />
 
-      <DiscoverPostTabs />
+      {/* <DiscoverPostTabs /> */}
+      <RecommendedProducts />
 
       <DiscoverPosts />
     </section>

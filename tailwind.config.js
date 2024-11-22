@@ -28,6 +28,7 @@ module.exports = {
         "2xl": "1400px",
       },
       colors: {
+        background: "#faf9f7",
         dark: "#242424",
         gold: " #f1c644",
         custom_yellow: "#FFFAB7",
