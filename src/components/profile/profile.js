@@ -50,9 +50,6 @@ function Profile() {
           </div>
         </div>
       </div>
-      {/* <footer className="text-center py-5">
-        <p>ALL RIGHT RESERVED &copy; 2024</p>
-      </footer> */}
     </main>
   );
 }
