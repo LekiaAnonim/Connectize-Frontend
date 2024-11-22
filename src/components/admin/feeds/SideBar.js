@@ -7,8 +7,8 @@ import { useNav } from "../../../context/navContext";
 import { useMediaQuery } from "react-responsive";
 import FeedSearch from "./FeedSearch";
 import { useQuery } from "@tanstack/react-query";
-import { getSuggestedUsersForCurrentUser } from "../../../api-services/users";
-import { companyArray } from "../../../lib/data/feed";
+import { getCompanies } from "../../../api-services/users";
+import LightParagraph from "../../ParagraphText";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
@@ -71,31 +71,38 @@ function NavigationSection({ pathname }) {
 
 function Companies({ companyArray }) {
   const { data: companyArrayData } = useQuery({
-    queryKey: ["suggestedUsers"],
-    queryFn: getSuggestedUsersForCurrentUser,
+    queryKey: ["companies"],
+    queryFn: getCompanies,
     placeholderData: companyArray,
   });
   return (
     <div className="space-y-3">
       <h3 className="font-semibold text-xl">Companies</h3>
       <ul className="space-y-2 divide-y divide-gray-100/80 xs:text-sm p-0">
-        {companyArrayData.map(
-          ({ company, avatar: src, bio: description }, index) => (
-            <li key={index} className="flex items-center gap-2 pt-2">
-              <img
-                src={src || "/images/logo.png"}
-                alt={company}
-                className="size-10 rounded-full"
-              />
-              <div className="">
-                <h1 className="text-base font-semibold leading-normal m-0 capitalize">
-                  {company}
-                </h1>
-                <span className="text-gray-500 text-sm line-clamp-1">
-                  {description}
-                </span>
-              </div>
-            </li>
+        {companyArrayData.length < 1 ? (
+          <LightParagraph>No company yet...</LightParagraph>
+        ) : (
+          companyArrayData?.map(
+            (
+              { company_name: company, logo: src, tag_line: description },
+              index
+            ) => (
+              <li key={index} className="flex items-center gap-2 pt-2">
+                <img
+                  src={src || "/images/logo.png"}
+                  alt={company}
+                  className="size-10 rounded-full"
+                />
+                <div className="">
+                  <h1 className="text-base font-semibold leading-normal m-0 capitalize">
+                    {company}
+                  </h1>
+                  <span className="text-gray-500 text-sm line-clamp-1">
+                    {description}
+                  </span>
+                </div>
+              </li>
+            )
           )
         )}
       </ul>
