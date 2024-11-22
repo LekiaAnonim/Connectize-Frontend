@@ -7,11 +7,11 @@ const RecommendedProducts = () => {
   return (
     <div className="bg-white p-4 sm:p-8 rounded-md">
       <HeadingText>Recommended Products</HeadingText>
-      <div className="bg-background p-3 sm:p-6 rounded-md mt-2 flex max-sm:flex-col gap-2 relative">
+      <div className="bg-background p-3 sm:p-6 rounded-md mt-2 flex max-sm:flex-col gap-2 sm:gap-4 relative">
         <picture className="bg-white sm:w-1/3 p-4 rounded-md">
           <img
             src="/images/drum1.PNG"
-            className="w-4/5 sm:w-full mx-auto"
+            className="w-3/4 sm:w-full mx-auto"
             alt="oil barrels"
           />
         </picture>
