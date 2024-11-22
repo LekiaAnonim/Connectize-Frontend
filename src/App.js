@@ -1,6 +1,4 @@
-//import 'bootstrap/dist/css/bootstrap.min.css'
 import { Routes, Route } from "react-router-dom";
-// import FeedPage from "./pages/feedPages/feedPage";
 import Signup from "./pages/authentication/signup";
 import Login from "./pages/authentication/login";
 import NoPage from "./components/NoPage";
