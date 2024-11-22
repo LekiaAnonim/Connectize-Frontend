@@ -7,7 +7,7 @@ import { useNav } from "../../../context/navContext";
 import { useMediaQuery } from "react-responsive";
 import FeedSearch from "./FeedSearch";
 import { useQuery } from "@tanstack/react-query";
-import { getCompanies } from "../../../api-services/users";
+import { getCompanies } from "../../../api-services/companies";
 import LightParagraph from "../../ParagraphText";
 
 const Sidebar = () => {

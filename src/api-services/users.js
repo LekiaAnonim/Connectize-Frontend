@@ -10,15 +10,6 @@ export const getAllUsers = async () => {
   return results;
 };
 
-export const getCompanies = async () => {
-  const { results } = await makeApiRequest({
-    url: `api/companies/`,
-    method: "GET",
-  });
-
-  return results;
-};
-
 export const getSuggestedUsersForCurrentUser = async () => {
   const { user: currentUser } = getSession();
 
@@ -33,4 +24,3 @@ export const getSuggestedUsersForCurrentUser = async () => {
   );
   return allUsersInLocation;
 };
-
