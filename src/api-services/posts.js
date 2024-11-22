@@ -1,6 +1,6 @@
 import { makeApiRequest } from "../lib/helpers";
 
-export const getAllPosts = async () => {
+export const getPosts = async () => {
   const { results } = await makeApiRequest({
     url: `api/posts/`,
     method: "GET",

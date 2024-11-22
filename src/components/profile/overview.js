@@ -19,6 +19,7 @@ import { getLocalData } from "../../lib/helpers/overview";
 import { makeApiRequest } from "../../lib/helpers";
 import { useAuth } from "../../context/userContext";
 import { setSession } from "../../lib/session";
+import { getOrCreateGender } from "../../api-services/users";
 
 function Overview() {
   const { user } = useAuth();
@@ -34,7 +35,7 @@ function Overview() {
   const doStepChange = async () => {
     const values = formik.values;
 
-    console.log("formik values: ", values);
+    await getOrCreateGender(values.gender);
 
     const response = await makeApiRequest({
       url: `api/users/${user.id}/`,

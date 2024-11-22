@@ -24,3 +24,23 @@ export const getSuggestedUsersForCurrentUser = async () => {
   );
   return allUsersInLocation;
 };
+
+// get and create user
+
+export const getOrCreateGender = async (gender) => {
+  const { results } = await makeApiRequest({
+    url: "api/genders",
+    method: "GET",
+  });
+
+  if (
+    results.filter((data) => data.type.toLowerCase() === gender.toLowerCase())
+  )
+    return;
+
+  return await makeApiRequest({
+    url: "api/genders",
+    method: "POST",
+    data: { type: gender },
+  });
+};
