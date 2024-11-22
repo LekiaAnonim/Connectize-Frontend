@@ -10,7 +10,7 @@ function Profile() {
 
   useRedirect(!session, "/login");
 
-  useRedirect(session && !session?.is_first_time_user, "/");
+  useRedirect(session && !session?.is_first_time_user, "/userprofile");
   return (
     <main>
       <div className="container py-4">
