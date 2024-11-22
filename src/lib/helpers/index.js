@@ -12,8 +12,7 @@ export function sleep(ms) {
 }
 
 // Configure Axios Defaults
-axios.defaults.baseURL =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:8000"; // Django API URL
+axios.defaults.baseURL = "http://localhost:8000"; // Django API URL
 axios.defaults.withCredentials = true;
 
 export async function refreshTokenIfNeeded() {

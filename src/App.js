@@ -23,8 +23,8 @@ import Listing from "./pages/market/listing";
 import UserProfile from "./pages/feedPages/userProfile";
 import AdminProfile from "./pages/feedPages/adminProfile";
 import NewsFeed from "./pages/feedPages/newsFeed";
-import Testing from "./pages/feedPages/testing";
-import Navbar from "./pages/feedPages/antway";
+// import Testing from "./pages/feedPages/testing";
+// import Navbar from "./pages/feedPages/antway";
 import AuthLayout from "./pages/authentication/AuthLayout";
 import ResetPasswordPage from "./pages/authentication/reset-password";
 import ProfileLayout from "./components/profile/layout";
@@ -69,8 +69,8 @@ function App() {
           <Route path="user-profile" element={<UserProfile />} />
           <Route path="admin-profile" element={<AdminProfile />} />
           {/* <Route path="feed-page" element={<FeedPage />} /> */}
-          <Route path="testing" element={<Testing />} />
-          <Route path="antway" element={<Navbar />} />
+          {/* <Route path="testing" element={<Testing />} /> */}
+          {/* <Route path="antway" element={<Navbar />} /> */}
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>

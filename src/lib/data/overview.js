@@ -15,7 +15,6 @@ import {
   company_addressKey,
   postal_codeKey,
   bioKey,
-  imageKey,
 } from ".";
 import { getLocalData } from "../helpers/overview";
 
