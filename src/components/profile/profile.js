@@ -10,7 +10,7 @@ function Profile() {
 
   useRedirect(!session, "/login");
 
-  useRedirect(session && !session?.is_first_time_user, "/userprofile");
+  useRedirect(session && !session?.is_first_time_user, "/user-profile");
   return (
     <main>
       <div className="container py-4">
@@ -41,12 +41,6 @@ function Profile() {
             >
               Not Now
             </Link>
-            {/* <button
-              style={{ width: "250px" }}
-              className="btn btn-secondary rounded-pill mb-3 ms-3"
-            >
-              Not Now
-            </button> */}
           </div>
         </div>
       </div>

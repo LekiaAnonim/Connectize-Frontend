@@ -62,15 +62,15 @@ function App() {
           <Route path="bio-three" element={<CompanyBioThree />} />
           <Route path="bio-four" element={<CompanyBioFour />} />
           <Route path="service" element={<Services />} />
-          <Route path="serviceoverview" element={<ServiceOverView />} />
-          <Route path="serviceadmin" element={<ServiceAdmin />} />
+          <Route path="service-overview" element={<ServiceOverView />} />
+          <Route path="service-admin" element={<ServiceAdmin />} />
           <Route path="market" element={<Market />} />
           <Route path="product" element={<Product />} />
           <Route path="analysis" element={<Analysis />} />
           <Route path="listing" element={<Listing />} />
-          <Route path="userprofile" element={<UserProfile />} />
-          <Route path="adminprofile" element={<AdminProfile />} />
-          {/* <Route path="feedpage" element={<FeedPage />} /> */}
+          <Route path="user-profile" element={<UserProfile />} />
+          <Route path="admin-profile" element={<AdminProfile />} />
+          {/* <Route path="feed-page" element={<FeedPage />} /> */}
           <Route path="testing" element={<Testing />} />
           <Route path="antway" element={<Navbar />} />
           <Route path="*" element={<NoPage />} />
