@@ -12,15 +12,14 @@ export function sleep(ms) {
 }
 
 // Configure Axios Defaults
-axios.defaults.baseURL = "http://localhost:8000"; // Django API URL
-axios.defaults.withCredentials = true;
+export const baseURL = "http://localhost:8000";
 
 export async function refreshTokenIfNeeded() {
   const session = getSession();
 
   if (session?.tokens?.refresh && session?.tokens) {
     try {
-      const { data } = await axios.post("api/auth/refresh-token/", {
+      const { data } = await axios.post(baseURL + "/api/auth/refresh-token/", {
         refresh: session.tokens.refresh,
       });
 
@@ -50,7 +49,7 @@ export async function makeApiRequest({ url, method, data, resetForm, type }) {
     const headers = await refreshTokenIfNeeded();
 
     const response = await axios({
-      url: `/${url}`,
+      url: `${baseURL}/${url}`,
       method,
       data,
       headers,

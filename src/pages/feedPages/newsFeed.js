@@ -7,6 +7,7 @@ import clsx from "clsx";
 
 export default function NewsFeed() {
   const { navOpen } = useNav();
+
   return (
     <section
       className={clsx(

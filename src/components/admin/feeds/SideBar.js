@@ -6,6 +6,9 @@ import clsx from "clsx";
 import { useNav } from "../../../context/navContext";
 import { useMediaQuery } from "react-responsive";
 import FeedSearch from "./FeedSearch";
+import { useQuery } from "@tanstack/react-query";
+import { getSuggestedUsersForCurrentUser } from "../../../api-services/users";
+import { companyArray } from "../../../lib/data/feed";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
@@ -14,49 +17,6 @@ const Sidebar = () => {
   const isTablet = useMediaQuery({ minWidth: 768 });
 
   if (isTablet) toggleNav(false);
-
-  const companyArray = [
-    {
-      name: "Jenny Wilson",
-      src: "/images/icondell.PNG",
-      description: "Sed ut perspiciatis unde omnis iste natus ",
-    },
-    {
-      name: "Albert Flores",
-      src: "/images/huawei.PNG",
-      description: "Sed ut perspiciatis unde omnis iste natus ",
-    },
-    {
-      name: "Bessie Cooper",
-      src: "/images/iconcooper.PNG",
-      description: "Sed ut perspiciatis unde omnis iste natus ",
-    },
-    {
-      name: "Darlene Robertson",
-      src: "/images/icondalene.PNG",
-      description: "Sed ut perspiciatis unde omnis iste natus ",
-    },
-    {
-      name: "Esther Howard",
-      src: "/images/iconnorth.PNG",
-      description: "Sed ut perspiciatis unde omnis iste natus ",
-    },
-    {
-      name: "Annette Black",
-      src: "/images/nasa.PNG",
-      description: "Sed ut perspiciatis unde omnis iste natus ",
-    },
-    {
-      name: "Bessie Cooper",
-      src: "/images/iconcooper.PNG",
-      description: "Sed ut perspiciatis unde omnis iste natus ",
-    },
-    {
-      name: "Cody Fisher",
-      src: "/images/iconcody.PNG",
-      description: "Sed ut perspiciatis unde omnis iste natus ",
-    },
-  ];
 
   return (
     <div
@@ -76,7 +36,7 @@ const Sidebar = () => {
 
       <NavigationSection pathname={pathname} />
 
-      <Companies companyArray={companyArray} />
+      <Companies />
     </div>
   );
 };
@@ -110,21 +70,34 @@ function NavigationSection({ pathname }) {
 }
 
 function Companies({ companyArray }) {
+  const { data: companyArrayData } = useQuery({
+    queryKey: ["suggestedUsers"],
+    queryFn: getSuggestedUsersForCurrentUser,
+    placeholderData: companyArray,
+  });
   return (
     <div className="space-y-3">
       <h3 className="font-semibold text-xl">Companies</h3>
-      <ul className="space-y-2 divide-y divide-gray-100 xs:text-sm p-0">
-        {companyArray.map(({ name, src, description }, index) => (
-          <li key={index} className="flex items-center gap-2 pt-2">
-            <img src={src} alt={name} className="size-10" />
-            <div className="">
-              <h1 className="text-base font-semibold leading-normal m-0">
-                {name}
-              </h1>
-              <span className="text-gray-500 text-sm">{description}</span>
-            </div>
-          </li>
-        ))}
+      <ul className="space-y-2 divide-y divide-gray-100/80 xs:text-sm p-0">
+        {companyArrayData.map(
+          ({ company, avatar: src, bio: description }, index) => (
+            <li key={index} className="flex items-center gap-2 pt-2">
+              <img
+                src={src || "/images/logo.png"}
+                alt={company}
+                className="size-10 rounded-full"
+              />
+              <div className="">
+                <h1 className="text-base font-semibold leading-normal m-0 capitalize">
+                  {company}
+                </h1>
+                <span className="text-gray-500 text-sm line-clamp-1">
+                  {description}
+                </span>
+              </div>
+            </li>
+          )
+        )}
       </ul>
     </div>
   );
