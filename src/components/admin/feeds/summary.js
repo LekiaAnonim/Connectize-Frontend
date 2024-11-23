@@ -1,4 +1,4 @@
-import MoreHorizoneIcon from '@mui/icons-material/MoreHoriz'
+import MoreOptions from "../../MoreOptions";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import clsx from "clsx";
 import DiscoverPosts from "./DiscoverPosts";
@@ -6,6 +6,7 @@ import RecommendedProducts from "../products/recommendedProducts";
 import HeadingText from "../../HeadingText";
 import LightParagraph from "../../ParagraphText";
 import CreatePost from "./CreatePost";
+import Reviews from "./reviews";
 
 function Summary() {
   return (
@@ -13,9 +14,9 @@ function Summary() {
       <div className="border-b pb-3">
         <div className="flex pb-3 items-start justify-between">
           <HeadingText>Summary</HeadingText>
-          <button>
-            <MoreHorizoneIcon />
-          </button>
+          <MoreOptions>
+            <div>more options</div>
+          </MoreOptions>
         </div>
         <LightParagraph>
           Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
@@ -51,7 +52,7 @@ function SummaryTabs() {
       <TabPanels className="!w-full">
         <TabPanel className="p-0 !w-full">
           <section className="space-y-6">
-            <h1 className="text-3xl font-semibold py-3">Activities</h1>
+            <h1 className="text-2xl font-semibold px-3 py-2">Activities</h1>
             <CreatePost />
             <RecommendedProducts />
             <DiscoverPosts />
@@ -64,11 +65,11 @@ function SummaryTabs() {
           <div>Products tab</div>
         </TabPanel>
         <TabPanel className="p-0 !w-full">
-          <div>Reviews tab</div>
+          <Reviews />
         </TabPanel>
       </TabPanels>
     </Tabs>
   );
 }
 
-export default Summary
+export default Summary;

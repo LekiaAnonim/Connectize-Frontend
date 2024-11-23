@@ -7,7 +7,6 @@ import {
   PopoverArrow,
 } from "@chakra-ui/react";
 import { Notification } from "../icon";
-import HeadingText from "./HeadingText";
 
 export function NotificationPopOver() {
   return (
