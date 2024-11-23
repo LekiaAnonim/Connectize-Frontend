@@ -30,7 +30,7 @@ export function Notifications({ className }) {
   return (
     <div className={clsx("bg-white rounded p-3 space-y-4 w-full", className)}>
       <header className="flex justify-between items-center gap-2 border-b border-gray-100 pb-1">
-        <HeadingText className="text-xl font-bold">Notifications</HeadingText>
+        <h4 className="text-xl font-semibold">Notifications</h4>
         <button className="text-gray-500 hover:text-black transition-colors duration-300 underline">
           Clear All
         </button>
