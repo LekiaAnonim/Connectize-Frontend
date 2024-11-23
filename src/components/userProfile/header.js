@@ -1,9 +1,6 @@
-import Navbar from "./Navbar";
-
 const Header = () => {
   return (
     <>
-      <Navbar />
       <section className="relative">
         <img
           src="images/dangote.png"

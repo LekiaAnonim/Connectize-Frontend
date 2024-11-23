@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { useAuth } from "../../context/userContext";
 import Reviews from "../../components/admin/feeds/reviews";
 import { Suggestions } from "../../components/admin/feeds/TopServiceSuggestions";
-import DiscoverFeed from "../../components/admin/feeds/DiscoverFeed";
+import Summary from "../../components/admin/feeds/summary";
 import ListedProducts from "../../components/admin/products/listedProducts";
 import Header from "../../components/userProfile/header";
+import Navbar from "../../components/userProfile/Navbar";
 
 export default function UserProfile() {
   const { user } = useAuth();
@@ -14,17 +15,20 @@ export default function UserProfile() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <main className="bg-background">
-      <Header />
+    <>
+      <Navbar />
+      <main className="bg-background">
+        <Header />
 
-      <section className="mt-16 max-md:container flex flex-col items-start md:flex-row p-3 gap-2">
-        <ProductSidebar />
-        <section className="grid grid-cols-1 xl:grid-cols-3 md:px-2 xl:px-4 gap-2 py-2">
-          <DiscoverFeed isUserProfile />
-          <Suggestions />
+        <section className="mt-16 max-md:container flex flex-col items-start md:flex-row p-3 gap-2">
+          <ProductSidebar />
+          <section className="grid grid-cols-1 xl:grid-cols-3 md:px-2 xl:px-4 gap-2 py-2">
+            <Summary />
+            <Suggestions />
+          </section>
         </section>
-      </section>
-    </main>
+      </main>
+    </>
   );
 }
 

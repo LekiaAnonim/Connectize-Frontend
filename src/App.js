@@ -55,19 +55,24 @@ function App() {
             <Route path="bio" element={<Bio />} />
             <Route path="overview" element={<Overview />} />
           </Route>
+
           <Route path="bio-one" element={<CompanyBioOne />} />
           <Route path="bio-two" element={<CompanyBioTwo />} />
           <Route path="bio-three" element={<CompanyBioThree />} />
           <Route path="bio-four" element={<CompanyBioFour />} />
+
           <Route path="service" element={<Services />} />
           <Route path="service-overview" element={<ServiceOverView />} />
           <Route path="service-admin" element={<ServiceAdmin />} />
-          <Route path="market" element={<Market />} />
-          <Route path="product" element={<Product />} />
           <Route path="analysis" element={<Analysis />} />
+
+          <Route path="market" element={<Market />} />
+          <Route path="products" element={<Product />} />
           <Route path="listing" element={<Listing />} />
+
           <Route path="user-profile" element={<UserProfile />} />
           <Route path="admin-profile" element={<AdminProfile />} />
+
           {/* <Route path="feed-page" element={<FeedPage />} /> */}
           {/* <Route path="testing" element={<Testing />} /> */}
           {/* <Route path="antway" element={<Navbar />} /> */}
