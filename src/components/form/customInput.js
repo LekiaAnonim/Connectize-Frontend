@@ -1,3 +1,4 @@
+import { Input } from "@chakra-ui/react";
 import React, { useState } from "react";
 
 export default function CustomInput({
@@ -10,7 +11,7 @@ export default function CustomInput({
   className,
 }) {
   const [isPassword, setIsPassword] = useState(true);
-  const [passWordType, setPasswordType] = useState("password");
+  const [passwordType, setPasswordType] = useState("password");
 
   const handlePasswordVisibility = () => {
     setIsPassword(!isPassword);
@@ -18,10 +19,10 @@ export default function CustomInput({
   };
   return (
     <div className="relative w-full max-w-md">
-      <input
+      <Input
         autoComplete="true"
-        className={`relative mt-2 !w-full bg-[#eee] py-2.5 px-3 rounded-md placeholder:text-sm text-sm ${className} transition-all duration-300 focus:border-mid_grey`}
-        type={type === "password" ? passWordType : type}
+        className={`relative mt-2 !w-full !bg-background py-2.5 px-3 rounded-md placeholder:text-sm text-sm ${className} transition-all duration-300 focus:!border-gold focus:outline-none`}
+        type={type === "password" ? passwordType : type}
         placeholder={placeholder}
         onChange={onChange}
         onBlur={onBlur}

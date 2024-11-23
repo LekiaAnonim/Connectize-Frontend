@@ -1,117 +1,130 @@
 import React from "react";
 import {
-  Building,
-  CircleFill,
-  GreaterThan,
-  Squares,
+  CategoryIcon,
+  ChartBar,
+  Notification,
+  StoreIcon,
   UserGroup,
 } from "../../../icon";
 import "../services/navbar.css";
-import { Link } from "react-router-dom";
-import {
-  Analytics,
-  ChatRounded,
-  ContactPage,
-  DesignServices,
-} from "@mui/icons-material";
+import { Link, useLocation } from "react-router-dom";
+import { ChevronRight } from "@mui/icons-material";
+import HeadingText from "../../HeadingText";
+import clsx from "clsx";
 
-function SidebarMenu() {
+const marketPlaceItems = [
+  {
+    name: "Market",
+    icon: StoreIcon,
+    to: "/market",
+  },
+  {
+    name: "Organization",
+    icon: UserGroup,
+    to: "/organization",
+  },
+  {
+    name: "Analysis",
+    icon: ChartBar,
+    to: "/analysis",
+  },
+  {
+    name: "Services",
+    icon: Notification,
+    to: "/service",
+  },
+];
+
+function SidebarMenu({ isService }) {
   return (
-    <div className="mb-5">
-      <div className=" bg-white px-2 pt-4 pb-5 rounded">
-        <h3>Services</h3>
-        <div className="d-flex">
-          <p>
-            <Building />
-          </p>
-          <Link to={"/market"} className="text-decoration-none text-black">
-            <p className="ms-2">Market</p>
-          </Link>
-        </div>
-        <Link
-          to={"/organization"}
-          className="d-flex text-black text-decoration-none"
-        >
-          <p>
-            <UserGroup />
-          </p>
-          <p className="ms-2">Organization</p>
-        </Link>
-        <Link
-          to={"/service"}
-          className="d-flex text-black text-decoration-none"
-        >
-          <p>
-            <DesignServices />
-          </p>
-          <p className="ms-2">Services</p>
-        </Link>
-        <Link
-          to={"/analysis"}
-          className="d-flex text-black text-decoration-none"
-        >
-          <p>
-            <Analytics />
-          </p>
-          <p className="ms-2">Analytics</p>
-        </Link>
-        <Link
-          to={"/listing"}
-          className="rounded-pill bg-dark text-white px-2 border border-none py-1 mb-3 sidebar text-decoration-none"
-        >
-          List new product
-          <GreaterThan />
-        </Link>
-        <div className="d-flex mt-3">
-          <p>
-            <Squares />
-          </p>
-          <p className="ms-2">Categories</p>
-        </div>
-        <Link to={"/chat"} className="d-flex text-black text-decoration-none">
-          <p>
-            <ChatRounded />
-          </p>
-          <p className="ms-2">Chat</p>
-        </Link>
-        <Link
-          to={"/contact"}
-          className="d-flex text-black text-decoration-none"
-        >
-          <p>
-            <ContactPage />
-          </p>
-          <p className="ms-2">Contact</p>
-        </Link>
-        <Link
-          to={"/serviceadmin"}
-          className="rounded-pill bg-black border border-none px-2 py-1 mb-3 sidebar text-decoration-none text-white"
-        >
-          List new service
-          <GreaterThan />
-        </Link>
-
-        <div className="d-flex">
-          <p>
-            <CircleFill />
-          </p>
-          <p className="ms-2">Marketplaces</p>
-        </div>
-        <div className="d-flex">
-          <p>
-            <CircleFill />
-          </p>
-          <p className="ms-2">Marketplaces</p>
-        </div>
-        <div className="d-flex">
-          <p>
-            <CircleFill />
-          </p>
-          <p className="ms-2">Marketplaces</p>
-        </div>
-      </div>
-    </div>
+    <section className="bg-white p-3 w-full md:max-w-[250px] shrink-0 rounded-md">
+      <MarketPlaceNavigation />
+      <Link
+        to="/listing"
+        className="flex items-center justify-between rounded-full bg-dark text-white text-sm py-2.5 px-3 w-full mb-4 mt-2"
+      >
+        <span>List New Product</span>
+        <ChevronRight className="!size-5 text-gray-200" />
+      </Link>
+      <ProductCategory />
+    </section>
   );
 }
 
 export default SidebarMenu;
+
+function MarketPlaceNavigation() {
+  const { pathname } = useLocation();
+  return (
+    <section className="space-y-2">
+      <HeadingText>Marketplace</HeadingText>
+      <div className="space-y-2 xs:text-sm p-2">
+        {marketPlaceItems.map((item, index) => {
+          return (
+            <Link
+              key={index}
+              to={item.to}
+              className={clsx(
+                "flex gap-2 items-center transition-colors duration-300 p-2 rounded hover:!text-mid_grey",
+                {
+                  "!text-gold !bg-mid_grey pointer-events-none":
+                    item.to === pathname,
+                  "!text-gray-500": item.to !== pathname,
+                }
+              )}
+            >
+              <item.icon />
+              <span className="text-sm font-semibold">{item.name}</span>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+const categories = [
+  {
+    name: "Newly listed",
+    image: "",
+  },
+  {
+    name: "Black gold",
+    image: "",
+  },
+  {
+    name: "Oil barrels",
+    image: "",
+  },
+  {
+    name: "Imported",
+    image: "",
+  },
+  {
+    name: "Refined",
+    image: "",
+  },
+  {
+    name: "Tested",
+    image: "",
+  },
+];
+
+function ProductCategory() {
+  return (
+    <section className="space-y-2">
+      <div className="flex gap-2 items-center">
+        <CategoryIcon />
+        <HeadingText>Category</HeadingText>
+      </div>
+      <div className="space-y-2 xs:text-sm p-2">
+        {categories.map((item, index) => (
+          <Link to="" key={index} className="flex gap-2 p-2">
+            <span className="size-5 bg-dark rounded-full" />
+            <span>{item.name}</span>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}

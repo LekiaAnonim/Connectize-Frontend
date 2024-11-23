@@ -3,7 +3,7 @@ import HeadingText from "../HeadingText";
 import LightParagraph from "../ParagraphText";
 import { bioKey, social_media_urlKey, website_urlKey } from "../../lib/data";
 import Form from "../form";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import { useFormik } from "formik";
 import StepButton from "./StepButton";
 

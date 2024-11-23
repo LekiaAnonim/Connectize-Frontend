@@ -1,71 +1,112 @@
-import React from 'react'
-import { ArrowDown } from '../../../icon'
+import React, { useEffect } from "react";
+import { ImageIcon } from "../../../icon";
+import HeadingText from "../../HeadingText";
+import LightParagraph from "../../ParagraphText";
+import Form from "../../form";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+
+const validationSchema = Yup.object().shape({
+  product_title: Yup.string()
+    .max(250, "Should not be more that 250 characters")
+    .required("Field cannot be empty"),
+  product_category: Yup.string().required("Field cannot be empty"),
+  description: Yup.string()
+    .max(1450, "Should not be more that 1450 characters")
+    .required("Field cannot be empty"),
+  subtitle: Yup.string()
+    .max(450, "Should not be more that 450 characters")
+    .required("Field cannot be empty"),
+});
+
+const listingFields = [
+  {
+    name: "product_title",
+    type: "text",
+    label: "Product Title",
+    placeholder: "Should not be more that 250 characters",
+  },
+  {
+    name: "product_category",
+    type: "select",
+    label: "Choose Category",
+    placeholder: "Product type",
+  },
+  {
+    name: "description",
+    type: "textfield",
+    label: "Description",
+    placeholder: "Should not be more than 1450 characters",
+  },
+  {
+    name: "subtitle",
+    type: "textfield",
+    label: "Subtitle",
+    placeholder: "Should not be more than 450 characters",
+  },
+];
 
 export default function NewListing() {
+  //   const navigate = useNavigate();
+  const formValues = {
+    product_title: "",
+    product_category: "",
+    description: "",
+    subtitle: "",
+  };
+
+  const formik = useFormik({
+    initialValues: formValues,
+    validationSchema: validationSchema,
+    onSubmit: async (
+      { product_title, product_category, description, subtitle },
+      { resetForm }
+    ) => {},
+  });
+  useEffect(() => {
+    formik.setValues(formValues);
+    document.title = "Create a new listing | Connectize";
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
-    <div className='bg-white p-5 rounded'>
-        <div>
-            <h1>List new products</h1>
-            <p className='text-black-50'>upload at least 4 images</p>
-        </div>
-        <div className='row'>
-            <div className='col-sm-6 col-md-3 pb-3'>
-                <div className='card' style={{height:"150px",background:"#EEE"}}>
-                    <input className='form-control'  type="file" name="filename"/>
-                </div>
-            </div>
-            <div className='col-sm-6 col-md-3 pb-3'>
-                <div className='card' style={{height:"150px",background:"#EEE"}}>
-                    <input className='form-control'  type="file" name="filename"/>
-                </div>
-            </div>
-            <div className='col-sm-6 col-md-3 pb-3'>
-                <div className='card' style={{height:"150px",background:"#EEE"}}>
-                    <input className='form-control'  type="file" name="filename"/>
-                </div>
-            </div>
-            <div className='col-sm-6 col-md-3 pb-3'>
-                <div className='card' style={{height:"150px",background:"#EEE"}}>
-                    <input className='form-control'  type="file" name="filename"/>
-                </div>
-            </div> 
-        </div>
-        <div className='col-10'>
-            <form className='pt-5'>
-                <div className='row'>
-                    <div className='col-sm-12 col-md-6'>
-                        <label className='pb-2'>Product title</label><br/>
-                        <input type='text' className='form-control' placeholder='should not be more than 250 characters' style={{height:"50px",background:"#EEE"}}/>
-                    </div>
-                    <div className='col-sm-12 col-md-6'>
-                    <label for="exampleDataList" className="form-label">Choose category</label>
-                    <input type='text' className='form-control border-0' list="datalistOptions" id="exampleDataList" style={{background:"#EEEEEE", height:"50px"}}  placeholder='Refined oil'/>
-                        <div style={{marginLeft:"90%", marginTop:"-10%"}}>
-                            <ArrowDown  />
-                        </div>
-                    </div>
-                    <datalist id="datalistOptions">
-                        <option />
-                        <option value="San Francisco"/>
-                            <option value="New York"/>
-                            <option value="Seattle"/>
-                            <option value="Los Angeles"/>
-                            <option value="Chicago"/>
-                    </datalist>   
-                    
-                </div>
-                <div className='row'>
-                    <div className='col-sm-12 col-md-6'>
-                        <label className='pt-3 pb-2'>Description</label><br/>
-                        <input type='text' className='form-control' placeholder='should not be more than 1450 characters' style={{height:"80px",background:"#EEE"}}/>
-                    </div>
-                    <div className='col-sm-12 col-md-6'>
-                        <label className='pt-3 pb-2'>Subtitle</label><br/>
-                        <input type='text' className='form-control' placeholder='should not be more than 450 characters' style={{height:"80px",background:"#EEE"}}/>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-  )
+    <section className="bg-white p-4 rounded-md w-full shrink-0">
+      <div className="mb-4">
+        <HeadingText>List new products</HeadingText>
+        <LightParagraph>Upload at least 4 images</LightParagraph>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-2 xl:grid-cols-4 gap-4">
+        <ImageSelect name="Image 1" />
+        <ImageSelect name="Image 2" />
+        <ImageSelect name="Image 3" />
+        <ImageSelect name="Image 4" />
+      </div>
+      <Form
+        formik={formik}
+        status={"none"}
+        inputArray={listingFields}
+        button={{
+          type: "submit",
+          text: "List product | >",
+
+          submitText: "Checking...",
+          style: "!w-fit mt-20 text-sm",
+        }}
+      />
+    </section>
+  );
+}
+
+function ImageSelect(name) {
+  return (
+    <label className="border !border-gray-100 h-[150px] rounded-md bg-background flex flex-col items-center gap-3 overflow-hidden p-1 cursor-pointer">
+      <input
+        className="w-full file:border-0 file:rounded-md text-gray-500 text-sm file:p-2"
+        type="file"
+        accept="image/*"
+        name={name}
+      />
+      <ImageIcon className="text-custom_grey/20" />
+    </label>
+  );
 }

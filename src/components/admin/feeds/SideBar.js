@@ -46,7 +46,7 @@ export default Sidebar;
 function NavigationSection({ pathname }) {
   const { toggleNav } = useNav();
   return (
-    <ul className="mb-6 space-y-1 xs:text-sm p-2 bg-[#eee] rounded">
+    <ul className="mb-6 space-y-1 xs:text-sm p-2 bg-background rounded">
       {feedNavItems.map((item, index) => (
         <li className="" key={index}>
           <Link

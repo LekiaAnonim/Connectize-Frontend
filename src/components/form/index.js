@@ -63,16 +63,17 @@ export default function Form({
           {button && (
             <button
               type={button ? button.type : "submit"}
-              className={`w-full bg-black rounded-full hover:opacity-70 transition-all duration-300 text-white px-3 py-2.5 ${
+              className={`w-full bg-black rounded-full hover:opacity-80 transition-all duration-300 text-white px-3 py-2.5 flex items-center justify-center ${
                 button.style
               } ${formik.isSubmitting ? "opacity-50 pointer-events-none" : ""}`}
             >
               {formik.isSubmitting ? (
-                // <div className="boxes_loader"></div>
-
                 <> {button.submitText}</>
               ) : (
-                <>{button.text}</>
+                <>
+                  <span>{button.text}</span>
+                  {button.icon}
+                </>
               )}
             </button>
           )}

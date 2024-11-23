@@ -29,15 +29,18 @@ import AuthLayout from "./pages/authentication/AuthLayout";
 import ResetPasswordPage from "./pages/authentication/reset-password";
 import ProfileLayout from "./components/profile/layout";
 import ConfirmResetPassword from "./pages/authentication/confirmPasswordReset";
+import MarketPlaceLayout from "./pages/MarketPlaceLayout";
 
 function App() {
   return (
     <>
       <Routes>
         <Route>
+          {/* Landing page */}
           <Route path="/" element={<NewsFeed />} />
+
+          {/* authentication routes */}
           <Route path="/" element={<AuthLayout />}>
-            {/* authentication routes */}
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
@@ -61,21 +64,28 @@ function App() {
           <Route path="bio-three" element={<CompanyBioThree />} />
           <Route path="bio-four" element={<CompanyBioFour />} />
 
+          {/* Services */}
           <Route path="service" element={<Services />} />
           <Route path="service-overview" element={<ServiceOverView />} />
           <Route path="service-admin" element={<ServiceAdmin />} />
-          <Route path="analysis" element={<Analysis />} />
 
-          <Route path="market" element={<Market />} />
-          <Route path="products" element={<Product />} />
-          <Route path="listing" element={<Listing />} />
+          {/* Market place */}
+          <Route element={<MarketPlaceLayout />}>
+            <Route path="analysis" element={<Analysis />} />
+            <Route path="market" element={<Market />} />
+            <Route path="products" element={<Product />} />
+            <Route path="listing" element={<Listing />} />
+          </Route>
 
+          {/* User */}
           <Route path="user-profile" element={<UserProfile />} />
           <Route path="admin-profile" element={<AdminProfile />} />
 
           {/* <Route path="feed-page" element={<FeedPage />} /> */}
           {/* <Route path="testing" element={<Testing />} /> */}
           {/* <Route path="antway" element={<Navbar />} /> */}
+
+          {/* 404 Page */}
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>

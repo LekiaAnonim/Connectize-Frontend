@@ -24,8 +24,8 @@ const Navbar = () => {
   const groupFlex = "flex w-full gap-4 md:!gap-3 xl:!gap-6 items-center";
   return (
     <Headroom>
-      <section className="w-full h-16 flex items-center bg-white">
-        <nav className="max-md:container w-full py-2 md:px-4 flex items-center justify-between gap-2 lg:!gap-10 xl:!gap-14">
+      <nav className="w-full h-20 flex items-center bg-white">
+        <section className="max-md:container w-full py-2 md:px-4 flex items-center justify-between gap-2 lg:!gap-10 xl:!gap-14">
           <div className={weirdFlex}>
             <Logo />
             <div className={groupFlex}>
@@ -101,8 +101,8 @@ const Navbar = () => {
 
             <ProfilePicture />
           </div>
-        </nav>
-      </section>
+        </section>
+      </nav>
     </Headroom>
   );
 };
