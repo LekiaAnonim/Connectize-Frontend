@@ -19,6 +19,18 @@ export default function Reviews() {
           date="05-06-2024"
           text="Sed ut perspiciatis unde omnis iste natus error"
         />
+        <Review
+          image="/images/bmw.PNG"
+          name="cody fisher"
+          date="05-06-2024"
+          text="Sed ut perspiciatis unde omnis iste natus error sit voluptatem   accusantium"
+        />
+        <Review
+          image="/images/bmwprofilepicture.png"
+          name="Mitsubishi"
+          date="05-06-2024"
+          text="Sed ut perspiciatis unde omnis iste natus error"
+        />
       </section>
     </section>
   );
