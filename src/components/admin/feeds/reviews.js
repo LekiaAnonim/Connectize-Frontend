@@ -1,5 +1,4 @@
 import React from "react";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import MoreOptions from "../../MoreOptions";
 import LightParagraph from "../../ParagraphText";
 
@@ -7,7 +6,7 @@ export default function Reviews() {
   return (
     <section className="bg-white my-4 p-3 rounded-md space-y-4">
       <h1 className="p-2 text-xl md:text-lg font-bold">Reviews</h1>
-      <section className="space-y-4">
+      <section className="space-y-4 divide-y">
         <Review
           image="/images/bmw.PNG"
           name="cody fisher"
@@ -27,7 +26,7 @@ export default function Reviews() {
 
 const Review = ({ image, name, date, text }) => {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 first:!pt-0 pt-4">
       <img src={image} alt={name} className="size-[80px]" />
 
       <div className="w-full">

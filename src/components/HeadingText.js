@@ -4,7 +4,7 @@ import React from "react";
 export default function HeadingText({ children, center = false }) {
   return (
     <h1
-      className={clsx("font-semibold text-3xl xs:text-2xl text-balance", {
+      className={clsx("font-bold text-xl md:text-lg text-balance", {
         "text-center": center,
       })}
     >
