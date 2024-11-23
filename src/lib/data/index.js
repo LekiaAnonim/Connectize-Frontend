@@ -46,13 +46,15 @@ export const feedNavItems = [
   { name: "Analysis", to: "/analysis", icon: <AnalysisIcon /> },
   { name: "Photos", to: "/photos", icon: <PhotosIcon /> },
   { name: "Videos", to: "/videos", icon: <VideoIcon /> },
+  { name: "User profile", to: "/user-profile", icon: <VideoIcon /> },
   {
     name: "Profile",
-    to: !session?.is_first_time_user
-      ? "/user-profile"
-      : session
-      ? "/profile"
-      : "/login",
+    to:
+      session && !session?.is_first_time_user
+        ? "/user-profile"
+        : session
+        ? "/profile"
+        : "/login",
     icon: <PersonIcon />,
   },
 ];

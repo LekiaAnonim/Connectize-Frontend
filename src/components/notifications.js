@@ -5,6 +5,7 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverArrow,
+  // Tooltip,
 } from "@chakra-ui/react";
 import { Notification } from "../icon";
 
@@ -13,7 +14,14 @@ export function NotificationPopOver() {
     <Popover>
       <PopoverTrigger>
         <button>
+          {/* <Tooltip
+            label={"Notifications"}
+            fontSize="sm"
+            placement="auto"
+            className="!rounded-md bg-white !text-custom_blue border"
+          > */}
           <Notification />
+          {/* </Tooltip> */}
         </button>
       </PopoverTrigger>
 

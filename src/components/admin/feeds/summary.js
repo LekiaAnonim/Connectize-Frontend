@@ -30,7 +30,7 @@ function Summary() {
 }
 
 function SummaryTabs() {
-  const tabsStyle = "w-full rounded-full font-medium";
+  const tabsStyle = "w-full rounded-full font-medium md:!text-xs lg:!text-sm";
   const selectedStyle = { color: "black", bg: "#F1C644" };
   return (
     <Tabs variant="solid-rounded" className="space-y-4">

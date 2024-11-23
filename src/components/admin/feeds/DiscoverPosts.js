@@ -34,7 +34,7 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
           />
 
           <div className="flex items-center gap-1">
-            <span className="text-lg xl:text-xl font-bold">Dangote Oil</span>
+            <h4 className=" md:text-sm lg:text-base font-bold">Dangote Oil</h4>
             <VerifiedIcon color="black" />
             <small className="text-gray-400">@dangote • 14s</small>
           </div>

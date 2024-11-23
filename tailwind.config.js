@@ -35,7 +35,7 @@ module.exports = {
         custom_grey: " #828282",
         light_grey: " #e5e5e5",
         mid_grey: "#373737",
-        custom_blue: "#134074",
+        custom_blue: "#262626",
       },
     },
   },

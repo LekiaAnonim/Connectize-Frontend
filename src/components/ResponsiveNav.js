@@ -2,7 +2,7 @@ import React from "react";
 import { useNav } from "../context/navContext";
 import { Menu } from "@mui/icons-material";
 import clsx from "clsx";
-import { ChartBar, Notification, Setting } from "../icon";
+import { ChartBar, Setting } from "../icon";
 import FeedSearch from "./admin/feeds/FeedSearch";
 import { NotificationPopOver } from "./notifications";
 import { Link } from "react-router-dom";

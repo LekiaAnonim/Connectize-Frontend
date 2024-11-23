@@ -10,14 +10,14 @@ function CreatePost() {
         className="w-full pb-2 border-b border-gray-300 bg-transparent focus:outline-0 text-xl"
       />
 
-      <div className="mt-4 flex max-xs:flex-col xs:items-center justify-between max-xs:gap-4">
+      <div className="mt-4 flex max-xs:flex-col md:flex-col lg:flex-row xs:items-center justify-between max-xs:gap-4 md:gap-4 lg:gap-1">
         <div className="flex items-center gap-2">
           <MaskedIcon Icon={GalleryIcon} />
           <MaskedIcon Icon={GifIcon} />
           <MaskedIcon Icon={AlignmentIcon} />
           <MaskedIcon Icon={SmileIcon} />
         </div>
-        <button className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-4 transition-opacity duration-300">
+        <button className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-4 transition-opacity duration-300 md:w-full lg:w-fit">
           create post
         </button>
       </div>

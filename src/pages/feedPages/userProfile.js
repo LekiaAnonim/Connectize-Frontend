@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useAuth } from "../../context/userContext";
 import Reviews from "../../components/admin/feeds/reviews";
-import Summary from "../../components/admin/feeds/summary";
-// import Company from "../../components/admin/feeds/company";
 import { Suggestions } from "../../components/admin/feeds/TopServiceSuggestions";
 import DiscoverFeed from "../../components/admin/feeds/DiscoverFeed";
 import ListedProducts from "../../components/admin/products/listedProducts";
 import Header from "../../components/userProfile/header";
 
 export default function UserProfile() {
+  const { user } = useAuth();
+
+  useEffect(() => {
+    document.title = `${user?.first_name} ${user?.last_name} | User Profile - Connectize`;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <main className="bg-background">
       <Header />

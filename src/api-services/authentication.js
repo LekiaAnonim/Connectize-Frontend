@@ -16,6 +16,8 @@ export const authenticationService = async ({
       resetForm,
       type,
     });
+    console.log(results);
+    
 
     if (type === "login") {
       setSession(results);

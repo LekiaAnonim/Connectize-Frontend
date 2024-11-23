@@ -22,15 +22,16 @@ code {
 
 a {
   text-decoration-line: none !important;
+  color: inherit !important;
   transition: all;
   transition-duration: 350ms;
 }
 
-* {
+/* * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-}
+} */
 
 :root {
   --font-drk-600: #242424;

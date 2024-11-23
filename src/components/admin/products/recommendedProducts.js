@@ -6,7 +6,9 @@ import { ShareAltOutlined } from "@ant-design/icons";
 const RecommendedProducts = () => {
   return (
     <div className="bg-white p-4 sm:p-8 rounded-md">
-      <HeadingText>Recommended Products</HeadingText>
+      <HeadingText className="max-md:text-xl font-bold">
+        Recommended Products
+      </HeadingText>
       <div className="bg-background p-3 sm:p-6 rounded-md mt-2 flex max-sm:flex-col gap-2 sm:gap-4 relative">
         <picture className="bg-white sm:w-1/3 p-4 rounded-md">
           <img
@@ -17,7 +19,7 @@ const RecommendedProducts = () => {
         </picture>
 
         <div className="sm:w-2/3">
-          <h4 className="text-xl font-bold border-b border-gray-200 pb-2.5 md:pb-3.5 pt-2">
+          <h4 className="max-md:text-xl font-bold border-b border-gray-200 pb-2.5 md:pb-3.5 pt-2">
             Premium Black Gold Reserve
           </h4>
 

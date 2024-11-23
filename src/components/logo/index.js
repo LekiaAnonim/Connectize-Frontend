@@ -6,7 +6,10 @@ function Logo({ className, url = "/", height = "60px", width = "60px" }) {
   return (
     <Link
       to={url}
-      className={clsx("w-fit block transition-all duration-500", className)}
+      className={clsx(
+        "w-fit shrink-0 block transition-all duration-500",
+        className
+      )}
     >
       <img
         src="/images/logo.png"
