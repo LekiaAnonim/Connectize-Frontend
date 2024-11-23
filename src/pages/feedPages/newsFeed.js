@@ -11,7 +11,7 @@ export default function NewsFeed() {
   return (
     <section
       className={clsx(
-        "flex flex-col items-start md:flex-row p-3 gap-3 bg-[#EEEEEE]",
+        "flex flex-col items-start md:flex-row p-3 gap-3 bg-background",
         {
           "overflow-y-hidden h-screen": navOpen,
         }
