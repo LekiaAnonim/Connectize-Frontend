@@ -24,11 +24,8 @@ const ListedProducts = () => {
 
 function ListedProduct() {
   return (
-    <div className="bg-background p-2.5 sm:p-6 rounded-md flex max-sm:flex-col gap-2 sm:gap-4 relative">
-      <button className="p-1 absolute right-4 top-4">
-        <MoreHoriz />
-      </button>
-      <picture className="bg-white sm:w-1/3 p-4 rounded-md">
+    <div className="bg-background p-2.5 rounded-md flex max-sm:flex-col gap-2 sm:gap-4 relative">
+      <picture className="bg-white sm:w-1/3 p-4 sm:p-1 rounded-md">
         <img
           src="/images/drum1.PNG"
           className="w-3/4 sm:w-full mx-auto"
@@ -37,9 +34,12 @@ function ListedProduct() {
       </picture>
 
       <div className="sm:w-2/3">
-        <h4 className="text-xl font-bold border-b border-gray-200 pb-2.5 md:pb-3.5 pt-2">
-          Premium Black Gold Reserve
-        </h4>
+        <div className="sm:flex justify-between items-start border-b pb-2 pt-2">
+          <h4 className="text-xl font-bold">Premium Black Gold Reserve</h4>
+          <button className="max-sm:absolute right-5 top-4">
+            <MoreHoriz />
+          </button>
+        </div>
 
         <div className="flex mt-2.5 md:mt-3.5">
           {[1, 2, 3].map((_, index) => (

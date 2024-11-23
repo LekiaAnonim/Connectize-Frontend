@@ -7,7 +7,7 @@ import clsx from "clsx";
 
 function DiscoverPosts() {
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 mt-4">
       <DiscoverPostItem hasImage />
       <DiscoverPostItem />
       <DiscoverPostItem />

@@ -3,8 +3,8 @@ import { VerifiedIcon } from "../../../icon";
 
 import { useQuery } from "@tanstack/react-query";
 import { getSuggestedUsersForCurrentUser } from "../../../api-services/users";
-import { suggestions } from "../../../lib/data/feed";
 import { PostCard } from "./DiscoverPostTabs";
+import HeadingText from "../../HeadingText";
 
 const TopServiceSuggestions = () => {
   return (
@@ -20,7 +20,11 @@ export default TopServiceSuggestions;
 
 export function TopServices() {
   return (
-    <div>
+    <div className="p-3 sm:p-4 rounded-md bg-white">
+      <div className="mb-2">
+        <HeadingText>Top Services</HeadingText>
+      </div>
+
       <PostCard />
     </div>
   );
@@ -33,7 +37,7 @@ export function Suggestions() {
   });
 
   return (
-    <div className="bg-white rounded p-4 space-y-4 w-full">
+    <div className="bg-white rounded p-4 space-y-4 w-full h-fit">
       <h2 className="text-xl font-bold">Suggested</h2>
       <ul className="space-y-2 divide-y divide-gray-100 p-0">
         {suggestedUsers?.map(
