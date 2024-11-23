@@ -5,6 +5,9 @@ import LightParagraph from "../../ParagraphText";
 import Form from "../../form";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { ChevronLeft } from "@mui/icons-material";
+import { ChevronRightIcon } from "@radix-ui/react-icons";
+import { Divider } from "@chakra-ui/react";
 
 const validationSchema = Yup.object().shape({
   product_title: Yup.string()
@@ -81,14 +84,15 @@ export default function NewListing() {
         <ImageSelect name="Image 3" />
         <ImageSelect name="Image 4" />
       </div>
+      <Divider className="my-4 text-transparent" />
       <Form
         formik={formik}
         status={"none"}
         inputArray={listingFields}
         button={{
           type: "submit",
-          text: "List product | >",
-
+          text: "List product  | ",
+          icon: <ChevronRightIcon />,
           submitText: "Checking...",
           style: "!w-fit mt-20 text-sm",
         }}
