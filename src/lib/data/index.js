@@ -36,6 +36,8 @@ export const days = [
 
 export const connectizeApiBaseUrl = "https://connectize.co/api/";
 
+const session = getSession();
+
 export const feedNavItems = [
   { name: "Feeds", to: "/", icon: <HomeIcon /> },
   { name: "Messages", to: "/messages", icon: <Message /> },
@@ -46,7 +48,11 @@ export const feedNavItems = [
   { name: "Videos", to: "/videos", icon: <VideoIcon /> },
   {
     name: "Profile",
-    to: getSession() ? "/profile" : "/login",
+    to: !session?.is_first_time_user
+      ? "/user-profile"
+      : session
+      ? "/profile"
+      : "/login",
     icon: <PersonIcon />,
   },
 ];
