@@ -1,11 +1,36 @@
 import clsx from "clsx";
 import { notificationMessages } from "../lib/data/feed";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+} from "@chakra-ui/react";
+import { Notification } from "../icon";
+import HeadingText from "./HeadingText";
+
+export function NotificationPopOver() {
+  return (
+    <Popover>
+      <PopoverTrigger>
+        <button>
+          <Notification />
+        </button>
+      </PopoverTrigger>
+
+      <PopoverContent>
+        <PopoverArrow />
+        <Notifications />
+      </PopoverContent>
+    </Popover>
+  );
+}
 
 export function Notifications({ className }) {
   return (
-    <div className={clsx("bg-white rounded p-4 space-y-4 w-full", className)}>
-      <header className="flex justify-between items-center gap-2">
-        <h2 className="text-xl font-bold">Notifications</h2>
+    <div className={clsx("bg-white rounded p-3 space-y-4 w-full", className)}>
+      <header className="flex justify-between items-center gap-2 border-b border-gray-100 pb-1">
+        <HeadingText className="text-xl font-bold">Notifications</HeadingText>
         <button className="text-gray-500 hover:text-black transition-colors duration-300 underline">
           Clear All
         </button>

@@ -4,27 +4,26 @@ import { Menu } from "@mui/icons-material";
 import clsx from "clsx";
 import { ChartBar, Notification, Setting } from "../icon";
 import FeedSearch from "./admin/feeds/FeedSearch";
+import { NotificationPopOver } from "./notifications";
+import { Link } from "react-router-dom";
 
 function ResponsiveNav() {
   const { navOpen, toggleNav } = useNav();
-  const images = ["/images/iconlove.png", "/images/iconprofile.PNG"];
+  const headerImages = ["/images/iconlove.png", "/images/iconprofile.PNG"];
   return (
     <div className="flex justify-between items-center gap-2 sm:gap-4 w-full mb-4 max-md:mt-2">
-      <ConJoinedImages array={images} />
+      <ConJoinedImages array={headerImages} />
 
       <FeedSearch className="max-xs:hidden" />
 
       <div className="flex items-center gap-3 sm:gap-5 pr-2">
-        <button>
-          <Notification />
-        </button>
-        <button>
+        <NotificationPopOver />
+        <Link to="/analysis">
           <ChartBar />
-        </button>
+        </Link>
         <button>
           <Setting />
         </button>
-
         <button onClick={() => toggleNav(!navOpen)} className="md:hidden">
           <Menu />
         </button>
