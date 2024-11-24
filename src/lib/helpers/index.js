@@ -22,7 +22,6 @@ export async function refreshTokenIfNeeded() {
       const { data } = await axios.post(baseURL + "/api/auth/refresh-token/", {
         refresh: session.tokens.refresh,
       });
-      console.log(data);
 
       setSession({
         ...session,
@@ -39,8 +38,9 @@ export async function refreshTokenIfNeeded() {
     if (error?.response?.data?.code === "token_not_valid") {
       removeSession();
       toast.info("User session has been reset, kindly login again");
-      window.history.pushState(null, "", "/login");
-      window.location.reload();
+      // window.history.pushState(null, "", "/login");
+      // window.location.reload();
+      window.location.replace("/login")
       return;
     }
   }
@@ -48,15 +48,22 @@ export async function refreshTokenIfNeeded() {
 
 setTimeout(() => refreshTokenIfNeeded(), 250000);
 
-export async function makeApiRequest({ url, method, data, resetForm, type }) {
+export async function makeApiRequest({
+  url,
+  method,
+  data,
+  resetForm,
+  type,
+  contentType = "application/json",
+}) {
   try {
-    const headers = await refreshTokenIfNeeded();
+    const authorization = await refreshTokenIfNeeded();
 
     const response = await axios({
       url: `${baseURL}/${url}`,
       method,
       data,
-      headers,
+      headers: { ...authorization, "Content-Type": contentType },
     });
 
     if (response.status >= 200 && response.status <= 204) {

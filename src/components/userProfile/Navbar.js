@@ -15,7 +15,7 @@ import {
 } from "../../icon";
 import FeedSearch from "../../components/admin/feeds/FeedSearch";
 import { NotificationPopOver } from "../../components/notifications";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import clsx from "clsx";
 import { SearchPopOver } from "../SearchPopOver";
 import { useNav } from "../../context/navContext";
@@ -23,6 +23,7 @@ import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 
 const Navbar = () => {
   const { toggleNav } = useNav();
+  const { pathname } = useLocation();
   const weirdFlex = "flex w-full gap-4 md:!gap-6 items-center justify-between";
   const groupFlex = "flex w-full gap-4 md:!gap-3 xl:!gap-6 items-center";
   return (
@@ -116,12 +117,14 @@ const Navbar = () => {
 
             <div className="flex items-center gap-2 shrink-0">
               <ProfilePicture />
-              <Button
-                onClick={() => toggleNav(true)}
-                className="!p-0 bg-transparent md:!hidden"
-              >
-                <HamburgerMenuIcon />
-              </Button>
+              {pathname !== "/user-profile" && (
+                <Button
+                  onClick={() => toggleNav(true)}
+                  className="!p-0 bg-transparent md:!hidden"
+                >
+                  <HamburgerMenuIcon />
+                </Button>
+              )}
             </div>
           </div>
         </section>
