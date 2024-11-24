@@ -1,5 +1,10 @@
 import { Input } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { ImageIcon } from "../../icon";
+import FormikErrorResponse from "./formError";
+
+const inputClassNames =
+  "relative mt-2 !w-full !bg-background py-2.5 px-3 rounded-md placeholder:text-sm !text-sm transition-all duration-300";
 
 export default function CustomInput({
   type,
@@ -21,10 +26,13 @@ export default function CustomInput({
     <div className="relative w-full max-w-md">
       <Input
         autoComplete="true"
-        className={`relative mt-2 !w-full !bg-background py-2.5 px-3 rounded-md placeholder:text-sm text-sm ${className} transition-all duration-300 focus:!border-gold focus:!outline-0 hover:!border-gold`}
+        className={`${className} ${inputClassNames}`}
         type={type === "password" ? passwordType : type}
         placeholder={placeholder}
-        onChange={onChange}
+        onChange={(e) => {
+          localStorage.setItem(name, e.target.value);
+          onChange(e);
+        }}
         onBlur={onBlur}
         value={value}
         name={name}
@@ -45,6 +53,44 @@ export default function CustomInput({
           Hide
         </span>
       ) : null}
+    </div>
+  );
+}
+
+export function ImageSelect({ name, formik, hasCaption = true, captionName }) {
+  return (
+    <div>
+      <label className="border !border-gray-100 h-[150px] rounded-md bg-background flex flex-col items-center gap-3 overflow-hidden p-1 cursor-pointer relative">
+        <input
+          className="w-full file:border-0 file:rounded-md text-gray-500 text-xs file:!text-xs file:p-2"
+          type="file"
+          accept="image/*"
+          name={name}
+          onChange={(event) => {
+            formik.setFieldValue(name, event.currentTarget.files?.[0]);
+          }}
+          onBlur={(event) => {
+            formik.setFieldValue(name, event.currentTarget.files?.[0]);
+          }}
+          // value={formik.values[`${name}`]}
+        />
+        <ImageIcon className="text-custom_grey/20" />
+        <Input
+          name={captionName}
+          onChange={(event) => {
+            localStorage.setItem(name, event.currentTarget.value);
+            formik.setFieldValue(captionName, event.currentTarget.value);
+          }}
+          onBlur={(event) => {
+            formik.setFieldValue(captionName, event.currentTarget.value);
+          }}
+          value={formik.values[`${captionName}`]}
+          placeholder="Enter caption for image (optional)"
+          className={`${inputClassNames} placeholder:text-xs placeholder:text-gray-400 !border-gray-200`}
+        />
+      </label>
+
+      <FormikErrorResponse formik={formik} name={name} />
     </div>
   );
 }

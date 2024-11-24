@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "sonner";
-import { getSession, setSession } from "../session";
+import { getSession, removeSession, setSession } from "../session";
 
 // Constants
 export const REGISTER_EMAIL_KEY = "register_email";
@@ -17,11 +17,12 @@ export const baseURL = "http://localhost:8000";
 export async function refreshTokenIfNeeded() {
   const session = getSession();
 
-  if (session?.tokens?.refresh && session?.tokens) {
-    try {
+  try {
+    if (session?.tokens?.refresh && session?.tokens) {
       const { data } = await axios.post(baseURL + "/api/auth/refresh-token/", {
         refresh: session.tokens.refresh,
       });
+      console.log(data);
 
       setSession({
         ...session,
@@ -31,15 +32,18 @@ export async function refreshTokenIfNeeded() {
         },
       });
 
-      console.log("tokens refreshed");
-
       return { Authorization: "Bearer " + data.access };
-    } catch (error) {
-      console.error("Token refresh failed:", error);
-      throw new Error("Failed to refresh token");
+    }
+    return undefined;
+  } catch (error) {
+    if (error?.response?.data?.code === "token_not_valid") {
+      removeSession();
+      toast.info("User session has been reset, kindly login again");
+      window.history.pushState(null, "", "/login");
+      window.location.reload();
+      return;
     }
   }
-  return undefined;
 }
 
 setTimeout(() => refreshTokenIfNeeded(), 250000);
@@ -77,6 +81,5 @@ export async function makeApiRequest({ url, method, data, resetForm, type }) {
 
     console.error("API request failed:", error);
     toast.error(errorMsg);
-    throw error;
   }
 }

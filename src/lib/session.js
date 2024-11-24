@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 
-const AUTH_SESSION_COOKIE = "connectize_spicy_auth_cookie";
+export const AUTH_SESSION_COOKIE = "connectize_spicy_auth_cookie";
 
 const ENCRYPTION_KEY =
   "9803037e608561b4485fa127ed2c0788578605492c15942944bf34868adf2c4f";

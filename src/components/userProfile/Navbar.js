@@ -3,7 +3,7 @@ import Logo from "../logo";
 import MoreOptions from "../MoreOptions";
 import Headroom from "react-headroom";
 import { useAuth } from "../../context/userContext";
-import { Tooltip } from "@chakra-ui/react";
+import { Button, Tooltip } from "@chakra-ui/react";
 
 import {
   ChartBar,
@@ -18,8 +18,11 @@ import { NotificationPopOver } from "../../components/notifications";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { SearchPopOver } from "../SearchPopOver";
+import { useNav } from "../../context/navContext";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 
 const Navbar = () => {
+  const { toggleNav } = useNav();
   const weirdFlex = "flex w-full gap-4 md:!gap-6 items-center justify-between";
   const groupFlex = "flex w-full gap-4 md:!gap-3 xl:!gap-6 items-center";
   return (
@@ -54,7 +57,7 @@ const Navbar = () => {
                 IconName={ChartBar}
                 to="/analysis"
                 tip="Analysis"
-                className="max-xs:hidden"
+                className="max-sm:hidden"
               />
               <NavItemIcon
                 IconName={StoreIcon}
@@ -68,14 +71,19 @@ const Navbar = () => {
                 tip="Organization"
                 className="max-md:hidden"
               />
-              <NavItemIcon IconName={Setting} to="/settings" tip="Settings" />
+              <NavItemIcon
+                IconName={Setting}
+                to="/settings"
+                tip="Settings"
+                className="max-xs:hidden"
+              />
 
               <MoreOptions className="mx-2 md:!hidden" triggerStyle="md:hidden">
                 <NavItemIcon
                   IconName={ChartBar}
                   to="/analysis"
                   text="Analysis"
-                  className="xs:hidden"
+                  className="sm:hidden"
                 />
                 <NavItemIcon
                   IconName={StoreIcon}
@@ -96,10 +104,25 @@ const Navbar = () => {
                   text="Organization"
                   className="pt-3 md:hidden"
                 />
+
+                <NavItemIcon
+                  IconName={Setting}
+                  to="/settings"
+                  text="Settings"
+                  className="pt-3 xs:hidden"
+                />
               </MoreOptions>
             </div>
 
-            <ProfilePicture />
+            <div className="flex items-center gap-2 shrink-0">
+              <ProfilePicture />
+              <Button
+                onClick={() => toggleNav(true)}
+                className="!p-0 bg-transparent md:!hidden"
+              >
+                <HamburgerMenuIcon />
+              </Button>
+            </div>
           </div>
         </section>
       </nav>
@@ -113,11 +136,13 @@ function ProfilePicture() {
   const { user } = useAuth();
 
   return (
-    <img
-      src={user?.avatar || "/images/iconprofile.PNG"}
-      alt={user?.first_name + " " + user?.last_name || "User"}
-      className="size-[35px] rounded-full "
-    />
+    <Link to="/user-profile">
+      <img
+        src={user?.avatar || "/images/iconprofile.PNG"}
+        alt={user?.first_name + " " + user?.last_name || "User"}
+        className="size-[35px] rounded-full "
+      />
+    </Link>
   );
 }
 
@@ -135,7 +160,7 @@ function NavItemIcon({ IconName, text, to, tip, className, tooltipClassName }) {
       <Link
         to={to}
         className={clsx(
-          "flex items-center font-bold text-sm gap-2 text-gray-400 hover:text-custom_blue transition-colors duration-300",
+          "flex items-center font-bold text-sm gap-3 text-gray-400 hover:text-custom_blue transition-colors duration-300",
           className
         )}
       >

@@ -1,4 +1,6 @@
+import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
+import { capitalizeFirst } from "../lib/utils";
 
 // {
 //     "title": "",
@@ -19,24 +21,86 @@ export const getProducts = async () => {
   return results;
 };
 
-export const createProduct = async (data) => {
-  await getOrCreateProductCategories(data.category);
-  const { results } = await makeApiRequest({
+export const createProduct = async (data, resetForm) => {
+  const productCategoryData = data.product_category
+    .toString()
+    .replaceAll(" ", "_");
+
+  console.log("product data: ", data);
+
+  if (!data || !productCategoryData) {
+    toast.error("No product data or product category found");
+    return;
+  }
+
+  const category = await getOrCreateProductCategories(productCategoryData);
+
+  console.log(category, productCategoryData, " is processing...");
+
+  // failed here
+  const { results: product } = await makeApiRequest({
     url: `api/products/`,
     method: "POST",
-    data,
+    data: {
+      title: capitalizeFirst(data.product_title),
+      sub_title: data.subtitle,
+      category: productCategoryData.toLowerCase(),
+      description: data.description,
+      featured: false,
+      company: "Blue Oil",
+    },
+    resetForm,
   });
 
-  return results;
+  console.log(product, " has been created...");
+
+  const image1 = await getOrCreateProductImages(
+    {
+      image: data.image_1,
+      caption: data?.image_caption1 || data?.product_title,
+      product,
+    },
+    product
+  );
+  const image2 = await getOrCreateProductImages(
+    {
+      image: data.image_2,
+      caption: data?.image_caption2 || data?.product_title,
+      product,
+    },
+    product
+  );
+  const image3 = await getOrCreateProductImages(
+    {
+      image: data.image_3,
+      caption: data?.image_caption3 || data?.product_title,
+      product,
+    },
+    product
+  );
+  const image4 = await getOrCreateProductImages(
+    {
+      image: data.image_4,
+      caption: data?.image_caption4 || data?.product_title,
+      product,
+    },
+    product
+  );
+
+  console.log("Created Product: ", product, image1, image2, image3, image4);
 };
 
 export const getOrCreateProductImages = async (data, product) => {
-  const { results } = await makeApiRequest({
+  const { results: products } = await makeApiRequest({
     url: `api/product-images/`,
     method: "GET",
   });
 
-  if (results.filter((data) => data.product.id === product.id)) return results;
+  if (
+    products.filter((data) => data.product.id === product.id) ||
+    data === undefined
+  )
+    return products || [];
 
   return await makeApiRequest({
     url: `api/product-images/`,
@@ -51,9 +115,8 @@ export const getOrCreateProductCategories = async (name) => {
     method: "GET",
   });
 
-  console.log("Product Category result: ", results);
-
-  if (results.filter((data) => data.name === name)) return results;
+  if (results.filter((data) => data.name === name) || name === undefined)
+    return results || [];
 
   return await makeApiRequest({
     url: `api/product-categories/`,

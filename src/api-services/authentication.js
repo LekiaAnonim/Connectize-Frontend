@@ -16,14 +16,12 @@ export const authenticationService = async ({
       resetForm,
       type,
     });
-    console.log(results);
-    
 
     if (type === "login") {
       setSession(results);
     } else if (type === "register" && values?.email) {
       localStorage.setItem(REGISTER_EMAIL_KEY, values.email);
-    } 
+    }
     return true;
   } catch (error) {
     console.error("Auth submission error:", error);

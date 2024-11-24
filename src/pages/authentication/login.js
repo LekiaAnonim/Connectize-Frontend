@@ -34,6 +34,8 @@ function Login() {
     initialValues: formValues,
     validationSchema: validationSchema,
     onSubmit: async ({ email, password }, { resetForm }) => {
+      // await getTokenForConnectize({ email, password });
+
       const success = await authenticationService({
         values: {
           username: email,

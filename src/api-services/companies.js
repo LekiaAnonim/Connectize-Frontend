@@ -27,7 +27,7 @@ export const getCompanies = async () => {
 };
 
 export const createCompany = async (data) => {
-  await getOrCreateCompanyCategories(data.organization_type);
+  await getOrCreateCompanyCategories(data.company_category);
   await getOrCreateCompanySize(data.company_size);
 
   if (!data.organization_type === undefined || data.company_size === undefined)
@@ -48,9 +48,8 @@ export const getOrCreateCompanyCategories = async (name) => {
     method: "GET",
   });
 
-  console.log("Categories result: ", results);
-
-  if (results.filter((data) => data.name === name)) return;
+  if (results.filter((data) => data.name === name) || name === undefined)
+    return results;
 
   return await makeApiRequest({
     url: `api/company-categories/`,
@@ -66,7 +65,8 @@ export const getOrCreateCompanySize = async (size) => {
 
   console.log("Company Size result: ", results);
 
-  if (results.filter((data) => data.size === size)) return;
+  if (results.filter((data) => data.size === size) || size === undefined)
+    return results;
 
   return await makeApiRequest({
     url: `api/company-categories/`,

@@ -1,9 +1,9 @@
 import {
-  AnalysisIcon,
+  ChartBar,
   HomeIcon,
-  MarketIcon,
   Message,
   PhotosIcon,
+  StoreIcon,
   UserGroup,
   VideoIcon,
 } from "../../icon";
@@ -42,8 +42,8 @@ export const feedNavItems = [
   { name: "Feeds", to: "/", icon: <HomeIcon /> },
   { name: "Messages", to: "/messages", icon: <Message /> },
   { name: "Organization", to: "/organization", icon: <UserGroup /> },
-  { name: "Market", to: "/market", icon: <MarketIcon /> },
-  { name: "Analysis", to: "/analysis", icon: <AnalysisIcon /> },
+  { name: "Market", to: "/market", icon: <StoreIcon /> },
+  { name: "Analysis", to: "/analysis", icon: <ChartBar /> },
   { name: "Photos", to: "/photos", icon: <PhotosIcon /> },
   { name: "Videos", to: "/videos", icon: <VideoIcon /> },
   { name: "User profile", to: "/user-profile", icon: <VideoIcon /> },

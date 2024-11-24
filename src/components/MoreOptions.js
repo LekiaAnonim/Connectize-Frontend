@@ -17,9 +17,7 @@ const MoreOptions = ({ children, className, triggerStyle, isOpen }) => {
         </button>
       </PopoverTrigger>
 
-      <PopoverContent
-        className={clsx("p-3 space-y-3 divide-y divide-gray-100/90", className)}
-      >
+      <PopoverContent className={clsx("!p-3 space-y-2 !mb-1", className)}>
         <PopoverArrow />
         {children}
       </PopoverContent>

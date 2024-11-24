@@ -167,15 +167,9 @@ function Home() {
             id="image"
             type="file"
             accept="image/*"
-            onChange={(e) =>
-              formik.setFieldValue(
-                imageKey,
-                e.currentTarget.files[0].webkitRelativePath
-              )
-            }
-            onBlur={(e) =>
-              formik.setFieldValue(imageKey, e.currentTarget.files[0])
-            }
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.image}
             className="hidden"
           />
         </label>

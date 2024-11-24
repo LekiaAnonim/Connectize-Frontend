@@ -1,3 +1,4 @@
+import { Textarea } from "@chakra-ui/react";
 import CustomInput from "./customInput";
 import FormikErrorResponse from "./formError";
 
@@ -38,6 +39,24 @@ export default function Form({
                   </div>
                 ))}
               </div>
+            ) : type === "textarea" ? (
+              <div className="my-2">
+                <label
+                  htmlFor={type}
+                  className="mb-4 text-gray-700 font-semibold"
+                >
+                  {label}
+                </label>
+                <Textarea
+                  name={name}
+                  placeholder={placeholder}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values[`${name}`]}
+                  className="resize-none h-[150px] w-full"
+                />
+                <FormikErrorResponse formik={formik} name={name} />
+              </div>
             ) : (
               <div className="my-3 w-full">
                 <label htmlFor={type}>{label}</label>
@@ -62,7 +81,7 @@ export default function Form({
         <div className="flex items-center">
           {button && (
             <button
-              type={button ? button.type : "submit"}
+              type={button ? button?.type : "submit"}
               className={`w-full bg-black rounded-full hover:opacity-80 transition-all duration-300 text-white px-3 py-2.5 flex items-center justify-center ${
                 button.style
               } ${formik.isSubmitting ? "opacity-50 pointer-events-none" : ""}`}

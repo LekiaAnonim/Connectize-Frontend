@@ -11,7 +11,7 @@ export const getAllUsers = async () => {
 };
 
 export const getSuggestedUsersForCurrentUser = async () => {
-  const currentUser = getSession();
+  const { user: currentUser } = getSession();
 
   const allUsers = await getAllUsers();
 
@@ -33,9 +33,12 @@ export const getOrCreateGender = async (gender) => {
   });
 
   if (
-    results.filter((data) => data.type.toLowerCase() === gender.toLowerCase())
+    results.filter(
+      (data) => data.type.toLowerCase() === gender.toLowerCase()
+    ) ||
+    gender === undefined
   )
-    return;
+    return results;
 
   return await makeApiRequest({
     url: "api/genders",

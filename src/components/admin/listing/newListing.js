@@ -1,15 +1,57 @@
 import React, { useEffect } from "react";
-import { ImageIcon } from "../../../icon";
 import HeadingText from "../../HeadingText";
 import LightParagraph from "../../ParagraphText";
 import Form from "../../form";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { ChevronLeft } from "@mui/icons-material";
 import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { Divider } from "@chakra-ui/react";
+import { createProduct } from "../../../api-services/products";
+import { ImageSelect } from "../../form/customInput";
+
+const FILE_SIZE = 4 * 1024 * 1024; // 4MB
+const SUPPORTED_FORMATS = [
+  "image/jpg",
+  "image/jpeg",
+  "image/png",
+  "image/avif",
+  "image/webp",
+];
+
+const unSupportedText =
+  "Unsupported file format, only avif, webP, PNGs, JPEGs and JPGs are allowed";
+
+const largeFileText =
+  "File size is too large, only images less than 4mb is allowed";
+function checkFileFormat(value) {
+  return value && SUPPORTED_FORMATS.includes(value.type.toLowerCase());
+}
+
+function checkFileSize(value) {
+  return value && value.size <= FILE_SIZE;
+}
 
 const validationSchema = Yup.object().shape({
+  image_1: Yup.mixed()
+    .required("Please select an image")
+    .test("file-size", largeFileText, checkFileSize)
+    .test("file-format", unSupportedText, checkFileFormat),
+  image_2: Yup.mixed()
+    .required("Please select an image")
+    .test("file-size", largeFileText, checkFileSize)
+    .test("file-format", unSupportedText, checkFileFormat),
+  image_3: Yup.mixed()
+    .required("Please select an image")
+    .test("file-size", largeFileText, checkFileSize)
+    .test("file-format", unSupportedText, checkFileFormat),
+  image_4: Yup.mixed()
+    .required("Please select an image")
+    .test("file-size", largeFileText, checkFileSize)
+    .test("file-format", unSupportedText, checkFileFormat),
+  image_caption1: Yup.string().optional(),
+  image_caption2: Yup.string().optional(),
+  image_caption3: Yup.string().optional(),
+  image_caption4: Yup.string().optional(),
   product_title: Yup.string()
     .max(250, "Should not be more that 250 characters")
     .required("Field cannot be empty"),
@@ -24,51 +66,71 @@ const validationSchema = Yup.object().shape({
 
 const listingFields = [
   {
-    name: "product_title",
-    type: "text",
-    label: "Product Title",
-    placeholder: "Should not be more that 250 characters",
-  },
-  {
-    name: "product_category",
-    type: "select",
-    label: "Choose Category",
-    placeholder: "Product type",
-  },
-  {
-    name: "description",
-    type: "textfield",
-    label: "Description",
-    placeholder: "Should not be more than 1450 characters",
-  },
-  {
-    name: "subtitle",
-    type: "textfield",
-    label: "Subtitle",
-    placeholder: "Should not be more than 450 characters",
+    type: "grid",
+    gridInputs: [
+      {
+        name: "product_title",
+        type: "text",
+        label: "Product Title",
+        placeholder: "Should not be more that 250 characters",
+      },
+      {
+        name: "product_category",
+        type: "select",
+        label: "Choose Category",
+        placeholder: "Product type",
+      },
+      {
+        name: "description",
+        type: "textarea",
+        label: "Description",
+        placeholder: "Should not be more than 1450 characters",
+      },
+      {
+        name: "subtitle",
+        type: "textarea",
+        label: "Subtitle",
+        placeholder: "Should not be more than 450 characters",
+      },
+    ],
   },
 ];
 
 export default function NewListing() {
   //   const navigate = useNavigate();
   const formValues = {
-    product_title: "",
-    product_category: "",
-    description: "",
-    subtitle: "",
+    image_1: "",
+    image_2: "",
+    image_3: "",
+    image_4: "",
+    image_caption1: localStorage.getItem("image_caption1") || "",
+    image_caption2: localStorage.getItem("image_caption2") || "",
+    image_caption3: localStorage.getItem("image_caption3") || "",
+    image_caption4: localStorage.getItem("image_caption4") || "",
+    product_title: localStorage.getItem("product_title") || "",
+    product_category: localStorage.getItem("product_category") || "",
+    description: localStorage.getItem("description") || "",
+    subtitle: localStorage.getItem("subtitle") || "",
   };
 
   const formik = useFormik({
     initialValues: formValues,
     validationSchema: validationSchema,
-    onSubmit: async (
-      { product_title, product_category, description, subtitle },
-      { resetForm }
-    ) => {},
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        await createProduct(values, resetForm);
+        for (let value in values) {
+          console.log(value);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
   });
+
   useEffect(() => {
-    formik.setValues(formValues);
     document.title = "Create a new listing | Connectize";
+    formik.setValues(formValues);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -78,11 +140,27 @@ export default function NewListing() {
         <HeadingText>List new products</HeadingText>
         <LightParagraph>Upload at least 4 images</LightParagraph>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-2 xl:grid-cols-4 gap-4">
-        <ImageSelect name="Image 1" />
-        <ImageSelect name="Image 2" />
-        <ImageSelect name="Image 3" />
-        <ImageSelect name="Image 4" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4">
+        <ImageSelect
+          name="image_1"
+          captionName="image_caption1"
+          formik={formik}
+        />
+        <ImageSelect
+          name="image_2"
+          captionName="image_caption2"
+          formik={formik}
+        />
+        <ImageSelect
+          name="image_3"
+          captionName="image_caption3"
+          formik={formik}
+        />
+        <ImageSelect
+          name="image_4"
+          captionName="image_caption4"
+          formik={formik}
+        />
       </div>
       <Divider className="my-4 text-transparent" />
       <Form
@@ -93,24 +171,10 @@ export default function NewListing() {
           type: "submit",
           text: "List product  | ",
           icon: <ChevronRightIcon />,
-          submitText: "Checking...",
+          submitText: "Creating product...",
           style: "!w-fit mt-20 text-sm",
         }}
       />
     </section>
-  );
-}
-
-function ImageSelect(name) {
-  return (
-    <label className="border !border-gray-100 h-[150px] rounded-md bg-background flex flex-col items-center gap-3 overflow-hidden p-1 cursor-pointer">
-      <input
-        className="w-full file:border-0 file:rounded-md text-gray-500 text-sm file:p-2"
-        type="file"
-        accept="image/*"
-        name={name}
-      />
-      <ImageIcon className="text-custom_grey/20" />
-    </label>
   );
 }
