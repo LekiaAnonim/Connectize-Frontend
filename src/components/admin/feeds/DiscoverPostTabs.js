@@ -48,13 +48,13 @@ function DiscoverPostTabs() {
 
 export default DiscoverPostTabs;
 
-const PostSlider = ({ array }) => {
+export const PostSlider = ({ array, minWidth = 920, children }) => {
   const newArray = array || [1, 2, 3, 4, 5, 6];
 
   const [loading, setLoading] = useState(true);
   const [slidesPerView, setSlidesPerView] = useState(1);
 
-  const isTabletScreen = useMediaQuery({ minWidth: 920 });
+  const isTabletScreen = useMediaQuery({ minWidth });
 
   useEffect(() => {
     setLoading(false);
@@ -70,13 +70,15 @@ const PostSlider = ({ array }) => {
       slidesPerView={slidesPerView}
       autoplay={{ delay: 40000 }}
       pagination={{ clickable: true }}
-      className=""
+      className="z-0"
     >
-      {newArray.map((_, index) => (
-        <SwiperSlide key={index}>
-          <PostCard />
-        </SwiperSlide>
-      ))}
+      {children
+        ? children
+        : newArray.map((_, index) => (
+            <SwiperSlide key={index}>
+              <PostCard />
+            </SwiperSlide>
+          ))}
     </Swiper>
   );
 };

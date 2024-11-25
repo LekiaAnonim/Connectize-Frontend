@@ -12,7 +12,6 @@ export const getAllUsers = async () => {
 
 export const getSuggestedUsersForCurrentUser = async () => {
   const { user: currentUser } = getSession();
-  console.log("currentUser: ", currentUser);
 
   const allUsers = await getAllUsers();
 

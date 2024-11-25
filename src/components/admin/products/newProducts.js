@@ -1,47 +1,38 @@
-import React from 'react'
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import { getProducts } from "../../../api-services/products";
+import HeadingText from "../../HeadingText";
+import { ProductListCard } from "../markets/newlyListed";
 
 export default function NewProducts() {
-    let ProductCard = ({image,gold,reserved})=>{
-        return(
-            <div>
-                <img src={image} className='w-100' alt='#'/>
-                <p>{gold} <br/> {reserved}</p>
-            </div>
-        )
-    }
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: getProducts,
+  });
+
+  let ProductCard = ({ image, gold, reserved }) => {
+    return (
+      <div>
+        <img src={image} className="w-100" alt="#" />
+        <p>
+          {gold} <br /> {reserved}
+        </p>
+      </div>
+    );
+  };
   return (
-    <div className='py-5'>
-        <h3>You may also like</h3>
-        <div className='row'>
-            <div className='col-sm-6 col-md-3'>
-                <ProductCard
-                    image="images/Rectangle6.png"
-                    gold="Premium Black Gold"
-                    reserved="Reserve"
-                />
-            </div>
-            <div className='col-sm-6 col-md-3'>
-                <ProductCard
-                    image="images/Rectangle6.png"
-                    gold="Premium Black Gold"
-                    reserved="Reserve"
-                />
-            </div>
-            <div className='col-sm-6 col-md-3'>
-                <ProductCard
-                    image="images/Rectangle6.png"
-                    gold="Premium Black Gold"
-                    reserved="Reserve"
-                />
-            </div>
-            <div className='col-sm-6 col-md-3'>
-                <ProductCard
-                    image="images/Rectangle6.png"
-                    gold="Premium Black Gold"
-                    reserved="Reserve"
-                />
-            </div>
-        </div>
-    </div>
-  )
+    <section className="space-y-4">
+      <HeadingText>You may also like</HeadingText>
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+        {products.splice(0, 4).map((product) => (
+          <ProductListCard
+            key={product.id}
+            image={"/images/Rectangle7.png"}
+            title={product.title}
+            subtitle={product.category}
+          />
+        ))}
+      </div>
+    </section>
+  );
 }

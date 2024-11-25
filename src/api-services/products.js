@@ -79,8 +79,6 @@ export const createProduct = async (data, resetForm) => {
     product
   );
 
-  console.log("Created Product: ", product, image1, image2, image3, image4);
-
   if (product && image1 && image2 && image3 && image4)
     toast.success(`${product.title} has been created successfully!`);
 };

@@ -36,8 +36,8 @@ export async function refreshTokenIfNeeded() {
     return undefined;
   } catch (error) {
     if (error?.response?.data?.code === "token_not_valid") {
-      toast.info("User session has been reset, kindly login again");
       removeSession();
+      toast.info("User session has been reset, kindly login again");
       const pathname = window.location.pathname;
       window.location.replace("/login?next=" + pathname);
       return;
@@ -54,13 +54,16 @@ export async function makeApiRequest({
   contentType = "application/json",
 }) {
   try {
-    const authorization = await refreshTokenIfNeeded();
+    // const authorization = await refreshTokenIfNeeded();
 
     const response = await axios({
       url: `${baseURL}/${url}`,
       method,
       data,
-      headers: { ...authorization, "Content-Type": contentType },
+      headers: {
+        // ...authorization,
+        "Content-Type": contentType,
+      },
     });
 
     if (response.status >= 200 && response.status <= 204) {

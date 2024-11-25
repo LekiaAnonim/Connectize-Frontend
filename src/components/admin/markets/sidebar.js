@@ -15,6 +15,7 @@ import { useNav } from "../../../context/navContext";
 import { CloseButton } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { getProductCategories } from "../../../api-services/products";
+import CloseOverlay from "../../CloseOverlay";
 
 const marketPlaceItems = [
   {
@@ -49,15 +50,7 @@ function SidebarMenu({ isService }) {
     // <section className="bg-white p-3 w-full md:max-w-[250px] shrink-0 rounded-md">
 
     <>
-      <div
-        onClick={() => toggleNav(false)}
-        className={clsx(
-          "absolute bg-black/5 w-screen h-screen top-0 left-0 rounded-none z-[1000] transition-all duration-500",
-          {
-            "opacity-0 -z-[10000] scale-0": !navOpen,
-          }
-        )}
-      />
+      <CloseOverlay />
       <section
         className={clsx(
           "max-md:absolute max-md:top-0 max-md:left-0 max-md:h-screen bg-white rounded-md p-4 shrink-0 max-w-[300px] md:w-[240px] lg:w-[260px] 2xl:w-[280px] min-h-screen max-md:transition-all duration-500 ease-out scrollbar-hidden max-md:!py-6 max-md:shadow",

@@ -5,10 +5,10 @@ import clsx from "clsx";
 import { ChartBar, Setting } from "../icon";
 import FeedSearch from "./admin/feeds/FeedSearch";
 import { NotificationPopOver } from "./notifications";
-import { Link } from "react-router-dom";
+import { NavItemIcon } from "./userProfile/Navbar";
 
 function ResponsiveNav() {
-  const { navOpen, toggleNav } = useNav();
+  const { toggleNav } = useNav();
   const headerImages = ["/images/iconlove.png", "/images/iconprofile.PNG"];
   return (
     <div className="flex justify-between items-center gap-2 sm:gap-4 w-full mb-4 max-md:mt-2">
@@ -18,13 +18,9 @@ function ResponsiveNav() {
 
       <div className="flex items-center gap-3 sm:gap-5 pr-2">
         <NotificationPopOver />
-        <Link to="/analysis">
-          <ChartBar />
-        </Link>
-        <button>
-          <Setting />
-        </button>
-        <button onClick={() => toggleNav(!navOpen)} className="md:hidden">
+        <NavItemIcon IconName={ChartBar} to="/analysis" tip="Analysis" />
+        <NavItemIcon IconName={Setting} to="/settings" tip="Settings" />
+        <button onClick={() => toggleNav(true)} className="md:hidden">
           <Menu />
         </button>
       </div>

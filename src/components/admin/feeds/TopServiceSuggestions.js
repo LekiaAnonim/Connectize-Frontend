@@ -2,10 +2,7 @@ import React from "react";
 import { VerifiedIcon } from "../../../icon";
 
 import { useQuery } from "@tanstack/react-query";
-import {
-  getAllUsers,
-  getSuggestedUsersForCurrentUser,
-} from "../../../api-services/users";
+import { getSuggestedUsersForCurrentUser } from "../../../api-services/users";
 import { PostCard } from "./DiscoverPostTabs";
 import HeadingText from "../../HeadingText";
 import LightParagraph from "../../ParagraphText";
@@ -38,7 +35,6 @@ export function Suggestions() {
   const { data: suggestedUsers } = useQuery({
     queryKey: ["suggestedUsers"],
     queryFn: getSuggestedUsersForCurrentUser,
-    placeholderData: getAllUsers,
   });
 
   return (

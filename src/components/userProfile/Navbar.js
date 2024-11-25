@@ -3,7 +3,7 @@ import Logo from "../logo";
 import MoreOptions from "../MoreOptions";
 import Headroom from "react-headroom";
 import { useAuth } from "../../context/userContext";
-import { Button, Tooltip } from "@chakra-ui/react";
+import { Tooltip } from "@chakra-ui/react";
 
 import {
   ChartBar,
@@ -19,7 +19,8 @@ import { Link, useLocation } from "react-router-dom";
 import clsx from "clsx";
 import { SearchPopOver } from "../SearchPopOver";
 import { useNav } from "../../context/navContext";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+
+import { Menu } from "@mui/icons-material";
 
 const Navbar = () => {
   const { toggleNav } = useNav();
@@ -115,15 +116,13 @@ const Navbar = () => {
               </MoreOptions>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-3 shrink-0">
               <ProfilePicture />
-              {pathname !== "/user-profile" && (
-                <Button
-                  onClick={() => toggleNav(true)}
-                  className="!p-0 bg-transparent md:!hidden"
-                >
-                  <HamburgerMenuIcon />
-                </Button>
+              {(pathname !== "/user-profile" ||
+                pathname !== "/admin-profile") && (
+                <button onClick={() => toggleNav(true)} className="md:hidden">
+                  <Menu />
+                </button>
               )}
             </div>
           </div>
@@ -149,7 +148,14 @@ function ProfilePicture() {
   );
 }
 
-function NavItemIcon({ IconName, text, to, tip, className, tooltipClassName }) {
+export function NavItemIcon({
+  IconName,
+  text,
+  to,
+  tip,
+  className,
+  tooltipClassName,
+}) {
   return (
     <Tooltip
       label={tip}

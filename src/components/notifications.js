@@ -5,7 +5,6 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverArrow,
-  // Tooltip,
 } from "@chakra-ui/react";
 import { Notification } from "../icon";
 
@@ -14,18 +13,11 @@ export function NotificationPopOver() {
     <Popover>
       <PopoverTrigger>
         <button>
-          {/* <Tooltip
-            label={"Notifications"}
-            fontSize="sm"
-            placement="auto"
-            className="!rounded-md bg-white !text-custom_blue border"
-          > */}
           <Notification />
-          {/* </Tooltip> */}
         </button>
       </PopoverTrigger>
 
-      <PopoverContent>
+      <PopoverContent className="mx-2">
         <PopoverArrow />
         <Notifications />
       </PopoverContent>
@@ -37,7 +29,7 @@ export function Notifications({ className }) {
   return (
     <div
       className={clsx(
-        "bg-white rounded p-3 space-y-4 w-full max-w-screen-xs min-w-[300px]",
+        "bg-white rounded p-3 space-y-4 w-full min-w-[300px]",
         className
       )}
     >
@@ -59,8 +51,10 @@ export function Notifications({ className }) {
                 className="rounded-full"
               />
               <div className="space-y-0">
-                <h3 className="leading-[1.125] font-bold m-0">{company}</h3>
-                <p className="text-sm text-gray-700 line-clamp-1">{message}</p>
+                <h3 className="leading-[1.125] font-bold m-0 line-clamp-1">
+                  {company}
+                </h3>
+                <p className="text-sm text-gray-700 line-clamp-2">{message}</p>
                 <small className="text-gray-400 text-xs m-0">{timeStamp}</small>
               </div>
             </div>

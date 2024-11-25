@@ -26,7 +26,13 @@ function Login() {
   const session = getSession();
   const [searchParams] = useSearchParams();
 
-  const redirectParam = searchParams.get("next");
+  const nextParam = searchParams.get("next");
+
+  const navigateTo = searchParams.has("next")
+    ? nextParam
+    : session.user.isFirstTimeUser
+    ? "/profile"
+    : "/user-profile";
 
   const formValues = {
     username: "",
@@ -51,16 +57,7 @@ function Login() {
         type: "login",
       });
 
-      if (success)
-        navigate(
-          searchParams.size > 0
-            ? redirectParam
-            : session.user.isFirstTimeUser
-            ? "/profile"
-            : "/user-profile"
-        );
-
-      console.log(redirectParam);
+      if (success) navigate(navigateTo);
     },
   });
 

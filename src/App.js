@@ -73,7 +73,7 @@ function App() {
           <Route element={<MarketPlaceLayout />}>
             <Route path="analysis" element={<Analysis />} />
             <Route path="market" element={<Market />} />
-            <Route path="products" element={<Product />} />
+            <Route path="products/:id" element={<Product />} />
             <Route path="listing" element={<Listing />} />
           </Route>
 

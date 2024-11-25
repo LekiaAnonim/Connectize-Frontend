@@ -9,6 +9,7 @@ import FeedSearch from "./FeedSearch";
 import { useQuery } from "@tanstack/react-query";
 import { getCompanies } from "../../../api-services/companies";
 import LightParagraph from "../../ParagraphText";
+import CloseOverlay from "../../CloseOverlay";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
@@ -19,25 +20,28 @@ const Sidebar = () => {
   if (isTablet) toggleNav(false);
 
   return (
-    <div
-      className={clsx(
-        "max-md:absolute max-md:top-0 max-md:left-0 max-md:h-screen bg-white rounded p-4 shrink-0 max-w-[350px] md:w-[240px] lg:w-[260px] 2xl:w-[280px] min-h-screen max-md:transition-all duration-500 ease-out",
-        {
-          "max-md:overflow-y-auto max-md:min-w-[300px] max-md:w-[60%] z-[20000]":
-            navOpen,
-          "max-md:overflow-hidden max-md:-left-full max-md:opacity-0 max-md:-z-[20000]":
-            !navOpen,
-        }
-      )}
-    >
-      <Logo className="md:mx-auto mb-4" height="70px" width="70px" />
+    <>
+      <CloseOverlay />
+      <div
+        className={clsx(
+          "max-md:absolute max-md:top-0 max-md:left-0 max-md:h-screen bg-white rounded p-4 shrink-0 max-w-[350px] md:w-[240px] lg:w-[260px] 2xl:w-[280px] min-h-screen max-md:transition-all duration-500 ease-out",
+          {
+            "max-md:overflow-y-auto max-md:min-w-[300px] max-md:w-[60%] z-[20000]":
+              navOpen,
+            "max-md:overflow-hidden max-md:-left-full max-md:opacity-0 max-md:-z-[20000]":
+              !navOpen,
+          }
+        )}
+      >
+        <Logo className="md:mx-auto mb-4" height="70px" width="70px" />
 
-      <FeedSearch className="xs:hidden mb-4" />
+        <FeedSearch className="xs:hidden mb-4" />
 
-      <NavigationSection pathname={pathname} />
+        <NavigationSection pathname={pathname} />
 
-      <Companies />
-    </div>
+        <Companies />
+      </div>
+    </>
   );
 };
 
