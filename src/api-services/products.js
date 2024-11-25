@@ -101,17 +101,22 @@ export const getOrCreateProductImages = async (data, type) => {
   });
 };
 
-export const getOrCreateProductCategories = async (name) => {
+export const getProductCategories = async () => {
   const { results } = await makeApiRequest({
     url: `api/product-categories/`,
     method: "GET",
   });
 
-  const hasCategory = results?.filter((data) => data.name === name).length > 0;
+  return results || [];
+};
 
-  console.log("results: ", hasCategory);
+export const getOrCreateProductCategories = async (name) => {
+  const categories = await getProductCategories();
 
-  if (hasCategory || name === undefined) return results;
+  const hasCategory =
+    categories?.filter((data) => data.name === name).length > 0;
+
+  if (hasCategory) return categories || [];
 
   const newCategory = await makeApiRequest({
     url: `api/product-categories/`,

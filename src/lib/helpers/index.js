@@ -36,17 +36,14 @@ export async function refreshTokenIfNeeded() {
     return undefined;
   } catch (error) {
     if (error?.response?.data?.code === "token_not_valid") {
-      removeSession();
       toast.info("User session has been reset, kindly login again");
-      // window.history.pushState(null, "", "/login");
-      // window.location.reload();
-      window.location.replace("/login")
+      removeSession();
+      const pathname = window.location.pathname;
+      window.location.replace("/login?next=" + pathname);
       return;
     }
   }
 }
-
-setTimeout(() => refreshTokenIfNeeded(), 250000);
 
 export async function makeApiRequest({
   url,

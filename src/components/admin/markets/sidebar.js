@@ -12,7 +12,9 @@ import HeadingText from "../../HeadingText";
 import clsx from "clsx";
 import { useMediaQuery } from "react-responsive";
 import { useNav } from "../../../context/navContext";
-import { Button, CloseButton } from "@chakra-ui/react";
+import { CloseButton } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import { getProductCategories } from "../../../api-services/products";
 
 const marketPlaceItems = [
   {
@@ -120,35 +122,41 @@ function MarketPlaceNavigation() {
   );
 }
 
-const categories = [
-  {
-    name: "Newly listed",
-    image: "",
-  },
-  {
-    name: "Black gold",
-    image: "",
-  },
-  {
-    name: "Oil barrels",
-    image: "",
-  },
-  {
-    name: "Imported",
-    image: "",
-  },
-  {
-    name: "Refined",
-    image: "",
-  },
-  {
-    name: "Tested",
-    image: "",
-  },
-];
+// const categories = [
+//   {
+//     name: "Newly listed",
+//     image: "",
+//   },
+//   {
+//     name: "Black gold",
+//     image: "",
+//   },
+//   {
+//     name: "Oil barrels",
+//     image: "",
+//   },
+//   {
+//     name: "Imported",
+//     image: "",
+//   },
+//   {
+//     name: "Refined",
+//     image: "",
+//   },
+//   {
+//     name: "Tested",
+//     image: "",
+//   },
+// ];
 
 function ProductCategory() {
   const { toggleNav } = useNav();
+
+  const { data: categories } = useQuery({
+    queryKey: ["productCategories"],
+    queryFn: getProductCategories,
+  });
+
   return (
     <section className="space-y-2">
       <div className="flex gap-2 items-center">
@@ -156,7 +164,7 @@ function ProductCategory() {
         <HeadingText>Category</HeadingText>
       </div>
       <div className="space-y-2 xs:text-sm p-2">
-        {categories.map((item, index) => (
+        {categories?.map((item, index) => (
           <Link
             to=""
             key={index}

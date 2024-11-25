@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import Form from "../../components/form";
 import { useFormik } from "formik";
 import { authenticationService } from "../../api-services/authentication";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import HeadingText from "../../components/HeadingText";
 import { getSession } from "../../lib/session";
 import { useAuth } from "../../context/userContext";
@@ -23,6 +23,10 @@ const validationSchema = Yup.object().shape({
 function Login() {
   const navigate = useNavigate();
   const { setUser } = useAuth();
+  const session = getSession();
+  const [searchParams] = useSearchParams();
+
+  const redirectParam = searchParams.get("next");
 
   const formValues = {
     username: "",
@@ -47,7 +51,16 @@ function Login() {
         type: "login",
       });
 
-      if (success) navigate("/profile");
+      if (success)
+        navigate(
+          searchParams.size > 0
+            ? redirectParam
+            : session.user.isFirstTimeUser
+            ? "/profile"
+            : "/user-profile"
+        );
+
+      console.log(redirectParam);
     },
   });
 
@@ -55,7 +68,7 @@ function Login() {
     formik.setValues(formValues);
     document.title = "Login to connectize";
 
-    return () => setUser(getSession()?.user || null);
+    return () => setUser(session?.user || null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const fields = [
