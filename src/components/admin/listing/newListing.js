@@ -24,10 +24,12 @@ const unSupportedText =
 const largeFileText =
   "File size is too large, only images less than 4mb is allowed";
 function checkFileFormat(value) {
+  if (!value) return true;
   return value && SUPPORTED_FORMATS.includes(value.type.toLowerCase());
 }
 
 function checkFileSize(value) {
+  if (!value) return true;
   return value && value.size <= FILE_SIZE;
 }
 
@@ -37,15 +39,15 @@ const validationSchema = Yup.object().shape({
     .test("file-size", largeFileText, checkFileSize)
     .test("file-format", unSupportedText, checkFileFormat),
   image_2: Yup.mixed()
-    .required("Please select an image")
+    .optional()
     .test("file-size", largeFileText, checkFileSize)
     .test("file-format", unSupportedText, checkFileFormat),
   image_3: Yup.mixed()
-    .required("Please select an image")
+    .optional()
     .test("file-size", largeFileText, checkFileSize)
     .test("file-format", unSupportedText, checkFileFormat),
   image_4: Yup.mixed()
-    .required("Please select an image")
+    .optional()
     .test("file-size", largeFileText, checkFileSize)
     .test("file-format", unSupportedText, checkFileFormat),
   image_caption1: Yup.string().optional(),
@@ -88,7 +90,7 @@ const listingFields = [
       },
       {
         name: "subtitle",
-        type: "textarea",
+        type: "text",
         label: "Subtitle",
         placeholder: "Should not be more than 450 characters",
       },
@@ -138,7 +140,7 @@ export default function NewListing() {
     <section className="bg-white p-4 rounded-md w-full shrink-0">
       <div className="mb-4">
         <HeadingText>List new products</HeadingText>
-        <LightParagraph>Upload at least 4 images</LightParagraph>
+        <LightParagraph>Upload at least 1 image</LightParagraph>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4">
         <ImageSelect
@@ -162,7 +164,7 @@ export default function NewListing() {
           formik={formik}
         />
       </div>
-      <Divider className="my-4 text-transparent" />
+      <Divider className="my-4" />
       <Form
         formik={formik}
         status={"none"}

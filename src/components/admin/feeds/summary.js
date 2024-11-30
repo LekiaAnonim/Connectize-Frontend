@@ -10,7 +10,7 @@ import Reviews from "./reviews";
 
 function Summary() {
   return (
-    <section className="space-y-8">
+    <section className="space-y-8 w-full">
       <div className="border-b pb-3">
         <div className="flex pb-3 items-start justify-between">
           <HeadingText>Summary</HeadingText>

@@ -1,6 +1,7 @@
 import { Textarea } from "@chakra-ui/react";
-import CustomInput from "./customInput";
+import CustomInput, { inputClassNames } from "./customInput";
 import FormikErrorResponse from "./formError";
+import clsx from "clsx";
 
 export default function Form({
   formik,
@@ -24,17 +25,31 @@ export default function Form({
                 {gridInputs.map(({ name, type, label, placeholder }) => (
                   <div className="mb-4" key={name}>
                     <label htmlFor={type}>{label}</label>
-                    <CustomInput
-                      type={type}
-                      className={
-                        disabled ? "opacity-80 pointer-events-none" : ""
-                      }
-                      name={name}
-                      placeholder={placeholder}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values[`${name}`]}
-                    />
+                    {type === "textarea" ? (
+                      <Textarea
+                        name={name}
+                        placeholder={placeholder}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values[`${name}`]}
+                        className={clsx(
+                          "min-h-[200px] w-full",
+                          inputClassNames
+                        )}
+                      />
+                    ) : (
+                      <CustomInput
+                        type={type}
+                        className={
+                          disabled ? "opacity-80 pointer-events-none" : ""
+                        }
+                        name={name}
+                        placeholder={placeholder}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values[`${name}`]}
+                      />
+                    )}
                     <FormikErrorResponse formik={formik} name={name} />
                   </div>
                 ))}

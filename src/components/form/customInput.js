@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { ImageIcon } from "../../icon";
 import FormikErrorResponse from "./formError";
 
-const inputClassNames =
+export const inputClassNames =
   "relative mt-2 !w-full !bg-background py-2.5 px-3 rounded-md placeholder:text-sm !text-sm transition-all duration-300";
 
 export default function CustomInput({
@@ -75,19 +75,21 @@ export function ImageSelect({ name, formik, hasCaption = true, captionName }) {
           // value={formik.values[`${name}`]}
         />
         <ImageIcon className="text-custom_grey/20" />
-        <Input
-          name={captionName}
-          onChange={(event) => {
-            localStorage.setItem(name, event.currentTarget.value);
-            formik.setFieldValue(captionName, event.currentTarget.value);
-          }}
-          onBlur={(event) => {
-            formik.setFieldValue(captionName, event.currentTarget.value);
-          }}
-          value={formik.values[`${captionName}`]}
-          placeholder="Enter caption for image (optional)"
-          className={`${inputClassNames} placeholder:text-xs placeholder:text-gray-400 !border-gray-200`}
-        />
+        {hasCaption && (
+          <Input
+            name={captionName}
+            onChange={(event) => {
+              localStorage.setItem(name, event.currentTarget.value);
+              formik.setFieldValue(captionName, event.currentTarget.value);
+            }}
+            onBlur={(event) => {
+              formik.setFieldValue(captionName, event.currentTarget.value);
+            }}
+            value={formik.values[`${captionName}`]}
+            placeholder="Enter caption for image (optional)"
+            className={`${inputClassNames} placeholder:text-xs placeholder:text-gray-400 !border-gray-200`}
+          />
+        )}
       </label>
 
       <FormikErrorResponse formik={formik} name={name} />

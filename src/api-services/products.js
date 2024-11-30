@@ -54,32 +54,37 @@ export const createProduct = async (data, resetForm) => {
     product
   );
 
-  const image2 = await getOrCreateProductImages(
-    {
-      image: data.image_2,
-      caption: data?.image_caption2 || data?.product_title,
-      product: product.id,
-    },
-    product
-  );
-  const image3 = await getOrCreateProductImages(
-    {
-      image: data.image_3,
-      caption: data?.image_caption3 || data?.product_title,
-      product: product.id,
-    },
-    product
-  );
-  const image4 = await getOrCreateProductImages(
-    {
-      image: data.image_4,
-      caption: data?.image_caption4 || data?.product_title,
-      product: product.id,
-    },
-    product
-  );
+  if (data.image_2)
+    await getOrCreateProductImages(
+      {
+        image: data.image_2,
+        caption: data?.image_caption2 || data?.product_title,
+        product: product.id,
+      },
+      product
+    );
+  if (data.image_3)
+    await getOrCreateProductImages(
+      {
+        image: data.image_3,
+        caption: data?.image_caption3 || data?.product_title,
+        product: product.id,
+      },
+      product
+    );
 
-  if (product && image1 && image2 && image3 && image4)
+  if (data.image_4) {
+    await getOrCreateProductImages(
+      {
+        image: data.image_4,
+        caption: data?.image_caption4 || data?.product_title,
+        product: product.id,
+      },
+      product
+    );
+  }
+
+  if (product && image1)
     toast.success(`${product.title} has been created successfully!`);
 };
 
