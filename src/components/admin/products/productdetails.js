@@ -3,7 +3,7 @@ import { ChatSellerLink } from "../markets/newlyListed";
 import HeadingText from "../../HeadingText";
 import { HeartIcon } from "@radix-ui/react-icons";
 import { Divider } from "@chakra-ui/react";
-import LightParagraph from "../../ParagraphText";
+import ReactMarkdown from "react-markdown";
 
 function Productdetails({ product }) {
   return (
@@ -12,7 +12,7 @@ function Productdetails({ product }) {
         <img
           src="/images/Rectangle3.png"
           className="w-full lg:w-1/2 shrink-0"
-          alt={product.title || "#"}
+          alt={product.title || "product"}
         />
         <div className="space-y-4 lg:w-1/2 shrink-0">
           <div className="space-y-2">
@@ -22,7 +22,7 @@ function Productdetails({ product }) {
           <Divider />
           <div className="space-y-2">
             <h6 className="text-lg font-bold">Description</h6>
-            <LightParagraph>{product.description}</LightParagraph>
+            <ReactMarkdown>{product.description}</ReactMarkdown>
           </div>
           {/* <Divider /> */}
 
