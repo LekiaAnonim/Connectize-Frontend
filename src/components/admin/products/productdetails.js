@@ -3,7 +3,7 @@ import { ChatSellerLink } from "../markets/newlyListed";
 import HeadingText from "../../HeadingText";
 import { HeartIcon } from "@radix-ui/react-icons";
 import { Divider } from "@chakra-ui/react";
-import ReactMarkdown from "react-markdown";
+import { MarkdownComponent } from "../../MarkDownComponent";
 
 function Productdetails({ product }) {
   return (
@@ -22,7 +22,11 @@ function Productdetails({ product }) {
           <Divider />
           <div className="space-y-2">
             <h6 className="text-lg font-bold">Description</h6>
-            <ReactMarkdown>{product.description}</ReactMarkdown>
+
+            <MarkdownComponent
+              markdownContent={product.description}
+              isDescription
+            />
           </div>
           {/* <Divider /> */}
 

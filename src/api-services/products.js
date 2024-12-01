@@ -22,7 +22,9 @@ export const getProducts = async () => {
 };
 
 export const createProduct = async (data, resetForm) => {
-  const productCategoryData = data.product_category.trim().toLowerCase();
+  const productCategoryData = capitalizeFirst(
+    data.product_category.trim().toLowerCase()
+  );
 
   if (!data || !productCategoryData) {
     toast.error("No product data or product category found");

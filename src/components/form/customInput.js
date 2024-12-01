@@ -1,7 +1,20 @@
-import { Input } from "@chakra-ui/react";
+import {
+  Input,
+  Select,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { ImageIcon } from "../../icon";
 import FormikErrorResponse from "./formError";
+import ReactQuill from "react-quill";
+
+import "react-quill/dist/quill.snow.css";
+import { MarkdownComponent } from "../MarkDownComponent";
+import { capitalizeFirst } from "../../lib/utils";
 
 export const inputClassNames =
   "relative mt-2 !w-full !bg-background py-2.5 px-3 rounded-md placeholder:text-sm !text-sm transition-all duration-300";
@@ -96,3 +109,59 @@ export function ImageSelect({ name, formik, hasCaption = true, captionName }) {
     </div>
   );
 }
+
+export const CustomTextArea = ({ formik, name, placeholder }) => {
+  const selectedStyle = { color: "black", bg: "gray.100" };
+  return (
+    <Tabs>
+      <TabList className="mt-1">
+        <Tab className="text-xs" _selected={selectedStyle}>
+          Editor
+        </Tab>
+        <Tab className="text-xs" _selected={selectedStyle}>
+          Preview
+        </Tab>
+      </TabList>
+      <TabPanels>
+        <TabPanel className="!px-0">
+          <ReactQuill
+            value={formik.values[`${name}`]}
+            onChange={(value) => {
+              localStorage.setItem(name, value);
+              formik.setFieldValue(name, value);
+            }}
+            theme="snow"
+            placeholder={placeholder}
+          />
+        </TabPanel>
+        <TabPanel className="mb-4 !px-0">
+          <MarkdownComponent markdownContent={formik.values[`${name}`]} />
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
+  );
+};
+
+export const CustomSelect = ({ formik, name, placeholder, options = [""] }) => (
+  <div className="mt-2">
+    <Select
+      id={name}
+      name={name}
+      placeholder={placeholder}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values[`${name}`]}
+      className="!w-full !bg-background px-3 text-sm"
+    >
+      {options?.map((option, index) => (
+        <option
+          key={index}
+          value={capitalizeFirst(option.toLowerCase())}
+          className="capitalize"
+        >
+          {option}
+        </option>
+      ))}
+    </Select>
+  </div>
+);

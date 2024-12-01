@@ -17,7 +17,7 @@ export default function Product() {
     products?.find((item) => item.id.toString() === productId) || null;
 
   useEffect(() => {
-    document.title = `${product.title} | Products - Connectize`;
+    document.title = `${product?.title || ""} | Products - Connectize`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   if (!product) return <Navigate to="/market" />;
