@@ -38,13 +38,31 @@ export const createCompany = async (data) => {
   if (!data.organization_type === undefined || data.company_size === undefined)
     throw new Error("Please return organization_type or company_size");
 
-  const { results } = await makeApiRequest({
+  const session = getSession();
+
+  const { results: company } = await makeApiRequest({
     url: `api/companies/`,
     method: "POST",
-    data,
+    data: {
+      company_name: data.company_name,
+      profile: session.email,
+      organization_type: data.organization_type,
+      about: data.company_description,
+      tag_line: data.tag_line,
+      company_size: data.company_size,
+      logo: data.company_logo,
+      banner: data.company_banner,
+      email: data.company_email,
+      office_address: data.office_address,
+      country: data.country,
+      state: data.city,
+      city: data.city,
+      website: data.company_website,
+      // verify: false,
+    },
   });
 
-  return results;
+  return company;
 };
 
 export const getOrCreateCompanyCategories = async (name) => {

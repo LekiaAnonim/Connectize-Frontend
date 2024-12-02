@@ -16,6 +16,7 @@ import "react-quill/dist/quill.snow.css";
 import { MarkdownComponent } from "../MarkDownComponent";
 import { capitalizeFirst } from "../../lib/utils";
 import DOMPurify from "dompurify";
+import clsx from "clsx";
 
 export const inputClassNames =
   "relative mt-2 !w-full !bg-background py-2.5 px-3 rounded-md placeholder:text-sm !text-sm transition-all duration-300";
@@ -37,7 +38,7 @@ export default function CustomInput({
     setPasswordType(!isPassword ? "password" : "text");
   };
   return (
-    <div className="relative w-full max-w-md">
+    <div className="relative w-full">
       <Input
         autoComplete="true"
         className={`${className} ${inputClassNames}`}
@@ -49,6 +50,7 @@ export default function CustomInput({
         }}
         onBlur={onBlur}
         value={value}
+        id={name}
         name={name}
       />
 
@@ -71,10 +73,24 @@ export default function CustomInput({
   );
 }
 
-export function ImageSelect({ name, formik, hasCaption = true, captionName }) {
+export function ImageSelect({
+  label,
+  name,
+  formik,
+  hasCaption = true,
+  captionName,
+}) {
   return (
     <div>
-      <label className="border !border-gray-100 h-[150px] rounded-md bg-background flex flex-col items-center gap-3 overflow-hidden p-1 cursor-pointer relative">
+      <label
+        className={clsx(
+          "border !border-gray-100 h-[150px] rounded-md bg-background flex flex-col items-center gap-3 overflow-hidden p-1 cursor-pointer relative",
+          {
+            "!border-green-200 bg-green-50": formik.values[name],
+          }
+        )}
+      >
+        {label}
         <input
           className="w-full file:border-0 file:rounded-md text-gray-500 text-xs file:!text-xs file:p-2"
           type="file"
@@ -167,7 +183,7 @@ export const CustomSelect = ({ formik, name, placeholder, options = [""] }) => (
         formik.handleChange(e);
       }}
       value={formik.values[`${name}`]}
-      className="!w-full !bg-background px-3 text-sm border-gray-100"
+      className="!w-full !bg-background px-3 !text-sm  border-gray-100"
     >
       {options?.map((option, index) => (
         <option

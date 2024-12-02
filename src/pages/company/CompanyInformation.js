@@ -82,7 +82,12 @@ const CompanyInformation = () => {
         hasButton={false}
       />
       <div className="flex justify-between my-6">
-        <div></div>
+        <StepButton
+          doStepChange={doStepChange}
+          stepDirection="back"
+          nextStep="create-company"
+          stepText="Back"
+        />
         <StepButton
           doStepChange={doStepChange}
           nextStep="company-documents"

@@ -5,24 +5,41 @@ import Form from "../../components/form";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import StepButton from "../../components/profile/StepButton";
+import { getCountries } from "@loophq/country-state-list";
 
 const validationSchema = Yup.object().shape({
   company_name: Yup.string().required("Field cannot be empty"),
   company_address: Yup.string().required("Field cannot be empty"),
   country: Yup.string().required("Field cannot be empty"),
+  city: Yup.string().required("Field cannot be empty"),
+  organization_type: Yup.string().required("Field cannot be empty"),
+  company_size: Yup.string().required("Field cannot be empty"),
+  company_description: Yup.string().required("Field cannot be empty"),
 });
 
 const CreateCompany = () => {
+  const countries = getCountries();
+
   const initialValues = {
     company_name: localStorage.getItem("company_name") || "",
     company_address: localStorage.getItem("company_address") || "",
     country: localStorage.getItem("country") || "",
+    city: localStorage.getItem("city") || "",
+    organization_type: localStorage.getItem("organization_type") || "",
+    company_size: localStorage.getItem("company_size") || "",
+    company_description: localStorage.getItem("company_description") || "",
   };
 
   const formik = useFormik({
     initialValues,
     validationSchema,
   });
+
+  const countriesString = countries.map((country) => country.name);
+
+  const stateForCountry =
+    countries.find((country) => country.name === formik.values["country"])
+      ?.states || [];
 
   const doStepChange = async () => {
     const errors = await formik.validateForm(formik.values);
@@ -44,58 +61,69 @@ const CreateCompany = () => {
   }, []);
   const listingFields = [
     {
-      name: "company_name",
-      type: "text",
-      label: "Company's Name",
-      placeholder: "E.g The Large Company",
-    },
-    {
-      name: "company_address",
-      type: "text",
-      label: "Office Address",
-      placeholder: "E.g 24 Larkin Smith, Eket Akwa Ibom State",
-    },
-    {
-      name: "country",
-      type: "select",
-      label: "Country",
-      placeholder: "Select country",
-    },
-    {
-      name: "country",
-      type: "select",
-      label: "Country",
-      placeholder: "Select range of average annual revenue",
-    },
-    {
-      name: "organization_type",
-      type: "select",
-      label: "Region/City",
-      placeholder: "Select range of average annual revenue",
-      options: [
-        "Drilling Contractor Company",
-        "Integrated Oil & Gas Company",
-        "Independent Oil & Gas Company",
-        "Oil Service Company",
-        "Oil Equipment Manufacturer",
-        "Media Company",
-        "Security",
-        "Renewable Energy Company",
-        "Oil Refining",
+      type: "grid",
+      gridInputs: [
+        {
+          name: "company_name",
+          type: "text",
+          label: "Company's Name",
+          placeholder: "E.g The Large Company",
+        },
+        {
+          name: "company_address",
+          type: "text",
+          label: "Office Address",
+          placeholder: "E.g 24 Larkin Smith, Eket Akwa Ibom State",
+        },
+        {
+          name: "country",
+          type: "select",
+          label: "Country",
+          placeholder: "Select country",
+          options: countriesString,
+        },
+        {
+          name: "city",
+          type: "select",
+          label: "Region/City",
+          placeholder: "Select city",
+          options: stateForCountry,
+        },
+        {
+          name: "organization_type",
+          type: "select",
+          label: "Company type",
+          placeholder: "Select company type",
+          options: [
+            "Drilling Contractor Company",
+            "Integrated Oil & Gas Company",
+            "Independent Oil & Gas Company",
+            "Oil Service Company",
+            "Oil Equipment Manufacturer",
+            "Media Company",
+            "Security",
+            "Renewable Energy Company",
+            "Oil Refining",
+          ],
+        },
+        {
+          name: "company_size",
+          type: "select",
+          label: "Company's size",
+          placeholder: "Select range",
+          options: [
+            "0-10 employees",
+            "11-50 employees",
+            "50 and above employees",
+          ],
+        },
+        {
+          name: "company_description",
+          type: "textarea",
+          label: "Short description",
+          placeholder: "write a short description of your company here...",
+        },
       ],
-    },
-    {
-      name: "company_size",
-      type: "select",
-      label: "Company's size",
-      placeholder: "Select range",
-      options: ["0-10 employees", "11-50 employees", "50 and above employees"],
-    },
-    {
-      name: "description",
-      type: "textarea",
-      label: "Short description",
-      placeholder: "write a short description of your company here...",
     },
   ];
   return (
@@ -117,7 +145,7 @@ const CreateCompany = () => {
         <div></div>
         <StepButton
           doStepChange={doStepChange}
-          nextStep="company-documents"
+          nextStep="company-information"
           stepText="Next"
         />
       </div>

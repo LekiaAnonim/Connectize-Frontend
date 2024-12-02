@@ -10,7 +10,7 @@ const CompanyLayout = () => {
           <Logo /> {/* url="/create-company" */}
         </header>
       </nav>
-      <section className="min-h-[90vh] w-full max-w-screen-md flex items-center justify-center">
+      <section className="min-h-[90vh] mb-8 w-full max-w-screen-md flex items-center justify-center">
         <Outlet />
       </section>
     </main>

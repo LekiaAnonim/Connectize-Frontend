@@ -29,21 +29,28 @@ export default function Form({
           return (
             <div key={index} className="w-full">
               {type === "grid" ? (
-                <div className={`grid md:grid-cols-2 gap-2`}>
+                <div className={`grid md:grid-cols-2 gap-x-3 gap-y-5`}>
                   {gridInputs.map(
                     ({ name, type, label, placeholder, options }) => {
                       return (
-                        <div className="mb-4" key={name}>
-                          <label htmlFor={type}>{label}</label>
+                        <div className="" key={name}>
+                          <label htmlFor={name}>{label}</label>
                           {type === "textarea" ? (
                             <Textarea
                               name={name}
+                              id={name}
                               placeholder={placeholder}
-                              onChange={formik.handleChange}
+                              onChange={(e) => {
+                                localStorage.setItem(
+                                  name,
+                                  e.currentTarget.value
+                                );
+                                formik.handleChange(e);
+                              }}
                               onBlur={formik.handleBlur}
                               value={formik.values[`${name}`]}
                               className={clsx(
-                                "min-h-[200px] w-full",
+                                "!min-h-[150px] w-full",
                                 inputClassNames
                               )}
                             />
@@ -86,10 +93,13 @@ export default function Form({
                     <Textarea
                       name={name}
                       placeholder={placeholder}
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        localStorage.setItem(name, e.currentTarget.value);
+                        formik.handleChange(e);
+                      }}
                       onBlur={formik.handleBlur}
                       value={formik.values[`${name}`]}
-                      className="resize-none h-[150px] w-full"
+                      className={clsx("!min-h-[150px] w-full", inputClassNames)}
                     />
                   ) : type === "textarea-md" ? (
                     <CustomTextArea
