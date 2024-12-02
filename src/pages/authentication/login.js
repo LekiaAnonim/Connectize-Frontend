@@ -30,7 +30,7 @@ function Login() {
 
   const navigateTo = searchParams.has("next")
     ? nextParam
-    : session.user.isFirstTimeUser
+    : session?.user?.isFirstTimeUser
     ? "/profile"
     : "/user-profile";
 

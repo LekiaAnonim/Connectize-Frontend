@@ -1,62 +1,66 @@
-import React from 'react';
-import ReactECharts from 'echarts-for-react';
-import {ArrowDown}  from '../../../icon'
+import React from "react";
+import ReactECharts from "echarts-for-react";
+import HeadingText from "../../HeadingText";
+import LightParagraph from "../../ParagraphText";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 function Trends() {
   const option = {
     tooltip: {
-      trigger: 'axis'
+      trigger: "axis",
     },
-    legend: {
-      data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
-    },
+    // legend: {
+    //   data: ["Email", "Union Ads", "Video Ads", "Direct", "Search Engine"],
+    // },
     grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true
+      left: "3%",
+      right: "4%",
+      bottom: "5%",
+      containLabel: true,
     },
     toolbox: {
       feature: {
-        saveAsImage: {}
-      }
+        saveAsImage: {},
+      },
     },
     xAxis: {
-      type: 'category',
+      type: "category",
       boundaryGap: false,
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     },
     yAxis: {
-      type: 'value'
+      type: "value",
     },
     series: [
       {
-        name: 'Email',
-        smooth:'true',
-        type: 'line',
-        stack: 'Total',
-        data: [120, 132, 101, 134, 90, 230, 210]
+        name: "Email",
+        smooth: "true",
+        type: "line",
+        stack: "Total",
+        data: [120, 132, 101, 134, 90, 230, 210],
       },
-      
-    ]
+    ],
   };
-  
-  return (
-    <div>
-        <div className='d-flex'>
-            <h3 className='me-3'>Analysis</h3>
-            <div className='mt-1 fw-bold'><ArrowDown/></div>
-        </div>
-        <p className='text-black-50'>Yearly Analysis</p>
-        <div className='bg-white rounded'>
-            <div className='ms-5'>
-              <p className='text-black-50'>Market Trend Analysis</p>
-              <h2>12589k</h2>
-            </div>
-            <ReactECharts option={option} />
-        </div>
 
-    </div>
-  )
+  return (
+    <section className="space-y-8">
+      <div>
+        <div className="flex gap-3 items-center">
+          <HeadingText>Analysis</HeadingText>
+          <ChevronDownIcon />
+        </div>
+        <LightParagraph>Yearly Analysis</LightParagraph>
+      </div>
+
+      {/*  */}
+      <div className="bg-white rounded-md px-3">
+        <div className="py-3">
+          <LightParagraph>Market Trend Analysis</LightParagraph>
+          <h2 className="font-semibold text-2xl">12,589k</h2>
+        </div>
+        <ReactECharts option={option} />
+      </div>
+    </section>
+  );
 }
 export default Trends;

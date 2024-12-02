@@ -33,32 +33,27 @@ export const getCompanies = async () => {
 
 export const createCompany = async (data) => {
   await getOrCreateCompanyCategories(data.company_category);
+
   await getOrCreateCompanySize(data.company_size);
 
-  if (!data.organization_type === undefined || data.company_size === undefined)
-    throw new Error("Please return organization_type or company_size");
+  if (!data.company_category === undefined || data.company_size === undefined)
+    throw new Error("Please return organization type or company size");
 
-  const session = getSession();
-
-  const { results: company } = await makeApiRequest({
+  const company = await makeApiRequest({
     url: `api/companies/`,
     method: "POST",
     data: {
-      company_name: data.company_name,
-      profile: session.email,
-      organization_type: data.organization_type,
+      company_name: data.company_name.toLowerCase(),
+      organization_type: data.company_category,
       about: data.company_description,
-      tag_line: data.tag_line,
+      tag_line: data.company_tagline,
       company_size: data.company_size,
-      logo: data.company_logo,
-      banner: data.company_banner,
       email: data.company_email,
       office_address: data.office_address,
       country: data.country,
       state: data.city,
       city: data.city,
       website: data.company_website,
-      // verify: false,
     },
   });
 
@@ -66,13 +61,16 @@ export const createCompany = async (data) => {
 };
 
 export const getOrCreateCompanyCategories = async (name) => {
-  const { results } = await makeApiRequest({
+  const { results: categories } = await makeApiRequest({
     url: `api/company-categories/`,
     method: "GET",
   });
 
-  if (results.filter((data) => data.name === name) || name === undefined)
-    return results;
+  console.log("Category", name);
+  const hasCategory =
+    categories?.filter((data) => data.name === name).length > 0;
+
+  if (hasCategory) return categories || [];
 
   return await makeApiRequest({
     url: `api/company-categories/`,
@@ -86,13 +84,10 @@ export const getOrCreateCompanySize = async (size) => {
     method: "GET",
   });
 
-  console.log("Company Size result: ", results);
-
-  if (results.filter((data) => data.size === size) || size === undefined)
-    return results;
+  if (results.filter((data) => data.size === size).length > 0) return results;
 
   return await makeApiRequest({
-    url: `api/company-categories/`,
+    url: `api/company-sizes/`,
     method: "POST",
     data: { size },
   });

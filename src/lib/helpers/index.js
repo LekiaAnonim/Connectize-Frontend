@@ -31,7 +31,7 @@ export async function refreshTokenIfNeeded() {
         },
       });
 
-      return { Authorization: "Bearer " + data.access };
+      return { Authorization: "Bearer " + session.tokens.access };
     }
     return undefined;
   } catch (error) {
@@ -54,14 +54,14 @@ export async function makeApiRequest({
   contentType = "application/json",
 }) {
   try {
-    // const authorization = await refreshTokenIfNeeded();
+    const authorization = await refreshTokenIfNeeded();
 
     const response = await axios({
       url: `${baseURL}/${url}`,
       method,
       data,
       headers: {
-        // ...authorization,
+        ...authorization,
         "Content-Type": contentType,
       },
     });
@@ -83,6 +83,7 @@ export async function makeApiRequest({
       error?.response?.data?.errors?.[0]?.password2?.[0] ||
       error?.response?.data?.errors?.[0]?.gender?.[0] ||
       error?.response?.data?.errors?.[0]?.non_field_errors?.[0] ||
+      error?.response?.data?.company_name?.[0] ||
       error?.response?.data?.detail ||
       "Something went wrong!";
 

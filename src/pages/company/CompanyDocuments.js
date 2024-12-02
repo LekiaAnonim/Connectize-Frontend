@@ -6,6 +6,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import StepButton from "../../components/profile/StepButton";
 import { ImageSelect } from "../../components/form/customInput";
+import { createCompany } from "../../api-services/companies";
+import { toast } from "sonner";
 
 const validationSchema = Yup.object().shape({
   document_type: Yup.string().required("Field cannot be empty"),
@@ -19,7 +21,7 @@ const CompanyDocuments = () => {
     company_address: localStorage.getItem("company_address") || "",
     country: localStorage.getItem("country") || "",
     city: localStorage.getItem("city") || "",
-    organization_type: localStorage.getItem("organization_type") || "",
+    company_category: localStorage.getItem("company_category") || "",
     company_size: localStorage.getItem("company_size") || "",
     company_description: localStorage.getItem("company_description") || "",
 
@@ -51,7 +53,21 @@ const CompanyDocuments = () => {
       return false;
     }
 
-    // return true;
+    const toastId = toast.info("Processing your request...");
+
+    const newCompany = await createCompany(formik.values);
+
+    if (newCompany) {
+      for (let value in formik.values) {
+        localStorage.removeItem(value);
+      }
+      toast.success(formik.values["company_name"] + " created successfully", {
+        id: toastId,
+      });
+      return true;
+    }
+    toast.dismiss(toastId);
+    return false;
   };
 
   useEffect(() => {
@@ -88,7 +104,7 @@ const CompanyDocuments = () => {
         <StepButton
           doStepChange={doStepChange}
           stepDirection="back"
-          nextStep="create-company"
+          nextStep="company-information"
           stepText="Back"
         />
         <StepButton

@@ -35,6 +35,7 @@ export function Suggestions() {
   const { data: suggestedUsers } = useQuery({
     queryKey: ["suggestedUsers"],
     queryFn: getSuggestedUsersForCurrentUser,
+    placeholderData: [],
   });
 
   return (

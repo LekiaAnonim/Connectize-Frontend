@@ -11,9 +11,23 @@ export const getAllUsers = async () => {
 };
 
 export const getSuggestedUsersForCurrentUser = async () => {
+  // const allUsers = await getAllUsers();
+
   const { user: currentUser } = getSession();
 
-  const allUsers = await getAllUsers();
+  // const allUsersInLocation = allUsers.filter(
+  //   (user) =>
+  //     user.first_name &&
+  //     (user.city === currentUser.city ||
+  //       user.region === currentUser.region ||
+  //       user.country === currentUser.country)
+  // );
+
+  const { results: allUsers } = [];
+  //   await makeApiRequest({
+  //   url: `api/users/`,
+  //   method: "GET",
+  // });
 
   const allUsersInLocation = allUsers.filter(
     (user) =>
@@ -23,7 +37,7 @@ export const getSuggestedUsersForCurrentUser = async () => {
         user.country === currentUser.country)
   );
 
-  return allUsersInLocation || allUsers;
+  return allUsersInLocation || allUsers.splice(0, 10); // allUsersInLocation ||
 };
 
 // get and create user
@@ -35,9 +49,8 @@ export const getOrCreateGender = async (gender) => {
   });
 
   if (
-    results.filter(
-      (data) => data.type.toLowerCase() === gender.toLowerCase()
-    ) ||
+    results?.filter((data) => data.type.toLowerCase() === gender.toLowerCase())
+      .length > 0 ||
     gender === undefined
   )
     return results;

@@ -9,10 +9,13 @@ import { getCountries } from "@loophq/country-state-list";
 
 const validationSchema = Yup.object().shape({
   company_name: Yup.string().required("Field cannot be empty"),
+  company_tagline: Yup.string().required("Field cannot be empty"),
+  company_email: Yup.string().required("Field cannot be empty"),
+  company_website: Yup.string().required("Field cannot be empty"),
   company_address: Yup.string().required("Field cannot be empty"),
   country: Yup.string().required("Field cannot be empty"),
   city: Yup.string().required("Field cannot be empty"),
-  organization_type: Yup.string().required("Field cannot be empty"),
+  company_category: Yup.string().required("Field cannot be empty"),
   company_size: Yup.string().required("Field cannot be empty"),
   company_description: Yup.string().required("Field cannot be empty"),
 });
@@ -22,10 +25,13 @@ const CreateCompany = () => {
 
   const initialValues = {
     company_name: localStorage.getItem("company_name") || "",
+    company_tagline: localStorage.getItem("company_tagline") || "",
+    company_email: localStorage.getItem("company_email") || "",
+    company_website: localStorage.getItem("company_website") || "",
     company_address: localStorage.getItem("company_address") || "",
     country: localStorage.getItem("country") || "",
     city: localStorage.getItem("city") || "",
-    organization_type: localStorage.getItem("organization_type") || "",
+    company_category: localStorage.getItem("company_category") || "",
     company_size: localStorage.getItem("company_size") || "",
     company_description: localStorage.getItem("company_description") || "",
   };
@@ -70,6 +76,24 @@ const CreateCompany = () => {
           placeholder: "E.g The Large Company",
         },
         {
+          name: "company_tagline",
+          type: "text",
+          label: "Company's tagline",
+          placeholder: "E.g best in production...",
+        },
+        {
+          name: "company_email",
+          type: "email",
+          label: "Company's email",
+          placeholder: "E.g me@yourcompany.com",
+        },
+        {
+          name: "company_website",
+          type: "url",
+          label: "Company's website",
+          placeholder: "E.g https://www.yourcompany.com",
+        },
+        {
           name: "company_address",
           type: "text",
           label: "Office Address",
@@ -90,7 +114,7 @@ const CreateCompany = () => {
           options: stateForCountry,
         },
         {
-          name: "organization_type",
+          name: "company_category",
           type: "select",
           label: "Company type",
           placeholder: "Select company type",
