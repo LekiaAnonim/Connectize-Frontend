@@ -30,6 +30,11 @@ import ResetPasswordPage from "./pages/authentication/reset-password";
 import ProfileLayout from "./components/profile/layout";
 import ConfirmResetPassword from "./pages/authentication/confirmPasswordReset";
 import MarketPlaceLayout from "./pages/MarketPlaceLayout";
+import CompanyLayout from "./pages/company/layout";
+import CreateCompany from "./pages/company";
+import CompanyDocuments from "./pages/company/CompanyDocuments";
+import CompanyInformation from "./pages/company/CompanyInformation";
+import CompanyAdditionalInformation from "./pages/company/CompanyAdditionInformation";
 
 function App() {
   return (
@@ -80,6 +85,20 @@ function App() {
           {/* User */}
           <Route path="user-profile" element={<UserProfile />} />
           <Route path="admin-profile" element={<AdminProfile />} />
+
+          {/* Company */}
+          <Route element={<CompanyLayout />}>
+            <Route path="create-company" element={<CreateCompany />} />
+            <Route path="company-documents" element={<CompanyDocuments />} />
+            <Route
+              path="company-information"
+              element={<CompanyInformation />}
+            />
+            <Route
+              path="company-additional-information"
+              element={<CompanyAdditionalInformation />}
+            />
+          </Route>
 
           {/* <Route path="feed-page" element={<FeedPage />} /> */}
           {/* <Route path="testing" element={<Testing />} /> */}

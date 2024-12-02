@@ -8,9 +8,7 @@ import {
   VerifiedIcon,
 } from "../../../icon";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
+
 import { Pagination, Autoplay } from "swiper/modules";
 import { useMediaQuery } from "react-responsive";
 import { ConJoinedImages } from "../../ResponsiveNav";

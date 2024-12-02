@@ -11,15 +11,15 @@ export const MarkdownComponent = ({
   return (
     <div>
       <div
-        className={clsx("prose", {
-          "line-clamp-3": isDescription,
+        className={clsx("prose space-y-1", {
+          "md:line-clamp-3": isDescription,
         })}
         dangerouslySetInnerHTML={{
           __html: sanitizedDescriptionMarkdown,
         }}
       />
       {isDescription && sanitizedDescriptionMarkdown.length >= 80 && (
-        <button className="text-sm">see more</button>
+        <button className="text-sm max-md:hidden">see more</button>
       )}
     </div>
   );

@@ -15,6 +15,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { MarkdownComponent } from "../MarkDownComponent";
 import { capitalizeFirst } from "../../lib/utils";
+import DOMPurify from "dompurify";
 
 export const inputClassNames =
   "relative mt-2 !w-full !bg-background py-2.5 px-3 rounded-md placeholder:text-sm !text-sm transition-all duration-300";
@@ -113,32 +114,41 @@ export function ImageSelect({ name, formik, hasCaption = true, captionName }) {
 export const CustomTextArea = ({ formik, name, placeholder }) => {
   const selectedStyle = { color: "black", bg: "gray.100" };
   return (
-    <Tabs>
-      <TabList className="mt-1">
-        <Tab className="text-xs" _selected={selectedStyle}>
-          Editor
-        </Tab>
-        <Tab className="text-xs" _selected={selectedStyle}>
-          Preview
-        </Tab>
-      </TabList>
-      <TabPanels>
-        <TabPanel className="!px-0">
-          <ReactQuill
-            value={formik.values[`${name}`]}
-            onChange={(value) => {
-              localStorage.setItem(name, value);
-              formik.setFieldValue(name, value);
-            }}
-            theme="snow"
-            placeholder={placeholder}
-          />
-        </TabPanel>
-        <TabPanel className="mb-4 !px-0">
-          <MarkdownComponent markdownContent={formik.values[`${name}`]} />
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
+    <>
+      <Tabs>
+        <TabList className="mt-1">
+          <Tab className="text-xs" _selected={selectedStyle}>
+            Editor
+          </Tab>
+          <Tab className="text-xs" _selected={selectedStyle}>
+            Preview
+          </Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel className="!px-0">
+            <ReactQuill
+              value={formik.values[`${name}`]}
+              onChange={(value) => {
+                console.log("change value", value);
+                const purifiedContent = DOMPurify.sanitize(value);
+                console.log("purified value", purifiedContent);
+
+                localStorage.setItem(name, purifiedContent);
+                formik.setFieldValue(name, purifiedContent);
+              }}
+              onBlur={(value) => {
+                if (value.index < 1) formik.setFieldValue(name, "");
+              }}
+              theme="snow"
+              placeholder={placeholder}
+            />
+          </TabPanel>
+          <TabPanel className="mb-4 !px-0">
+            <MarkdownComponent markdownContent={formik.values[`${name}`]} />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </>
   );
 };
 
@@ -148,10 +158,16 @@ export const CustomSelect = ({ formik, name, placeholder, options = [""] }) => (
       id={name}
       name={name}
       placeholder={placeholder}
-      onChange={formik.handleChange}
-      onBlur={formik.handleBlur}
+      onChange={(e) => {
+        localStorage.setItem(name, e.currentTarget.value);
+        formik.handleChange(e);
+      }}
+      onBlur={(e) => {
+        localStorage.setItem(name, e.currentTarget.value);
+        formik.handleChange(e);
+      }}
       value={formik.values[`${name}`]}
-      className="!w-full !bg-background px-3 text-sm"
+      className="!w-full !bg-background px-3 text-sm border-gray-100"
     >
       {options?.map((option, index) => (
         <option
@@ -163,5 +179,7 @@ export const CustomSelect = ({ formik, name, placeholder, options = [""] }) => (
         </option>
       ))}
     </Select>
+
+    {/* <FormikErrorResponse formik={formik} name={name} /> */}
   </div>
 );

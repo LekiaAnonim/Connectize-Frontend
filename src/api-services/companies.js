@@ -1,4 +1,5 @@
 import { makeApiRequest } from "../lib/helpers";
+import { getSession } from "../lib/session";
 
 // {
 //     "company_name": "",
@@ -18,12 +19,16 @@ import { makeApiRequest } from "../lib/helpers";
 // }
 
 export const getCompanies = async () => {
-  const { results } = await makeApiRequest({
+  const { results: companies } = await makeApiRequest({
     url: `api/companies/`,
     method: "GET",
   });
 
-  return results || [];
+  const session = getSession();
+
+  const userEmail = session.email;
+
+  return companies?.filter((company) => company.profile === userEmail) || [];
 };
 
 export const createCompany = async (data) => {

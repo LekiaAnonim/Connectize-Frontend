@@ -8,20 +8,20 @@ function StepButton({
   nextStep = "contact",
   stepText = "Next",
   stepDirection = "next",
-  doStepChange = () => false,
+  doStepChange = async () => false,
   disabled = false,
 }) {
   const navigate = useNavigate();
   return (
     <Button
       disabled={disabled}
-      onClick={() => {
+      onClick={async () => {
         if (stepDirection === "back") {
           navigate(`/${nextStep}`);
           return;
         }
-        
-        const canMove = doStepChange();
+
+        const canMove = await doStepChange();
 
         if (canMove) navigate(`/${nextStep}`);
       }}

@@ -1,19 +1,100 @@
-import React from "react";
+import React, { useRef } from "react";
 import { ChatSellerLink } from "../markets/newlyListed";
 import HeadingText from "../../HeadingText";
-import { HeartIcon } from "@radix-ui/react-icons";
-import { Divider } from "@chakra-ui/react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  HeartIcon,
+} from "@radix-ui/react-icons";
+import { Button, Divider } from "@chakra-ui/react";
 import { MarkdownComponent } from "../../MarkDownComponent";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
+
+const NAVIGATION_BUTTONS = [
+  {
+    id: 1,
+    text: "Back",
+    icon: <ChevronLeftIcon direction="left" className="!w-5" />,
+    action: "prev",
+  },
+  {
+    id: 2,
+    text: "Next",
+    icon: <ChevronRightIcon direction="right" className="!w-5" />,
+    action: "next",
+  },
+];
 
 function Productdetails({ product }) {
+  const swiperRef = useRef(null);
+
+  const handleNavigation = (action) => {
+    const swiperInstance = swiperRef.current;
+    console.log(swiperInstance);
+
+    if (!swiperInstance) {
+      console.error("Swiper instance is not initialized.");
+
+      return;
+    }
+    action === "prev" ? swiperInstance.slidePrev() : swiperInstance.slideNext();
+  };
   return (
     <>
       <section className="flex max-lg:flex-col items-start justify-center gap-4">
-        <img
-          src="/images/Rectangle3.png"
-          className="w-full lg:w-1/2 shrink-0"
-          alt={product.title || "product"}
-        />
+        {product?.images?.length > 0 ? (
+          <div className="w-full lg:w-1/2 ">
+            <Swiper
+              onSwiper={(swiper) => (swiperRef.current = swiper)}
+              modules={[Pagination, Autoplay]}
+              autoplay={20000}
+              loop
+              slidesPerView={1}
+              className="!z-0"
+            >
+              {product.images.map((image) => (
+                <SwiperSlide
+                  key={image.id}
+                  className="max-h-[400px] rounded-md overflow-hidden"
+                >
+                  <img
+                    src={image.image}
+                    className="w-full"
+                    alt={product.title || "product"}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            <div className="flex gap-4 items-center justify-between">
+              <div className="flex text-xs gap-1 items-center">
+                <span>{swiperRef?.current?.activeIndex + 1}</span>
+                <span className="text-gray-300">/</span>
+                <strong>{product?.images?.length}</strong>
+              </div>
+              <div className="flex items-center">
+                {NAVIGATION_BUTTONS.map((button) => (
+                  <Button
+                    key={button.id}
+                    onClick={() => handleNavigation(button.action)}
+                    disabled={product?.images?.length === 1}
+                    className="!bg-transparent hover:!text-custom_blue !text-gray-600 first:flex-row-reverse active:scale-95 !text-sm"
+                  >
+                    <span>{button.text}</span>
+                    {button.icon}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <img
+            src={"/images/Rectangle3.png"}
+            className="w-full lg:w-1/2 shrink-0"
+            alt={product.title || "product"}
+          />
+        )}
+
         <div className="space-y-4 lg:w-1/2 shrink-0">
           <div className="space-y-2">
             <HeadingText>{product.title}</HeadingText>
@@ -21,7 +102,7 @@ function Productdetails({ product }) {
           </div>
           <Divider />
           <div className="space-y-2">
-            <h6 className="text-lg font-bold">Description</h6>
+            <h6 className="text-xl font-bold">Description</h6>
 
             <MarkdownComponent
               markdownContent={product.description}

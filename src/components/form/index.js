@@ -18,7 +18,7 @@ export default function Form({
   hasButton = true,
 }) {
   return (
-    <form className={`${className}`} onSubmit={formik.handleSubmit}>
+    <form className={`${className} w-full`} onSubmit={formik.handleSubmit}>
       {topCustomComponents}
 
       {inputArray.map(
@@ -31,49 +31,52 @@ export default function Form({
               {type === "grid" ? (
                 <div className={`grid md:grid-cols-2 gap-2`}>
                   {gridInputs.map(
-                    ({ name, type, label, placeholder, options }) => (
-                      <div className="mb-4" key={name}>
-                        <label htmlFor={type}>{label}</label>
-                        {type === "textarea" ? (
-                          <Textarea
-                            name={name}
-                            placeholder={placeholder}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values[`${name}`]}
-                            className={clsx(
-                              "min-h-[200px] w-full",
-                              inputClassNames
-                            )}
-                          />
-                        ) : type === "textarea-md" ? (
-                          <CustomTextArea
-                            formik={formik}
-                            name={name}
-                            placeholder={placeholder}
-                          />
-                        ) : type === "select" ? (
-                          <CustomSelect
-                            formik={formik}
-                            name={name}
-                            placeholder={placeholder}
-                            options={options}
-                          />
-                        ) : (
-                          <CustomInput
-                            type={type}
-                            className={
-                              disabled ? "opacity-80 pointer-events-none" : ""
-                            }
-                            name={name}
-                            placeholder={placeholder}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values[`${name}`]}
-                          />
-                        )}
-                      </div>
-                    )
+                    ({ name, type, label, placeholder, options }) => {
+                      return (
+                        <div className="mb-4" key={name}>
+                          <label htmlFor={type}>{label}</label>
+                          {type === "textarea" ? (
+                            <Textarea
+                              name={name}
+                              placeholder={placeholder}
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values[`${name}`]}
+                              className={clsx(
+                                "min-h-[200px] w-full",
+                                inputClassNames
+                              )}
+                            />
+                          ) : type === "textarea-md" ? (
+                            <CustomTextArea
+                              formik={formik}
+                              name={name}
+                              placeholder={placeholder}
+                            />
+                          ) : type === "select" ? (
+                            <CustomSelect
+                              formik={formik}
+                              name={name}
+                              placeholder={placeholder}
+                              options={options}
+                            />
+                          ) : (
+                            <CustomInput
+                              type={type}
+                              className={
+                                disabled ? "opacity-80 pointer-events-none" : ""
+                              }
+                              name={name}
+                              placeholder={placeholder}
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              value={formik.values[`${name}`]}
+                            />
+                          )}
+                          <FormikErrorResponse formik={formik} name={name} />
+                        </div>
+                      );
+                    }
                   )}
                 </div>
               ) : (

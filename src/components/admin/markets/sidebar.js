@@ -159,7 +159,7 @@ function ProductCategory() {
       <div className="space-y-2 xs:text-sm p-2">
         {categories?.map((item, index) => (
           <Link
-            to=""
+            to={"/market?category=" + item.name.toLowerCase()}
             key={index}
             onClick={() => toggleNav(false)}
             className="flex gap-2 p-2"

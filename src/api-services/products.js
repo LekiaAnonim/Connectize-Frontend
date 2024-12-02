@@ -13,12 +13,26 @@ import { capitalizeFirst } from "../lib/utils";
 // }
 
 export const getProducts = async () => {
-  const { results } = await makeApiRequest({
+  const { results: products } = await makeApiRequest({
     url: `api/products/`,
     method: "GET",
   });
+  let mergedProductWIthImage = [];
 
-  return results || [];
+  const productImages = await getOrCreateProductImages(undefined, "get");
+
+  products?.forEach((product) => {
+    const productImage = productImages?.filter(
+      (image) => product.id === image.product
+    );
+
+    mergedProductWIthImage.push({
+      ...product,
+      images: productImage,
+    });
+  });
+
+  return mergedProductWIthImage || [];
 };
 
 export const createProduct = async (data, resetForm) => {
@@ -91,12 +105,12 @@ export const createProduct = async (data, resetForm) => {
 };
 
 export const getOrCreateProductImages = async (data, type) => {
-  const { results: products } = await makeApiRequest({
+  const { results: images } = await makeApiRequest({
     url: `api/product-images/`,
     method: "GET",
   });
 
-  if (type === "get" || data === undefined) return products || [];
+  if (type === "get" || data === undefined) return images || [];
 
   return await makeApiRequest({
     url: `api/product-images/`,

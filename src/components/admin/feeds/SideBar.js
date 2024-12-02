@@ -80,11 +80,14 @@ function Companies({ companyArray }) {
     placeholderData: companyArray,
   });
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 mb-4">
       <h3 className="font-semibold text-xl">Companies</h3>
       <ul className="space-y-2 divide-y divide-gray-100/80 xs:text-sm p-0">
         {companyArrayData?.length < 1 ? (
-          <LightParagraph>No company yet...</LightParagraph>
+          <div>
+            <LightParagraph>No company yet...</LightParagraph>
+            <Link to="/create-company">Create a company</Link>
+          </div>
         ) : (
           companyArrayData?.map(
             (

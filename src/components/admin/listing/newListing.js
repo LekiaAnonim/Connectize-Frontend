@@ -77,6 +77,12 @@ const listingFields = [
         placeholder: "Should not be more that 250 characters",
       },
       {
+        name: "subtitle",
+        type: "text",
+        label: "Subtitle",
+        placeholder: "Should not be more than 450 characters",
+      },
+      {
         name: "product_category",
         type: "select",
         label: "Choose Category",
@@ -113,12 +119,6 @@ const listingFields = [
         label: "Description",
         placeholder: "Should not be more than 1450 characters",
       },
-      {
-        name: "subtitle",
-        type: "text",
-        label: "Subtitle",
-        placeholder: "Should not be more than 450 characters",
-      },
     ],
   },
 ];
@@ -147,7 +147,7 @@ export default function NewListing() {
       try {
         await createProduct(values, resetForm);
         for (let value in values) {
-          console.log(value);
+          localStorage.removeItem(value);
         }
       } catch (error) {
         console.error(error);
