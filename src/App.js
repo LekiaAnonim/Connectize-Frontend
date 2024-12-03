@@ -23,8 +23,6 @@ import Listing from "./pages/market/listing";
 import UserProfile from "./pages/feedPages/userProfile";
 import AdminProfile from "./pages/feedPages/adminProfile";
 import NewsFeed from "./pages/feedPages/newsFeed";
-// import Testing from "./pages/feedPages/testing";
-// import Navbar from "./pages/feedPages/antway";
 import AuthLayout from "./pages/authentication/AuthLayout";
 import ResetPasswordPage from "./pages/authentication/reset-password";
 import ProfileLayout from "./components/profile/layout";
@@ -77,8 +75,9 @@ function App() {
             <Route path="listing" element={<Listing />} />
             {/* Services */}
             <Route path="services" element={<Services />} />
-            <Route path="service-overview" element={<ServiceOverView />} />
-            <Route path="service-admin" element={<ServiceAdmin />} />
+
+            <Route path="services/:id" element={<ServiceOverView />} />
+            <Route path="services/add" element={<ServiceAdmin />} />
           </Route>
 
           {/* User */}

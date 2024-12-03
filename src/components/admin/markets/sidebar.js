@@ -60,11 +60,13 @@ function SidebarMenu() {
         <MarketPlaceNavigation />
         <Link
           onClick={() => toggleNav(false)}
-          to={pathname === "/services" ? "" : "/listing"}
+          to={pathname.startsWith("/services") ? "/services/add" : "/listing"}
           className="flex items-center justify-between rounded-full bg-dark text-white text-sm py-2.5 px-3 w-full mb-4 mt-2"
         >
           <span>
-            {pathname === "/services" ? "Add New Service" : "List New Product"}
+            {pathname.startsWith("/services")
+              ? "Add New Service"
+              : "List New Product"}
           </span>
           <ChevronRight className="!size-5 text-gray-200" />
         </Link>
@@ -82,7 +84,7 @@ function MarketPlaceNavigation() {
   return (
     <section className="space-y-2">
       <HeadingText>
-        {pathname === "/services" ? "Services" : "Marketplace"}
+        {pathname.startsWith("/services") ? "Services" : "Marketplace"}
       </HeadingText>
       <div className="space-y-2 xs:text-sm p-2">
         {marketPlaceItems.map((item, index) => {
@@ -95,8 +97,8 @@ function MarketPlaceNavigation() {
                 "flex gap-2 items-center transition-colors duration-300 p-2 rounded hover:!text-mid_grey",
                 {
                   "!text-gold !bg-mid_grey pointer-events-none":
-                    item.to === pathname,
-                  "!text-gray-500": item.to !== pathname,
+                    pathname.startsWith(item.to),
+                  "!text-gray-500": !pathname.startsWith(item.to),
                 }
               )}
             >
@@ -115,10 +117,12 @@ function ProductCategory({ pathname }) {
   console.log(pathname);
 
   const { data: categories, isLoading } = useQuery({
-    queryKey:
-      pathname === "/services" ? ["serviceCategories"] : ["productCategories"],
-    queryFn:
-      pathname === "/services" ? getServiceCategories : getProductCategories,
+    queryKey: pathname.startsWith("/services")
+      ? ["serviceCategories"]
+      : ["productCategories"],
+    queryFn: pathname.startsWith("/services")
+      ? getServiceCategories
+      : getProductCategories,
     enabled: !!pathname,
   });
 
@@ -139,7 +143,9 @@ function ProductCategory({ pathname }) {
           categories?.map((item, index) => (
             <Link
               to={
-                (pathname === "/services" ? "/services " : "/market ") +
+                (pathname.startsWith("/services")
+                  ? "/add-service "
+                  : "/market ") +
                 "?category=" +
                 item.name.toLowerCase()
               }
