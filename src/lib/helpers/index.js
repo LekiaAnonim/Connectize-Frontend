@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "sonner";
-import { getSession, setSession } from "../session";
+import { getSession, removeSession, setSession } from "../session";
 
 // Constants
 export const REGISTER_EMAIL_KEY = "register_email";
@@ -17,6 +17,8 @@ export const baseURL = "http://localhost:8000";
 // Mutex for Refresh Token
 let isRefreshing = false;
 let refreshPromise = null;
+
+let retries = 0;
 
 export async function refreshTokenIfNeeded() {
   const session = getSession();
@@ -54,14 +56,16 @@ export async function refreshTokenIfNeeded() {
     const authorizationHeader = await refreshPromise;
     return { Authorization: authorizationHeader };
   } catch (error) {
-    // if (error?.response?.data?.code === "token_not_valid") {
-    //   removeSession();
-    //   toast.info("User session has been reset, kindly login again");
-    //   const pathname = window.location.pathname;
-    //   window.location.replace("/login?next=" + pathname);
-    //   return undefined;
-    // }
+    // count retries
+    retries = retries + 1;
 
+    console.log(retries);
+    if (retries === 5) {
+      removeSession();
+      toast.info("User session has been reset, kindly login again");
+      const pathname = window.location.pathname;
+      window.location.replace("/login?next=" + pathname);
+    }
     throw error;
   } finally {
     isRefreshing = false;
@@ -102,6 +106,7 @@ export async function makeApiRequest({
     }
   } catch (error) {
     const errorCode = error?.response?.data?.code;
+
     if (errorCode === "token_not_valid") {
       // Attempt to refresh token and retry the request
       const authorization = await refreshTokenIfNeeded();

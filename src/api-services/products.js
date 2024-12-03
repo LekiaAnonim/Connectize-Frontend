@@ -1,6 +1,7 @@
 import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
 import { capitalizeFirst } from "../lib/utils";
+import { getSession } from "../lib/session";
 
 // {
 //     "title": "",
@@ -51,8 +52,16 @@ export const createProduct = async (data, resetForm) => {
     data.product_category.trim().toLowerCase()
   );
 
-  if (!data || !productCategoryData) {
-    toast.error("No product data or product category found");
+  console.log(data);
+
+  const { user } = getSession();
+
+  const toastId = toast.info("Enlisting product...");
+
+  if (!user && (!data || !productCategoryData)) {
+    toast.error("No User session or product data or product category found", {
+      id: toastId,
+    });
     return;
   }
 
@@ -67,7 +76,7 @@ export const createProduct = async (data, resetForm) => {
       category: productCategoryData,
       description: data.description,
       featured: false,
-      company: "Blue Oil",
+      company: data.company || "",
     },
     resetForm,
   });
@@ -112,7 +121,9 @@ export const createProduct = async (data, resetForm) => {
   }
 
   if (product && image1)
-    toast.success(`${product.title} has been created successfully!`);
+    toast.success(`${product.title} has been created successfully!`, {
+      id: toastId,
+    });
 };
 
 export const getOrCreateProductImages = async (data, type) => {

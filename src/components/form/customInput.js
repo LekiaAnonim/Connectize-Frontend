@@ -15,11 +15,11 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { MarkdownComponent } from "../MarkDownComponent";
 import { capitalizeFirst } from "../../lib/utils";
-import DOMPurify from "dompurify";
+
 import clsx from "clsx";
 
 export const inputClassNames =
-  "relative mt-2 !w-full !bg-background py-2.5 px-3 rounded-md placeholder:text-sm !text-sm transition-all duration-300";
+  "relative mt-2 !w-full !bg-background py-2.5 px-3 rounded-md placeholder:text-sm !text-sm transition-all duration-300 !z-0";
 
 export default function CustomInput({
   type,
@@ -145,12 +145,8 @@ export const CustomTextArea = ({ formik, name, placeholder }) => {
             <ReactQuill
               value={formik.values[`${name}`]}
               onChange={(value) => {
-                console.log("change value", value);
-                const purifiedContent = DOMPurify.sanitize(value);
-                console.log("purified value", purifiedContent);
-
-                localStorage.setItem(name, purifiedContent);
-                formik.setFieldValue(name, purifiedContent);
+                localStorage.setItem(name, value);
+                formik.setFieldValue(name, value);
               }}
               onBlur={(value) => {
                 if (value.index < 1) formik.setFieldValue(name, "");
@@ -186,12 +182,8 @@ export const CustomSelect = ({ formik, name, placeholder, options = [""] }) => (
       className="!w-full !bg-background px-3 !text-sm  border-gray-100"
     >
       {options?.map((option, index) => (
-        <option
-          key={index}
-          value={capitalizeFirst(option.toLowerCase())}
-          className="capitalize"
-        >
-          {option}
+        <option key={index} value={option}>
+          {capitalizeFirst(option.toLowerCase())}
         </option>
       ))}
     </Select>

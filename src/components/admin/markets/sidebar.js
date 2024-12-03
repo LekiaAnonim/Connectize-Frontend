@@ -114,7 +114,6 @@ function MarketPlaceNavigation() {
 
 function ProductCategory({ pathname }) {
   const { toggleNav } = useNav();
-  console.log(pathname);
 
   const { data: categories, isLoading } = useQuery({
     queryKey: pathname.startsWith("/services")

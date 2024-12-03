@@ -8,9 +8,12 @@ import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { Divider } from "@chakra-ui/react";
 import { createProduct } from "../../../api-services/products";
 import { ImageSelect } from "../../form/customInput";
+import { getCompanies } from "../../../api-services/companies";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const FILE_SIZE = 4 * 1024 * 1024; // 4MB
-const SUPPORTED_FORMATS = [
+export const SUPPORTED_FORMATS = [
   "image/jpg",
   "image/jpeg",
   "image/png",
@@ -18,17 +21,18 @@ const SUPPORTED_FORMATS = [
   "image/webp",
 ];
 
-const unSupportedText =
+export const unSupportedText =
   "Unsupported file format, only avif, webP, PNGs, JPEGs and JPGs are allowed";
 
-const largeFileText =
+export const largeFileText =
   "File size is too large, only images less than 4mb is allowed";
-function checkFileFormat(value) {
+
+export function checkFileFormat(value) {
   if (!value) return true;
   return value && SUPPORTED_FORMATS.includes(value.type.toLowerCase());
 }
 
-function checkFileSize(value) {
+export function checkFileSize(value) {
   if (!value) return true;
   return value && value.size <= FILE_SIZE;
 }
@@ -66,65 +70,12 @@ const validationSchema = Yup.object().shape({
     .required("Field cannot be empty"),
 });
 
-const listingFields = [
-  {
-    type: "grid",
-    gridInputs: [
-      {
-        name: "product_title",
-        type: "text",
-        label: "Product Title",
-        placeholder: "Should not be more that 250 characters",
-      },
-      {
-        name: "subtitle",
-        type: "text",
-        label: "Subtitle",
-        placeholder: "Should not be more than 450 characters",
-      },
-      {
-        name: "product_category",
-        type: "select",
-        label: "Choose Category",
-        placeholder: "Product type",
-        options: [
-          "Drilling equipment",
-          "Auxiliary equipment",
-          "Mud cleaners",
-          "Refinery",
-          "Valves",
-          "Gas analytics equipment",
-          "Heat exchangers",
-          "Centrifugal pump",
-          "Separators",
-          "Flow meters",
-          "Fuel gas conditioning",
-          "Pipe racks",
-          "Pipelines",
-          "Premix tanks",
-          "Pressure Control equipment",
-          "Oil and gas production equipment",
-          "Rotating equipment",
-          "Safety products",
-          "Sand Pump",
-          "Storage Equipment",
-          "Towers",
-          "Transportation Equipment",
-          "Piping Equipment",
-        ],
-      },
-      {
-        name: "description",
-        type: "textarea-md",
-        label: "Description",
-        placeholder: "Should not be more than 1450 characters",
-      },
-    ],
-  },
-];
-
 export default function NewListing() {
-  //   const navigate = useNavigate();
+  const { data: companies } = useQuery({
+    queryKey: ["companies"],
+    queryFn: getCompanies,
+  });
+
   const formValues = {
     image_1: "",
     image_2: "",
@@ -140,20 +91,86 @@ export default function NewListing() {
     subtitle: localStorage.getItem("subtitle") || "",
   };
 
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: formValues,
     validationSchema: validationSchema,
     onSubmit: async (values, { resetForm }) => {
-      try {
-        await createProduct(values, resetForm);
+      const product = await createProduct(values, resetForm);
+      if (product) {
         for (let value in values) {
           localStorage.removeItem(value);
         }
-      } catch (error) {
-        console.error(error);
+
+        navigate("/market", { replace: true });
       }
     },
   });
+
+  const listingFields = [
+    {
+      type: "grid",
+      gridInputs: [
+        {
+          name: "product_title",
+          type: "text",
+          label: "Product Title",
+          placeholder: "Should not be more that 250 characters",
+        },
+        {
+          name: "subtitle",
+          type: "text",
+          label: "Subtitle",
+          placeholder: "Should not be more than 450 characters",
+        },
+        {
+          name: "product_category",
+          type: "select",
+          label: "Choose Category",
+          placeholder: "Product type",
+          options: [
+            "Drilling equipment",
+            "Auxiliary equipment",
+            "Mud cleaners",
+            "Refinery",
+            "Valves",
+            "Gas analytics equipment",
+            "Heat exchangers",
+            "Centrifugal pump",
+            "Separators",
+            "Flow meters",
+            "Fuel gas conditioning",
+            "Pipe racks",
+            "Pipelines",
+            "Premix tanks",
+            "Pressure Control equipment",
+            "Oil and gas production equipment",
+            "Rotating equipment",
+            "Safety products",
+            "Sand Pump",
+            "Storage Equipment",
+            "Towers",
+            "Transportation Equipment",
+            "Piping Equipment",
+          ],
+        },
+        {
+          name: "description",
+          type: "textarea-md",
+          label: "Description",
+          placeholder: "Should not be more than 1450 characters",
+        },
+        {
+          name: "company",
+          type: "select",
+          label: "Select company",
+          placeholder: "Select company to attach product to",
+          options: companies?.map((company) => company?.company_name),
+        },
+      ],
+    },
+  ];
 
   useEffect(() => {
     document.title = "Create a new listing | Connectize";
