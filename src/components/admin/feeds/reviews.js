@@ -4,7 +4,7 @@ import LightParagraph from "../../ParagraphText";
 
 export default function Reviews() {
   return (
-    <section className="bg-white my-4 p-3 rounded-md space-y-4">
+    <section className="bg-white my-4 p-3 md:!px-2 rounded-md space-y-4">
       <h1 className="p-2 text-xl md:text-lg font-bold">Reviews</h1>
       <section className="space-y-4 divide-y">
         <Review

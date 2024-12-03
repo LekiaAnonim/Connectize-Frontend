@@ -34,19 +34,17 @@ export const days = [
   "Sunday",
 ];
 
-export const connectizeApiBaseUrl = "https://connectize.co/api/";
-
 const session = getSession();
 
 export const feedNavItems = [
   { name: "Feeds", to: "/", icon: <HomeIcon /> },
   { name: "Messages", to: "/messages", icon: <Message /> },
-  { name: "Organization", to: "/organization", icon: <UserGroup /> },
+  { name: "Services", to: "/services", icon: <UserGroup /> },
   { name: "Market", to: "/market", icon: <StoreIcon /> },
   { name: "Analysis", to: "/analysis", icon: <ChartBar /> },
   { name: "Photos", to: "/photos", icon: <PhotosIcon /> },
   { name: "Videos", to: "/videos", icon: <VideoIcon /> },
-  { name: "User profile", to: "/user-profile", icon: <VideoIcon /> },
+  // { name: "User profile", to: "/user-profile", icon: <VideoIcon /> },
   {
     name: "Profile",
     to:

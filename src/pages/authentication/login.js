@@ -7,6 +7,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import HeadingText from "../../components/HeadingText";
 import { getSession } from "../../lib/session";
 import { useAuth } from "../../context/userContext";
+import { getCurrentUser } from "../../api-services/users";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -44,8 +45,6 @@ function Login() {
     initialValues: formValues,
     validationSchema: validationSchema,
     onSubmit: async ({ email, password }, { resetForm }) => {
-      // await getTokenForConnectize({ email, password });
-
       const success = await authenticationService({
         values: {
           username: email,
@@ -65,7 +64,7 @@ function Login() {
     formik.setValues(formValues);
     document.title = "Login to connectize";
 
-    return () => setUser(session?.user || null);
+    return async () => setUser((await getCurrentUser()) || null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const fields = [

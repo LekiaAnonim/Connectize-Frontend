@@ -83,7 +83,7 @@ export const PostSlider = ({ array, minWidth = 920, children }) => {
 
 export function PostCard() {
   return (
-    <div className="p-4 bg-background rounded-md">
+    <div className="p-4 lg:!px-3 bg-background rounded-md">
       <div className="flex items-start justify-between gap-2 ">
         <h3 className="font-bold">Remote Monitoring and Control</h3>
         <button>

@@ -10,27 +10,24 @@ export const getAllUsers = async () => {
   return results;
 };
 
+export const getCurrentUser = async () => {
+  const { id } = getSession();
+  const user = await makeApiRequest({
+    url: `api/users/${id}`,
+    method: "GET",
+  });
+
+  return user;
+};
+
 export const getSuggestedUsersForCurrentUser = async () => {
-  // const allUsers = await getAllUsers();
+  const currentUser = await getCurrentUser();
 
-  const { user: currentUser } = getSession();
-
-  // const allUsersInLocation = allUsers.filter(
-  //   (user) =>
-  //     user.first_name &&
-  //     (user.city === currentUser.city ||
-  //       user.region === currentUser.region ||
-  //       user.country === currentUser.country)
-  // );
-
-  const { results: allUsers } = [];
-  //   await makeApiRequest({
-  //   url: `api/users/`,
-  //   method: "GET",
-  // });
+  const allUsers = await getAllUsers();
 
   const allUsersInLocation = allUsers.filter(
     (user) =>
+      currentUser.id !== user.id &&
       user.first_name &&
       (user.city === currentUser.city ||
         user.region === currentUser.region ||

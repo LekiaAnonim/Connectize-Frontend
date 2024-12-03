@@ -70,7 +70,7 @@ function App() {
           <Route path="bio-four" element={<CompanyBioFour />} />
 
           {/* Services */}
-          <Route path="service" element={<Services />} />
+          <Route path="services" element={<Services />} />
           <Route path="service-overview" element={<ServiceOverView />} />
           <Route path="service-admin" element={<ServiceAdmin />} />
 

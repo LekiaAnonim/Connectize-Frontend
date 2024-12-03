@@ -1,13 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getSession } from "../lib/session";
+import { getCurrentUser } from "../api-services/users";
 
 // Create the context
 const UserContext = createContext();
 
 // Create the provider component
 export const UserProvider = ({ children }) => {
-  const session = getSession();
-
   const [user, setUser] = useState(
     {
       address: null,
@@ -35,10 +33,7 @@ export const UserProvider = ({ children }) => {
       verified: false,
     } || null
   );
-  useEffect(() => {
-    setUser(session?.user || null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useEffect(() => async () => setUser((await getCurrentUser()) || null), []);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

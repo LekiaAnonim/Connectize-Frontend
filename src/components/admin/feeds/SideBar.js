@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCompanies } from "../../../api-services/companies";
 import LightParagraph from "../../ParagraphText";
 import CloseOverlay from "../../CloseOverlay";
+import { CirceTitleSubtitleSkeleton } from "../feeds/TopServiceSuggestions";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
@@ -24,7 +25,7 @@ const Sidebar = () => {
       <CloseOverlay />
       <div
         className={clsx(
-          "max-md:absolute max-md:top-0 max-md:left-0 max-md:h-screen bg-white rounded p-4 shrink-0 max-w-[350px] md:w-[240px] lg:w-[260px] 2xl:w-[280px] min-h-screen max-md:transition-all duration-500 ease-out",
+          "max-md:absolute max-md:top-0 max-md:left-0 max-md:h-screen bg-white rounded p-4 shrink-0 max-w-[350px] md:w-[240px] lg:w-[260px] 2xl:w-[280px] min-h-screen max-md:transition-all duration-500 ease-out md:sticky md:top-0 md:right-4 md:h-screen md:overflow-y-auto scrollbar-hidden",
           {
             "max-md:overflow-y-auto max-md:min-w-[300px] max-md:w-[60%] z-[20000]":
               navOpen,
@@ -39,7 +40,7 @@ const Sidebar = () => {
 
         <NavigationSection pathname={pathname} />
 
-        <Companies />
+        <Companies toggleNav={toggleNav} />
       </div>
     </>
   );
@@ -73,21 +74,30 @@ function NavigationSection({ pathname }) {
   );
 }
 
-function Companies({ companyArray }) {
-  const { data: companyArrayData } = useQuery({
+function Companies({ toggleNav }) {
+  const { data: companyArrayData, isLoading } = useQuery({
     queryKey: ["companies"],
     queryFn: getCompanies,
-    placeholderData: companyArray,
   });
   return (
     <div className="space-y-3 mb-4">
-      <h3 className="font-semibold text-xl">Companies</h3>
+      <div className="flex items-center justify-between">
+        <h3 className="font-semibold text-xl">Companies</h3>
+        <Link
+          to="/create-company"
+          className="!text-gray-400 hover:!text-custom_blue text-sm"
+          onClick={() => toggleNav(false)}
+        >
+          Create company
+        </Link>
+      </div>
       <ul className="space-y-2 divide-y divide-gray-100/80 xs:text-sm p-0">
-        {companyArrayData?.length < 1 ? (
-          <div>
-            <LightParagraph>No company yet...</LightParagraph>
-            <Link to="/create-company">Create a company</Link>
-          </div>
+        {isLoading ? (
+          Array.from({ length: 4 }, (_, index) => (
+            <CirceTitleSubtitleSkeleton key={index} />
+          ))
+        ) : companyArrayData?.length < 1 ? (
+          <LightParagraph>No company yet...</LightParagraph>
         ) : (
           companyArrayData?.map(
             (

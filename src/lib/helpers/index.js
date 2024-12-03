@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "sonner";
-import { getSession, removeSession, setSession } from "../session";
+import { getSession, setSession } from "../session";
 
 // Constants
 export const REGISTER_EMAIL_KEY = "register_email";
@@ -14,34 +14,58 @@ export function sleep(ms) {
 // Configure Axios Defaults
 export const baseURL = "http://localhost:8000";
 
+// Mutex for Refresh Token
+let isRefreshing = false;
+let refreshPromise = null;
+
 export async function refreshTokenIfNeeded() {
   const session = getSession();
 
+  if (!session?.tokens?.refresh) {
+    return undefined;
+  }
+
+  if (isRefreshing) {
+    // Wait for the ongoing refresh operation to complete
+    return refreshPromise;
+  }
+
+  isRefreshing = true;
+
   try {
-    if (session?.tokens?.refresh && session?.tokens) {
-      const { data } = await axios.post(baseURL + "/api/auth/refresh-token/", {
+    refreshPromise = (async () => {
+      const { data } = await axios.post(`${baseURL}/api/auth/refresh-token/`, {
         refresh: session.tokens.refresh,
       });
 
+      const newTokens = {
+        access: data.access,
+        refresh: data.refresh,
+      };
+
       setSession({
         ...session,
-        tokens: {
-          access: data.access,
-          refresh: data.refresh,
-        },
+        tokens: newTokens,
       });
 
-      return { Authorization: "Bearer " + session.tokens.access };
-    }
-    return undefined;
+      return "Bearer " + newTokens.access;
+    })();
+
+    const authorizationHeader = await refreshPromise;
+    return { Authorization: authorizationHeader };
   } catch (error) {
-    if (error?.response?.data?.code === "token_not_valid") {
-      removeSession();
-      toast.info("User session has been reset, kindly login again");
-      const pathname = window.location.pathname;
-      window.location.replace("/login?next=" + pathname);
-      return;
-    }
+    // if (error?.response?.data?.code === "token_not_valid") {
+    //   removeSession();
+    //   toast.info("User session has been reset, kindly login again");
+    //   const pathname = window.location.pathname;
+    //   window.location.replace("/login?next=" + pathname);
+    //   return undefined;
+    // }
+
+    throw error;
+  } finally {
+    isRefreshing = false;
+    refreshPromise = null;
   }
 }
 
@@ -66,28 +90,61 @@ export async function makeApiRequest({
       },
     });
 
+    const responseMessage = response.data.message;
+
     if (response.status >= 200 && response.status <= 204) {
       resetForm?.();
       console.log("Request succeeded:", response.data);
 
-      if (response.data.success && response.data.message)
-        toast.success(response.data.message);
+      if (response.data.success && responseMessage)
+        toast.success(responseMessage);
       return response.data;
     }
   } catch (error) {
+    const errorCode = error?.response?.data?.code;
+    if (errorCode === "token_not_valid") {
+      // Attempt to refresh token and retry the request
+      const authorization = await refreshTokenIfNeeded();
+
+      if (authorization) {
+        // Retry the original request with the new token
+        const response = await axios({
+          url: `${baseURL}/${url}`,
+          method,
+          data,
+          headers: {
+            ...authorization,
+            "Content-Type": contentType,
+          },
+        });
+
+        const responseMessage = response.data.message;
+
+        if (response.status >= 200 && response.status <= 204) {
+          resetForm?.();
+          console.log("Request succeeded after retry:", response.data);
+
+          if (response.data.success && responseMessage)
+            toast.success(responseMessage);
+          return response.data;
+        }
+      }
+    }
+    const errorResponse = error?.response?.data;
+    const apiErrorResponse = errorResponse?.errors?.[0];
     const errorMsg =
-      error?.response?.data?.errors?.[0]?.message ||
-      error?.response?.data?.errors?.[0]?.__all__?.[0] ||
-      error?.response?.data?.errors?.[0]?.username?.[0] ||
-      error?.response?.data?.errors?.[0]?.email?.[0] ||
-      error?.response?.data?.errors?.[0]?.password2?.[0] ||
-      error?.response?.data?.errors?.[0]?.gender?.[0] ||
-      error?.response?.data?.errors?.[0]?.non_field_errors?.[0] ||
-      error?.response?.data?.company_name?.[0] ||
-      error?.response?.data?.detail ||
+      apiErrorResponse?.message ||
+      apiErrorResponse?.__all__?.[0] ||
+      apiErrorResponse?.username?.[0] ||
+      apiErrorResponse?.email?.[0] ||
+      apiErrorResponse?.password2?.[0] ||
+      apiErrorResponse?.gender?.[0] ||
+      apiErrorResponse?.non_field_errors?.[0] ||
+      errorResponse?.company_name?.[0] ||
+      errorResponse?.detail ||
       "Something went wrong!";
 
     console.error("API request failed:", error);
-    toast.error(errorMsg);
+    if (errorResponse) toast.error(errorMsg);
   }
 }

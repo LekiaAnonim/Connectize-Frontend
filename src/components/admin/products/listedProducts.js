@@ -5,7 +5,7 @@ import MoreOptions from "../../MoreOptions";
 
 const ListedProducts = () => {
   return (
-    <section className="bg-white p-3 rounded-md">
+    <section className="bg-white p-3 md:!px-2 rounded-md">
       <div className="flex items-center justify-between mb-3">
         <h4 className="text-xl md:text-lg font-semibold">Listed Products</h4>
         <MoreOptions>

@@ -4,10 +4,10 @@ import NewlyListed from "../../components/admin/markets/newlyListed";
 
 export default function Market() {
   useEffect(() => {
-    document.title = `Market - Connectize`;
+    document.title = `Marketplace - Connectize`;
   }, []);
   return (
-    <section className="space-y-8 w-full">
+    <section className="space-y-16 w-full bg-background">
       <Carousel />
       <NewlyListed />
     </section>

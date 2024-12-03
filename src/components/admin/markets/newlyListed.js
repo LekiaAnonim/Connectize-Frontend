@@ -10,38 +10,37 @@ function NewlyListed() {
     queryKey: ["products"],
     queryFn: getProducts,
   });
-    console.log(products);
 
-    return (
-      <section className="space-y-4 max-md:container">
-        <div className="flex justify-between items-center">
-          <HeadingText>Newly Listed</HeadingText>
-          <Link
-            to="/products"
-            className="flex items-center gap-1 font-semibold text-sm text-gray-400 hover:text-black"
-          >
-            <span>See All</span>
-            <ChevronRight fontSize="20" />
-          </Link>
-        </div>
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-          {isLoading
-            ? Array.from({ length: 10 }, (_, index) => (
-                <ListCardSkeleton key={index} />
-              ))
-            : products?.map((product) => (
-                <ProductListCard
-                  key={product.id}
-                  id={product.id}
-                  image={product.images[0]?.image || "/images/Rectangle5.png"}
-                  title={product.title}
-                  subtitle={product.category}
-                  chatUrl={`/products/${product.id}`}
-                />
-              ))}
-        </div>
-      </section>
-    );
+  return (
+    <section className="space-y-4 max-md:container">
+      <div className="flex justify-between items-center">
+        <HeadingText>Newly Listed</HeadingText>
+        <Link
+          to="/products"
+          className="flex items-center gap-1 font-semibold text-sm text-gray-400 hover:text-black"
+        >
+          <span>See All</span>
+          <ChevronRight fontSize="20" />
+        </Link>
+      </div>
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+        {isLoading
+          ? Array.from({ length: 6 }, (_, index) => (
+              <ListCardSkeleton key={index} />
+            ))
+          : products?.map((product) => (
+              <ProductListCard
+                key={product.id}
+                id={product.id}
+                image={product.images[0]?.image || "/images/Rectangle5.png"}
+                title={product.title}
+                subtitle={product.category}
+                chatUrl={`/products/${product.id}`}
+              />
+            ))}
+      </div>
+    </section>
+  );
 }
 
 export default NewlyListed;
@@ -63,7 +62,7 @@ export const ProductListCard = ({ image, title, subtitle, chatUrl }) => {
   );
 };
 
-const ListCardSkeleton = () => {
+export const ListCardSkeleton = () => {
   return (
     <div className="rounded-lg overflow-hidden flex items-start flex-col gap-2 animate-pulse">
       {/* Skeleton for Image */}

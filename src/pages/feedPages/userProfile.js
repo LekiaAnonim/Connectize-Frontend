@@ -24,7 +24,9 @@ export default function UserProfile() {
           <ProductSidebar />
           <section className="grid grid-cols-1 xl:grid-cols-3 md:px-2 xl:px-4 gap-2 py-2">
             <Summary />
-            <Suggestions />
+            <div className="md:sticky top-2 md:max-h-screen md:overflow-y-auto scrollbar-hidden">
+              <Suggestions />
+            </div>
           </section>
         </section>
       </main>
@@ -34,7 +36,7 @@ export default function UserProfile() {
 
 function ProductSidebar() {
   return (
-    <section className="space-y-8 max-md:mb-4 w-full md:max-w-[360px] shrink-0">
+    <section className="space-y-8 max-md:mb-4 w-full md:max-w-[350px] shrink-0 md:sticky top-2 md:h-screen md:overflow-y-auto scrollbar-hidden">
       <section className="space-y-5 px-2">
         <h1 className="text-3xl md:text-2xl font-bold">Dangote oil refinery</h1>
         <div className="flex gap-2">

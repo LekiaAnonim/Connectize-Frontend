@@ -35,6 +35,17 @@ export const getProducts = async () => {
   return mergedProductWIthImage || [];
 };
 
+export const getRecommendedProducts = async () => {
+  const allProducts = await getProducts();
+
+  const featuredProducts = allProducts.filter(
+    (product) =>
+      product.featured === true ||
+      product.title.toString().toLowerCase().includes("oil")
+  );
+  return featuredProducts.splice(0, 5) || [];
+};
+
 export const createProduct = async (data, resetForm) => {
   const productCategoryData = capitalizeFirst(
     data.product_category.trim().toLowerCase()

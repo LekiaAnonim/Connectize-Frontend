@@ -89,8 +89,8 @@ export default function Chart() {
   //     ]
   //   };
   return (
-    <section className="flex max-lg:flex-col gap-4">
-      <div className="bg-white p-3 rounded-md w-full shrink-0">
+    <section className="grid lg:grid-cols-2 gap-3 mt-3">
+      <div className="bg-white p-3 rounded-md w-full">
         <div className="p-3">
           <LightParagraph>sales</LightParagraph>
           <h2 className="font-semibold text-2xl">5,987.37</h2>
@@ -99,7 +99,7 @@ export default function Chart() {
         <ReactECharts option={option} />
       </div>
 
-      <div className="bg-white p-3 rounded-md w-full shrink-0">
+      <div className="bg-white p-3 rounded-md w-full">
         <div className="p-3">
           <LightParagraph>ReachES</LightParagraph>
           <h2 className="font-semibold text-2xl">5,987.34</h2>
