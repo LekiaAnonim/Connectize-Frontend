@@ -81,7 +81,7 @@ export const PostSlider = ({ array, minWidth = 920, children }) => {
   );
 };
 
-export function PostCard() {
+export function PostCard({ isService }) {
   return (
     <div className="p-4 lg:!px-3 bg-background rounded-md">
       <div className="flex items-start justify-between gap-2 ">
@@ -90,30 +90,34 @@ export function PostCard() {
           <Bookmark />
         </button>
       </div>
-      <div className="flex mt-2">
-        {[1, 2, 3].map((_, index) => (
-          <StarFilledIcon key={index} />
-        ))}
-        {[1, 2].map((_, index) => (
-          <StarOutlinedIcon key={index} />
-        ))}
-      </div>
+      {!isService && (
+        <div className="flex mt-2">
+          {[1, 2, 3].map((_, index) => (
+            <StarFilledIcon key={index} />
+          ))}
+          {[1, 2].map((_, index) => (
+            <StarOutlinedIcon key={index} />
+          ))}
+        </div>
+      )}
 
       <p className="text-gray-500 my-3">
         This is a tweet. It can be long, or short. Depends on what you have to
         say. It can have some hashtags too.
       </p>
 
-      <ConJoinedImages
-        size={30}
-        array={[
-          "/images/passport9.PNG",
-          "/images/passport10.PNG",
-          "/images/passport11.PNG",
-          "/images/passport12.PNG",
-          "/images/iconprofile.PNG",
-        ]}
-      />
+      {!isService && (
+        <ConJoinedImages
+          size={30}
+          array={[
+            "/images/passport9.PNG",
+            "/images/passport10.PNG",
+            "/images/passport11.PNG",
+            "/images/passport12.PNG",
+            "/images/iconprofile.PNG",
+          ]}
+        />
+      )}
 
       <div className="flex items-center justify-between mt-4 py-3 border-t">
         <div className="flex gap-2 items-center">

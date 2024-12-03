@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { ChatSellerLink } from "../markets/newlyListed";
 import HeadingText from "../../HeadingText";
 import {
@@ -28,6 +28,7 @@ const NAVIGATION_BUTTONS = [
 
 function Productdetails({ product }) {
   const swiperRef = useRef(null);
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   const handleNavigation = (action) => {
     const swiperInstance = swiperRef.current;
@@ -39,59 +40,66 @@ function Productdetails({ product }) {
       return;
     }
     action === "prev" ? swiperInstance.slidePrev() : swiperInstance.slideNext();
+
+    setActiveSlideIndex(Number(swiperRef?.current?.activeIndex));
   };
   return (
     <>
       <section className="flex max-lg:flex-col items-start justify-center gap-4">
         {product?.images?.length > 0 ? (
-          <div className="w-full lg:w-1/2 ">
+          <div className="w-full lg:w-1/2">
             <Swiper
               onSwiper={(swiper) => (swiperRef.current = swiper)}
               modules={[Pagination, Autoplay]}
-              autoplay={20000}
-              loop
+              autoplay={{ delay: 40000 }}
+              pagination={{ clickable: true }}
               slidesPerView={1}
               className="!z-0"
             >
               {product.images.map((image) => (
                 <SwiperSlide
                   key={image.id}
-                  className="max-h-[400px] rounded-md overflow-hidden"
+                  className="max-h-[300px] md:max-h-[350px] rounded-md overflow-hidden relative group"
                 >
                   <img
-                    src={image.image}
-                    className="w-full"
-                    alt={product.title || "product"}
+                    src={image?.image}
+                    className="size-full"
+                    alt={image?.caption || product?.title || "product"}
                   />
+                  <div className="w-full absolute bottom-0 px-4 py-2 xs:opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-white max-xs:hidden">
+                    <small>{image?.caption}</small>
+                  </div>
                 </SwiperSlide>
               ))}
             </Swiper>
-            <div className="flex gap-4 items-center justify-between">
-              <div className="flex text-xs gap-1 items-center">
-                <span>{swiperRef?.current?.activeIndex + 1}</span>
-                <span className="text-gray-300">/</span>
-                <strong>{product?.images?.length}</strong>
+            {product?.images?.length > 1 && (
+              <div className="flex gap-4 items-center justify-between">
+                <div className="flex text-xs gap-1 items-center">
+                  <span>{activeSlideIndex + 1}</span>
+                  <span className="text-gray-300">/</span>
+                  <strong>{product?.images?.length}</strong>
+                </div>
+                <div className="flex items-center">
+                  {NAVIGATION_BUTTONS.map((button) => (
+                    <Button
+                      key={button.id}
+                      onClick={() => handleNavigation(button.action)}
+                      disabled={product?.images?.length === 1}
+                      className="!bg-transparent hover:!text-custom_blue !text-gray-600 first:flex-row-reverse active:scale-95 !text-sm"
+                    >
+                      <span>{button.text}</span>
+                      {button.icon}
+                    </Button>
+                  ))}
+                </div>
               </div>
-              <div className="flex items-center">
-                {NAVIGATION_BUTTONS.map((button) => (
-                  <Button
-                    key={button.id}
-                    onClick={() => handleNavigation(button.action)}
-                    disabled={product?.images?.length === 1}
-                    className="!bg-transparent hover:!text-custom_blue !text-gray-600 first:flex-row-reverse active:scale-95 !text-sm"
-                  >
-                    <span>{button.text}</span>
-                    {button.icon}
-                  </Button>
-                ))}
-              </div>
-            </div>
+            )}
           </div>
         ) : (
           <img
             src={"/images/Rectangle3.png"}
-            className="w-full lg:w-1/2 shrink-0"
-            alt={product.title || "product"}
+            className="w-full max-h-[300px] shrink-0"
+            alt={product?.title || "product"}
           />
         )}
 

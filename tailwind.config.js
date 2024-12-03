@@ -31,6 +31,7 @@ module.exports = {
         dark: "#242424",
         gold: " #F1C644",
         custom_yellow: "#FFFAB7",
+        services_yellow: "#f0d77f",
         custom_grey: " #828282",
         light_grey: " #e5e5e5",
         mid_grey: "#373737",

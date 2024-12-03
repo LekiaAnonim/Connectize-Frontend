@@ -69,8 +69,8 @@ const Navbar = () => {
               />
               <NavItemIcon
                 IconName={UserGroup}
-                to="/organization"
-                tip="Organization"
+                to="/services"
+                tip="Services"
                 className="max-md:hidden"
               />
               <NavItemIcon
@@ -102,8 +102,8 @@ const Navbar = () => {
 
                 <NavItemIcon
                   IconName={UserGroup}
-                  to="/organization"
-                  text="Organization"
+                  to="/services"
+                  text="Services"
                   className="pt-3 md:hidden"
                 />
 

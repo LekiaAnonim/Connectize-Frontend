@@ -28,7 +28,7 @@ function Carousel() {
       <section className="space-y-4">
         <HeadingText>Recommended</HeadingText>
         <PostSlider>
-          {recommendedProducts.map((product, index) => (
+          {recommendedProducts?.map((product, index) => (
             <SwiperSlide key={index}>
               <Card product={product} />
             </SwiperSlide>
@@ -52,7 +52,7 @@ export const Card = ({ product }) => {
         <h3 className="max-w-[60%]">
           {product.title || "Efficiency Unlashed: Mid-Tier Blend"}
         </h3>
-        <ChatSellerLink text="Visit store" to={`/product/${product.id}`} />
+        <ChatSellerLink text="Visit store" to={`/products/${product.id}`} />
       </div>
     </div>
   );

@@ -22,5 +22,5 @@ export const getServiceCategories = async () => {
     method: "GET",
   });
 
-  return results;
+  return results || [];
 };

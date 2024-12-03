@@ -10,7 +10,7 @@ function CreatePost() {
         className="w-full pb-2 border-b border-gray-300 bg-transparent focus:outline-0 text-xl"
       />
 
-      <div className="mt-4 flex max-xs:flex-col md:flex-col lg:flex-row xs:items-center justify-between max-xs:gap-4 md:gap-4 lg:gap-1">
+      <div className="mt-4 flex max-sm:flex-col md:flex-col lg:flex-row sm:items-center justify-between max-sm:gap-4 md:gap-4 lg:gap-1">
         <div className="flex items-center gap-2">
           <MaskedIcon Icon={GalleryIcon} />
           <MaskedIcon Icon={GifIcon} />
@@ -26,7 +26,7 @@ function CreatePost() {
 }
 
 const MaskedIcon = ({ Icon }) => (
-  <button className="bg-gray-200/70 py-2 px-4 rounded-sm outline-0 max-xs:w-full grid place-items-center">
+  <button className="bg-gray-200/50 py-2 px-4 rounded-sm outline-0 max-sm:w-full grid place-items-center">
     <Icon />
   </button>
 );

@@ -69,17 +69,16 @@ function App() {
           <Route path="bio-three" element={<CompanyBioThree />} />
           <Route path="bio-four" element={<CompanyBioFour />} />
 
-          {/* Services */}
-          <Route path="services" element={<Services />} />
-          <Route path="service-overview" element={<ServiceOverView />} />
-          <Route path="service-admin" element={<ServiceAdmin />} />
-
           {/* Market place */}
           <Route element={<MarketPlaceLayout />}>
             <Route path="analysis" element={<Analysis />} />
             <Route path="market" element={<Market />} />
             <Route path="products/:id" element={<Product />} />
             <Route path="listing" element={<Listing />} />
+            {/* Services */}
+            <Route path="services" element={<Services />} />
+            <Route path="service-overview" element={<ServiceOverView />} />
+            <Route path="service-admin" element={<ServiceAdmin />} />
           </Route>
 
           {/* User */}
