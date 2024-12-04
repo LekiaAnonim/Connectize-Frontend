@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import Productdetails from "../../components/admin/products/productdetails";
 import NewProducts from "../../components/admin/products/newProducts";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getProducts } from "../../api-services/products";
 import { useQuery } from "@tanstack/react-query";
+import NoPage from "../../components/NoPage";
 
 export default function Product() {
   const { id: productId } = useParams();
@@ -20,7 +21,11 @@ export default function Product() {
     document.title = `${product?.title || ""} | Products - Connectize`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  if (!product) return <Navigate to="/market" />;
+
+  if (!product) {
+    return <NoPage />;
+  }
+  // if (!product) return <Navigate to="/market" />;
   return (
     <div className="space-y-12 max-md:container">
       <Productdetails product={product} />

@@ -3,7 +3,7 @@ import React from "react";
 import { Heart, StarFilledIcon, StarOutlinedIcon } from "../../../icon";
 import MoreOptions from "../../MoreOptions";
 
-const ListedProducts = () => {
+const ListedProducts = ({ company }) => {
   return (
     <section className="bg-white p-3 md:!px-2 rounded-md">
       <div className="flex items-center justify-between mb-3">
@@ -13,9 +13,15 @@ const ListedProducts = () => {
         </MoreOptions>
       </div>
       <section className="space-y-4">
-        <ListedProduct />
-        <ListedProduct />
-        <ListedProduct />
+        {company.products.map((product) => {
+          return (
+            <ListedProduct
+              key={product.id}
+              title={product.title}
+              likes={product.likes.length || "0"}
+            />
+          );
+        })}
       </section>
     </section>
   );
@@ -54,9 +60,9 @@ function ListedProduct({ src, title, likes }) {
         </div>
 
         <div className="absolute bottom-3 right-4 flex gap-3">
-          <div className="flex items-end gap-0.5">
+          <div className="flex items-center gap-0.5">
             <Heart />
-            <small className="text-[.55rem] font-bold">{likes || "178k"}</small>
+            <small className="text-[.6rem] font-bold">{likes || "178k"}</small>
           </div>
           <ShareAltOutlined />
         </div>

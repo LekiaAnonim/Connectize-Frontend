@@ -5,21 +5,12 @@ import HeadingText from "../../HeadingText";
 import { ProductListCard } from "../markets/newlyListed";
 
 export default function NewProducts() {
-  const { data: products, isLoading } = useQuery({
+  const { data: products } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
   });
 
-  let ProductCard = ({ image, gold, reserved }) => {
-    return (
-      <div>
-        <img src={image} className="w-100" alt="#" />
-        <p>
-          {gold} <br /> {reserved}
-        </p>
-      </div>
-    );
-  };
+
   return (
     <section className="space-y-4">
       <HeadingText>You may also like</HeadingText>

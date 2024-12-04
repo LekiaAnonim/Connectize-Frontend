@@ -87,9 +87,28 @@ function NewlyListed() {
 
 export default NewlyListed;
 
-export const ProductListCard = ({ image, title, subtitle, chatUrl }) => (
-  <div className="rounded-lg overflow-hidden flex items-start flex-col gap-2">
-    <img src={image} className="w-full h-[300px]" alt={title || "Product"} />
+export const ProductListCard = ({
+  image,
+  title,
+  subtitle,
+  chatUrl,
+  isSummary = false,
+}) => (
+  <div
+    className={clsx(
+      "rounded-lg overflow-hidden flex items-start flex-col gap-2",
+      {
+        "bg-white p-2": isSummary,
+      }
+    )}
+  >
+    <img
+      src={image || "/images/Rectangle5.png"}
+      className={clsx("w-full h-[300px] rounded-lg", {
+        "md:h-[200px]": isSummary,
+      })}
+      alt={title || "Product"}
+    />
     <div className="flex sm:flex-col items-start justify-between gap-4 sm:!gap-2 w-full">
       <div>
         <h4 className="font-bold text-xl sm:text-lg capitalize line-clamp-1">
@@ -97,7 +116,7 @@ export const ProductListCard = ({ image, title, subtitle, chatUrl }) => (
         </h4>
         <span className="font-semibold text-lg">{subtitle}</span>
       </div>
-      <ChatSellerLink to={chatUrl} />
+      {!isSummary && <ChatSellerLink to={chatUrl} />}
     </div>
   </div>
 );

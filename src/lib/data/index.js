@@ -7,8 +7,8 @@ import {
   UserGroup,
   VideoIcon,
 } from "../../icon";
-import { PersonIcon } from "@radix-ui/react-icons";
-import { getSession } from "../session";
+// import { PersonIcon } from "@radix-ui/react-icons";
+// import { getSession } from "../session";
 
 export const months = [
   "January",
@@ -34,27 +34,27 @@ export const days = [
   "Sunday",
 ];
 
-const session = getSession();
+// const session = getSession();
 
 export const feedNavItems = [
   { name: "Feeds", to: "/", icon: <HomeIcon /> },
-  { name: "Messages", to: "/messages", icon: <Message /> },
+  { name: "Messages", to: "/chat", icon: <Message /> },
   { name: "Services", to: "/services", icon: <UserGroup /> },
   { name: "Market", to: "/market", icon: <StoreIcon /> },
   { name: "Analysis", to: "/analysis", icon: <ChartBar /> },
   { name: "Photos", to: "/photos", icon: <PhotosIcon /> },
   { name: "Videos", to: "/videos", icon: <VideoIcon /> },
   // { name: "User profile", to: "/user-profile", icon: <VideoIcon /> },
-  {
-    name: "Profile",
-    to:
-      session && !session?.is_first_time_user
-        ? "/user-profile"
-        : session
-        ? "/profile"
-        : "/login",
-    icon: <PersonIcon />,
-  },
+  // {
+  //   name: "Profile",
+  //   to:
+  //     session && !session?.is_first_time_user
+  //       ? "/user-profile"
+  //       : session
+  //       ? "/profile"
+  //       : "/login",
+  //   icon: <PersonIcon />,
+  // },
 ];
 
 // personal information

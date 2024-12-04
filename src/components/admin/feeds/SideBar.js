@@ -104,20 +104,25 @@ function Companies({ toggleNav }) {
               { company_name: company, logo: src, tag_line: description },
               index
             ) => (
-              <li key={index} className="flex items-center gap-2 pt-2">
-                <img
-                  src={src || "/images/logo.png"}
-                  alt={company}
-                  className="size-10 rounded-full"
-                />
-                <div className="">
-                  <h1 className="text-base font-semibold leading-normal m-0 capitalize">
-                    {company}
-                  </h1>
-                  <span className="text-gray-500 text-sm line-clamp-1">
-                    {description}
-                  </span>
-                </div>
+              <li key={index}>
+                <Link
+                  to={`/${company.toLowerCase().replaceAll(" ", "_")}`}
+                  className="flex items-center gap-2 pt-2"
+                >
+                  <img
+                    src={src || "/images/logo.png"}
+                    alt={company}
+                    className="size-10 rounded-full"
+                  />
+                  <div className="">
+                    <h1 className="text-base font-semibold leading-normal m-0 capitalize">
+                      {company}
+                    </h1>
+                    <span className="text-gray-400 text-xs line-clamp-1">
+                      {description || "No tag line..."}
+                    </span>
+                  </div>
+                </Link>
               </li>
             )
           )

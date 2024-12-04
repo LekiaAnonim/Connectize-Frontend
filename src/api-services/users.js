@@ -13,6 +13,7 @@ export const getAllUsers = async () => {
 export const getCurrentUser = async () => {
   const { id } = getSession();
   if (!id) return null;
+  
   const user = await makeApiRequest({
     url: `api/users/${id}`,
     method: "GET",

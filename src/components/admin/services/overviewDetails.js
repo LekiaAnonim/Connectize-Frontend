@@ -1,55 +1,59 @@
-import React from 'react'
-import { Bookmark, Location } from '../../../icon'
+import React, { useEffect } from "react";
+import { Location } from "../../../icon";
+import { getServices } from "../../../api-services/services";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import NoPage from "../../NoPage";
+import { BookMarkButton } from "../feeds/DiscoverPostTabs";
+import LightParagraph from "../../ParagraphText";
+import { MarkdownComponent } from "../../MarkDownComponent";
 
 export default function OverviewDetails() {
-  return (
-    <div className='bg-white p-4 rounded pb-5'>
-        <div className='d-flex align-items-center justify-content-around'>
-            <img src='images/bmwprofilepicture.png' alt='#'/>
-            <div>
-                <h5> Senior Process Engineer - Oil Refinery</h5>
-                <div className='my-2'>
-                    <button className='rounded-pill px-2 border border-none'>Engineering</button>
-                    <button className='rounded-pill mx-2 px-2 border border-none'>Chemical Engineering</button>
-                    <button className='rounded-pill px-2 border border-none'>Industrial Engr</button>
-                </div>
-                <div className='d-flex'>
-                    <div className='me-2'><Location/></div>
-                    <p> PetroEnergy Corp - Houston, TXtv</p>
-                </div>
-            </div>
-            <div style={{marginTop:"-10%"}}><Bookmark/></div>
-        </div>
-        <div className='mt-5'>
-            <div>
-                <h5>Qualifications</h5>
-                <ul>
-                    <li>Bachelor's degree in Chemical Engineering or related field.</li>
-                    <li>Minimum of 7 years of experience in process engineering within the oil and gas industry.</li>
-                    <li>Expertise in process simulation tools and software.</li>
-                    <li>Proven track record in process optimization and troubleshooting.</li>
-                    <li>In-depth knowledge of refinery operations, equipment, and safety protocols.</li>
-                    <li>Strong communication and leadership skills.</li>
-                </ul>
-            </div>
-            <div>
-                <h5>Responsibility</h5>
-                <ul>
-                    <li>Analyze and optimize refinery processes to improve efficiency and reduce environmental impact.</li>
-                    <li>Collaborate with cross-functional teams to implement process improvements.</li>
-                    <li>Conduct process simulations and modeling to identify bottlenecks and enhance performance.</li>
-                    <li>Provide technical support and troubleshooting for refinery operations.</li>
-                    <li>Ensure compliance with safety regulations and industry standards.</li>
-                </ul>
-            </div>
-            <div>
-                <p>
-                    Join PetroEnergy Corp and be part of a team committed to driving innovation and sustainability in the energy sector. Apply now to contribute to the future of our dynamic and growing company.
-                    To apply, please submit your resume and cover letter to careers@petroenergy.com with the subject line "Senior Process Engineer Application - [Your Full Name]." Applications will be accepted until [closing date].
-                </p>
-            </div>
-        </div>
-    </div>
-  )
-}
+  const { data: services } = useQuery({
+    queryKey: ["services"],
+    queryFn: getServices,
+  });
 
+  const params = useParams();
+
+  const service = services?.find((item) => item.id.toString() === params.id);
+
+  useEffect(() => {
+    document.title = `${service?.title || ""} | Services - Connectize`;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!service) return <NoPage />;
+
+  return (
+    <section className="bg-white p-4 rounded pb-5 col-span-3 w-full min-h-screen space-y-4">
+      <div className="flex items-start gap-1 lg:gap-2.5">
+        <img
+          src={service.companyInfo.logo || "/images/logo.png"}
+          alt={service.company}
+          className="size-16"
+        />
+        <div className="w-full flex-1 flex items-start justify-between">
+          <div className="capitalize space-y-1">
+            <h2 className="font-bold text-lg md:text-xl">
+              {service.title} - {service.category}
+            </h2>
+
+            <div className="flex items-center gap-1">
+              <Location className="w-5 shrink-0" />
+              <p className="text-gray-500 text-sm">
+                {service.company} - {service.companyInfo.state},{" "}
+                {service.companyInfo.country}
+              </p>
+            </div>
+          </div>
+          <BookMarkButton />
+        </div>
+      </div>
+      <div className="space-y-1">
+        <MarkdownComponent markdownContent={service.description} />
+      </div>
+      <LightParagraph>{service.sub_title}</LightParagraph>
+    </section>
+  );
+}

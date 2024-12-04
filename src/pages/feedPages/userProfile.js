@@ -1,29 +1,46 @@
 import React, { useEffect } from "react";
-import { useAuth } from "../../context/userContext";
 import Reviews from "../../components/admin/feeds/reviews";
 import { Suggestions } from "../../components/admin/feeds/TopServiceSuggestions";
 import Summary from "../../components/admin/feeds/summary";
 import ListedProducts from "../../components/admin/products/listedProducts";
 import Header from "../../components/userProfile/header";
 import Navbar from "../../components/userProfile/Navbar";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { getCompanies } from "../../api-services/companies";
+import { capitalizeFirst } from "../../lib/utils";
+import NoPage from "../../components/NoPage";
 
 export default function UserProfile() {
-  const { user } = useAuth();
+  const { company: companyName } = useParams();
+
+  const { data: companies } = useQuery({
+    queryKey: ["companies"],
+    queryFn: getCompanies,
+  });
+
+  const company =
+    companies?.find(
+      (item) =>
+        item.company_name.toLowerCase().replaceAll(" ", "_") === companyName
+    ) || null;
 
   useEffect(() => {
-    document.title = `${user?.first_name} ${user?.last_name} | User Profile - Connectize`;
+    document.title = `${company?.company_name || ""} | Companies - Connectize`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (!company) return <NoPage />;
   return (
     <>
-      <Navbar />
+      <Navbar isUserProfile />
       <main className="bg-background">
-        <Header />
+        <Header company={company} />
 
         <section className="mt-16 max-md:container flex flex-col items-start md:flex-row p-3 gap-2">
-          <ProductSidebar />
+          <ProductSidebar company={company} />
           <section className="grid grid-cols-1 xl:grid-cols-3 md:px-2 xl:px-4 gap-2 py-2">
-            <Summary />
+            <Summary company={company} />
             <div className="md:sticky top-2 md:max-h-screen md:overflow-y-auto scrollbar-hidden">
               <Suggestions />
             </div>
@@ -34,18 +51,20 @@ export default function UserProfile() {
   );
 }
 
-function ProductSidebar() {
+function ProductSidebar({ company }) {
   return (
     <section className="space-y-8 max-md:mb-4 w-full md:max-w-[350px] shrink-0 md:sticky top-2 md:h-screen md:overflow-y-auto scrollbar-hidden">
       <section className="space-y-5 px-2">
-        <h1 className="text-3xl md:text-2xl font-bold">Dangote oil refinery</h1>
+        <h1 className="text-3xl md:text-2xl font-bold">
+          {capitalizeFirst(company.company_name) || "Dangote oil refinery"}
+        </h1>
         <div className="flex gap-2">
           <StatsText text="25k/ post" />
           <StatsText text="1M/ followers" />
           <StatsText text="157/ Reviews" />
         </div>
       </section>
-      <ListedProducts />
+      <ListedProducts company={company} />
       <Reviews />
     </section>
   );

@@ -7,8 +7,10 @@ import HeadingText from "../../HeadingText";
 import LightParagraph from "../../ParagraphText";
 import CreatePost from "./CreatePost";
 import Reviews from "./reviews";
+import { PostCard } from "./DiscoverPostTabs";
+import { ProductListCard } from "../markets/newlyListed";
 
-function Summary() {
+function Summary({ company }) {
   return (
     <section className="space-y-8 w-full md:col-span-2">
       <div className="border-b pb-3">
@@ -24,12 +26,12 @@ function Summary() {
         </LightParagraph>
       </div>
 
-      <SummaryTabs />
+      <SummaryTabs company={company} />
     </section>
   );
 }
 
-function SummaryTabs() {
+function SummaryTabs({ company }) {
   const tabsStyle = "w-full rounded-full font-medium md:!text-xs lg:!text-sm";
   const selectedStyle = { color: "black", bg: "#F1C644" };
   return (
@@ -59,10 +61,34 @@ function SummaryTabs() {
           </section>
         </TabPanel>
         <TabPanel className="p-0 !w-full">
-          <div>Services tab</div>
+          <div className="bg-white rounded-md p-2 grid gap-x-3 gap-y-4">
+            {company.services?.map((service, index) => (
+              <PostCard
+                key={index}
+                companyName={service.company}
+                verified={service?.companyInfo?.verified}
+                logo={service?.companyInfo?.logo}
+                title={service.title}
+                summary={service.sub_title}
+                url={`/services/${service.id}`}
+                isService
+              />
+            ))}
+          </div>
         </TabPanel>
         <TabPanel className="p-0 !w-full">
-          <div>Products tab</div>
+          <div className="p-2 grid gap-x-3 gap-y-4 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3">
+            {company.products?.map((product, index) => (
+              <ProductListCard
+                key={index}
+                title={product.title}
+                subtitle={product.company}
+                // image={product.}
+                // url={`/products/${product.id}`}
+                isSummary
+              />
+            ))}
+          </div>
         </TabPanel>
         <TabPanel className="p-0 !w-full">
           <Reviews />

@@ -7,6 +7,7 @@ import { createService } from "../../../api-services/services";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCompanies } from "../../../api-services/companies";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   //   image_1: Yup.mixed()
@@ -47,6 +48,8 @@ export default function ServiceAdminMain() {
     queryFn: getCompanies,
   });
 
+  const navigate = useNavigate();
+
   const initialValues = {
     service_title: localStorage.getItem("service_title") || "",
     service_category: localStorage.getItem("service_category") || "",
@@ -63,6 +66,8 @@ export default function ServiceAdminMain() {
         for (let value in values) {
           localStorage.removeItem(value);
         }
+
+        navigate("/services");
         return;
       }
     },

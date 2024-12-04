@@ -15,16 +15,15 @@ import {
 } from "../../icon";
 import FeedSearch from "../../components/admin/feeds/FeedSearch";
 import { NotificationPopOver } from "../../components/notifications";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { SearchPopOver } from "../SearchPopOver";
 import { useNav } from "../../context/navContext";
 
 import { Menu } from "@mui/icons-material";
 
-const Navbar = () => {
+const Navbar = ({ isUserProfile }) => {
   const { toggleNav } = useNav();
-  const { pathname } = useLocation();
   const weirdFlex = "flex w-full gap-4 md:!gap-6 items-center justify-between";
   const groupFlex = "flex w-full gap-4 md:!gap-3 xl:!gap-6 items-center";
   return (
@@ -118,8 +117,7 @@ const Navbar = () => {
 
             <div className="flex items-center gap-3 shrink-0">
               <ProfilePicture />
-              {(pathname !== "/user-profile" ||
-                pathname !== "/admin-profile") && (
+              {!isUserProfile && (
                 <button onClick={() => toggleNav(true)} className="md:hidden">
                   <Menu />
                 </button>
@@ -138,13 +136,13 @@ function ProfilePicture() {
   const { user } = useAuth();
 
   return (
-    <Link to="/user-profile">
-      <img
-        src={user?.avatar || "/images/iconprofile.PNG"}
-        alt={user?.first_name + " " + user?.last_name || "User"}
-        className="size-[35px] rounded-full "
-      />
-    </Link>
+    // <Link to="/user-profile">
+    <img
+      src={user?.avatar || "/images/iconprofile.PNG"}
+      alt={user?.first_name + " " + user?.last_name || "User"}
+      className="size-[35px] rounded-full "
+    />
+    // </Link>
   );
 }
 

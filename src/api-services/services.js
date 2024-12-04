@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
 import { capitalizeFirst } from "../lib/utils";
 import { getSession } from "../lib/session";
+import { getCompanies } from "./companies";
 
 // {
 //     "title": "",
@@ -14,12 +15,24 @@ import { getSession } from "../lib/session";
 // }
 
 export const getServices = async () => {
-  const { results } = await makeApiRequest({
+  const { results: services } = await makeApiRequest({
     url: `api/services/`,
     method: "GET",
   });
 
-  return results;
+  const companies = await getCompanies();
+
+  const newServices = services.map((service) => {
+    const company = companies.find(
+      (company) => company.company_name === service.company
+    );
+    return {
+      ...service,
+      companyInfo: company,
+    };
+  });
+
+  return newServices;
 };
 
 export const createService = async (data, resetForm) => {

@@ -96,8 +96,7 @@ function MarketPlaceNavigation() {
               className={clsx(
                 "flex gap-2 items-center transition-colors duration-300 p-2 rounded hover:!text-mid_grey",
                 {
-                  "!text-gold !bg-mid_grey pointer-events-none":
-                    pathname.startsWith(item.to),
+                  "!text-gold !bg-mid_grey": pathname.startsWith(item.to),
                   "!text-gray-500": !pathname.startsWith(item.to),
                 }
               )}
@@ -142,18 +141,16 @@ function ProductCategory({ pathname }) {
           categories?.map((item, index) => (
             <Link
               to={
-                (pathname.startsWith("/services")
-                  ? "/add-service "
-                  : "/market ") +
+                (pathname.startsWith("/services") ? "/services" : "/market ") +
                 "?category=" +
                 item.name.toLowerCase()
               }
               key={index}
               onClick={() => toggleNav(false)}
-              className="flex gap-2 p-2"
+              className="flex items-center gap-2 p-2"
             >
-              <span className="size-5 bg-dark rounded-full" />
-              <span>{item.name}</span>
+              <span className="size-5 bg-dark rounded-full shrink-0" />
+              <span className="line-clamp-2">{item.name}</span>
             </Link>
           ))
         )}

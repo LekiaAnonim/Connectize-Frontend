@@ -52,8 +52,6 @@ export const createProduct = async (data, resetForm) => {
     data.product_category.trim().toLowerCase()
   );
 
-  console.log(data);
-
   const { user } = getSession();
 
   const toastId = toast.info("Enlisting product...");

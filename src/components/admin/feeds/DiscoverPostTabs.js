@@ -81,14 +81,23 @@ export const PostSlider = ({ array, minWidth = 920, children }) => {
   );
 };
 
-export function PostCard({ isService }) {
+export function PostCard({
+  isService,
+  title,
+  summary,
+  companyName,
+  id,
+  logo,
+  verified,
+  url,
+}) {
   return (
-    <div className="p-4 lg:!px-3 bg-background rounded-md">
+    <div className="p-4 lg:!px-3 bg-background rounded-md flex flex-col">
       <div className="flex items-start justify-between gap-2 ">
-        <h3 className="font-bold">Remote Monitoring and Control</h3>
-        <button>
-          <Bookmark />
-        </button>
+        <h3 className="font-bold capitalize">
+          {title || "Remote Monitoring and Control"}
+        </h3>
+        <BookMarkButton />
       </div>
       {!isService && (
         <div className="flex mt-2">
@@ -101,9 +110,9 @@ export function PostCard({ isService }) {
         </div>
       )}
 
-      <p className="text-gray-500 my-3">
-        This is a tweet. It can be long, or short. Depends on what you have to
-        say. It can have some hashtags too.
+      <p className="text-gray-500 my-3 flex-1">
+        {summary ||
+          "This is a tweet. It can be long, or short. Depends on what you have to say. It can have some hashtags too."}
       </p>
 
       {!isService && (
@@ -119,24 +128,69 @@ export function PostCard({ isService }) {
         />
       )}
 
-      <div className="flex items-center justify-between mt-4 py-3 border-t">
+      <div className="flex items-center justify-between mt-4 pt-3 border-t">
         <div className="flex gap-2 items-center">
           <div className="relative">
             <img
-              src="/images/bmw.PNG"
+              src={logo || "/images/logo.png"}
               alt="bmw"
               className="rounded-full"
               width={50}
             />
-            <VerifiedIcon className="absolute bottom-0 right-0" />
+            {verified && <VerifiedIcon className="absolute bottom-0 right-0" />}
           </div>
-          <h4 className="text-sm font-bold">West Land Oil</h4>
+          <h4 className="text-sm font-bold capitalize line-clamp-1">
+            {companyName || "West Land Oil"}
+          </h4>
         </div>
 
-        <Link to="/" className="bg-gold rounded-full py-2 px-4 text-sm">
+        <Link
+          to={url || ""}
+          replace
+          className="bg-gold hover:opacity-60 rounded-full py-2 px-4 text-sm"
+        >
           View
         </Link>
       </div>
     </div>
   );
 }
+
+export const PostCardSkeleton = () => (
+  <div class="p-3 lg:px-3 rounded-md bg-background flex flex-col animate-pulse">
+    {/* <!-- Title and Bookmark --> */}
+    <div class="flex items-start justify-between gap-2">
+      <div class="w-2/3 h-5 bg-gray-200 rounded-md"></div>
+      <div class="w-6 h-6 bg-gray-200 rounded"></div>
+    </div>
+
+    {/* <!-- Summary --> */}
+    <div class="my-4 space-y-3">
+      <div class="h-3 bg-gray-200 rounded"></div>
+      <div class="h-3 bg-gray-200 rounded w-5/6"></div>
+      <div class="h-3 bg-gray-200 rounded w-4/6"></div>
+    </div>
+
+    {/* <!-- Footer --> */}
+    <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
+      {/* <!-- Company Logo and Name --> */}
+      <div class="flex gap-2 items-center">
+        <div class="relative">
+          <div class="w-12 h-12 bg-gray-200 rounded-full"></div>
+        </div>
+        <div class="w-28 h-3 bg-gray-200 rounded"></div>
+      </div>
+
+      {/* <!-- View Button --> */}
+      <div class="bg-gray-200 rounded-full py-2 px-10 h-8"></div>
+    </div>
+  </div>
+);
+
+export const BookMarkButton = () => {
+  return (
+    <button>
+      <Bookmark />
+    </button>
+  );
+};

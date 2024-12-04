@@ -80,9 +80,9 @@ function App() {
             <Route path="services/add" element={<ServiceAdmin />} />
           </Route>
 
-          {/* User */}
-          <Route path="user-profile" element={<UserProfile />} />
-          <Route path="admin-profile" element={<AdminProfile />} />
+          {/* Company */}
+          <Route path=":company" element={<UserProfile />} />
+          <Route path="admin/:company" element={<AdminProfile />} />
 
           {/* Company */}
           <Route element={<CompanyLayout />}>

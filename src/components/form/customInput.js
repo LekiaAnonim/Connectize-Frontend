@@ -148,9 +148,9 @@ export const CustomTextArea = ({ formik, name, placeholder }) => {
                 localStorage.setItem(name, value);
                 formik.setFieldValue(name, value);
               }}
-              onBlur={(value) => {
-                if (value.index < 1) formik.setFieldValue(name, "");
-              }}
+              // onBlur={(value) => {
+              //   if (value.index < 1) formik.setFieldValue(name, "");
+              // }}
               theme="snow"
               placeholder={placeholder}
             />
