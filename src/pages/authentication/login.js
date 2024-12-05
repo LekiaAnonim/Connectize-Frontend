@@ -5,7 +5,6 @@ import { useFormik } from "formik";
 import { authenticationService } from "../../api-services/authentication";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import HeadingText from "../../components/HeadingText";
-import { getSession } from "../../lib/session";
 import { useAuth } from "../../context/userContext";
 import { getCurrentUser } from "../../api-services/users";
 
@@ -23,15 +22,14 @@ const validationSchema = Yup.object().shape({
 
 function Login() {
   const navigate = useNavigate();
-  const { setUser } = useAuth();
-  const session = getSession();
+  const { user, setUser } = useAuth();
   const [searchParams] = useSearchParams();
 
   const nextParam = searchParams.get("next");
 
   const navigateTo = searchParams.has("next")
     ? nextParam
-    : session?.user?.isFirstTimeUser
+    : user?.isFirstTimeUser
     ? "/profile"
     : "/";
 

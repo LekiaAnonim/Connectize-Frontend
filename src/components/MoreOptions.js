@@ -4,6 +4,7 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverArrow,
+  Button,
 } from "@chakra-ui/react";
 import { MoreHoriz } from "@mui/icons-material";
 import clsx from "clsx";
@@ -12,12 +13,12 @@ const MoreOptions = ({ children, className, triggerStyle, isOpen }) => {
   return (
     <Popover isOpen={isOpen}>
       <PopoverTrigger>
-        <button className={clsx("", triggerStyle)}>
+        <Button className={clsx("bg-transparent", triggerStyle)}>
           <MoreHoriz />
-        </button>
+        </Button>
       </PopoverTrigger>
 
-      <PopoverContent className={clsx("!p-3 space-y-2 !mb-1", className)}>
+      <PopoverContent className={clsx("!p-3 space-y-2 !mb-1 !mx-2", className)}>
         <PopoverArrow />
         {children}
       </PopoverContent>

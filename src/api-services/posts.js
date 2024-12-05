@@ -1,5 +1,4 @@
 import { makeApiRequest } from "../lib/helpers";
-import { getCompanies } from "./companies";
 
 export const getPosts = async () => {
   const { results: posts } = await makeApiRequest({
@@ -10,17 +9,16 @@ export const getPosts = async () => {
   return posts;
 };
 
-export const createPost = async (body) => {
-  const companies = await getCompanies();
-
+export const createPost = async (body, companyId) => {
   const post = await makeApiRequest({
     url: `api/posts/`,
     method: "POST",
-    data: { body, company: companies[0].id },
+    data: { body, company: companyId },
   });
 
   return post;
 };
+
 export const getLikes = async () => {
   const { results } = await makeApiRequest({
     url: `api/likes/`,
@@ -29,6 +27,25 @@ export const getLikes = async () => {
 
   return results;
 };
+
+export const likePost = async (id) => {
+  const result = await makeApiRequest({
+    url: `api/posts/${id}/like/`,
+    method: "POST",
+  });
+
+  return result;
+};
+
+export const commentOnPost = async (id) => {
+  const result = await makeApiRequest({
+    url: `api/posts/${id}/like/`,
+    method: "POST",
+  });
+
+  return result;
+};
+
 export const getComments = async () => {
   const { results } = await makeApiRequest({
     url: `api/comments/`,
@@ -37,6 +54,7 @@ export const getComments = async () => {
 
   return results;
 };
+
 export const getFollows = async () => {
   const { results } = await makeApiRequest({
     url: `api/follows/`,

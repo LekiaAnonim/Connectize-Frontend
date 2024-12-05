@@ -1,5 +1,4 @@
 import { makeApiRequest } from "../lib/helpers";
-import { getSession } from "../lib/session";
 
 export const getAllUsers = async () => {
   const { results } = await makeApiRequest({
@@ -11,15 +10,12 @@ export const getAllUsers = async () => {
 };
 
 export const getCurrentUser = async () => {
-  const { id } = getSession();
-  if (!id) return null;
-  
-  const user = await makeApiRequest({
-    url: `api/users/${id}`,
+  const currentUser = await makeApiRequest({
+    url: `api/current-user/`,
     method: "GET",
   });
 
-  return user;
+  return currentUser;
 };
 
 export const getSuggestedUsersForCurrentUser = async () => {

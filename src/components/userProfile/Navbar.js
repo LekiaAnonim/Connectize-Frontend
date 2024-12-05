@@ -33,13 +33,13 @@ const Navbar = ({ isUserProfile }) => {
           <div className={weirdFlex}>
             <Logo />
             <div className={groupFlex}>
-              <NavItemIcon
+              <LinkWithTooltipIcon
                 IconName={HomeIcon}
                 text="Home"
                 to="/"
                 className="max-lg:hidden"
               />
-              <NavItemIcon
+              <LinkWithTooltipIcon
                 IconName={Message}
                 to="/messages"
                 tip="Messages"
@@ -54,25 +54,25 @@ const Navbar = ({ isUserProfile }) => {
           <div className={weirdFlex}>
             <div className={groupFlex}>
               <NotificationPopOver />
-              <NavItemIcon
+              <LinkWithTooltipIcon
                 IconName={ChartBar}
                 to="/analysis"
                 tip="Analysis"
                 className="max-sm:hidden"
               />
-              <NavItemIcon
+              <LinkWithTooltipIcon
                 IconName={StoreIcon}
                 to="/market"
                 tip="Market"
                 className="max-sm:hidden"
               />
-              <NavItemIcon
+              <LinkWithTooltipIcon
                 IconName={UserGroup}
                 to="/services"
                 tip="Services"
                 className="max-md:hidden"
               />
-              <NavItemIcon
+              <LinkWithTooltipIcon
                 IconName={Setting}
                 to="/settings"
                 tip="Settings"
@@ -80,33 +80,33 @@ const Navbar = ({ isUserProfile }) => {
               />
 
               <MoreOptions className="mx-2 md:!hidden" triggerStyle="md:hidden">
-                <NavItemIcon
+                <LinkWithTooltipIcon
                   IconName={ChartBar}
                   to="/analysis"
                   text="Analysis"
                   className="sm:hidden"
                 />
-                <NavItemIcon
+                <LinkWithTooltipIcon
                   IconName={StoreIcon}
                   to="/market"
                   text="Market"
                   className="pt-3 sm:hidden"
                 />
-                <NavItemIcon
+                <LinkWithTooltipIcon
                   IconName={Message}
                   to="/messages"
                   text="Messages"
                   className="pt-3 md:hidden"
                 />
 
-                <NavItemIcon
+                <LinkWithTooltipIcon
                   IconName={UserGroup}
                   to="/services"
                   text="Services"
                   className="pt-3 md:hidden"
                 />
 
-                <NavItemIcon
+                <LinkWithTooltipIcon
                   IconName={Setting}
                   to="/settings"
                   text="Settings"
@@ -146,7 +146,7 @@ function ProfilePicture() {
   );
 }
 
-export function NavItemIcon({
+export function LinkWithTooltipIcon({
   IconName,
   text,
   to,

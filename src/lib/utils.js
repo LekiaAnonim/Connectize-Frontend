@@ -36,5 +36,3 @@ export function timeAgo(timestamp) {
     return "just now"; // Default for timestamps very close to the current time
 }
 
-// Example usage
-console.log(timeAgo("2024-12-05T01:50:53.479073Z")); // Outputs: "x seconds ago", "x minutes ago", etc.

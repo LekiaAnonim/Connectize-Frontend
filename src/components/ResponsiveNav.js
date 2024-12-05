@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { ChartBar, Setting } from "../icon";
 import FeedSearch from "./admin/feeds/FeedSearch";
 import { NotificationPopOver } from "./notifications";
-import { NavItemIcon } from "./userProfile/Navbar";
+import { LinkWithTooltipIcon } from "./userProfile/Navbar";
 
 function ResponsiveNav() {
   const { toggleNav } = useNav();
@@ -18,8 +18,12 @@ function ResponsiveNav() {
 
       <div className="flex items-center gap-3 sm:gap-5 pr-2">
         <NotificationPopOver />
-        <NavItemIcon IconName={ChartBar} to="/analysis" tip="Analysis" />
-        <NavItemIcon IconName={Setting} to="/settings" tip="Settings" />
+        <LinkWithTooltipIcon
+          IconName={ChartBar}
+          to="/analysis"
+          tip="Analysis"
+        />
+        <LinkWithTooltipIcon IconName={Setting} to="/settings" tip="Settings" />
         <button onClick={() => toggleNav(true)} className="md:hidden">
           <Menu />
         </button>

@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
-import { getSession } from "../lib/session";
+import { getCurrentUser } from "./users";
 
 // {
 //     "company_name": "",
@@ -25,9 +25,9 @@ export const getCompanies = async () => {
     method: "GET",
   });
 
-  const session = getSession();
+  const currentUser = await getCurrentUser();
 
-  const userEmail = session.email;
+  const userEmail = currentUser.email;
 
   return companies?.filter((company) => company.profile === userEmail) || [];
 };

@@ -7,7 +7,6 @@ import HeadingText from "../HeadingText";
 
 function Profile() {
   const session = getSession();
-  // console.log(session, session.is_first_time_user);
 
   useRedirect(!session, "/login");
 
