@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Heart, VerifiedIcon } from "../../../icon";
 import { ConJoinedImages } from "../../ResponsiveNav";
-import { DownloadIcon } from "@radix-ui/react-icons";
+import { DownloadIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { MessageOutlined, ShareAltOutlined } from "@ant-design/icons";
 import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import { timeAgo } from "../../../lib/utils";
 import { Button, Tooltip } from "@chakra-ui/react";
 import MoreOptions from "../../MoreOptions";
 import FormatPostText from "../../FormatPostText";
+import { ChangeCircleOutlined } from "@mui/icons-material";
 
 function DiscoverPosts() {
   const { data: posts } = useQuery({
@@ -61,7 +62,19 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
           </div>
         </div>
 
-        <MoreOptions></MoreOptions>
+        <MoreOptions>
+          <div className="flex flex-col">
+            <ButtonWithTooltipIcon text="Edit post" IconName={Pencil2Icon} />
+            <ButtonWithTooltipIcon
+              text="Convert to draft"
+              IconName={ChangeCircleOutlined}
+            />
+            <ButtonWithTooltipIcon
+              text="Delete post"
+              className="!text-white !bg-red-700 hover:!bg-red-500"
+            />
+          </div>
+        </MoreOptions>
       </header>
 
       <FormatPostText text={postItem.body} />
@@ -94,7 +107,7 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
           ]}
         />
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5">
           <ButtonWithTooltipIcon IconName={MessageOutlined} tip="Comment" />
           <ButtonWithTooltipIcon IconName={Heart} tip="Like post" />
           <ButtonWithTooltipIcon IconName={DownloadIcon} tip="Download post" />
@@ -126,11 +139,11 @@ export function ButtonWithTooltipIcon({
       <Button
         onClick={onClick}
         className={clsx(
-          "flex items-center font-bold text-sm gap-3 bg-transparent hover:!bg-gray-100 !p-0 text-gray-400 hover:text-custom_blue transition-colors duration-300",
+          "flex items-center !justify-start !text-start !text-sm gap-1 bg-transparent hover:!bg-gray-100 !py-0 text-gray-400 hover:text-custom_blue transition-colors duration-300",
           className
         )}
       >
-        <IconName />
+        {IconName && <IconName className="!size-4 " />}
         {text && <span>{text}</span>}
       </Button>
     </Tooltip>
