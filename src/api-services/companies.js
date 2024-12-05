@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
 import { getSession } from "../lib/session";
 
@@ -31,13 +32,15 @@ export const getCompanies = async () => {
   return companies?.filter((company) => company.profile === userEmail) || [];
 };
 
-export const createCompany = async (data) => {
+export const createCompany = async (data, resetForm) => {
   await getOrCreateCompanyCategories(data.company_category);
 
   await getOrCreateCompanySize(data.company_size);
 
-  if (!data.company_category === undefined || data.company_size === undefined)
-    throw new Error("Please return organization type or company size");
+  if (!data.company_category === undefined || data.company_size === undefined) {
+    toast.error("Incomplete data was provided");
+    return;
+  }
 
   const company = await makeApiRequest({
     url: `api/companies/`,
@@ -57,6 +60,18 @@ export const createCompany = async (data) => {
     },
   });
 
+  const document = await createCompanyDocument({
+    type: data.document_type,
+    document: data.company_document,
+    company: company?.company_name,
+  });
+
+  if (!document || !company) {
+    return;
+  }
+  resetForm?.();
+  toast.success(company?.company_name + " was created successfully");
+
   return company;
 };
 
@@ -66,7 +81,6 @@ export const getOrCreateCompanyCategories = async (name) => {
     method: "GET",
   });
 
-  console.log("Category", name);
   const hasCategory =
     categories?.filter((data) => data.name === name).length > 0;
 
@@ -90,5 +104,45 @@ export const getOrCreateCompanySize = async (size) => {
     url: `api/company-sizes/`,
     method: "POST",
     data: { size },
+  });
+};
+
+/**
+ * {
+ *  "type": null,
+ *  "document": null,
+ *   "company": null
+ * }
+ */
+
+export const createCompanyDocument = async (data) => {
+  await getOrCreateCompanyDocumentTypes(data.type, data.type);
+  const companyDocument = await makeApiRequest({
+    url: `api/documents/`,
+    method: "POST",
+    data,
+    contentType: "multipart/form-data",
+  });
+
+  return companyDocument;
+};
+
+export const getOrCreateCompanyDocumentTypes = async (type, name) => {
+  const { results: documentType } = await makeApiRequest({
+    url: `api/document-types/`,
+    method: "GET",
+  });
+
+  if (
+    documentType.find(
+      (document) => document.type === type || document.name === name
+    )
+  )
+    return documentType;
+
+  return await makeApiRequest({
+    url: `api/document-types/`,
+    method: "POST",
+    data: { name, type },
   });
 };

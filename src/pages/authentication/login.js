@@ -33,7 +33,7 @@ function Login() {
     ? nextParam
     : session?.user?.isFirstTimeUser
     ? "/profile"
-    : "/user-profile";
+    : "/";
 
   const formValues = {
     username: "",

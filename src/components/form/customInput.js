@@ -79,6 +79,7 @@ export function ImageSelect({
   formik,
   hasCaption = true,
   captionName,
+  accept = "image/*",
 }) {
   return (
     <div>
@@ -94,7 +95,7 @@ export function ImageSelect({
         <input
           className="w-full file:border-0 file:rounded-md text-gray-500 text-xs file:!text-xs file:p-2"
           type="file"
-          accept="image/*"
+          accept={accept}
           name={name}
           onChange={(event) => {
             formik.setFieldValue(name, event.currentTarget.files?.[0]);

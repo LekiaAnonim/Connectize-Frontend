@@ -25,7 +25,7 @@ const Sidebar = () => {
       <CloseOverlay />
       <div
         className={clsx(
-          "max-md:absolute max-md:top-0 max-md:left-0 max-md:h-screen bg-white rounded p-4 shrink-0 max-w-[350px] md:w-[240px] lg:w-[260px] 2xl:w-[280px] min-h-screen max-md:transition-all duration-500 ease-out md:sticky md:top-0 md:right-4 md:h-screen md:overflow-y-auto scrollbar-hidden",
+          "max-md:absolute max-md:top-0 max-md:left-0 max-md:h-screen bg-white rounded p-4 shrink-0 max-w-[350px] md:w-[240px] lg:w-[270px] 2xl:w-[280px] min-h-screen max-md:transition-all duration-500 ease-out md:sticky md:top-0 md:right-4 md:h-screen md:overflow-y-auto scrollbar-hidden",
           {
             "max-md:overflow-y-auto max-md:min-w-[300px] max-md:w-[60%] z-[20000]":
               navOpen,
@@ -85,7 +85,7 @@ function Companies({ toggleNav }) {
         <h3 className="font-semibold text-xl">Companies</h3>
         <Link
           to="/create-company"
-          className="!text-gray-400 hover:!text-custom_blue text-sm"
+          className="!text-gray-400 hover:!text-custom_blue text-sm xl:text-xs"
           onClick={() => toggleNav(false)}
         >
           Create company
@@ -119,7 +119,7 @@ function Companies({ toggleNav }) {
                       {company}
                     </h1>
                     <span className="text-gray-400 text-xs line-clamp-1">
-                      {description || "No tag line..."}
+                      {description || "Tag line goes here"}
                     </span>
                   </div>
                 </Link>

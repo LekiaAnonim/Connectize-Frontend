@@ -9,12 +9,43 @@ import { ImageSelect } from "../../components/form/customInput";
 import { createCompany } from "../../api-services/companies";
 import { toast } from "sonner";
 
+const FILE_SIZE = 10 * 1024 * 1024; // 10MB
+export const SUPPORTED_FORMATS = [
+  "application/pdf",
+  "text/plain",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ".docx",
+];
+
+export const unSupportedText =
+  "Unsupported file format, only .pdfs, msword, .docx and plain text are allowed";
+
+export const largeFileText =
+  "File size is too large, only images less than 10mb is allowed";
+
+export function checkFileFormat(value) {
+  if (!value) return true;
+  console.log(value);
+
+  return value && SUPPORTED_FORMATS.includes(value.type.toLowerCase());
+}
+
+export function checkFileSize(value) {
+  if (!value) return true;
+  return value && value.size <= FILE_SIZE;
+}
+
 const validationSchema = Yup.object().shape({
   document_type: Yup.string().required("Field cannot be empty"),
-  company_document: Yup.mixed().required("Field cannot be empty"),
+  company_document: Yup.mixed()
+    .required("Field cannot be empty")
+    .test("file-size", largeFileText, checkFileSize)
+    .test("file-format", unSupportedText, checkFileFormat),
 });
 
 const CompanyDocuments = () => {
+  let newCompanyName;
   const initialValues = {
     // create company
     company_name: localStorage.getItem("company_name") || "",
@@ -64,6 +95,7 @@ const CompanyDocuments = () => {
       toast.success(formik.values["company_name"] + " created successfully", {
         id: toastId,
       });
+      newCompanyName = newCompany.company_name.replaceAll(" ", "_");
       return true;
     }
     toast.dismiss(toastId);
@@ -99,7 +131,12 @@ const CompanyDocuments = () => {
         hasButton={false}
       />
 
-      <ImageSelect hasCaption={false} formik={formik} name="company_document" />
+      <ImageSelect
+        hasCaption={false}
+        formik={formik}
+        name="company_document"
+        accept=".pdf, .doc, .docx, .txt, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      />
       <div className="flex justify-between my-6">
         <StepButton
           doStepChange={doStepChange}
@@ -109,7 +146,7 @@ const CompanyDocuments = () => {
         />
         <StepButton
           doStepChange={doStepChange}
-          nextStep="success"
+          nextStep={newCompanyName || ""}
           stepText="Submit"
         />
       </div>
