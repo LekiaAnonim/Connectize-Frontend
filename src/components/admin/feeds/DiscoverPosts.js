@@ -1,17 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Heart, Threedot, VerifiedIcon } from "../../../icon";
 import { ConJoinedImages } from "../../ResponsiveNav";
 import { DownloadIcon } from "@radix-ui/react-icons";
 import { MessageOutlined, ShareAltOutlined } from "@ant-design/icons";
 import clsx from "clsx";
+import { useQuery } from "@tanstack/react-query";
+import { getPosts } from "../../../api-services/posts";
+import { timeAgo } from "../../../lib/utils";
 
 function DiscoverPosts() {
+  const { data: posts } = useQuery({
+    queryKey: ["posts"],
+    queryFn: getPosts,
+  });
   return (
     <section className="space-y-4 mt-4">
-      <DiscoverPostItem hasImage />
-      <DiscoverPostItem />
-      <DiscoverPostItem />
-      <DiscoverPostItem />
+      {posts?.map((post, index) => (
+        <DiscoverPostItem hasImage={index === 0} key={index} postItem={post} />
+      ))}
     </section>
   );
 }
@@ -19,6 +25,15 @@ function DiscoverPosts() {
 export default DiscoverPosts;
 
 const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
+  const [timestamp, setTimestamp] = useState();
+
+  useEffect(() => {
+    const interval = setInterval(
+      () => setTimestamp(timeAgo(postItem.date_created)),
+      60000
+    );
+    return () => clearInterval(interval);
+  });
   return (
     <article
       className={clsx(
@@ -36,7 +51,7 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
           <div className="flex items-center gap-1">
             <h4 className=" md:text-sm lg:text-base font-bold">Dangote Oil</h4>
             <VerifiedIcon color="black" />
-            <small className="text-gray-400">@dangote • 14s</small>
+            <small className="text-gray-400">@dangote • {timestamp}</small>
           </div>
         </div>
 
@@ -46,11 +61,12 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
       </header>
 
       <p>
-        This is a tweet. It can be long, or short. Depends on what you have to
-        say. It can have some hashtags too.{" "}
-        <span className="text-blue-400">#likethis</span> This is a tweet. It can
-        be long, or short. Depends on what you have to say. It can have some
-        hashtags too. <span className="text-blue-400">#likethis</span>
+        {postItem.body ||
+          `This is a tweet. It can be long, or short. Depends on what you have to say. It can have some hashtags too. 
+        ${(
+          <span className="text-blue-400">#likethis</span>
+        )} This is a tweet. It can be long, or short. Depends on what you have to say. It can have some
+        hashtags too. ${(<span className="text-blue-400">#likethis</span>)}`}
       </p>
 
       {hasImage && (

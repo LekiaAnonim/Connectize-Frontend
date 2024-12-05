@@ -2,12 +2,12 @@ import { makeApiRequest } from "../lib/helpers";
 import { getCompanies } from "./companies";
 
 export const getPosts = async () => {
-  const { results } = await makeApiRequest({
+  const { results: posts } = await makeApiRequest({
     url: `api/posts/`,
     method: "GET",
   });
 
-  return results;
+  return posts;
 };
 
 export const createPost = async (body) => {
