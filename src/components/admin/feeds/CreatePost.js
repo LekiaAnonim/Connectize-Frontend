@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import MoreOptions from "../../MoreOptions";
 import { useQuery } from "@tanstack/react-query";
 import { getCompanies } from "../../../api-services/companies";
-import { Select } from "@chakra-ui/react";
+import { CloseButton, Select } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import EmojiPicker from "emoji-picker-react";
@@ -17,7 +17,7 @@ function CreatePost() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [companyId, setCompanyId] = useState();
+  const [companyId, setCompanyId] = useState(-1);
   const [needsFocus, setNeedsFocus] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
 
@@ -114,9 +114,16 @@ function CreatePost() {
           <MaskedIcon Icon={SmileIcon} onClick={toggleEmojiPicker} />
         </div>
         {showPicker && (
-          <div className="fixed top-0 left-0 w-screen h-screen z-[4000] flex items-center justify-center bg-black/30">
-            <EmojiPicker onEmojiClick={onEmojiClick} />
-          </div>
+          <section className="fixed top-0 left-0 w-screen h-screen z-[4000] flex items-center justify-center bg-black/30">
+            <div className="relative">
+              <CloseButton
+                onClick={() => setShowPicker(false)}
+                className="absolute -right-8 -top-8 bg-white"
+                c
+              />
+              <EmojiPicker onEmojiClick={onEmojiClick} />
+            </div>
+          </section>
         )}
         <button
           className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-4 transition-opacity duration-300 md:w-full lg:w-fit"
