@@ -8,6 +8,7 @@ import { getCompanies } from "../../../api-services/companies";
 import { Select } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
+import EmojiPicker from "emoji-picker-react";
 
 function CreatePost() {
   const { data: companies } = useQuery({
@@ -18,6 +19,16 @@ function CreatePost() {
   const [message, setMessage] = useState("");
   const [companyId, setCompanyId] = useState();
   const [needsFocus, setNeedsFocus] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
+
+  const onEmojiClick = (emojiObject) => {
+    setMessage((prevText) => prevText + emojiObject.emoji);
+    setShowPicker(false);
+  };
+
+  const toggleEmojiPicker = () => {
+    setShowPicker((prevState) => !prevState);
+  };
 
   const handleCreatePost = async () => {
     if (message.length < 10) {
@@ -96,12 +107,17 @@ function CreatePost() {
       </div>
 
       <div className="mt-4 flex max-sm:flex-col md:flex-col lg:flex-row sm:items-center justify-between max-sm:gap-4 md:gap-4 lg:gap-1">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 relative">
           <MaskedIcon Icon={GalleryIcon} />
           <MaskedIcon Icon={GifIcon} />
           <MaskedIcon Icon={AlignmentIcon} />
-          <MaskedIcon Icon={SmileIcon} />
+          <MaskedIcon Icon={SmileIcon} onClick={toggleEmojiPicker} />
         </div>
+        {showPicker && (
+          <div className="fixed top-0 left-0 w-screen h-screen z-[4000] flex items-center justify-center bg-black/30">
+            <EmojiPicker onEmojiClick={onEmojiClick} />
+          </div>
+        )}
         <button
           className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-4 transition-opacity duration-300 md:w-full lg:w-fit"
           onClick={handleCreatePost}
@@ -113,8 +129,11 @@ function CreatePost() {
   );
 }
 
-const MaskedIcon = ({ Icon }) => (
-  <button className="bg-gray-200/50 py-2 px-4 rounded-sm outline-0 max-sm:w-full grid place-items-center">
+const MaskedIcon = ({ Icon, onClick }) => (
+  <button
+    className="bg-gray-200/50 py-2 px-4 rounded-sm outline-0 max-sm:w-full grid place-items-center"
+    onClick={onClick}
+  >
     <Icon />
   </button>
 );
