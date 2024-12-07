@@ -11,6 +11,11 @@ export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function goToLogin(toastMessage) {
+  const pathname = window.location.pathname;
+  window.location.replace("/login?next=" + pathname);
+}
+
 // Configure Axios Defaults
 export const baseURL = "http://localhost:8000";
 
@@ -63,8 +68,7 @@ export async function refreshTokenIfNeeded() {
     if (retries === 5) {
       removeSession();
       toast.info("User session has been reset, kindly login again");
-      const pathname = window.location.pathname;
-      window.location.replace("/login?next=" + pathname);
+      goToLogin();
     }
     throw error;
   } finally {
@@ -84,11 +88,10 @@ export async function makeApiRequest({
   try {
     const authorization = await refreshTokenIfNeeded();
 
-    // if (!authorization) {
-    //   const pathname = window.location.pathname;
-    //   window.location.replace("/login?next=" + pathname);
-    //   return;
-    // }
+    if (!authorization && type !== "login") {
+      goToLogin();
+      return;
+    }
 
     const response = await axios({
       url: `${baseURL}/${url}`,

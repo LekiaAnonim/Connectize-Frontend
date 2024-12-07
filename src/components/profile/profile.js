@@ -4,6 +4,7 @@ import Logo from "../logo";
 import { getSession } from "../../lib/session";
 import useRedirect from "../../hooks/useRedirect";
 import HeadingText from "../HeadingText";
+import { useAuth } from "../../context/userContext";
 
 function Profile() {
   const session = getSession();

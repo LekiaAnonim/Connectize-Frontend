@@ -1,4 +1,6 @@
+import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
+import { getCurrentUser } from "./users";
 
 export const getPosts = async () => {
   const { results: posts } = await makeApiRequest({
@@ -32,19 +34,35 @@ export const getLikes = async () => {
 };
 
 export const likePost = async (id, data) => {
-  const result = await makeApiRequest({
+  const toastId = toast.info("processing like action...");
+  const allPosts = await getPosts();
+
+  const currentUser = await getCurrentUser();
+
+  const currentPost = allPosts.find((post) => post.id === id);
+
+  if (currentPost.likes.find((post) => post.user_id === currentUser.id)) {
+    await makeApiRequest({
+      url: `api/posts/${id}/unlike/`,
+      method: "POST",
+      data,
+    });
+    toast.success("Post has been unlike", { id: toastId });
+    return;
+  }
+  await makeApiRequest({
     url: `api/posts/${id}/like/`,
     method: "POST",
     data,
   });
-
-  return result;
+  toast.success("Post has been liked", { id: toastId });
 };
 
-export const commentOnPost = async (id) => {
+export const commentOnPost = async (id, data) => {
   const result = await makeApiRequest({
     url: `api/posts/${id}/comment/`,
     method: "POST",
+    data,
   });
 
   return result;

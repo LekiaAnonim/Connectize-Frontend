@@ -6,7 +6,7 @@ import { MessageOutlined, ShareAltOutlined } from "@ant-design/icons";
 import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
 import { getPosts, likePost } from "../../../api-services/posts";
-import { timeAgo } from "../../../lib/utils";
+import { formatNumber, timeAgo } from "../../../lib/utils";
 import { Button, Tooltip } from "@chakra-ui/react";
 import MoreOptions from "../../MoreOptions";
 import FormatPostText from "../../FormatPostText";
@@ -14,10 +14,12 @@ import { ChangeCircleOutlined } from "@mui/icons-material";
 import { useCustomQuery } from "../../../context/queryContext";
 import jsPDF from "jspdf";
 import { toast } from "sonner";
+import { useAuth } from "../../../context/userContext";
+import { motion } from "framer-motion";
 
 function DiscoverPosts() {
   const { refetchInterval } = useCustomQuery();
-  const { data: posts } = useQuery({
+  const { data: posts, isLoading } = useQuery({
     queryKey: ["posts"],
     queryFn: getPosts,
     refetchInterval,
@@ -25,13 +27,17 @@ function DiscoverPosts() {
 
   return (
     <section className="space-y-4 mt-4">
-      {posts?.map((post, index) => (
-        <DiscoverPostItem
-          hasImage={post.images_data.length > 0}
-          key={index}
-          postItem={post}
-        />
-      ))}
+      {isLoading
+        ? Array.from({ length: 4 }, (_, index) => (
+            <DiscoverPostSkeleton key={index} />
+          ))
+        : posts?.map((post, index) => (
+            <DiscoverPostItem
+              hasImage={post.images_data.length > 0}
+              key={index}
+              postItem={post}
+            />
+          ))}
     </section>
   );
 }
@@ -40,17 +46,21 @@ export default DiscoverPosts;
 
 const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
   const { setRefetchInterval } = useCustomQuery();
+  const { user: currentUser } = useAuth();
   const [timestamp, setTimestamp] = useState(timeAgo(postItem.date_created));
 
+  const hasUserLikedPost = postItem.likes.find(
+    (post) => post.user_id === currentUser?.id
+  );
+
+  console.log(currentUser);
+  console.log(postItem.likes);
+  // console.log(hasUserLikedPost);
+
   const handleLikePost = async () => {
-    try {
-      await likePost(postItem.id, postItem);
-      setRefetchInterval(1000);
-      setTimeout(() => setRefetchInterval(false), 2000);
-      toast.success("Post has been liked");
-    } catch (error) {
-      toast.error("An error occurred while liking post");
-    }
+    await likePost(postItem.id, postItem);
+    setRefetchInterval(1000);
+    setTimeout(() => setRefetchInterval(false), 2000);
   };
 
   const sharePost = async () => {
@@ -107,7 +117,10 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
     return () => clearInterval(interval);
   });
   return (
-    <article
+    <motion.article
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
       className={clsx("border-t border-gray-300 p-3", {
         "bg-white !border-0 rounded-md": hasImage,
       })}
@@ -176,13 +189,15 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
           <ButtonWithTooltipIcon
             IconName={MessageOutlined}
             tip="Comment"
-            text={postItem.comments.length}
+            textClassName="!text-[.6rem]"
+            text={formatNumber(postItem.comments.length)}
           />
           <ButtonWithTooltipIcon
             IconName={Heart}
             tip="Like post"
             onClick={handleLikePost}
-            text={postItem.likes.length}
+            textClassName="!text-[.6rem]"
+            text={formatNumber(postItem.likes.length)}
           />
           <ButtonWithTooltipIcon
             IconName={DownloadIcon}
@@ -196,7 +211,7 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
           />
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 };
 
@@ -227,10 +242,74 @@ export function ButtonWithTooltipIcon({
         )}
       >
         {IconName && <IconName className="!size-4" />}
-        {text && (
-          <span className={`${textClassName} !text-[.5rem]`}>{text}</span>
-        )}
+        {text && <span className={`${textClassName}`}>{text}</span>}
       </Button>
     </Tooltip>
   );
 }
+
+export const DiscoverPostSkeleton = ({ hasImage }) => {
+  return (
+    <div
+      className={clsx(
+        "border-t border-gray-200 p-3 animate-[pulse_5s_infinite]",
+        {
+          "bg-gray-100 !border-0 rounded-md": hasImage,
+        }
+      )}
+    >
+      <header className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          {/* Placeholder for logo */}
+          <div className="size-10 rounded-full bg-gray-200" />
+
+          <div className="flex flex-col gap-1">
+            {/* Placeholder for company name */}
+            <div className="h-4 w-24 bg-gray-200 rounded-md" />
+            {/* Placeholder for small text */}
+            <div className="h-3 w-40 bg-gray-200 rounded-md" />
+          </div>
+        </div>
+
+        {/* Placeholder for More Options */}
+        <div className="h-6 w-6 bg-gray-200 rounded-md" />
+      </header>
+
+      {/* Placeholder for post body */}
+      <div className="mt-2 space-y-2">
+        <div className="h-4 w-full bg-gray-200 rounded-md" />
+        <div className="h-4 w-full bg-gray-200 rounded-md" />
+        <div className="h-4 w-3/4 bg-gray-200 rounded-md" />
+      </div>
+
+      {/* Placeholder for images */}
+      {hasImage && (
+        <section className="grid grid-cols-3 gap-2 mt-2">
+          {[...Array(3)].map((_, index) => (
+            <div key={index} className="size-full rounded-lg bg-gray-200" />
+          ))}
+        </section>
+      )}
+
+      {/* Placeholder for footer */}
+      <div className="flex items-center gap-2 justify-between mt-4">
+        {/* Placeholder for joined images */}
+        <div className="flex -space-x-1 hover:space-x-1">
+          {[...Array(5)].map((_, index) => (
+            <div
+              key={index}
+              className="size-6 bg-gray-200 rounded-full border border-white transition-all duration-300"
+            />
+          ))}
+        </div>
+
+        {/* Placeholder for action buttons */}
+        <div className="flex items-center gap-2">
+          {[...Array(4)].map((_, index) => (
+            <div key={index} className="size-6 bg-gray-200 rounded-md" />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -6,7 +6,6 @@ import { authenticationService } from "../../api-services/authentication";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import HeadingText from "../../components/HeadingText";
 import { useAuth } from "../../context/userContext";
-import { getCurrentUser } from "../../api-services/users";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -24,6 +23,8 @@ function Login() {
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
   const [searchParams] = useSearchParams();
+
+  setUser(null);
 
   const nextParam = searchParams.get("next");
 
@@ -62,7 +63,7 @@ function Login() {
     formik.setValues(formValues);
     document.title = "Login to connectize";
 
-    return async () => setUser((await getCurrentUser()) || null);
+    // return async () => setUser((await getCurrentUser()) || null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const fields = [
