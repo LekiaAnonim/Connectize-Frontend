@@ -146,12 +146,13 @@ export const CustomTextArea = ({ formik, name, placeholder }) => {
             <ReactQuill
               value={formik.values[`${name}`]}
               onChange={(value) => {
-                localStorage.setItem(name, value);
-                formik.setFieldValue(name, value);
+                // Remove <p><br></p> if the editor is empty
+                const cleanedValue = value === "<p><br></p>" ? "" : value;
+                
+                localStorage.setItem(name, cleanedValue);
+                formik.setFieldValue(name, cleanedValue);
               }}
-              // onBlur={(value) => {
-              //   if (value.index < 1) formik.setFieldValue(name, "");
-              // }}
+            
               theme="snow"
               placeholder={placeholder}
             />

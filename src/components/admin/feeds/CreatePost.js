@@ -192,7 +192,9 @@ function CreatePost() {
                   className="!text-sm"
                 >
                   {companies?.map((company) => (
-                    <option value={company?.id}>{company?.company_name}</option>
+                    <option value={company?.id} key={company?.id}>
+                      {company?.company_name}
+                    </option>
                   ))}
                 </Select>
               </>

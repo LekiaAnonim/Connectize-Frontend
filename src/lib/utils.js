@@ -29,7 +29,7 @@ export function timeAgo(timestamp) {
     for (const [unit, value] of Object.entries(intervals)) {
         const count = Math.floor(seconds / value);
         if (count > 0) {
-            return count === 1 ? `1 ${unit} ago` : `${count} ${unit}s ago`;
+            return count === 1 ? `a ${unit} ago` : `${count} ${unit}s ago`;
         }
     }
 

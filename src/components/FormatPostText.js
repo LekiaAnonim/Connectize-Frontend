@@ -22,9 +22,9 @@ const FormatPostText = ({ text }) => {
 
       if (part.startsWith("##")) {
         return (
-          <h2 key={index} className="!text-bold !text-lg !text-black">
+          <span key={index} className="!text-bold !text-lg !text-black !block">
             {part.slice(2).trim()}
-          </h2>
+          </span>
         );
       }
 

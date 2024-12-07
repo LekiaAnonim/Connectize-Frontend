@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { getCurrentUser } from "../api-services/users";
+import { refreshTokenIfNeeded } from "../lib/helpers";
 
 // Create the context
 const UserContext = createContext();
@@ -8,8 +9,13 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  useEffect(() => async () => setUser((await getCurrentUser()) || null));
-
+  useEffect(
+    () => async () => {
+      const authorization = await refreshTokenIfNeeded();
+      if (authorization) setUser(await getCurrentUser());
+    },
+    []
+  );
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}

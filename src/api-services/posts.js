@@ -8,7 +8,7 @@ export const getPosts = async () => {
     method: "GET",
   });
 
-  return posts;
+  return posts.filter((post) => post.status.toUpperCase() === "PUBLISHED");
 };
 
 export const createPost = async (body, companyId, images) => {
@@ -41,11 +41,11 @@ export const likePost = async (id, data) => {
 
   const currentPost = allPosts.find((post) => post.id === id);
 
-  if (currentPost.likes.find((post) => post.user_id === currentUser.id)) {
+  if (currentPost.likes.find((post) => post.user.id === currentUser.id)) {
     await makeApiRequest({
       url: `api/posts/${id}/unlike/`,
       method: "POST",
-      data,
+      data: { ...data, company_id: data.company.id },
     });
     toast.success("Post has been unlike", { id: toastId });
     return;
@@ -53,16 +53,16 @@ export const likePost = async (id, data) => {
   await makeApiRequest({
     url: `api/posts/${id}/like/`,
     method: "POST",
-    data,
+    data: { ...data, company_id: data.company.id },
   });
   toast.success("Post has been liked", { id: toastId });
 };
 
-export const commentOnPost = async (id, data) => {
+export const commentOnPost = async (id, data, comment) => {
   const result = await makeApiRequest({
     url: `api/posts/${id}/comment/`,
     method: "POST",
-    data,
+    data: { ...data, company_id: data.company.id, comment },
   });
 
   return result;

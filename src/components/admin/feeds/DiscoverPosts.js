@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Heart, VerifiedIcon } from "../../../icon";
 import { ConJoinedImages } from "../../ResponsiveNav";
-import { DownloadIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import { DownloadIcon, HeartIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { MessageOutlined, ShareAltOutlined } from "@ant-design/icons";
 import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
-import { getPosts, likePost } from "../../../api-services/posts";
+import { commentOnPost, getPosts, likePost } from "../../../api-services/posts";
 import { formatNumber, timeAgo } from "../../../lib/utils";
-import { Button, Tooltip } from "@chakra-ui/react";
+import { CloseButton, Tooltip } from "@chakra-ui/react";
 import MoreOptions from "../../MoreOptions";
 import FormatPostText from "../../FormatPostText";
 import { ChangeCircleOutlined } from "@mui/icons-material";
@@ -16,6 +16,8 @@ import jsPDF from "jspdf";
 import { toast } from "sonner";
 import { useAuth } from "../../../context/userContext";
 import { motion } from "framer-motion";
+import ReactQuill from "react-quill";
+import { MarkdownComponent } from "../../MarkDownComponent";
 
 function DiscoverPosts() {
   const { refetchInterval } = useCustomQuery();
@@ -33,7 +35,7 @@ function DiscoverPosts() {
           ))
         : posts?.map((post, index) => (
             <DiscoverPostItem
-              hasImage={post.images_data.length > 0}
+              hasImage={post.images.length > 0}
               key={index}
               postItem={post}
             />
@@ -45,17 +47,16 @@ function DiscoverPosts() {
 export default DiscoverPosts;
 
 const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
+  const [showCommentSection, setShowCommentSection] = useState(false);
   const { setRefetchInterval } = useCustomQuery();
   const { user: currentUser } = useAuth();
   const [timestamp, setTimestamp] = useState(timeAgo(postItem.date_created));
 
-  const hasUserLikedPost = postItem.likes.find(
-    (post) => post.user_id === currentUser?.id
-  );
-
-  console.log(currentUser);
-  console.log(postItem.likes);
-  // console.log(hasUserLikedPost);
+  const userHasLikedPost = postItem.likes.find(
+    (post) => post.user.id === currentUser?.id
+  )
+    ? true
+    : false;
 
   const handleLikePost = async () => {
     await likePost(postItem.id, postItem);
@@ -120,7 +121,6 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
     <motion.article
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
       className={clsx("border-t border-gray-300 p-3", {
         "bg-white !border-0 rounded-md": hasImage,
       })}
@@ -163,7 +163,7 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
 
       {hasImage && (
         <section className="grid grid-cols-3 gap-2 mt-2">
-          {postItem.images_data.map(({ image: src, id }) => (
+          {postItem.images.map(({ image: src, id }) => (
             <img
               key={id}
               src={src}
@@ -185,16 +185,17 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
           ]}
         />
 
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-3">
           <ButtonWithTooltipIcon
             IconName={MessageOutlined}
-            tip="Comment"
+            tip="Comments"
             textClassName="!text-[.6rem]"
             text={formatNumber(postItem.comments.length)}
+            onClick={() => setShowCommentSection(!showCommentSection)}
           />
           <ButtonWithTooltipIcon
-            IconName={Heart}
-            tip="Like post"
+            IconName={userHasLikedPost ? Heart : HeartIcon}
+            tip={userHasLikedPost ? "Unlike post" : "Like post"}
             onClick={handleLikePost}
             textClassName="!text-[.6rem]"
             text={formatNumber(postItem.likes.length)}
@@ -211,7 +212,126 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
           />
         </div>
       </div>
+
+      <CommentSection
+        showCommentSection={showCommentSection}
+        setShowCommentSection={setShowCommentSection}
+        commentsData={postItem.comments}
+        postItem={postItem}
+      />
     </motion.article>
+  );
+};
+
+const CommentSection = ({
+  showCommentSection,
+  setShowCommentSection,
+  commentsData = [],
+  postItem,
+}) => {
+  const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { setRefetchInterval } = useCustomQuery();
+
+  const handleComment = async () => {
+    setLoading(true);
+    try {
+      const { id } = await commentOnPost(postItem.id, postItem, comment);
+      if (id) toast.info("Comment has been submitted");
+
+      setRefetchInterval(1000);
+      setTimeout(() => setRefetchInterval(false), 2000);
+      setComment("");
+    } catch (error) {
+      // throw error
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setComment("");
+  }, []);
+  return (
+    <section
+      className={clsx("overflow-hidden transition-all duration-300", {
+        "mt-4 ": showCommentSection,
+        "h-0 opacity-0": !showCommentSection,
+      })}
+    >
+      <div className="mb-4 flex justify-between">
+        <h2 className="font-bold text-lg">Comments</h2>
+        <CloseButton
+          className="!text-xs"
+          onClick={() => setShowCommentSection(false)}
+        />
+      </div>
+      {commentsData.map((comment) => (
+        <CommentBlock
+          key={comment.id}
+          comment={comment}
+          userId={postItem.user.id}
+        />
+      ))}
+      <div className="mt-4 border-t pt-4 relative">
+        <ReactQuill
+          value={comment}
+          onChange={(value) => {
+            // Remove <p><br></p> if the editor is empty
+            const cleanedValue = value === "<p><br></p>" ? "" : value;
+            setComment(cleanedValue);
+          }}
+          theme="snow"
+          placeholder="Type your comment here"
+        />
+        <button
+          className="absolute bottom-1.5 right-2 bg-gray-300 disabled:bg-gray-200 hover:bg-gray-400 text-xs p-2 active:scale-95 disabled:active:scale-100 transition-all duration-300 rounded disabled:cursor-not-allowed"
+          onClick={handleComment}
+          disabled={loading || comment.trim().length < 1}
+        >
+          {loading ? "Commenting..." : "Comment"}
+        </button>
+      </div>
+    </section>
+  );
+};
+
+const CommentBlock = ({ comment, userId }) => {
+  const [timestamp, setTimestamp] = useState(timeAgo(comment.commented_at));
+  const { user: currentUser } = useAuth();
+
+  useEffect(() => {
+    const interval = setInterval(
+      () => setTimestamp(timeAgo(comment.commented_at)),
+      1000
+    );
+    return () => clearInterval(interval);
+  });
+  return (
+    <div key={comment.id} className="mb-4">
+      <div className="flex gap-2">
+        <img
+          src={comment.user.avatar || "https://via.placeholder.com/40"}
+          alt="Avatar"
+          className="size-8 rounded-full"
+        />
+        <div className="flex items-center gap-1">
+          <h5 className="font-bold text-sm">
+            {comment.user.first_name} {comment.user.last_name}
+            <span className="text-[.7rem] text-gray-400 font-medium">
+              {currentUser.id === userId ? "(author) •" : ""}
+            </span>
+          </h5>
+          <span className="text-gray-400 text-xs">{timestamp}</span>
+        </div>
+      </div>
+      <div className="mt-1 text-gray-600">
+        <MarkdownComponent
+          markdownContent={comment.content}
+          className="text-sm"
+        />
+      </div>
+    </div>
   );
 };
 
@@ -227,23 +347,23 @@ export function ButtonWithTooltipIcon({
   return (
     <Tooltip
       label={tip}
-      fontSize="sm"
+      fontSize="12"
       placement="auto"
       className={clsx(
         "!rounded-md bg-white !text-custom_blue border",
         tooltipClassName
       )}
     >
-      <Button
+      <button
         onClick={onClick}
         className={clsx(
-          "flex items-center !justify-start !text-start !text-sm gap-1 bg-transparent hover:!bg-gray-100 !py-0 text-gray-400 hover:text-custom_blue active:scale-95 transition-all duration-300",
+          "flex items-center text-sm gap-1 bg-transparent text-gray-600 hover:text-custom_blue active:scale-95 transition-all duration-300",
           className
         )}
       >
         {IconName && <IconName className="!size-4" />}
         {text && <span className={`${textClassName}`}>{text}</span>}
-      </Button>
+      </button>
     </Tooltip>
   );
 }

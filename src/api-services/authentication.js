@@ -14,7 +14,7 @@ export const authenticationService = async ({
       method,
       data: values,
       resetForm,
-      type,
+      type: "auth-" + type,
     });
 
     if (type === "login") {

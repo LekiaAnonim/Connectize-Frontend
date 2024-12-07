@@ -82,13 +82,13 @@ export async function makeApiRequest({
   method,
   data,
   resetForm,
-  type,
+  type = "",
   contentType = "application/json",
 }) {
   try {
     const authorization = await refreshTokenIfNeeded();
 
-    if (!authorization && type !== "login") {
+    if (!authorization && !type.startsWith("auth")) {
       goToLogin();
       return;
     }

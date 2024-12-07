@@ -6,6 +6,7 @@ import { authenticationService } from "../../api-services/authentication";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import HeadingText from "../../components/HeadingText";
 import { useAuth } from "../../context/userContext";
+import { getCurrentUser } from "../../api-services/users";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -55,7 +56,10 @@ function Login() {
         type: "login",
       });
 
-      if (success) navigate(navigateTo);
+      if (success) {
+        setUser((await getCurrentUser()) || null);
+        navigate(navigateTo);
+      }
     },
   });
 

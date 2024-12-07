@@ -15,7 +15,7 @@ export const getCurrentUser = async () => {
     method: "GET",
   });
 
-  return currentUser;
+  return currentUser || null;
 };
 
 export const getSuggestedUsersForCurrentUser = async () => {
