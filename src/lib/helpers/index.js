@@ -84,6 +84,12 @@ export async function makeApiRequest({
   try {
     const authorization = await refreshTokenIfNeeded();
 
+    // if (!authorization) {
+    //   const pathname = window.location.pathname;
+    //   window.location.replace("/login?next=" + pathname);
+    //   return;
+    // }
+
     const response = await axios({
       url: `${baseURL}/${url}`,
       method,

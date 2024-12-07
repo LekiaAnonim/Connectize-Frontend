@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AlignmentIcon, GalleryIcon, GifIcon, SmileIcon } from "../../../icon";
 import { createPost } from "../../../api-services/posts";
 import { toast } from "sonner";
@@ -9,25 +9,71 @@ import { CloseButton, Select } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import EmojiPicker from "emoji-picker-react";
+import GifPicker from "../../GifPicker";
+import { unSupportedText } from "../listing/newListing";
+import { useCustomQuery } from "../../../context/queryContext";
+
+const isImageFile = (files) => {
+  if (!files || files.length === 0) return true; // No files provided
+
+  const imageTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+    "image/avif",
+  ];
+
+  // Check all files if the input is an array of files
+  if (Array.isArray(files)) {
+    return files.every((file) => imageTypes.includes(file.type.toLowerCase()));
+  }
+
+  // If it's a single file, directly check its type
+  return imageTypes.includes(files.type.toLowerCase());
+};
 
 function CreatePost() {
+  const { setRefetchInterval } = useCustomQuery();
   const { data: companies } = useQuery({
     queryKey: ["companies"],
     queryFn: getCompanies,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [validImages, setValidImages] = useState([]);
   const [companyId, setCompanyId] = useState(-1);
   const [needsFocus, setNeedsFocus] = useState(false);
-  const [showPicker, setShowPicker] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showGifPicker, setShowGifPicker] = useState(false);
+  const [selectedGif, setSelectedGif] = useState("");
+
+  const handleFileChange = (event) => {
+    const selectedFiles = Array.from(event.target.files);
+
+    const validImageFiles = selectedFiles.filter(isImageFile);
+    setValidImages(validImageFiles);
+    console.log(validImageFiles);
+
+    if (validImageFiles.length < selectedFiles.length) {
+      toast.info(unSupportedText);
+    }
+  };
+  useEffect(() => {
+    // Cleanup generated URLs on unmount or when validImages changes
+    return () => {
+      validImages.forEach((image) => URL.revokeObjectURL(image));
+    };
+  }, [validImages]);
 
   const onEmojiClick = (emojiObject) => {
     setMessage((prevText) => prevText + emojiObject.emoji);
-    setShowPicker(false);
+    setShowEmojiPicker(false);
   };
 
-  const toggleEmojiPicker = () => {
-    setShowPicker((prevState) => !prevState);
+  const onGifSelect = (gifUrl) => {
+    setSelectedGif(gifUrl);
+    setShowGifPicker(false);
   };
 
   const handleCreatePost = async () => {
@@ -45,9 +91,13 @@ function CreatePost() {
     setIsLoading(true);
     const toastId = toast.info("Creating post. please hold on...");
     try {
-      await createPost(message, companyId);
+      await createPost(message, companyId, validImages);
       setMessage("");
+      setSelectedGif("");
       toast.success("Your post has been created", { id: toastId });
+      setRefetchInterval(1000);
+      setTimeout(() => setRefetchInterval(false), 2000);
+      setValidImages([]);
     } catch (error) {
       toast.dismiss(toastId);
       console.error("Post error: ", error);
@@ -63,16 +113,61 @@ function CreatePost() {
         value={message}
         onChange={(e) => setMessage(e.currentTarget.value)}
         minLength={10}
-        placeholder="What's happening"
-        className="w-full h-10 pb-2 border-b border-gray-300 bg-transparent focus:outline-0 text-xl resize-none transition-all duration-300 scrollbar-hidden scroll-smooth"
+        placeholder="What's happening?"
+        className="w-full min-h-10 h-10 max-h-40  pb-2 border-b border-gray-300 bg-transparent focus:outline-0 text-base resize-no_ne transition-all duration-300 scrollbar-hidden scroll-smooth placeholder:text-lg"
       />
+
+      {validImages.length > 0 && (
+        <div className="mt-2">
+          <h5 className="font-bold mb-2">Image Previews</h5>
+          <div className="flex gap-4 overflow-x-auto">
+            {validImages.map((image, index) => (
+              <div key={index} className="relative shrink-0 group">
+                <CloseButton
+                  onClick={() =>
+                    setValidImages((prevItems) =>
+                      prevItems.filter((_, i) => i !== index)
+                    )
+                  }
+                  className="absolute -right-1 -top-1 bg-white !text-[.5rem] !size-6 xs:opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                />
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt={image.name}
+                  className="w-full h-20 object-cover rounded-lg shadow-md"
+                />
+                <p className="text-center mt-2 text-sm font-semibold">
+                  {image.name}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {selectedGif && (
+        <div className="mt-4 relative w-fit">
+          <CloseButton
+            onClick={() => setSelectedGif("")}
+            className="absolute -right-1 -top-1 bg-white !text-[.5rem] !size-6"
+            c
+          />
+          <img
+            src={selectedGif}
+            alt="Selected GIF"
+            className="w-16 h-auto rounded-lg hover:shadow transition-all duration-300"
+          />
+        </div>
+      )}
 
       <div
         className="absolute right-3 top-2"
         onClick={() => setNeedsFocus(false)}
       >
         <MoreOptions
-          triggerStyle={needsFocus ? "!border-2 !border-red-600 bg-white" : ""}
+          triggerStyle={`${
+            needsFocus ? "!border-2 !border-red-600 " : ""
+          } !bg-white`}
         >
           <div className="space-y-1">
             {companies?.length < 1 ? (
@@ -108,26 +203,55 @@ function CreatePost() {
 
       <div className="mt-4 flex max-sm:flex-col md:flex-col lg:flex-row sm:items-center justify-between max-sm:gap-4 md:gap-4 lg:gap-1">
         <div className="flex items-center gap-2 relative">
-          <MaskedIcon Icon={GalleryIcon} />
-          <MaskedIcon Icon={GifIcon} />
+          <input
+            name="post_images"
+            id="post_images"
+            type="file"
+            onChange={handleFileChange}
+            accept="image/*"
+            multiple
+            hidden
+          />
+
+          <MaskedIcon
+            Icon={GalleryIcon}
+            onClick={() => document.getElementById("post_images").click()}
+          />
+          <MaskedIcon Icon={GifIcon} onClick={() => setShowGifPicker(true)} />
           <MaskedIcon Icon={AlignmentIcon} />
-          <MaskedIcon Icon={SmileIcon} onClick={toggleEmojiPicker} />
+          <MaskedIcon
+            Icon={SmileIcon}
+            onClick={() => setShowEmojiPicker((prevState) => !prevState)}
+          />
         </div>
-        {showPicker && (
-          <section className="fixed top-0 left-0 w-screen h-screen z-[4000] flex items-center justify-center bg-black/30">
-            <div className="relative">
+
+        {(showEmojiPicker || showGifPicker) && (
+          <section className="fixed top-0 left-0 w-screen h-screen z-[4000] flex items-center justify-center bg-transparent">
+            <div
+              className="bg-black/30 fixed top-0 left-0 w-screen h-screen"
+              onClick={() => {
+                setShowEmojiPicker(false);
+                setShowGifPicker(false);
+              }}
+            />
+            <div className="relative size-fit max-w-sm grid place-items-center m-10">
               <CloseButton
-                onClick={() => setShowPicker(false)}
-                className="absolute -right-8 -top-8 bg-white"
+                onClick={() => {
+                  setShowEmojiPicker(false);
+                  setShowGifPicker(false);
+                }}
+                className="absolute -right-8 -top-8 bg-white !text-xs !size-8"
                 c
               />
-              <EmojiPicker onEmojiClick={onEmojiClick} />
+              {showGifPicker && <GifPicker onGifSelect={onGifSelect} />}
+              {showEmojiPicker && <EmojiPicker onEmojiClick={onEmojiClick} />}
             </div>
           </section>
         )}
         <button
-          className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-4 transition-opacity duration-300 md:w-full lg:w-fit"
+          className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-4 transition-all duration-300 md:w-full lg:w-fit disabled:bg-gray-400 disabled:cursor-not-allowed"
           onClick={handleCreatePost}
+          disabled={isLoading}
         >
           {isLoading ? "creating post" : "create post"}
         </button>

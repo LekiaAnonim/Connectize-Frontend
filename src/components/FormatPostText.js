@@ -1,23 +1,38 @@
+import React from "react";
 import LightParagraph from "./ParagraphText";
+import DOMPurify from "dompurify";
 
 const FormatPostText = ({ text }) => {
   // Split the text into parts, keeping hashtags separate
   // Regex to detect spaces, #hashtags, ##large text, **bold**, and *italic*
-  const parts = text
+  const parts = DOMPurify.sanitize(text)
     .split(/(\s+|##?[^#\s]+|[*]{1,2}[^*]+[*]{1,2})/g)
     .map((part, index) => {
+      if (part.includes("\n\n")) {
+        return (
+          <React.Fragment key={index}>
+            <br />
+            <br />
+          </React.Fragment>
+        );
+      }
+      if (part.includes("\n")) {
+        return <br key={index} />;
+      }
+
+      if (part.startsWith("##")) {
+        return (
+          <h2 key={index} className="!text-bold !text-lg !text-black">
+            {part.slice(2).trim()}
+          </h2>
+        );
+      }
+
       if (part.startsWith("#")) {
         return (
           <span key={index} className="text-blue-400 font-semibold">
             {part}
           </span>
-        );
-      }
-      if (part.startsWith("##")) {
-        return (
-          <h2 key={index} className="!text-bold !text-lg !text-black">
-            {part}
-          </h2>
         );
       }
 

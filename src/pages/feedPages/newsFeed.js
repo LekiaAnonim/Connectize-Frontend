@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../../components/admin/feeds/SideBar";
 import DiscoverFeed from "../../components/admin/feeds/DiscoverFeed";
 import TopServiceSuggestions from "../../components/admin/feeds/TopServiceSuggestions";
@@ -8,6 +8,9 @@ import clsx from "clsx";
 export default function NewsFeed() {
   const { navOpen } = useNav();
 
+  useEffect(() => {
+    document.title = "Welcome to connectize | Feed";
+  });
   return (
     <section
       className={clsx(

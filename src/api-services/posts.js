@@ -9,11 +9,14 @@ export const getPosts = async () => {
   return posts;
 };
 
-export const createPost = async (body, companyId) => {
+export const createPost = async (body, companyId, images) => {
+  console.log(images);
+
   const post = await makeApiRequest({
     url: `api/posts/`,
     method: "POST",
-    data: { body, company: companyId },
+    data: { body, company: companyId, images },
+    contentType: "multipart/form-data",
   });
 
   return post;
@@ -28,10 +31,11 @@ export const getLikes = async () => {
   return results;
 };
 
-export const likePost = async (id) => {
+export const likePost = async (id, data) => {
   const result = await makeApiRequest({
     url: `api/posts/${id}/like/`,
     method: "POST",
+    data,
   });
 
   return result;
@@ -39,7 +43,7 @@ export const likePost = async (id) => {
 
 export const commentOnPost = async (id) => {
   const result = await makeApiRequest({
-    url: `api/posts/${id}/like/`,
+    url: `api/posts/${id}/comment/`,
     method: "POST",
   });
 

@@ -8,9 +8,11 @@ import HeadingText from "../HeadingText";
 function Profile() {
   const session = getSession();
 
+  const {user} = useAuth()
+
   useRedirect(!session, "/login");
 
-  useRedirect(session && !session?.is_first_time_user, "/user-profile");
+  useRedirect(session && !user?.is_first_time_user, "/");
   return (
     <main>
       <div className="container py-4">

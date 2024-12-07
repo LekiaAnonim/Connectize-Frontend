@@ -5,23 +5,32 @@ import { DownloadIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { MessageOutlined, ShareAltOutlined } from "@ant-design/icons";
 import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
-import { getPosts } from "../../../api-services/posts";
+import { getPosts, likePost } from "../../../api-services/posts";
 import { timeAgo } from "../../../lib/utils";
 import { Button, Tooltip } from "@chakra-ui/react";
 import MoreOptions from "../../MoreOptions";
 import FormatPostText from "../../FormatPostText";
 import { ChangeCircleOutlined } from "@mui/icons-material";
+import { useCustomQuery } from "../../../context/queryContext";
+import jsPDF from "jspdf";
+import { toast } from "sonner";
 
 function DiscoverPosts() {
+  const { refetchInterval } = useCustomQuery();
   const { data: posts } = useQuery({
     queryKey: ["posts"],
     queryFn: getPosts,
+    refetchInterval,
   });
 
   return (
     <section className="space-y-4 mt-4">
       {posts?.map((post, index) => (
-        <DiscoverPostItem hasImage={index === 0} key={index} postItem={post} />
+        <DiscoverPostItem
+          hasImage={post.images_data.length > 0}
+          key={index}
+          postItem={post}
+        />
       ))}
     </section>
   );
@@ -30,7 +39,65 @@ function DiscoverPosts() {
 export default DiscoverPosts;
 
 const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
+  const { setRefetchInterval } = useCustomQuery();
   const [timestamp, setTimestamp] = useState(timeAgo(postItem.date_created));
+
+  const handleLikePost = async () => {
+    try {
+      await likePost(postItem.id, postItem);
+      setRefetchInterval(1000);
+      setTimeout(() => setRefetchInterval(false), 2000);
+      toast.success("Post has been liked");
+    } catch (error) {
+      toast.error("An error occurred while liking post");
+    }
+  };
+
+  const sharePost = async () => {
+    const shareUrlString = window.location.href + "posts/" + postItem.id;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title:
+            "Connectize Post " +
+            postItem.id +
+            " - " +
+            postItem.company.company_name,
+          text: postItem.body,
+          url: shareUrlString, // You can replace this with the post's URL
+        });
+      } catch (error) {
+        console.log("Error sharing:", error);
+        toast.error("An error occurred while sharing post");
+      }
+    } else {
+      // Fallback for browsers that don't support the Web Share API
+      const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        shareUrlString
+      )}`;
+      window.open(shareUrl, "_blank");
+    }
+  };
+
+  const handlePostDownloadPDF = () => {
+    const doc = new jsPDF();
+
+    // Add title and content to the PDF
+    doc.setFont("Helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text(
+      "Connectize Post " + postItem.id + " - " + postItem.company.company_name,
+      10,
+      10
+    );
+
+    doc.setFont("Helvetica", "normal");
+    doc.setFontSize(12);
+    doc.text(postItem.body, 10, 20, { maxWidth: 180 }); // Wraps text within 180mm
+
+    // Save the PDF
+    doc.save(`${"Connectize_Post_" + postItem.id}.pdf`);
+  };
 
   useEffect(() => {
     const interval = setInterval(
@@ -41,9 +108,9 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
   });
   return (
     <article
-      className={clsx(
-        "first:bg-white border-t border-gray-300 first:border-0 first:rounded-md p-3"
-      )}
+      className={clsx("border-t border-gray-300 p-3", {
+        "bg-white !border-0 rounded-md": hasImage,
+      })}
     >
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -58,12 +125,14 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
               {postItem?.company?.company_name}
             </h4>
             {postItem?.company?.verify && <VerifiedIcon color="black" />}
-            <small className="text-gray-400">@dangote • {timestamp}</small>
+            <small className="text-gray-400 lowercase">
+              @{postItem.user.first_name} • {timestamp}
+            </small>
           </div>
         </div>
 
         <MoreOptions>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-2">
             <ButtonWithTooltipIcon text="Edit post" IconName={Pencil2Icon} />
             <ButtonWithTooltipIcon
               text="Convert to draft"
@@ -80,16 +149,12 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
       <FormatPostText text={postItem.body} />
 
       {hasImage && (
-        <section className="grid grid-cols-3 gap-3">
-          {[
-            "/images/company1.PNG",
-            "/images/company2.PNG",
-            "/images/company3.PNG",
-          ].map((src) => (
+        <section className="grid grid-cols-3 gap-2 mt-2">
+          {postItem.images_data.map(({ image: src, id }) => (
             <img
-              key={src}
+              key={id}
               src={src}
-              className="size-full"
+              className="size-full rounded-lg"
               alt="some images for post"
             />
           ))}
@@ -108,10 +173,27 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
         />
 
         <div className="flex items-center gap-0.5">
-          <ButtonWithTooltipIcon IconName={MessageOutlined} tip="Comment" />
-          <ButtonWithTooltipIcon IconName={Heart} tip="Like post" />
-          <ButtonWithTooltipIcon IconName={DownloadIcon} tip="Download post" />
-          <ButtonWithTooltipIcon IconName={ShareAltOutlined} tip="Share post" />
+          <ButtonWithTooltipIcon
+            IconName={MessageOutlined}
+            tip="Comment"
+            text={postItem.comments.length}
+          />
+          <ButtonWithTooltipIcon
+            IconName={Heart}
+            tip="Like post"
+            onClick={handleLikePost}
+            text={postItem.likes.length}
+          />
+          <ButtonWithTooltipIcon
+            IconName={DownloadIcon}
+            tip="Download post"
+            onClick={handlePostDownloadPDF}
+          />
+          <ButtonWithTooltipIcon
+            IconName={ShareAltOutlined}
+            tip="Share post"
+            onClick={sharePost}
+          />
         </div>
       </div>
     </article>
@@ -125,6 +207,7 @@ export function ButtonWithTooltipIcon({
   tip,
   className,
   tooltipClassName,
+  textClassName,
 }) {
   return (
     <Tooltip
@@ -139,12 +222,14 @@ export function ButtonWithTooltipIcon({
       <Button
         onClick={onClick}
         className={clsx(
-          "flex items-center !justify-start !text-start !text-sm gap-1 bg-transparent hover:!bg-gray-100 !py-0 text-gray-400 hover:text-custom_blue transition-colors duration-300",
+          "flex items-center !justify-start !text-start !text-sm gap-1 bg-transparent hover:!bg-gray-100 !py-0 text-gray-400 hover:text-custom_blue active:scale-95 transition-all duration-300",
           className
         )}
       >
-        {IconName && <IconName className="!size-4 " />}
-        {text && <span>{text}</span>}
+        {IconName && <IconName className="!size-4" />}
+        {text && (
+          <span className={`${textClassName} !text-[.5rem]`}>{text}</span>
+        )}
       </Button>
     </Tooltip>
   );

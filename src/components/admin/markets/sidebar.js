@@ -94,10 +94,12 @@ function MarketPlaceNavigation() {
               to={item.to}
               onClick={() => toggleNav(false)}
               className={clsx(
-                "flex gap-2 items-center transition-colors duration-300 p-2 rounded hover:!text-mid_grey",
+                "flex gap-2 items-center transition-colors duration-300 p-2 rounded-md",
                 {
                   "!text-gold !bg-mid_grey": pathname.startsWith(item.to),
-                  "!text-gray-500": !pathname.startsWith(item.to),
+                  "!text-gray-500 hover:!text-mid_grey": !pathname.startsWith(
+                    item.to
+                  ),
                 }
               )}
             >
