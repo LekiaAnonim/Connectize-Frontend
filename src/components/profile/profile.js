@@ -29,7 +29,7 @@ function Profile() {
             Would you like to set up <br />
             your profile now?
           </HeadingText>
-          <img src="/images/pasportOne.png" alt="passport" width="140px" />
+          <img src="/images/passportOne.png" alt="passport" width="140px" />
           <div className="flex max-md:flex-col gap-3 font-semibold text-sm">
             <Link to="/home" className="bg-gold rounded-full w-[250px] p-2">
               Let's Go

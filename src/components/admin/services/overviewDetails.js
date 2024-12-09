@@ -29,21 +29,21 @@ export default function OverviewDetails() {
     <section className="bg-white p-4 rounded pb-5 col-span-3 w-full min-h-screen space-y-4">
       <div className="flex items-start gap-1 lg:gap-2.5">
         <img
-          src={service.companyInfo.logo || "/images/logo.png"}
-          alt={service.company}
+          src={service?.companyInfo?.logo || "/images/logo.png"}
+          alt={service?.company}
           className="size-16"
         />
         <div className="w-full flex-1 flex items-start justify-between">
           <div className="capitalize space-y-1">
             <h2 className="font-bold text-lg md:text-xl">
-              {service.title} - {service.category}
+              {service.title} - {service?.category}
             </h2>
 
             <div className="flex items-center gap-1">
               <Location className="w-5 shrink-0" />
               <p className="text-gray-500 text-sm">
-                {service.company} - {service.companyInfo.state},{" "}
-                {service.companyInfo.country}
+                {service?.company} - {service?.companyInfo?.state},{" "}
+                {service.companyInfo?.country}
               </p>
             </div>
           </div>
