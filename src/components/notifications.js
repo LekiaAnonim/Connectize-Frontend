@@ -5,6 +5,7 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverArrow,
+  Avatar,
 } from "@chakra-ui/react";
 import { Notification } from "../icon";
 
@@ -39,17 +40,11 @@ export function Notifications({ className }) {
           Clear All
         </button>
       </header>
-      <div className="space-y-4">
+      <div className="space-y-4 overflow-y-auto max-h-[70vh]">
         {notificationMessages.map(
           ({ company, src, message, timeStamp }, index) => (
             <div key={index} className="flex items-start gap-2">
-              <img
-                src={src}
-                alt={company}
-                width={35}
-                height={35}
-                className="rounded-full"
-              />
+              <Avatar src={src} alt={company} size="sm" name={company} />
               <div className="space-y-0">
                 <h3 className="leading-[1.125] font-bold m-0 line-clamp-1">
                   {company}
