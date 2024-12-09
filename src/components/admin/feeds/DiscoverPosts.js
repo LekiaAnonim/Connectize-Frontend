@@ -18,6 +18,7 @@ import { useAuth } from "../../../context/userContext";
 import { motion } from "framer-motion";
 import ReactQuill from "react-quill";
 import { MarkdownComponent } from "../../MarkDownComponent";
+import { baseURL } from "../../../lib/helpers";
 
 function DiscoverPosts() {
   const { refetchInterval } = useCustomQuery();
@@ -178,7 +179,7 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
           size={25}
           array={postItem.likes.slice(0, 5).map((post) => ({
             name: post.user.first_name,
-            src: post.user.avatar,
+            src: baseURL + post.user.avatar,
           }))}
         />
 
@@ -310,7 +311,7 @@ const CommentBlock = ({ comment, userId }) => {
         <Avatar
           name={comment.user.first_name + " " + comment.user.last_name}
           className="!size-8"
-          src={comment.user.avatar}
+          src={baseURL + comment.user.avatar}
         />
         <div className="flex items-center gap-1">
           <h5 className="font-bold text-sm">
@@ -322,11 +323,15 @@ const CommentBlock = ({ comment, userId }) => {
           <span className="text-gray-400 text-xs">{timestamp}</span>
         </div>
       </div>
-      <div className="mt-1 text-gray-600">
+      <div className="my-1 text-gray-600">
         <MarkdownComponent
           markdownContent={comment.content}
           className="text-sm"
         />
+      </div>
+
+      <div>
+        
       </div>
     </div>
   );

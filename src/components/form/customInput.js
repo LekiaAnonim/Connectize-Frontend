@@ -127,27 +127,42 @@ export function ImageSelect({
   );
 }
 
-export function AvatarUpload({ formik, name }) {
+export function AvatarUpload({ formik, name, label, className }) {
   const imageValue = formik.values[`${name}`];
+
+  const handleFileChange = (e) => {
+    formik.setFieldValue(name, e.currentTarget.files[0]);
+  };
+  console.log(imageValue);
+
   return (
-    <div>
+    <div className={className}>
       <label>
         <img
-          src={URL.createObjectURL(imageValue) || "/images/pasportTwo.png"}
-          alt="placeholder avatar"
-          className="py-4 w-24 h-auto"
+          src={
+            imageValue
+              ? URL.createObjectURL(imageValue)
+              : "/images/passportTwo.png"
+          }
+          alt="upload"
+          className={clsx("size-24 mx-auto transition-all duration-300", {
+            "rounded-full p-0.5 bg-gold": imageValue !== "",
+          })}
         />
         <input
           name={name}
           type="file"
           accept="image/*"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
+          onChange={handleFileChange}
+          onInput={handleFileChange}
+          onBlur={handleFileChange}
           className="hidden"
         />
+        {label && (
+          <small className="font-semibold !leading-none">{label}</small>
+        )}
       </label>
-
-      <FormikErrorResponse formik={formik} name={imageValue} />
+      <FormikErrorResponse formik={formik} name={name} />
     </div>
   );
 }
@@ -172,11 +187,10 @@ export const CustomTextArea = ({ formik, name, placeholder }) => {
               onChange={(value) => {
                 // Remove <p><br></p> if the editor is empty
                 const cleanedValue = value === "<p><br></p>" ? "" : value;
-                
+
                 localStorage.setItem(name, cleanedValue);
                 formik.setFieldValue(name, cleanedValue);
               }}
-            
               theme="snow"
               placeholder={placeholder}
             />

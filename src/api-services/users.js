@@ -30,23 +30,34 @@ export const updateCurrentUserInfo = async (values) => {
 
   await getOrCreateGender(values.gender);
 
-  await makeApiRequest({
+  return await makeApiRequest({
     url: `api/users/${currentUser.id}/`,
+    contentType: "multipart/form-data",
     method: "PUT",
     data: {
+      ...currentUser,
       first_name: capitalizeFirst(values.first_name),
       last_name: capitalizeFirst(values.last_name),
       gender: values.gender,
       date_of_birth: values.age,
       bio: values.bio,
       role: values.role,
-      is_first_time_user: false,
+      is_first_time_user:
+        values.first_name &&
+        values.last_name &&
+        values.gender &&
+        values.age &&
+        values.role &&
+        values.nationality &&
+        values.state
+          ? false
+          : true,
       country: values.nationality,
       city: values.state,
       region: values.state,
       phone_number: values.phone_number,
       address: values.company_address,
-      avatar: null,
+      avatar: values.image,
     },
   });
 };
@@ -73,7 +84,7 @@ export const getSuggestedUsersForCurrentUser = async () => {
 
 export const getOrCreateGender = async (gender) => {
   const { results } = await makeApiRequest({
-    url: "api/genders",
+    url: "api/genders/",
     method: "GET",
   });
 
@@ -81,7 +92,7 @@ export const getOrCreateGender = async (gender) => {
     return results;
 
   return await makeApiRequest({
-    url: "api/genders",
+    url: "api/genders/",
     method: "POST",
     data: { type: gender },
   });
