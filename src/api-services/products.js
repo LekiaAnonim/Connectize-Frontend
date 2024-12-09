@@ -38,10 +38,10 @@ export const getProducts = async () => {
 };
 
 export const getProductById = async (id) => {
-  const allProducts = await getProducts()
+  const allProducts = await getProducts();
 
-  return allProducts.find((product) => product.id === id)
-}
+  return allProducts.find((product) => product.id === id);
+};
 
 export const getRecommendedProducts = async () => {
   const allProducts = await getProducts();
@@ -51,7 +51,7 @@ export const getRecommendedProducts = async () => {
       product.featured === true ||
       product.title.toString().toLowerCase().includes("oil")
   );
-  return featuredProducts.splice(0, 5) || [];
+  return featuredProducts.slice(0, 5) || [];
 };
 
 export const createProduct = async (data, resetForm) => {
@@ -193,7 +193,7 @@ export const favoriteProduct = async (productId, data) => {
       method: "POST",
       data,
     });
-    toast.success(product.title + " has been unfavorite", { id: toastId });
+    toast.success(data.title + " has been unfavorite", { id: toastId });
     return;
   }
   await makeApiRequest({
@@ -201,5 +201,5 @@ export const favoriteProduct = async (productId, data) => {
     method: "POST",
     data,
   });
-  toast.success(product.title + " has been favorited", { id: toastId });
+  toast.success(data.title + " has been favorited", { id: toastId });
 };

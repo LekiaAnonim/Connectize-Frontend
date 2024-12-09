@@ -12,6 +12,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import { useAuth } from "../../../context/userContext";
 import { Heart } from "../../../icon";
+import { favoriteProduct } from "../../../api-services/products";
 
 const NAVIGATION_BUTTONS = [
   {
@@ -131,7 +132,10 @@ function Productdetails({ product }) {
 
           <div className="flex gap-4 items-center">
             <ChatSellerLink to="/chat" />
-            <FavoriteButton userHasLikedProduct={userHasLikedProduct} product={product} />
+            <FavoriteButton
+              userHasLikedProduct={userHasLikedProduct}
+              product={product}
+            />
           </div>
         </div>
       </section>
@@ -168,12 +172,14 @@ function Productdetails({ product }) {
 
 export default Productdetails;
 
-function FavoriteButton({ userHasLikedProduct,product }) {
+function FavoriteButton({ userHasLikedProduct, product }) {
+  const handleFavorite = async () => await favoriteProduct(product.id, product);
 
-  const handleFavorite = async() =>await favoriteProduct(product.id, product)
-  
   return (
-    <button className="rounded-full px-4 py-1.5 border !border-black/60 flex items-center justify-center gap-2 text-sm font-bold" onClick={handleFavorite }>
+    <button
+      className="rounded-full px-4 py-1.5 border !border-black/60 flex items-center justify-center gap-2 text-sm font-bold"
+      onClick={handleFavorite}
+    >
       {userHasLikedProduct ? <Heart /> : <HeartIcon />}
       <span>Add to favorite</span>
     </button>
