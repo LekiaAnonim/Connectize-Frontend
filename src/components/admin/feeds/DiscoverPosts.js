@@ -235,7 +235,7 @@ const CommentSection = ({
     setLoading(true);
     try {
       const { id } = await commentOnPost(postItem.id, postItem, comment);
-      if (id) toast.info("Comment has been submitted");
+      if (id) toast.success("Comment has been submitted");
 
       setRefetchInterval(1000);
       setTimeout(() => setRefetchInterval(false), 2000);
@@ -268,7 +268,7 @@ const CommentSection = ({
         <CommentBlock
           key={comment.id}
           comment={comment}
-          userId={postItem.user.id}
+          postUserId={postItem.user.id}
         />
       ))}
       <div className="mt-4 border-t pt-4 relative">
@@ -294,9 +294,8 @@ const CommentSection = ({
   );
 };
 
-const CommentBlock = ({ comment, userId }) => {
+const CommentBlock = ({ comment, postUserId }) => {
   const [timestamp, setTimestamp] = useState(timeAgo(comment.commented_at));
-  const { user: currentUser } = useAuth();
 
   useEffect(() => {
     const interval = setInterval(
@@ -317,7 +316,7 @@ const CommentBlock = ({ comment, userId }) => {
           <h5 className="font-bold text-sm">
             {comment.user.first_name} {comment.user.last_name}
             <span className="text-[.65rem] text-gray-400 font-medium">
-              {currentUser?.id === userId ? "(author) •" : ""}
+              {comment.user?.id === postUserId ? "(author) •" : ""}
             </span>
           </h5>
           <span className="text-gray-400 text-xs">{timestamp}</span>
@@ -330,9 +329,7 @@ const CommentBlock = ({ comment, userId }) => {
         />
       </div>
 
-      <div>
-        
-      </div>
+      <div></div>
     </div>
   );
 };

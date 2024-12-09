@@ -155,7 +155,7 @@ function Overview() {
         <StepButton nextStep="bio" stepDirection="back" stepText="Back" />
         <StepButton
           doStepChange={doStepChange}
-          nextStep="/"
+          nextStep=""
           disabled={loading}
           stepText={loading ? "Updating..." : "Submit"}
         />

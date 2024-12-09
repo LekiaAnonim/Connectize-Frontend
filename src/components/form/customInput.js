@@ -133,7 +133,6 @@ export function AvatarUpload({ formik, name, label, className }) {
   const handleFileChange = (e) => {
     formik.setFieldValue(name, e.currentTarget.files[0]);
   };
-  console.log(imageValue);
 
   return (
     <div className={className}>
