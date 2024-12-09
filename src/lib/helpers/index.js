@@ -11,7 +11,8 @@ export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function goToLogin(toastMessage) {
+export function goToLogin() {
+  removeSession();
   const pathname = window.location.pathname;
   window.location.replace("/login?next=" + pathname);
 }

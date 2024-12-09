@@ -8,6 +8,7 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
+  Divider,
 } from "@chakra-ui/react";
 
 const ReusableModal = ({
@@ -25,8 +26,9 @@ const ReusableModal = ({
         <ModalHeader className="text-lg font-bold text-gray-800">
           {title}
         </ModalHeader>
+        <Divider className="mb-3 mx-auto !w-[96%]" />
         <ModalCloseButton className="focus:outline-none" />
-        <ModalBody className="text-gray-600">{children}</ModalBody>
+        <ModalBody className="text-gray-700">{children}</ModalBody>
         <ModalFooter className="flex justify-end space-x-2">
           {footerContent || (
             <Button colorScheme="blue" onClick={onClose} className="px-4 py-2">

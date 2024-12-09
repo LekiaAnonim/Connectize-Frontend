@@ -8,16 +8,22 @@ const UserContext = createContext();
 // Create the provider component
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(
-    () => async () => {
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      setLoading(true);
       const authorization = await refreshTokenIfNeeded();
-      if (authorization) setUser(await getCurrentUser());
-    },
-    []
-  );
+      if (authorization) {
+        setUser(await getCurrentUser());
+      }
+      setLoading(false);
+    };
+    fetchCurrentUser();
+    return () => fetchCurrentUser();
+  }, []);
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, loading }}>
       {children}
     </UserContext.Provider>
   );

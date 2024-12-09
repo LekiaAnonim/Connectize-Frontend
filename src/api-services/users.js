@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import { makeApiRequest } from "../lib/helpers";
+import { goToLogin, makeApiRequest } from "../lib/helpers";
 import { capitalizeFirst } from "../lib/utils";
 
 export const getAllUsers = async () => {
@@ -97,3 +97,5 @@ export const getOrCreateGender = async (gender) => {
     data: { type: gender },
   });
 };
+
+export const logOutCurrentUser = () => goToLogin();

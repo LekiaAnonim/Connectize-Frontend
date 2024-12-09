@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
 import { capitalizeFirst } from "../lib/utils";
 import { getSession } from "../lib/session";
+import { getCurrentUser } from "./users";
 
 // {
 //     "title": "",
@@ -35,6 +36,12 @@ export const getProducts = async () => {
 
   return mergedProductWIthImage || [];
 };
+
+export const getProductById = async (id) => {
+  const allProducts = await getProducts()
+
+  return allProducts.find((product) => product.id === id)
+}
 
 export const getRecommendedProducts = async () => {
   const allProducts = await getProducts();
@@ -164,4 +171,35 @@ export const getOrCreateProductCategories = async (name) => {
   });
 
   return newCategory;
+};
+
+// favorite product
+
+export const favoriteProduct = async (productId, data) => {
+  const toastId = toast.info("processing like action...");
+  const allProducts = await getProducts();
+
+  const currentUser = await getCurrentUser();
+
+  const currentProduct = allProducts.find(
+    (product) => product.id === productId
+  );
+
+  if (
+    currentProduct.likes.find((product) => product.user.id === currentUser.id)
+  ) {
+    await makeApiRequest({
+      url: `api/products/${productId}/unlike/`,
+      method: "POST",
+      data,
+    });
+    toast.success(product.title + " has been unfavorite", { id: toastId });
+    return;
+  }
+  await makeApiRequest({
+    url: `api/products/${productId}/like/`,
+    method: "POST",
+    data,
+  });
+  toast.success(product.title + " has been favorited", { id: toastId });
 };

@@ -10,6 +10,8 @@ import { Button, Divider } from "@chakra-ui/react";
 import { MarkdownComponent } from "../../MarkDownComponent";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
+import { useAuth } from "../../../context/userContext";
+import { Heart } from "../../../icon";
 
 const NAVIGATION_BUTTONS = [
   {
@@ -28,11 +30,11 @@ const NAVIGATION_BUTTONS = [
 
 function Productdetails({ product }) {
   const swiperRef = useRef(null);
+  const { user: currentUser } = useAuth();
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   const handleNavigation = (action) => {
     const swiperInstance = swiperRef.current;
-    console.log(swiperInstance);
 
     if (!swiperInstance) {
       console.error("Swiper instance is not initialized.");
@@ -43,6 +45,13 @@ function Productdetails({ product }) {
 
     setActiveSlideIndex(Number(swiperRef?.current?.activeIndex));
   };
+
+  const userHasLikedProduct = product.likes.find(
+    (product) => product.user.id === currentUser?.id
+  )
+    ? true
+    : false;
+
   return (
     <>
       <section className="flex max-lg:flex-col items-start justify-center gap-4">
@@ -114,6 +123,7 @@ function Productdetails({ product }) {
 
             <MarkdownComponent
               markdownContent={product.description}
+              markdownTitle="Product description"
               isDescription
             />
           </div>
@@ -121,10 +131,7 @@ function Productdetails({ product }) {
 
           <div className="flex gap-4 items-center">
             <ChatSellerLink to="/chat" />
-            <button className="rounded-full px-4 py-1.5 border !border-black/60 flex items-center justify-center gap-2 text-sm font-bold">
-              <HeartIcon />
-              <span>Add to favorite</span>
-            </button>
+            <FavoriteButton userHasLikedProduct={userHasLikedProduct} product={product} />
           </div>
         </div>
       </section>
@@ -160,3 +167,15 @@ function Productdetails({ product }) {
 }
 
 export default Productdetails;
+
+function FavoriteButton({ userHasLikedProduct,product }) {
+
+  const handleFavorite = async() =>await favoriteProduct(product.id, product)
+  
+  return (
+    <button className="rounded-full px-4 py-1.5 border !border-black/60 flex items-center justify-center gap-2 text-sm font-bold" onClick={handleFavorite }>
+      {userHasLikedProduct ? <Heart /> : <HeartIcon />}
+      <span>Add to favorite</span>
+    </button>
+  );
+}

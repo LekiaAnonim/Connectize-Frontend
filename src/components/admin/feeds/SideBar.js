@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { feedNavItems } from "../../../lib/data";
 import Logo from "../../logo";
@@ -12,6 +12,10 @@ import LightParagraph from "../../ParagraphText";
 import CloseOverlay from "../../CloseOverlay";
 import { CirceTitleSubtitleSkeleton } from "../feeds/TopServiceSuggestions";
 import { Avatar } from "@chakra-ui/react";
+import { LogoutOutlined } from "@ant-design/icons";
+import { useAuth } from "../../../context/userContext";
+import { getSession } from "../../../lib/session";
+import { logOutCurrentUser } from "../../../api-services/users";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
@@ -51,6 +55,17 @@ export default Sidebar;
 
 function NavigationSection({ pathname }) {
   const { toggleNav } = useNav();
+  const { user: currentUser } = useAuth();
+  const session = getSession();
+  const [loading, setLoading] = useState(false);
+
+  const handleLogout = async () => {
+    setLoading(true);
+
+    logOutCurrentUser();
+    setLoading(false);
+  };
+
   return (
     <ul className="mb-6 space-y-1 xs:text-sm p-2 bg-background rounded">
       {feedNavItems.map((item, index) => (
@@ -59,10 +74,11 @@ function NavigationSection({ pathname }) {
             to={item.to}
             onClick={() => toggleNav(false)}
             className={clsx(
-              "flex gap-2 items-center transition-colors duration-300 p-2 rounded  hover:text-mid_grey text-gray-500",
+              "flex gap-2 items-center transition-colors duration-300 p-2 rounded  hover:!text-mid_grey",
               {
                 "!text-gold bg-mid_grey pointer-events-none":
                   item.to === pathname,
+                "!text-gray-500": item.to !== pathname,
               }
             )}
           >
@@ -71,6 +87,20 @@ function NavigationSection({ pathname }) {
           </Link>
         </li>
       ))}
+      {currentUser && session && (
+        <li>
+          <button
+            className={clsx(
+              "flex gap-2 items-center transition-colors duration-300 p-2 rounded  hover:text-red-600 text-gray-500 disabled:cursor-not-allowed disabled:text-red-600"
+            )}
+            onClick={handleLogout}
+            disabled={loading}
+          >
+            <LogoutOutlined />
+            <span>{loading ? "Logging out..." : "Logout"}</span>
+          </button>
+        </li>
+      )}
     </ul>
   );
 }
