@@ -105,3 +105,34 @@ export const getOrCreateServiceCategories = async (name) => {
 
   return newCategory;
 };
+
+export const bookmarkService = async (serviceId, data) => {
+  const toastId = toast.info("processing like action...");
+  const allProducts = await getServices();
+
+  const currentUser = await getCurrentUser();
+
+  const currentProduct = allProducts.find(
+    (product) => product.id === serviceId
+  );
+
+  if (
+    currentProduct.likes.find((product) => product.user.id === currentUser.id)
+  ) {
+    await makeApiRequest({
+      url: `api/services/${serviceId}/unlike/`,
+      method: "POST",
+      data: { ...data, company_id: data.company.id },
+    });
+    toast.success(data.title + " has been removed from bookmark", {
+      id: toastId,
+    });
+    return;
+  }
+  await makeApiRequest({
+    url: `api/services/${serviceId}/like/`,
+    method: "POST",
+    data: { ...data, company_id: data.company.id },
+  });
+  toast.success(data.title + " has been bookmarked", { id: toastId });
+};
