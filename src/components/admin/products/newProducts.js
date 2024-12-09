@@ -15,10 +15,10 @@ export default function NewProducts() {
     <section className="space-y-4">
       <HeadingText>You may also like</HeadingText>
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-        {products.splice(0, 4).map((product) => (
+        {products?.slice(0, 4).map((product, index) => (
           <ProductListCard
             key={product.id}
-            image={"/images/Rectangle7.png"}
+            image={product.images[index]}
             title={product.title}
             subtitle={product.category}
           />

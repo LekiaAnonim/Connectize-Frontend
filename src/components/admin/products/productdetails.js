@@ -4,6 +4,7 @@ import HeadingText from "../../HeadingText";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
+  HeartFilledIcon,
   HeartIcon,
 } from "@radix-ui/react-icons";
 import { Button, Divider } from "@chakra-ui/react";
@@ -11,7 +12,6 @@ import { MarkdownComponent } from "../../MarkDownComponent";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import { useAuth } from "../../../context/userContext";
-import { Heart } from "../../../icon";
 import { favoriteProduct } from "../../../api-services/products";
 
 const NAVIGATION_BUTTONS = [
@@ -47,7 +47,7 @@ function Productdetails({ product }) {
     setActiveSlideIndex(Number(swiperRef?.current?.activeIndex));
   };
 
-  const userHasLikedProduct = product.likes.find(
+  const userHasLikedProduct = product?.likes.find(
     (product) => product.user.id === currentUser?.id
   )
     ? true
@@ -61,7 +61,7 @@ function Productdetails({ product }) {
             <Swiper
               onSwiper={(swiper) => (swiperRef.current = swiper)}
               modules={[Pagination, Autoplay]}
-              autoplay={{ delay: 40000 }}
+              autoplay={{ delay: 10000 }}
               pagination={{ clickable: true }}
               slidesPerView={1}
               className="!z-0"
@@ -173,14 +173,23 @@ function Productdetails({ product }) {
 export default Productdetails;
 
 function FavoriteButton({ userHasLikedProduct, product }) {
-  const handleFavorite = async () => await favoriteProduct(product.id, product);
+  const [favorited, setFavorited] = useState(userHasLikedProduct);
+  const [loading, setLoading] = useState(false);
+
+  const handleFavorite = async () => {
+    setLoading(true);
+    await favoriteProduct(product.id, product);
+    setLoading(false);
+    setFavorited(!favorited); // for optimistic changes
+  };
 
   return (
     <button
-      className="rounded-full px-4 py-1.5 border !border-black/60 flex items-center justify-center gap-2 text-sm font-bold"
+      className="rounded-full px-4 py-1.5 border !border-black/60 flex items-center justify-center gap-2 text-sm font-bold disabled:cursor-not-allowed"
       onClick={handleFavorite}
+      disabled={loading}
     >
-      {userHasLikedProduct ? <Heart /> : <HeartIcon />}
+      {favorited ? <HeartFilledIcon /> : <HeartIcon />}
       <span>Add to favorite</span>
     </button>
   );

@@ -37,19 +37,14 @@ export const getProducts = async () => {
   return mergedProductWIthImage || [];
 };
 
-export const getProductById = async (id) => {
-  const allProducts = await getProducts();
-
-  return allProducts.find((product) => product.id === id);
-};
-
 export const getRecommendedProducts = async () => {
   const allProducts = await getProducts();
 
   const featuredProducts = allProducts.filter(
     (product) =>
       product.featured === true ||
-      product.title.toString().toLowerCase().includes("oil")
+      product.title.toString().toLowerCase().includes("oil") ||
+      product
   );
   return featuredProducts.slice(0, 5) || [];
 };
@@ -173,8 +168,6 @@ export const getOrCreateProductCategories = async (name) => {
   return newCategory;
 };
 
-// favorite product
-
 export const favoriteProduct = async (productId, data) => {
   const toastId = toast.info("processing like action...");
   const allProducts = await getProducts();
@@ -191,7 +184,7 @@ export const favoriteProduct = async (productId, data) => {
     await makeApiRequest({
       url: `api/products/${productId}/unlike/`,
       method: "POST",
-      data,
+      data: { ...data, company_id: data.company.id },
     });
     toast.success(data.title + " has been unfavorite", { id: toastId });
     return;
@@ -199,7 +192,7 @@ export const favoriteProduct = async (productId, data) => {
   await makeApiRequest({
     url: `api/products/${productId}/like/`,
     method: "POST",
-    data,
+    data: { ...data, company_id: data.company.id },
   });
   toast.success(data.title + " has been favorited", { id: toastId });
 };

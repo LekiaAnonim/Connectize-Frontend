@@ -3,7 +3,7 @@ import Logo from "../logo";
 import MoreOptions from "../MoreOptions";
 import Headroom from "react-headroom";
 import { useAuth } from "../../context/userContext";
-import { Tooltip } from "@chakra-ui/react";
+import { Avatar, Tooltip } from "@chakra-ui/react";
 
 import {
   ChartBar,
@@ -137,10 +137,10 @@ function ProfilePicture() {
 
   return (
     // <Link to="/user-profile">
-    <img
+    <Avatar
       src={user?.avatar || "/images/iconprofile.PNG"}
-      alt={user?.first_name + " " + user?.last_name || "User"}
-      className="size-[35px] rounded-full "
+      name={user?.first_name + " " + user?.last_name || "User"}
+      size="sm"
     />
     // </Link>
   );

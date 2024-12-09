@@ -10,17 +10,19 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const fetchCurrentUser = async () => {
+    setLoading(true);
+    const authorization = await refreshTokenIfNeeded();
+    if (authorization && !user) {
+      setUser(await getCurrentUser());
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      setLoading(true);
-      const authorization = await refreshTokenIfNeeded();
-      if (authorization) {
-        setUser(await getCurrentUser());
-      }
-      setLoading(false);
-    };
     fetchCurrentUser();
-    return () => fetchCurrentUser();
+    return async () => await fetchCurrentUser();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <UserContext.Provider value={{ user, setUser, loading }}>
