@@ -7,7 +7,7 @@ import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
 import { commentOnPost, getPosts, likePost } from "../../../api-services/posts";
 import { formatNumber, timeAgo } from "../../../lib/utils";
-import { CloseButton, Tooltip } from "@chakra-ui/react";
+import { Avatar, CloseButton, Tooltip } from "@chakra-ui/react";
 import MoreOptions from "../../MoreOptions";
 import FormatPostText from "../../FormatPostText";
 import { ChangeCircleOutlined } from "@mui/icons-material";
@@ -125,12 +125,12 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
         "bg-white !border-0 rounded-md": hasImage,
       })}
     >
-      <header className="flex items-center justify-between">
+      <header className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <img
-            src={postItem?.company?.logo || "/images/logo.png"}
-            alt="Post"
-            className="size-10 rounded-full"
+          <Avatar
+            name={postItem?.company?.company_name}
+            className="size-10"
+            src={postItem?.company?.logo}
           />
 
           <div className="flex items-center gap-1">
@@ -176,13 +176,10 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
       <div className="flex items-center gap-2 justify-between mt-4">
         <ConJoinedImages
           size={25}
-          array={[
-            "/images/passport9.PNG",
-            "/images/passport10.PNG",
-            "/images/passport11.PNG",
-            "/images/passport12.PNG",
-            "/images/iconprofile.PNG",
-          ]}
+          array={postItem.likes.slice(0, 5).map((post) => ({
+            name: post.user.first_name,
+            src: post.user.avatar,
+          }))}
         />
 
         <div className="flex items-center gap-3">
@@ -310,16 +307,16 @@ const CommentBlock = ({ comment, userId }) => {
   return (
     <div key={comment.id} className="mb-4">
       <div className="flex gap-2">
-        <img
-          src={comment.user.avatar || "https://via.placeholder.com/40"}
-          alt="Avatar"
-          className="size-8 rounded-full"
+        <Avatar
+          name={comment.user.first_name + " " + comment.user.last_name}
+          className="!size-8"
+          src={comment.user.avatar}
         />
         <div className="flex items-center gap-1">
           <h5 className="font-bold text-sm">
             {comment.user.first_name} {comment.user.last_name}
-            <span className="text-[.7rem] text-gray-400 font-medium">
-              {currentUser.id === userId ? "(author) •" : ""}
+            <span className="text-[.65rem] text-gray-400 font-medium">
+              {currentUser?.id === userId ? "(author) •" : ""}
             </span>
           </h5>
           <span className="text-gray-400 text-xs">{timestamp}</span>

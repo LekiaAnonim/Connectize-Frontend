@@ -6,10 +6,16 @@ import { ChartBar, Setting } from "../icon";
 import FeedSearch from "./admin/feeds/FeedSearch";
 import { NotificationPopOver } from "./notifications";
 import { LinkWithTooltipIcon } from "./userProfile/Navbar";
+import { Avatar } from "@chakra-ui/react";
+import { useAuth } from "../context/userContext";
 
 function ResponsiveNav() {
   const { toggleNav } = useNav();
-  const headerImages = ["/images/iconlove.png", "/images/iconprofile.PNG"];
+  const { user } = useAuth();
+  const headerImages = [
+    { src: user?.avatar, name: user?.first_name + " " + user?.last_name },
+    { src: "", name: "Company Name" },
+  ];
   return (
     <div className="flex justify-between items-center gap-2 sm:gap-4 w-full mb-4 max-md:mt-2">
       <ConJoinedImages array={headerImages} />
@@ -37,14 +43,16 @@ export default ResponsiveNav;
 export const ConJoinedImages = ({ size = 40, array, animate = true }) => {
   return (
     <div className="flex group w-fit">
-      {array.map((src, index) => (
-        <img
+      {array.map(({ src, name }, index) => (
+        <Avatar
           key={index}
           src={src}
-          alt="joined together"
-          style={{ transform: `translateX(-${5 * index}px)` }}
-          width={size}
-          height={size}
+          name={name}
+          style={{
+            transform: `translateX(-${5 * index}px)`,
+            width: `${size}px`,
+            height: `${size}px`,
+          }}
           className={clsx("rounded-full transition-transform duration-500", {
             "group-hover:!translate-x-2 delay-200": animate,
           })}

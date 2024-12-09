@@ -4,6 +4,7 @@ import LightParagraph from "../ParagraphText";
 import {
   bioKey,
   company_addressKey,
+  currentProfileIndexKey,
   first_nameKey,
   last_nameKey,
   nationalityKey,
@@ -16,56 +17,60 @@ import { useFormik } from "formik";
 import StepButton from "./StepButton";
 import { overviewFields, overviewFormValues } from "../../lib/data/overview";
 import { getLocalData } from "../../lib/helpers/overview";
-import { makeApiRequest } from "../../lib/helpers";
-import { useAuth } from "../../context/userContext";
-import { setSession } from "../../lib/session";
-import { getOrCreateGender } from "../../api-services/users";
+import { updateCurrentUserInfo } from "../../api-services/users";
+import * as Yup from "yup";
+import { AvatarUpload } from "../form/customInput";
+import { toast } from "sonner";
+import useRedirect from "../../hooks/useRedirect";
+
+const FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
+
+const validationSchema = Yup.object().shape({
+  image: Yup.mixed()
+    .required("File is required")
+    .test(
+      "file-size",
+      "File size is too large, only images less than 4mb is allowed",
+      (value) => {
+        return value && value.size <= FILE_SIZE;
+      }
+    )
+    .test(
+      "file-format",
+      "Unsupported file format, only PNGs, JPEGs and JPGs are allowed",
+      (value) => {
+        return value && SUPPORTED_FORMATS.includes(value.type);
+      }
+    ),
+});
 
 function Overview() {
-  const { user } = useAuth();
+  useRedirect(
+    !(Number(localStorage.getItem(currentProfileIndexKey)) >= 4),
+    "/bio"
+  );
 
   const fullName =
     getLocalData(first_nameKey) + " " + getLocalData(last_nameKey);
 
   const formik = useFormik({
     initialValues: overviewFormValues,
-    onSubmit: async () => await doStepChange(),
+    validationSchema,
   });
 
   const doStepChange = async () => {
     const values = formik.values;
 
-    await getOrCreateGender(values.gender);
+    const response = await updateCurrentUserInfo(values);
 
-    const response = await makeApiRequest({
-      url: `api/users/${user.id}/`,
-      method: "PUT",
-      data: {
-        first_name: values.first_name,
-        last_name: values.last_name,
-        email: user.email,
-        gender: values.gender.toLowerCase(),
-        date_of_birth: values.age,
-        bio: values.bio,
-        role: values.role,
-        is_first_time_user: false,
-        company: values.company_name,
-        country: values.nationality,
-        city: values.city,
-        phone_number: values.phone_number,
-        region: values.state,
-        address: values.company_address,
-        avatar: null,
-        companies: [],
-      },
-    });
+    if (response && response?.id) {
+      for (let value in formik.values) {
+        localStorage.removeItem(value);
+      }
 
-    const userData = { ...response, is_first_time_user: false };
-
-    setSession(userData);
-
-    for (let value in formik.values) {
-      localStorage.removeItem(value);
+      toast.success("User profile has been updated successfully");
+      return true;
     }
 
     return false;
@@ -74,7 +79,8 @@ function Overview() {
   useEffect(() => {
     formik.setValues(overviewFormValues);
 
-    document.title = "Overview | connectize";
+    document.title =
+      "Complete profile - confirm profile information | Connectize";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -84,11 +90,7 @@ function Overview() {
         <LightParagraph>Please ensure your details are correct</LightParagraph>
       </div>
       <div className="flex gap-3 mb-4">
-        <img
-          src="/images/pasportTwo.png"
-          alt={fullName || "User profile"}
-          className="w-1/2 max-w-36"
-        />
+        <AvatarUpload formik={formik} name="image" />
         <div className="mt-4 capitalize">
           <h4>{fullName || "No name"}</h4>
           <p className="text-black/50">

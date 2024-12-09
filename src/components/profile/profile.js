@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../logo";
 import { getSession } from "../../lib/session";
@@ -9,11 +9,17 @@ import { useAuth } from "../../context/userContext";
 function Profile() {
   const session = getSession();
 
-  const {user} = useAuth()
+  const { user: currentUser } = useAuth();
 
   useRedirect(!session, "/login");
 
-  useRedirect(session && !user?.is_first_time_user, "/");
+  useRedirect(currentUser && !currentUser?.is_first_time_user, "/");
+
+  useEffect(() => {
+    document.title =
+      "Complete your profile to start enjoying connectize's great services | Connectize";
+  }, []);
+
   return (
     <main>
       <div className="container py-4">
@@ -23,15 +29,12 @@ function Profile() {
             Would you like to set up <br />
             your profile now?
           </HeadingText>
-          <img src="/images/pasportOne.png" alt="passport" width="150px" />
-          <div className="flex max-md:flex-col gap-3">
+          <img src="/images/pasportOne.png" alt="passport" width="140px" />
+          <div className="flex max-md:flex-col gap-3 font-semibold text-sm">
             <Link to="/home" className="bg-gold rounded-full w-[250px] p-2">
               Let's Go
             </Link>
-            <Link
-              to="/user-profile"
-              className="bg-gray-400 rounded-full w-[250px] p-2"
-            >
+            <Link to="/" className="bg-gray-300 rounded-full w-[250px] p-2">
               Not Now
             </Link>
           </div>

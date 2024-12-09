@@ -1,4 +1,6 @@
+import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
+import { capitalizeFirst } from "../lib/utils";
 
 export const getAllUsers = async () => {
   const { results } = await makeApiRequest({
@@ -18,6 +20,37 @@ export const getCurrentUser = async () => {
   return currentUser || null;
 };
 
+export const updateCurrentUserInfo = async (values) => {
+  const currentUser = await getCurrentUser();
+
+  if (!values || !values.gender) {
+    toast.info("Incomplete profile information");
+    return;
+  }
+
+  await getOrCreateGender(values.gender);
+
+  await makeApiRequest({
+    url: `api/users/${currentUser.id}/`,
+    method: "PUT",
+    data: {
+      first_name: capitalizeFirst(values.first_name),
+      last_name: capitalizeFirst(values.last_name),
+      gender: values.gender,
+      date_of_birth: values.age,
+      bio: values.bio,
+      role: values.role,
+      is_first_time_user: false,
+      country: values.nationality,
+      city: values.state,
+      region: values.state,
+      phone_number: values.phone_number,
+      address: values.company_address,
+      avatar: null,
+    },
+  });
+};
+
 export const getSuggestedUsersForCurrentUser = async () => {
   const currentUser = await getCurrentUser();
 
@@ -29,10 +62,11 @@ export const getSuggestedUsersForCurrentUser = async () => {
       user.first_name &&
       (user.city === currentUser.city ||
         user.region === currentUser.region ||
-        user.country === currentUser.country)
+        user.country === currentUser.country ||
+        user)
   );
 
-  return allUsersInLocation || allUsers.splice(0, 10); // allUsersInLocation ||
+  return allUsersInLocation;
 };
 
 // get and create user
@@ -43,11 +77,7 @@ export const getOrCreateGender = async (gender) => {
     method: "GET",
   });
 
-  if (
-    results?.filter((data) => data.type.toLowerCase() === gender.toLowerCase())
-      .length > 0 ||
-    gender === undefined
-  )
+  if (results?.filter((data) => data.type === gender).length > 0 || !gender)
     return results;
 
   return await makeApiRequest({

@@ -1,37 +1,44 @@
 import React, { useEffect } from "react";
 import HeadingText from "../HeadingText";
 import LightParagraph from "../ParagraphText";
-import { personal_emailKey, phone_numberKey } from "../../lib/data";
+import {
+  currentProfileIndexKey,
+  personal_emailKey,
+  phone_numberKey,
+} from "../../lib/data";
 import Form from "../form";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import StepButton from "./StepButton";
+import { customFormikFieldValidator } from "../../lib/utils";
+import useRedirect from "../../hooks/useRedirect";
 
 const validationSchema = Yup.object().shape({
-  phone_number: Yup.string().required("Phone number field is required"),
+  phone_number: Yup.string().required("This field is required"),
   personal_email: Yup.string()
     .email("Invalid Email")
-    .required("Personal email field is required"),
+    .required("This field is required"),
 });
 
 function Contact() {
-  const formValues = {
+  useRedirect(
+    !(Number(localStorage.getItem(currentProfileIndexKey)) >= 1),
+    "/home"
+  );
+  const initialValues = {
     personal_email: localStorage.getItem(personal_emailKey) || "",
     phone_number: localStorage.getItem(phone_numberKey) || "",
   };
 
   const formik = useFormik({
-    initialValues: formValues,
-    validationSchema: validationSchema,
+    initialValues,
+    validationSchema,
   });
 
-  const doStepChange = () => {
-    formik.handleSubmit();
-    const hasUndefined = Object.values(formik.values).some(
-      (value) => value === undefined || value === "" || value === null
-    );
+  const doStepChange = async () => {
+    const isValidFields = await customFormikFieldValidator(formik);
 
-    if (hasUndefined) return false;
+    if (!isValidFields) return false;
 
     for (let value in formik.values) {
       const key = value;
@@ -39,11 +46,13 @@ function Contact() {
 
       localStorage.setItem(key, keyValue);
     }
+
+    localStorage.setItem(currentProfileIndexKey, "2");
     return true;
   };
 
   useEffect(() => {
-    formik.setValues(formValues);
+    formik.setValues(initialValues);
     document.title = "Complete your profile - Contact information | connectize";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -60,7 +69,7 @@ function Contact() {
         {
           name: personal_emailKey,
           type: "email",
-          label: "Personal Email",
+          label: "Alternative Email",
           placeholder: "example@company_name.com",
         },
       ],

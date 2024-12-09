@@ -1,8 +1,8 @@
 import React from "react";
-import { ArrowLeft, GreaterThan } from "../../icon";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
+import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 
 function StepButton({
   nextStep = "contact",
@@ -35,7 +35,7 @@ function StepButton({
       )}
     >
       <span>{stepText}</span>
-      {stepDirection === "next" ? <GreaterThan /> : <ArrowLeft />}
+      {stepDirection === "next" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
     </Button>
   );
 }

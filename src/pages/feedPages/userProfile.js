@@ -8,7 +8,7 @@ import Navbar from "../../components/userProfile/Navbar";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getCompanies } from "../../api-services/companies";
-import { capitalizeFirst } from "../../lib/utils";
+import { capitalizeFirst, formatNumber } from "../../lib/utils";
 import NoPage from "../../components/NoPage";
 
 export default function UserProfile() {
@@ -58,10 +58,17 @@ function ProductSidebar({ company }) {
         <h1 className="text-3xl md:text-2xl font-bold">
           {capitalizeFirst(company.company_name) || "Dangote oil refinery"}
         </h1>
-        <div className="flex gap-2">
-          <StatsText text="25k/ post" />
-          <StatsText text="1M/ followers" />
-          <StatsText text="157/ Reviews" />
+        <div className="flex gap-2 overflow-x-auto">
+          <StatsText
+            text={formatNumber(company.products.length) + "/ products"}
+          />
+          <StatsText
+            text={formatNumber(company.followers.length) + "/ followers"}
+          />
+          <StatsText
+            text={formatNumber(company.following.length) + "/ following"}
+          />
+          <StatsText text={"0/ Reviews"} />
         </div>
       </section>
       <ListedProducts company={company} />
@@ -72,7 +79,7 @@ function ProductSidebar({ company }) {
 
 function StatsText({ text }) {
   return (
-    <div className="bg-gray-200/80 py-2 px-3 rounded-full md:text-xs text-sm">
+    <div className="bg-gray-200/80 py-2 px-3 rounded-full md:text-xs text-sm shrink-0">
       <span className="text-black font-semibold">{text.split("/")[0]}</span>
       <span className="text-gray-500">{text.split("/")[1]}</span>
     </div>

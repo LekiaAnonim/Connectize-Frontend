@@ -84,6 +84,7 @@ export async function makeApiRequest({
   resetForm,
   type = "",
   contentType = "application/json",
+  params,
 }) {
   try {
     const authorization = await refreshTokenIfNeeded();
@@ -101,6 +102,7 @@ export async function makeApiRequest({
         ...authorization,
         "Content-Type": contentType,
       },
+      params,
     });
 
     const responseMessage = response.data.message;
@@ -130,6 +132,7 @@ export async function makeApiRequest({
             ...authorization,
             "Content-Type": contentType,
           },
+          params,
         });
 
         const responseMessage = response.data.message;

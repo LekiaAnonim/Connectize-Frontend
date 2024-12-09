@@ -1,7 +1,6 @@
 import {
   first_nameKey,
   last_nameKey,
-  company_nameKey,
   genderKey,
   ageKey,
   website_urlKey,
@@ -50,12 +49,6 @@ export const overviewFields = [
     disabled: true,
     gridInputs: [
       {
-        name: company_nameKey,
-        type: "text",
-        label: "Company Name",
-        placeholder: "Enter your company's name",
-      },
-      {
         name: genderKey,
         type: "text",
         label: "Gender",
@@ -99,7 +92,6 @@ export const overviewFields = [
 export const overviewFormValues = {
   first_name: getLocalData(first_nameKey),
   last_name: getLocalData(last_nameKey),
-  company_name: getLocalData(company_nameKey),
   gender: getLocalData(genderKey),
   age: getLocalData(ageKey),
   phone_number: getLocalData(phone_numberKey),
@@ -113,5 +105,5 @@ export const overviewFormValues = {
   postal_code: getLocalData(postal_codeKey),
   role: getLocalData(roleKey),
   bio: getLocalData(bioKey),
-  // image: getLocalData(imageKey),
+  image: "",
 };

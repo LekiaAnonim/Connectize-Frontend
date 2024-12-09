@@ -10,8 +10,9 @@ import { Link } from "react-router-dom";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import EmojiPicker from "emoji-picker-react";
 import GifPicker from "../../GifPicker";
-import { unSupportedText } from "../listing/newListing";
+import { largeFileText, unSupportedText } from "../listing/newListing";
 import { useCustomQuery } from "../../../context/queryContext";
+import { useAuth } from "../../../context/userContext";
 
 const isImageFile = (files) => {
   if (!files || files.length === 0) return true; // No files provided
@@ -33,8 +34,23 @@ const isImageFile = (files) => {
   return imageTypes.includes(files.type.toLowerCase());
 };
 
+const isImageSize = (files) => {
+  if (!files || files.length === 0) return true; // No files provided
+
+  const imageSize = 4 * 1024; // 4MB
+
+  // Check all files if the input is an array of files
+  if (Array.isArray(files)) {
+    return files.every((file) => imageSize <= file.size);
+  }
+
+  // If it's a single file, directly check its type
+  return imageSize <= files.size;
+};
+
 function CreatePost() {
   const { setRefetchInterval } = useCustomQuery();
+  const { user: currentUser } = useAuth();
   const { data: companies } = useQuery({
     queryKey: ["companies"],
     queryFn: getCompanies,
@@ -51,12 +67,14 @@ function CreatePost() {
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
 
-    const validImageFiles = selectedFiles.filter(isImageFile);
+    const validImageFiles = selectedFiles
+      .filter(isImageFile)
+      .filter(isImageSize);
+
     setValidImages(validImageFiles);
-    console.log(validImageFiles);
 
     if (validImageFiles.length < selectedFiles.length) {
-      toast.info(unSupportedText);
+      toast.info(unSupportedText + " or " + largeFileText);
     }
   };
   useEffect(() => {
@@ -77,6 +95,25 @@ function CreatePost() {
   };
 
   const handleCreatePost = async () => {
+    if (currentUser?.is_first_time_user) {
+      toast.info(
+        <div className="grid gap-1">
+          <strong>Please complete your profile to create a post</strong>
+          <Link
+            to="/home"
+            className="!underline !text-gray-400 hover:!text-black font-semibold"
+          >
+            Complete your profile
+          </Link>
+        </div>,
+        {
+          closeButton: true,
+          duration: 30000,
+          position: "top-center",
+        }
+      );
+      return;
+    }
     if (message.length < 10) {
       toast.info(
         "Post length is too short. Minimum post character length is 10 characters"
@@ -119,7 +156,9 @@ function CreatePost() {
 
       {validImages.length > 0 && (
         <div className="mt-2">
-          <h5 className="font-bold mb-2">Image Previews</h5>
+          <h5 className="font-bold mb-2">
+            Image Preview{validImages.length > 1 ? "s" : ""}
+          </h5>
           <div className="flex gap-4 overflow-x-auto">
             {validImages.map((image, index) => (
               <div key={index} className="relative shrink-0 group">

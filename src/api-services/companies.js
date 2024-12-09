@@ -20,16 +20,13 @@ import { getCurrentUser } from "./users";
 // }
 
 export const getCompanies = async () => {
+  const currentUser = await getCurrentUser();
   const { results: companies } = await makeApiRequest({
     url: `api/companies/`,
     method: "GET",
+    params: { profile: currentUser.email }, // Send email to filter
   });
-
-  const currentUser = await getCurrentUser();
-
-  const userEmail = currentUser.email;
-
-  return companies?.filter((company) => company.profile === userEmail) || [];
+  return companies || [];
 };
 
 export const createCompany = async (data, resetForm) => {
@@ -46,7 +43,7 @@ export const createCompany = async (data, resetForm) => {
     url: `api/companies/`,
     method: "POST",
     data: {
-      company_name: data.company_name.toLowerCase(),
+      company_name: data.company_name,
       organization_type: data.company_category,
       about: data.company_description,
       tag_line: data.company_tagline,

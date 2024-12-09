@@ -1,19 +1,18 @@
 import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
 import ProfileNavBar from "./ProfileNavBar";
 import { getSession } from "../../lib/session";
 import useRedirect from "../../hooks/useRedirect";
+import { useAuth } from "../../context/userContext";
+import { Outlet } from "react-router-dom";
 
 function ProfileLayout() {
   const currentYear = new Date().getFullYear();
 
   const session = getSession();
+  const { user: currentUser } = useAuth();
 
-  useRedirect(!session?.user?.is_first_time_user, "/market");
-
-  if (!session) {
-    return <Navigate to="/login" replace />;
-  }
+  useRedirect(!session, "/login");
+  useRedirect(currentUser && !currentUser?.is_first_time_user, "/");
 
   return (
     <>

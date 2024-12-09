@@ -103,7 +103,6 @@ export function ImageSelect({
           onBlur={(event) => {
             formik.setFieldValue(name, event.currentTarget.files?.[0]);
           }}
-          // value={formik.values[`${name}`]}
         />
         <ImageIcon className="text-custom_grey/20" />
         {hasCaption && (
@@ -124,6 +123,31 @@ export function ImageSelect({
       </label>
 
       <FormikErrorResponse formik={formik} name={name} />
+    </div>
+  );
+}
+
+export function AvatarUpload({ formik, name }) {
+  const imageValue = formik.values[`${name}`];
+  return (
+    <div>
+      <label>
+        <img
+          src={URL.createObjectURL(imageValue) || "/images/pasportTwo.png"}
+          alt="placeholder avatar"
+          className="py-4 w-24 h-auto"
+        />
+        <input
+          name={name}
+          type="file"
+          accept="image/*"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          className="hidden"
+        />
+      </label>
+
+      <FormikErrorResponse formik={formik} name={imageValue} />
     </div>
   );
 }

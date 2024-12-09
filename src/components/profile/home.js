@@ -5,102 +5,80 @@ import { useFormik } from "formik";
 
 import HeadingText from "../HeadingText";
 import LightParagraph from "../ParagraphText";
-import FormikErrorResponse from "../form/formError";
 import StepButton from "./StepButton";
 import {
   ageKey,
-  company_nameKey,
+  currentProfileIndexKey,
   first_nameKey,
   genderKey,
-  imageKey,
   last_nameKey,
   roleKey,
 } from "../../lib/data";
-
-const FILE_SIZE = 4 * 1024 * 1024; // 2MB
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
+import { customFormikFieldValidator } from "../../lib/utils";
 
 const validationSchema = Yup.object().shape({
-  image: Yup.mixed()
-    .required("File is required")
-    .test(
-      "file-size",
-      "File size is too large, only images less than 4mb is allowed",
-      (value) => {
-        return value && value.size <= FILE_SIZE;
-      }
-    )
-    .test(
-      "file-format",
-      "Unsupported file format, only PNGs, JPEGs and JPGs are allowed",
-      (value) => {
-        return value && SUPPORTED_FORMATS.includes(value.type);
-      }
-    ),
-  gender: Yup.string()
-    .trim()
-    .optional()
-    .test(
-      "correct-gender",
-      "Only genders, ie male or female is allowed.",
-      function (value) {
-        return (
-          value?.toLowerCase() === "male" || value?.toLowerCase() === "female"
-        );
-      }
-    ),
+  first_name: Yup.string().trim().required("This field is required"),
+  last_name: Yup.string().trim().required("This field is required"),
+  role: Yup.string().trim().required("This field is required"),
+  gender: Yup.string().trim().required("This field is required"),
   age: Yup.string()
-    .optional()
+    .required("This field is required")
     .test("compare-age", "You have to be at least 18 years", function (value) {
       const inputDate = new Date(value);
 
       const today = new Date();
-      const tenYearsAgo = new Date();
-      tenYearsAgo.setFullYear(today.getFullYear() - 17);
+      const seventeenYearsAgo = new Date();
+
+      seventeenYearsAgo.setFullYear(today.getFullYear() - 17);
 
       today.setHours(0, 0, 0, 0);
-      tenYearsAgo.setHours(0, 0, 0, 0);
+      seventeenYearsAgo.setHours(0, 0, 0, 0);
       inputDate.setHours(0, 0, 0, 0);
 
       // Check that the date is not today, not 17 years ago, and not in the future
       return (
         inputDate.getTime() !== today.getTime() &&
-        inputDate.getTime() !== tenYearsAgo.getTime() &&
-        inputDate <= today
+        inputDate.getTime() !== seventeenYearsAgo.getTime() &&
+        inputDate <= today &&
+        inputDate < seventeenYearsAgo
       );
     }),
 });
 
 function Home() {
-  const formValues = {
-    image: localStorage.getItem(imageKey) || "",
+  const initialValues = {
     first_name: localStorage.getItem(first_nameKey) || "",
     last_name: localStorage.getItem(last_nameKey) || "",
-    company_name: localStorage.getItem(company_nameKey) || "",
     gender: localStorage.getItem(genderKey) || "",
     role: localStorage.getItem(roleKey) || "",
     age: localStorage.getItem(ageKey) || "",
   };
 
   const formik = useFormik({
-    initialValues: formValues,
-    validationSchema: validationSchema,
+    initialValues,
+    validationSchema,
   });
 
-  const doStepChange = () => {
+  const doStepChange = async () => {
+    const isValidFields = await customFormikFieldValidator(formik);
+
+    if (!isValidFields) return false;
+
     for (let value in formik.values) {
       const key = value;
       const keyValue = formik.values[value];
 
       localStorage.setItem(key, keyValue);
     }
+    localStorage.setItem(currentProfileIndexKey, "1");
     return true;
   };
 
   useEffect(() => {
-    formik.setValues(formValues);
+    formik.setValues(initialValues);
     document.title =
-      "Complete your profile - personal information | connectize";
+      "Complete your profile - personal information | Connectize";
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -120,17 +98,13 @@ function Home() {
           label: "Last Name",
           placeholder: "Enter your last name",
         },
-        {
-          name: company_nameKey,
-          type: "text",
-          label: "Company Name",
-          placeholder: "Enter your company's name",
-        },
+
         {
           name: genderKey,
-          type: "text",
+          type: "select",
           label: "Gender",
           placeholder: "Male/Female",
+          options: ["Male", "Female"],
         },
         {
           name: roleKey,
@@ -153,28 +127,6 @@ function Home() {
       <div className="my-4">
         <HeadingText>Help us know more about you</HeadingText>
         <LightParagraph>Please fill in the details below</LightParagraph>
-      </div>
-
-      <div>
-        <label>
-          <img
-            src={"/images/pasportTwo.png"}
-            alt="placeholder avatar"
-            className="py-4 w-24 h-auto"
-          />
-          <input
-            name="image"
-            id="image"
-            type="file"
-            accept="image/*"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.image}
-            className="hidden"
-          />
-        </label>
-
-        <FormikErrorResponse formik={formik} name={formik.values["image"]} />
       </div>
 
       <Form

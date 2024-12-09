@@ -44,23 +44,15 @@ export const feedNavItems = [
   { name: "Analysis", to: "/analysis", icon: <ChartBar /> },
   { name: "Photos", to: "/photos", icon: <PhotosIcon /> },
   { name: "Videos", to: "/videos", icon: <VideoIcon /> },
-  // { name: "User profile", to: "/user-profile", icon: <VideoIcon /> },
-  // {
-  //   name: "Profile",
-  //   to:
-  //     session && !session?.is_first_time_user
-  //       ? "/user-profile"
-  //       : session
-  //       ? "/profile"
-  //       : "/login",
-  //   icon: <PersonIcon />,
-  // },
 ];
+
+// index key for complete profile
+
+export const currentProfileIndexKey = "currentProfileIndex";
 
 // personal information
 export const first_nameKey = "first_name";
 export const last_nameKey = "last_name";
-export const company_nameKey = "company_name";
 export const genderKey = "gender";
 export const roleKey = "role";
 export const ageKey = "age";

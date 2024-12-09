@@ -1,13 +1,33 @@
 import React, { useEffect } from "react";
 import HeadingText from "../HeadingText";
 import LightParagraph from "../ParagraphText";
-import { bioKey, social_media_urlKey, website_urlKey } from "../../lib/data";
+import {
+  bioKey,
+  currentProfileIndexKey,
+  social_media_urlKey,
+  website_urlKey,
+} from "../../lib/data";
 import Form from "../form";
-// import * as Yup from "yup";
+import * as Yup from "yup";
 import { useFormik } from "formik";
 import StepButton from "./StepButton";
+import { customFormikFieldValidator } from "../../lib/utils";
+import useRedirect from "../../hooks/useRedirect";
+
+const validationSchema = Yup.object().shape({
+  bio: Yup.string().trim().required("This field is required"),
+  website_url: Yup.string()
+    .trim()
+    .url("Invalid url")
+    .required("This field is required"),
+  social_media_url: Yup.string().trim().optional(),
+});
 
 function Bio() {
+  useRedirect(
+    !(Number(localStorage.getItem(currentProfileIndexKey)) >= 3),
+    "/address"
+  );
   const formValues = {
     bio: localStorage.getItem(bioKey) || "",
     website_url: localStorage.getItem(website_urlKey) || "",
@@ -16,15 +36,22 @@ function Bio() {
 
   const formik = useFormik({
     initialValues: formValues,
+    validationSchema,
   });
 
-  const doStepChange = () => {
+  const doStepChange = async () => {
+    const isValidFields = await customFormikFieldValidator(formik);
+
+    if (!isValidFields) return false;
+
     for (let value in formik.values) {
       const key = value;
       const keyValue = formik.values[value];
 
       localStorage.setItem(key, keyValue);
     }
+
+    localStorage.setItem(currentProfileIndexKey, "4");
 
     return true;
   };
@@ -41,7 +68,7 @@ function Bio() {
       gridInputs: [
         {
           name: bioKey,
-          type: "text",
+          type: "textarea",
           label: "Bio",
           placeholder: "say something",
         },

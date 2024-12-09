@@ -11,6 +11,7 @@ import { getCompanies } from "../../../api-services/companies";
 import LightParagraph from "../../ParagraphText";
 import CloseOverlay from "../../CloseOverlay";
 import { CirceTitleSubtitleSkeleton } from "../feeds/TopServiceSuggestions";
+import { Avatar } from "@chakra-ui/react";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
@@ -75,7 +76,7 @@ function NavigationSection({ pathname }) {
 }
 
 function Companies({ toggleNav }) {
-  const { data: companyArrayData, isLoading } = useQuery({
+  const { data: companies, isLoading } = useQuery({
     queryKey: ["companies"],
     queryFn: getCompanies,
   });
@@ -83,39 +84,39 @@ function Companies({ toggleNav }) {
     <div className="space-y-3 mb-4">
       <div className="flex items-center justify-between">
         <h3 className="font-semibold text-xl">Companies</h3>
-        <Link
-          to="/create-company"
-          className="!text-gray-400 hover:!text-custom_blue text-sm xl:text-xs"
-          onClick={() => toggleNav(false)}
-        >
-          Create company
-        </Link>
+        {companies?.length <= 4 && (
+          <Link
+            to="/create-company"
+            className="!text-gray-400 hover:!text-custom_blue text-sm xl:text-xs"
+            onClick={() => toggleNav(false)}
+          >
+            Create company
+          </Link>
+        )}
       </div>
       <ul className="space-y-2 divide-y divide-gray-100/80 xs:text-sm p-0">
         {isLoading ? (
           Array.from({ length: 4 }, (_, index) => (
             <CirceTitleSubtitleSkeleton key={index} />
           ))
-        ) : companyArrayData?.length < 1 ? (
+        ) : companies?.length < 1 ? (
           <LightParagraph>No company yet...</LightParagraph>
         ) : (
-          companyArrayData?.map(
-            (
-              { company_name: company, logo: src, tag_line: description },
-              index
-            ) => (
-              <li key={index}>
+          companies?.map(
+            ({
+              company_name: company,
+              logo: src,
+              tag_line: description,
+              id,
+            }) => (
+              <li key={id}>
                 <Link
                   to={`/${company.toLowerCase().replaceAll(" ", "_")}`}
                   className="flex items-center gap-2 pt-2"
                 >
-                  <img
-                    src={src || "/images/logo.png"}
-                    alt={company}
-                    className="size-10 rounded-full"
-                  />
+                  <Avatar src={src} name={company} size="sm" />
                   <div className="">
-                    <h1 className="text-base font-semibold leading-normal m-0 capitalize">
+                    <h1 className="text-base font-semibold leading-normal m-0 capitalize line-clamp-2">
                       {company}
                     </h1>
                     <span className="text-gray-400 text-xs line-clamp-1">

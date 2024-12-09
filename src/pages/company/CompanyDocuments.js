@@ -8,6 +8,7 @@ import StepButton from "../../components/profile/StepButton";
 import { ImageSelect } from "../../components/form/customInput";
 import { createCompany } from "../../api-services/companies";
 import { toast } from "sonner";
+import { customFormikFieldValidator } from "../../lib/utils";
 
 const FILE_SIZE = 10 * 1024 * 1024; // 10MB
 export const SUPPORTED_FORMATS = [
@@ -75,14 +76,9 @@ const CompanyDocuments = () => {
   });
 
   const doStepChange = async () => {
-    const errors = await formik.validateForm(formik.values);
+    const isValidFields = await customFormikFieldValidator(formik);
 
-    if (Object.keys(errors).length > 0) {
-      Object.keys(formik.values).forEach((field) => {
-        formik.setFieldTouched(field, true);
-      });
-      return false;
-    }
+    if (!isValidFields) return false
 
     const toastId = toast.info("Processing your request...");
 

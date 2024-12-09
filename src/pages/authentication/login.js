@@ -29,11 +29,12 @@ function Login() {
 
   const nextParam = searchParams.get("next");
 
-  const navigateTo = searchParams.has("next")
-    ? nextParam
-    : user?.isFirstTimeUser
-    ? "/profile"
-    : "/";
+  const navigateTo =
+    user && user?.is_first_time_user
+      ? "/profile"
+      : searchParams.has("next")
+      ? nextParam
+      : "/";
 
   const formValues = {
     username: "",
@@ -57,11 +58,12 @@ function Login() {
       });
 
       if (success) {
-        setUser((await getCurrentUser()) || null);
-        navigate(navigateTo);
+        setUser(await getCurrentUser());
       }
     },
   });
+
+  if (user) navigate(navigateTo);
 
   useEffect(() => {
     formik.setValues(formValues);
