@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Location } from "../../../icon";
-import { getServices } from "../../../api-services/services";
+import { getSingleService } from "../../../api-services/services";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import NoPage from "../../NoPage";
@@ -9,19 +9,19 @@ import LightParagraph from "../../ParagraphText";
 import { MarkdownComponent } from "../../MarkDownComponent";
 
 export default function OverviewDetails() {
-  const { data: services } = useQuery({
-    queryKey: ["services"],
-    queryFn: getServices,
-  });
-
   const params = useParams();
 
-  const service = services?.find((item) => item.id.toString() === params.id);
+  const { data: service, isLoading } = useQuery({
+    queryKey: ["services"],
+    queryFn: () => getSingleService(params.id),
+  });
 
   useEffect(() => {
-    document.title = `${service?.title || ""} | Services - Connectize`;
+    document.title = `${service?.title + "| " || ""}Services - Connectize`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (isLoading) return <h2>Loading...</h2>;
 
   if (!service) return <NoPage />;
 
@@ -29,7 +29,7 @@ export default function OverviewDetails() {
     <section className="bg-white p-4 rounded pb-5 col-span-3 w-full min-h-screen space-y-4">
       <div className="flex items-start gap-1 lg:gap-2.5">
         <img
-          src={service?.companyInfo?.logo || "/images/logo.png"}
+          src={service?.company?.logo || "/images/logo.png"}
           alt={service?.company}
           className="size-16"
         />
@@ -42,8 +42,8 @@ export default function OverviewDetails() {
             <div className="flex items-center gap-1">
               <Location className="w-5 shrink-0" />
               <p className="text-gray-500 text-sm">
-                {service?.company} - {service?.companyInfo?.state},{" "}
-                {service.companyInfo?.country}
+                {service?.company}
+                {/* - {service?.company?.state},{" "}{service?.company?.country} */}
               </p>
             </div>
           </div>

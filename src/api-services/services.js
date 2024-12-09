@@ -1,8 +1,7 @@
 import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
 import { capitalizeFirst } from "../lib/utils";
-import { getSession } from "../lib/session";
-import { getCompanies } from "./companies";
+import { getCurrentUser } from "./users";
 
 // {
 //     "title": "",
@@ -20,19 +19,16 @@ export const getServices = async () => {
     method: "GET",
   });
 
-  const companies = await getCompanies();
+  return services;
+};
 
-  const newServices = services.map((service) => {
-    const company = companies.find(
-      (company) => company.company_name === service.company
-    );
-    return {
-      ...service,
-      companyInfo: company,
-    };
+export const getSingleService = async (id) => {
+  const service = await makeApiRequest({
+    url: `api/services/${id}/`,
+    method: "GET",
   });
 
-  return newServices;
+  return service;
 };
 
 export const createService = async (data, resetForm) => {
@@ -40,9 +36,7 @@ export const createService = async (data, resetForm) => {
     data.service_category.trim().toLowerCase()
   );
 
-  const { user } = getSession();
-
-  console.log(data);
+  const user = await getCurrentUser();
 
   const toastId = toast.info("Creating service...");
 

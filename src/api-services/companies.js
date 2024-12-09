@@ -29,6 +29,15 @@ export const getCompanies = async () => {
   return companies || [];
 };
 
+export const getSingleCompany = async (company) => {
+  const singleCompany = await makeApiRequest({
+    url: `api/companies/`,
+    method: "GET",
+    params: { company }, // Send email to filter
+  });
+  return singleCompany;
+};
+
 export const createCompany = async (data, resetForm) => {
   await getOrCreateCompanyCategories(data.company_category);
 
