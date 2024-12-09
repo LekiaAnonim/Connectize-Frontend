@@ -110,6 +110,7 @@ function Companies({ toggleNav }) {
     queryKey: ["companies"],
     queryFn: getCompanies,
   });
+
   return (
     <div className="space-y-3 mb-4">
       <div className="flex items-center justify-between">
@@ -126,39 +127,40 @@ function Companies({ toggleNav }) {
       </div>
       <ul className="space-y-2 divide-y divide-gray-100/80 xs:text-sm p-0">
         {isLoading ? (
-          Array.from({ length: 4 }, (_, index) => (
+          Array.from({ length: 4 }).map((_, index) => (
             <CirceTitleSubtitleSkeleton key={index} />
           ))
-        ) : companies?.length < 1 ? (
+        ) : companies?.length === 0 ? (
           <LightParagraph>No company yet...</LightParagraph>
         ) : (
-          companies?.map(
-            ({
-              company_name: company,
-              logo: src,
-              tag_line: description,
-              id,
-            }) => (
-              <li key={id}>
-                <Link
-                  to={`/${company.toLowerCase().replaceAll(" ", "_")}`}
-                  className="flex items-center gap-2 pt-2"
-                >
-                  <Avatar src={src} name={company} size="sm" />
-                  <div className="">
-                    <h1 className="text-base font-semibold leading-normal m-0 capitalize line-clamp-2">
-                      {company}
-                    </h1>
-                    <span className="text-gray-400 text-xs line-clamp-1">
-                      {description || "Tag line goes here"}
-                    </span>
-                  </div>
-                </Link>
-              </li>
-            )
-          )
+          companies?.map((company) => (
+            <CompanyListItem key={company.id} company={company} />
+          ))
         )}
       </ul>
     </div>
+  );
+}
+
+function CompanyListItem({ company }) {
+  const { company_name, logo, tag_line } = company;
+
+  return (
+    <li>
+      <Link
+        to={`/${company_name.toLowerCase().replaceAll(" ", "_")}`}
+        className="flex items-center gap-2 pt-2"
+      >
+        <Avatar src={logo} name={company_name} size="sm" />
+        <div>
+          <h1 className="text-base font-semibold leading-normal m-0 capitalize line-clamp-2">
+            {company_name}
+          </h1>
+          <span className="text-gray-400 text-xs line-clamp-1">
+            {tag_line || "Tag line goes here"}
+          </span>
+        </div>
+      </Link>
+    </li>
   );
 }

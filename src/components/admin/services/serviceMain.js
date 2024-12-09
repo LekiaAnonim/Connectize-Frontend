@@ -61,7 +61,9 @@ export const PostCardWrapper = ({ postArray, isOverview = false }) => {
       )}
     >
       {isLoading
-        ? Array.from({ length: 6 }, (_, index) => <PostCardSkeleton />)
+        ? Array.from({ length: 6 }, (_, index) => (
+            <PostCardSkeleton key={index} />
+          ))
         : services?.map((service, index) => (
             <PostCard
               key={index}
@@ -71,6 +73,7 @@ export const PostCardWrapper = ({ postArray, isOverview = false }) => {
               title={service.title}
               summary={service.sub_title}
               url={`/services/${service.id}`}
+              whole={service}
               isService
             />
           ))}

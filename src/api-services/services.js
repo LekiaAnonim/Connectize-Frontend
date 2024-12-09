@@ -107,17 +107,19 @@ export const getOrCreateServiceCategories = async (name) => {
 };
 
 export const bookmarkService = async (serviceId, data) => {
-  const toastId = toast.info("processing like action...");
-  const allProducts = await getServices();
+  const toastId = toast.info("Bookmarking service...");
+  const allServices = await getServices();
 
   const currentUser = await getCurrentUser();
 
-  const currentProduct = allProducts.find(
-    (product) => product.id === serviceId
+  const currentService = allServices.find(
+    (service) => service.id === serviceId
   );
 
+  console.log(serviceId);
+
   if (
-    currentProduct.likes.find((product) => product.user.id === currentUser.id)
+    currentService.likes.find((service) => service.user.id === currentUser.id)
   ) {
     await makeApiRequest({
       url: `api/services/${serviceId}/unlike/`,

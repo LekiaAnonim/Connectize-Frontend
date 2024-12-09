@@ -134,7 +134,7 @@ function ProductCategory({ pathname }) {
       </div>
       <div className="space-y-2 xs:text-sm p-2">
         {isLoading ? (
-          Array.from({ length: 4 }, (_, index) => (
+          Array.from({ length: 5 }, (_, index) => (
             <CirceTitleSubtitleSkeleton key={index} />
           ))
         ) : !categories?.length ? (
@@ -143,7 +143,7 @@ function ProductCategory({ pathname }) {
           categories?.map((item, index) => (
             <Link
               to={
-                (pathname.startsWith("/services") ? "/services" : "/market ") +
+                (pathname.startsWith("/services") ? "/services" : "/market") +
                 "?category=" +
                 item.name.toLowerCase()
               }

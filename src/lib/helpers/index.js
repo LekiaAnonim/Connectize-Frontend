@@ -19,12 +19,15 @@ export function goToLogin() {
 
 // Configure Axios Defaults
 export const baseURL = "http://localhost:8000";
+axios.defaults.withCredentials = true;
 
 // Mutex for Refresh Token
 let isRefreshing = false;
 let refreshPromise = null;
 
 let retries = 0;
+
+// let retries = 0;
 
 export async function refreshTokenIfNeeded() {
   const session = getSession();
@@ -34,8 +37,7 @@ export async function refreshTokenIfNeeded() {
   }
 
   if (isRefreshing) {
-    // Wait for the ongoing refresh operation to complete
-    return refreshPromise;
+    return refreshPromise; // Prevent re-running refresh if already in progress
   }
 
   isRefreshing = true;
@@ -62,21 +64,23 @@ export async function refreshTokenIfNeeded() {
     const authorizationHeader = await refreshPromise;
     return { Authorization: authorizationHeader };
   } catch (error) {
-    // count retries
-    retries = retries + 1;
+    retries++;
+    console.log(`Refresh token attempt #${retries}`);
 
-    console.log(retries);
     if (retries === 5) {
       removeSession();
-      toast.info("User session has been reset, kindly login again");
+      toast.info("User session has been reset. Please login again.");
       goToLogin();
+      return;
     }
+
     throw error;
   } finally {
     isRefreshing = false;
     refreshPromise = null;
   }
 }
+
 
 export async function makeApiRequest({
   url,
@@ -112,57 +116,65 @@ export async function makeApiRequest({
       resetForm?.();
       console.log("Request succeeded:", response.data);
 
-      if (response.data.success && responseMessage)
+      if (response.data.success && responseMessage) {
         toast.success(responseMessage);
+      }
       return response.data;
     }
   } catch (error) {
     const errorCode = error?.response?.data?.code;
 
     if (errorCode === "token_not_valid") {
-      // Attempt to refresh token and retry the request
-      const authorization = await refreshTokenIfNeeded();
+      // Retry after refreshing token
+      try {
+        const authorization = await refreshTokenIfNeeded();
+        if (authorization) {
+          // Retry the original request
+          const response = await axios({
+            url: `${baseURL}/${url}`,
+            method,
+            data,
+            headers: {
+              ...authorization,
+              "Content-Type": contentType,
+            },
+            params,
+          });
 
-      if (authorization) {
-        // Retry the original request with the new token
-        const response = await axios({
-          url: `${baseURL}/${url}`,
-          method,
-          data,
-          headers: {
-            ...authorization,
-            "Content-Type": contentType,
-          },
-          params,
-        });
-
-        const responseMessage = response.data.message;
-
-        if (response.status >= 200 && response.status <= 204) {
-          resetForm?.();
-          console.log("Request succeeded after retry:", response.data);
-
-          if (response.data.success && responseMessage)
-            toast.success(responseMessage);
-          return response.data;
+          if (response.status >= 200 && response.status <= 204) {
+            resetForm?.();
+            console.log("Request succeeded after retry:", response.data);
+            toast.success(response.data.message);
+            return response.data;
+          }
         }
+      } catch (retryError) {
+        // Handle failure of retry attempt here
+        console.error("Token refresh failed:", retryError);
       }
     }
+
+    // Handle general errors
     const errorResponse = error?.response?.data;
-    const apiErrorResponse = errorResponse?.errors?.[0];
-    const errorMsg =
-      apiErrorResponse?.message ||
-      apiErrorResponse?.__all__?.[0] ||
-      apiErrorResponse?.username?.[0] ||
-      apiErrorResponse?.email?.[0] ||
-      apiErrorResponse?.password2?.[0] ||
-      apiErrorResponse?.gender?.[0] ||
-      apiErrorResponse?.non_field_errors?.[0] ||
-      errorResponse?.company_name?.[0] ||
-      errorResponse?.detail ||
-      "Something went wrong!";
+    const errorMsg = extractErrorMessage(errorResponse);
 
     console.error("API request failed:", error);
     if (errorResponse) toast.error(errorMsg);
   }
+}
+
+function extractErrorMessage(errorResponse) {
+  const apiErrorResponse = errorResponse?.errors?.[0];
+  return (
+    apiErrorResponse?.message ||
+    apiErrorResponse?.__all__?.[0] ||
+    apiErrorResponse?.username?.[0] ||
+    apiErrorResponse?.email?.[0] ||
+    apiErrorResponse?.password2?.[0] ||
+    apiErrorResponse?.gender?.[0] ||
+    apiErrorResponse?.non_field_errors?.[0] ||
+    errorResponse?.company_name?.[0] ||
+    errorResponse?.detail ||
+    "Something went wrong!"
+  );
 }

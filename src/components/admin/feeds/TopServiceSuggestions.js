@@ -6,6 +6,7 @@ import { getSuggestedUsersForCurrentUser } from "../../../api-services/users";
 import { PostCard } from "./DiscoverPostTabs";
 import HeadingText from "../../HeadingText";
 import LightParagraph from "../../ParagraphText";
+import { Avatar } from "@chakra-ui/react";
 
 const TopServiceSuggestions = () => {
   return (
@@ -42,44 +43,37 @@ export function Suggestions() {
       <h2 className="text-xl font-bold">Suggested</h2>
       <ul className="space-y-2 divide-y divide-gray-100 p-0">
         {isLoading ? (
-          Array.from({ length: 6 }, (_, index) => (
+          Array.from({ length: 6 }).map((_, index) => (
             <CirceTitleSubtitleSkeleton key={index} />
           ))
-        ) : suggestedUsers?.length < 1 ? (
+        ) : suggestedUsers?.length === 0 ? (
           <LightParagraph>No suggested users...</LightParagraph>
         ) : (
-          suggestedUsers?.map(
-            ({
-              id,
-              first_name,
-              last_name,
-              avatar: src,
-              email: hashtag,
-              verified,
-            }) => (
-              <li key={id} className="flex items-center gap-2.5 pt-2">
-                <img
-                  src={src || "/images/logo.png"}
-                  alt={`${first_name} ${last_name}`}
-                  className="size-10 rounded-full"
-                />
-                <div className="">
-                  <div className="flex items-center gap-x-0.5">
-                    <span className="text-base xs:leading-tight text-gray-700 font-bold capitalize">
-                      {first_name} {last_name}
-                    </span>
-                    {verified && (
-                      <VerifiedIcon color="black" height="18" width="18" />
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-400 m-0">{hashtag}</p>
-                </div>
-              </li>
-            )
-          )
+          suggestedUsers?.map((user) => (
+            <SuggestionListItem key={user.id} user={user} />
+          ))
         )}
       </ul>
     </div>
+  );
+}
+
+function SuggestionListItem({ user }) {
+  const { first_name, last_name, avatar, email: hashtag, verified } = user;
+
+  return (
+    <li className="flex items-center gap-2.5 pt-2">
+      <Avatar src={avatar} name={`${first_name} ${last_name}`} size="sm" />
+      <div>
+        <div className="flex items-center gap-x-0.5">
+          <span className="text-base xs:leading-tight text-gray-700 font-bold capitalize">
+            {first_name} {last_name}
+          </span>
+          {verified && <VerifiedIcon color="black" height="18" width="18" />}
+        </div>
+        <p className="text-sm text-gray-400 m-0">{hashtag}</p>
+      </div>
+    </li>
   );
 }
 

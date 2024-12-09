@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { ChatSellerLink } from "../markets/newlyListed";
 import HeadingText from "../../HeadingText";
 import {
@@ -34,24 +34,21 @@ function Productdetails({ product }) {
   const { user: currentUser } = useAuth();
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
-  const handleNavigation = (action) => {
+  // Memoized navigation handler
+  const handleNavigation = useCallback((action) => {
     const swiperInstance = swiperRef.current;
-
-    if (!swiperInstance) {
-      console.error("Swiper instance is not initialized.");
-
-      return;
+    if (swiperInstance) {
+      action === "prev"
+        ? swiperInstance.slidePrev()
+        : swiperInstance.slideNext();
+      setActiveSlideIndex(swiperInstance.activeIndex);
     }
-    action === "prev" ? swiperInstance.slidePrev() : swiperInstance.slideNext();
+  }, []);
 
-    setActiveSlideIndex(Number(swiperRef?.current?.activeIndex));
-  };
-
-  const userHasLikedProduct = product?.likes.find(
-    (product) => product.user.id === currentUser?.id
-  )
-    ? true
-    : false;
+  // Determine if the current user has liked the product
+  const userHasLikedProduct = product?.likes?.some(
+    (like) => like.user.id === currentUser?.id
+  );
 
   return (
     <>
@@ -82,6 +79,7 @@ function Productdetails({ product }) {
                 </SwiperSlide>
               ))}
             </Swiper>
+
             {product?.images?.length > 1 && (
               <div className="flex gap-4 items-center justify-between">
                 <div className="flex text-xs gap-1 items-center">
@@ -121,15 +119,12 @@ function Productdetails({ product }) {
           <Divider />
           <div className="space-y-2">
             <h6 className="text-xl font-bold">Description</h6>
-
             <MarkdownComponent
               markdownContent={product.description}
               markdownTitle="Product description"
               isDescription
             />
           </div>
-          {/* <Divider /> */}
-
           <div className="flex gap-4 items-center">
             <ChatSellerLink to="/chat" />
             <FavoriteButton
@@ -140,12 +135,11 @@ function Productdetails({ product }) {
         </div>
       </section>
 
-      {/* location / Seller information */}
       <section className="gap-4 flex max-lg:flex-col">
         <section className="space-y-4 lg:w-1/2 shrink-0">
           <HeadingText>Location</HeadingText>
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253682.63648087732!2d3.1191397325001287!3d6.548028242383623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8b2ae68280c1%3A0xdc9e87a367c3d9cb!2sLagos!5e0!3m2!1sen!2sng!4v1715074059319!5m2!1sen!2sng"
+            src="https://www.google.com/maps/embed?pb=..."
             className="!w-full min-h-[300px]"
             loading="lazy"
             title="Lagos"
@@ -170,8 +164,6 @@ function Productdetails({ product }) {
   );
 }
 
-export default Productdetails;
-
 function FavoriteButton({ userHasLikedProduct, product }) {
   const [favorited, setFavorited] = useState(userHasLikedProduct);
   const [loading, setLoading] = useState(false);
@@ -179,8 +171,8 @@ function FavoriteButton({ userHasLikedProduct, product }) {
   const handleFavorite = async () => {
     setLoading(true);
     await favoriteProduct(product.id, product);
+    setFavorited((prev) => !prev); // Optimistic UI update
     setLoading(false);
-    setFavorited(!favorited); // for optimistic changes
   };
 
   return (
@@ -194,3 +186,5 @@ function FavoriteButton({ userHasLikedProduct, product }) {
     </button>
   );
 }
+
+export default Productdetails;

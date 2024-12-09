@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 export const List = ({
   width = "18",
   height = "18",
@@ -387,22 +389,37 @@ export const Squares = ({
     />
   </svg>
 );
+
 export const Bookmark = ({
-  width = "18",
-  height = "18",
+  width = "22",
+  height = "22",
   color = "currentColor",
   className,
-}) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    fill={color}
-    viewBox={`0 0 ${width} ${height}`}
-  >
-    <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z" />
-  </svg>
-);
+  isActive, // Pass this prop to control the toggle state
+}) => {
+  return (
+    <motion.svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      viewBox={`0 0 18 18`}
+      className={className}
+    >
+      <motion.path
+        d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z"
+        fill={isActive ? "#000" : "#333"} // Solid when active
+        stroke={color} // Outline when not active
+        strokeWidth={"1.5"}
+        initial={{ pathLength: isActive ? 0 : 1 }}
+        animate={{ pathLength: isActive ? 1 : 0 }}
+        transition={{
+          duration: 1.5, // Animation duration for the wave effect
+          ease: "easeInOut",
+        }}
+      />
+    </motion.svg>
+  );
+};
 export const CircleFill = ({
   width = "18",
   height = "18",
@@ -832,4 +849,4 @@ export const ImageIcon = ({ className }) => {
       />
     </svg>
   );
-}; 
+};

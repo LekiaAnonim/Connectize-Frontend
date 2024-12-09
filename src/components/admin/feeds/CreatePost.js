@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { AlignmentIcon, GalleryIcon, GifIcon, SmileIcon } from "../../../icon";
 import { createPost } from "../../../api-services/posts";
 import { toast } from "sonner";
@@ -15,8 +15,6 @@ import { useCustomQuery } from "../../../context/queryContext";
 import { useAuth } from "../../../context/userContext";
 
 const isImageFile = (files) => {
-  if (!files || files.length === 0) return true; // No files provided
-
   const imageTypes = [
     "image/jpeg",
     "image/jpg",
@@ -24,28 +22,16 @@ const isImageFile = (files) => {
     "image/webp",
     "image/avif",
   ];
-
-  // Check all files if the input is an array of files
-  if (Array.isArray(files)) {
-    return files.every((file) => imageTypes.includes(file.type.toLowerCase()));
-  }
-
-  // If it's a single file, directly check its type
-  return imageTypes.includes(files.type.toLowerCase());
+  return Array.isArray(files)
+    ? files.every((file) => imageTypes.includes(file.type.toLowerCase()))
+    : imageTypes.includes(files.type.toLowerCase());
 };
 
 const isImageSize = (files) => {
-  if (!files || files.length === 0) return true; // No files provided
-
-  const imageSize = 4 * 1024; // 4MB
-
-  // Check all files if the input is an array of files
-  if (Array.isArray(files)) {
-    return files.every((file) => imageSize <= file.size);
-  }
-
-  // If it's a single file, directly check its type
-  return imageSize <= files.size;
+  const imageSize = 4 * 1024 * 1024; // 4MB
+  return Array.isArray(files)
+    ? files.every((file) => file.size <= imageSize)
+    : files.size <= imageSize;
 };
 
 function CreatePost() {
@@ -64,19 +50,18 @@ function CreatePost() {
   const [showGifPicker, setShowGifPicker] = useState(false);
   const [selectedGif, setSelectedGif] = useState("");
 
-  const handleFileChange = (event) => {
+  const handleFileChange = useCallback((event) => {
     const selectedFiles = Array.from(event.target.files);
-
     const validImageFiles = selectedFiles
       .filter(isImageFile)
       .filter(isImageSize);
-
     setValidImages(validImageFiles);
 
     if (validImageFiles.length < selectedFiles.length) {
-      toast.info(unSupportedText + " or " + largeFileText);
+      toast.info(`${unSupportedText} or ${largeFileText}`);
     }
-  };
+  }, []);
+
   useEffect(() => {
     // Cleanup generated URLs on unmount or when validImages changes
     return () => {
@@ -84,17 +69,17 @@ function CreatePost() {
     };
   }, [validImages]);
 
-  const onEmojiClick = (emojiObject) => {
+  const onEmojiClick = useCallback((emojiObject) => {
     setMessage((prevText) => prevText + emojiObject.emoji);
     setShowEmojiPicker(false);
-  };
+  }, []);
 
-  const onGifSelect = (gifUrl) => {
+  const onGifSelect = useCallback((gifUrl) => {
     setSelectedGif(gifUrl);
     setShowGifPicker(false);
-  };
+  }, []);
 
-  const handleCreatePost = async () => {
+  const handleCreatePost = useCallback(async () => {
     if (currentUser?.is_first_time_user) {
       toast.info(
         <div className="grid gap-1">
@@ -106,27 +91,27 @@ function CreatePost() {
             Complete your profile
           </Link>
         </div>,
-        {
-          closeButton: true,
-          duration: 30000,
-          position: "top-center",
-        }
+        { closeButton: true, duration: 30000, position: "top-center" }
       );
       return;
     }
+
     if (message.length < 10) {
       toast.info(
         "Post length is too short. Minimum post character length is 10 characters"
       );
       return;
     }
+
     if (companyId < 1) {
       setNeedsFocus(true);
       toast.info("Please attach a company to your post");
       return;
     }
+
     setIsLoading(true);
-    const toastId = toast.info("Creating post. please hold on...");
+    const toastId = toast.info("Creating post. Please hold on...");
+
     try {
       await createPost(message, companyId, validImages);
       setMessage("");
@@ -142,16 +127,43 @@ function CreatePost() {
       setIsLoading(false);
       setNeedsFocus(false);
     }
-  };
+  }, [currentUser, companyId, message, validImages, setRefetchInterval]);
+
+  const renderEmojiGifPickers = useMemo(
+    () => (
+      <section className="fixed top-0 left-0 w-screen h-screen z-[4000] flex items-center justify-center bg-transparent">
+        <div
+          className="bg-black/30 fixed top-0 left-0 w-screen h-screen"
+          onClick={() => {
+            setShowEmojiPicker(false);
+            setShowGifPicker(false);
+          }}
+        />
+        <div className="relative size-fit max-w-sm grid place-items-center m-10">
+          <CloseButton
+            onClick={() => {
+              setShowEmojiPicker(false);
+              setShowGifPicker(false);
+            }}
+            className="absolute -right-8 -top-8 bg-white !text-xs !size-8"
+          />
+          {showGifPicker && <GifPicker onGifSelect={onGifSelect} />}
+          {showEmojiPicker && <EmojiPicker onEmojiClick={onEmojiClick} />}
+        </div>
+      </section>
+    ),
+    [showEmojiPicker, showGifPicker, onGifSelect, onEmojiClick]
+  );
+
   return (
-    <div className="bg-white px-4 md:px-4 py-4 rounded border-b-[5px] border-gold relative">
+    <div className="bg-white px-4 py-4 rounded border-b-[5px] border-gold relative">
       <textarea
         type="text"
         value={message}
         onChange={(e) => setMessage(e.currentTarget.value)}
         minLength={10}
         placeholder="What's happening?"
-        className="w-full min-h-10 h-10 max-h-40  pb-2 border-b border-gray-300 bg-transparent focus:outline-0 text-base resize-no_ne transition-all duration-300 scrollbar-hidden scroll-smooth placeholder:text-lg"
+        className="w-full min-h-10 h-10 max-h-40 pb-2 border-b border-gray-300 bg-transparent focus:outline-0 text-base resize-no_ne transition-all duration-300 scrollbar-hidden scroll-smooth placeholder:text-lg"
       />
 
       {validImages.length > 0 && (
@@ -189,7 +201,6 @@ function CreatePost() {
           <CloseButton
             onClick={() => setSelectedGif("")}
             className="absolute -right-1 -top-1 bg-white !text-[.5rem] !size-6"
-            c
           />
           <img
             src={selectedGif}
@@ -199,10 +210,7 @@ function CreatePost() {
         </div>
       )}
 
-      <div
-        className="absolute right-3 top-2"
-        onClick={() => setNeedsFocus(false)}
-      >
+      <div className="absolute right-3 top-2">
         <MoreOptions
           triggerStyle={`${
             needsFocus ? "!border-2 !border-red-600 " : ""
@@ -210,18 +218,16 @@ function CreatePost() {
         >
           <div className="space-y-1">
             {companies?.length < 1 ? (
-              <>
-                <h1 className="text-custom_blue">
-                  <InfoCircledIcon className="inline" /> You have no company
-                  attributed with your profile, please{" "}
-                  <Link
-                    to="/create-company"
-                    className="!text-gray-400 hover:!text-custom_blue transition-all duration-300 underline"
-                  >
-                    create one
-                  </Link>
-                </h1>
-              </>
+              <h1 className="text-custom_blue">
+                <InfoCircledIcon className="inline" /> You have no company
+                attributed with your profile, please{" "}
+                <Link
+                  to="/create-company"
+                  className="!text-gray-400 hover:!text-custom_blue transition-all duration-300 underline"
+                >
+                  create one
+                </Link>
+              </h1>
             ) : (
               <>
                 <h1 className="text-lg font-semibold">Create post as</h1>
@@ -253,7 +259,6 @@ function CreatePost() {
             multiple
             hidden
           />
-
           <MaskedIcon
             Icon={GalleryIcon}
             onClick={() => document.getElementById("post_images").click()}
@@ -266,29 +271,8 @@ function CreatePost() {
           />
         </div>
 
-        {(showEmojiPicker || showGifPicker) && (
-          <section className="fixed top-0 left-0 w-screen h-screen z-[4000] flex items-center justify-center bg-transparent">
-            <div
-              className="bg-black/30 fixed top-0 left-0 w-screen h-screen"
-              onClick={() => {
-                setShowEmojiPicker(false);
-                setShowGifPicker(false);
-              }}
-            />
-            <div className="relative size-fit max-w-sm grid place-items-center m-10">
-              <CloseButton
-                onClick={() => {
-                  setShowEmojiPicker(false);
-                  setShowGifPicker(false);
-                }}
-                className="absolute -right-8 -top-8 bg-white !text-xs !size-8"
-                c
-              />
-              {showGifPicker && <GifPicker onGifSelect={onGifSelect} />}
-              {showEmojiPicker && <EmojiPicker onEmojiClick={onEmojiClick} />}
-            </div>
-          </section>
-        )}
+        {(showEmojiPicker || showGifPicker) && renderEmojiGifPickers}
+
         <button
           className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-4 transition-all duration-300 md:w-full lg:w-fit disabled:bg-gray-400 disabled:cursor-not-allowed"
           onClick={handleCreatePost}

@@ -29,16 +29,13 @@ function NewlyListed() {
 
   const newlyListedProducts = useMemo(() => products.slice(0, 6), [products]);
 
-  const tabs = [
-    {
-      label: "All Products",
-      products: filteredProducts,
-    },
-    {
-      label: "Newly Listed",
-      products: newlyListedProducts,
-    },
-  ];
+  const tabs = useMemo(
+    () => [
+      { label: "All Products", products: filteredProducts },
+      { label: "Newly Listed", products: newlyListedProducts },
+    ],
+    [filteredProducts, newlyListedProducts]
+  );
 
   const tabsStyle = "w-full rounded";
   const selectedStyle = { color: "black", bg: "gray.100" };
@@ -114,7 +111,7 @@ export const ProductListCard = ({
         <h4 className="font-bold text-xl sm:text-lg capitalize line-clamp-1">
           {title}
         </h4>
-        <span className="font-semibold text-lg">{subtitle}</span>
+        <span className="font-semibold text-base">{subtitle}</span>
       </div>
       {!isSummary && <ChatSellerLink to={chatUrl} />}
     </div>
@@ -132,13 +129,13 @@ export const ListCardSkeleton = () => (
   </div>
 );
 
-export const ChatSellerLink = ({ text, to, id }) => (
+export const ChatSellerLink = ({ text = "Chat seller", to, id }) => (
   <Link
     to={to || ""}
     className="shrink-0 flex items-center bg-black py-2 text-white px-3 text-sm rounded-full group w-fit"
     onClick={() => localStorage.setItem("productId", id)}
   >
-    <span>{text || "Chat seller"}</span>
+    <span>{text}</span>
     <span className="text-custom_grey ml-1">|</span>
     <ChevronRight className="w-4 transition-all duration-300 -translate-x-1 group-hover:translate-x-1" />
   </Link>
