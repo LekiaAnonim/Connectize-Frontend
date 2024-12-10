@@ -204,29 +204,25 @@ export const CustomTextArea = ({ formik, name, placeholder }) => {
 };
 
 export const CustomSelect = ({ formik, name, placeholder, options = [""] }) => (
-  <div className="mt-2">
-    <Select
-      id={name}
-      name={name}
-      placeholder={placeholder}
-      onChange={(e) => {
-        localStorage.setItem(name, e.currentTarget.value);
-        formik.handleChange(e);
-      }}
-      onBlur={(e) => {
-        localStorage.setItem(name, e.currentTarget.value);
-        formik.handleChange(e);
-      }}
-      value={formik.values[`${name}`]}
-      className="!w-full !bg-background px-3 !text-sm  border-gray-100"
-    >
-      {options?.map((option, index) => (
-        <option key={index} value={option}>
-          {capitalizeFirst(option.toLowerCase())}
-        </option>
-      ))}
-    </Select>
-
-    {/* <FormikErrorResponse formik={formik} name={name} /> */}
-  </div>
+  <Select
+    id={name}
+    name={name}
+    placeholder={placeholder}
+    onChange={(e) => {
+      localStorage.setItem(name, e.currentTarget.value);
+      formik.handleChange(e);
+    }}
+    onBlur={(e) => {
+      localStorage.setItem(name, e.currentTarget.value);
+      formik.handleChange(e);
+    }}
+    value={formik.values[`${name}`]}
+    className="!w-full !bg-background px-3 !text-sm  border-gray-100"
+  >
+    {options?.map((option, index) => (
+      <option key={index} value={option}>
+        {capitalizeFirst(option.toLowerCase())}
+      </option>
+    ))}
+  </Select>
 );

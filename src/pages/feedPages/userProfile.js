@@ -68,11 +68,13 @@ function ProductSidebar({ company }) {
           <StatsText
             text={formatNumber(company.following.length) + "/ following"}
           />
-          <StatsText text={"0/ Reviews"} />
+          <StatsText
+            text={formatNumber(company.reviews.length) + "/ Reviews"}
+          />
         </div>
       </section>
       <ListedProducts company={company} />
-      <Reviews />
+      <Reviews reviews={company.reviews} />
     </section>
   );
 }

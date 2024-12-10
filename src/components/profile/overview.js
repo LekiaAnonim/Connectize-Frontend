@@ -34,6 +34,7 @@ const SUPPORTED_FORMATS = [
 ];
 
 function Overview() {
+  // Redirect if condition fails
   useRedirect(
     !(Number(localStorage.getItem(currentProfileIndexKey)) >= 4),
     "/bio"
@@ -41,68 +42,74 @@ function Overview() {
 
   const [loading, setLoading] = useState(false);
 
-  const fullName =
-    getLocalData(first_nameKey) + " " + getLocalData(last_nameKey);
+  // Initialize full name dynamically from localStorage
+  const getFullName = () =>
+    `${getLocalData(first_nameKey) || ""} ${
+      getLocalData(last_nameKey) || ""
+    }`.trim();
 
   const validationSchema = Yup.object().shape({
     image: Yup.mixed()
-      .required("File is required")
+      .required("Image is required")
       .test(
         "file-size",
-        "File size is too large, only images less than 4mb is allowed",
-        (value) => {
-          return value && value.size <= FILE_SIZE;
-        }
+        "File size is too large, only images less than 4mb are allowed",
+        (value) => value && value.size <= FILE_SIZE
       )
       .test(
         "file-format",
-        "Unsupported file format, only AVIFs, WEBPs, PNGs, JPEGs and JPGs are allowed",
-        (value) => {
-          return value && SUPPORTED_FORMATS.includes(value.type);
-        }
+        "Unsupported file format, only AVIFs, WEBPs, PNGs, JPEGs, and JPGs are allowed",
+        (value) => value && SUPPORTED_FORMATS.includes(value.type)
       ),
   });
 
   const formik = useFormik({
-    initialValues: overviewFormValues,
+    initialValues: { ...overviewFormValues },
     validationSchema,
+    enableReinitialize: true, // Ensures formik reinitializes when initialValues change
   });
 
-  const doStepChange = async () => {
-    const values = formik.values;
+  const loadLocalStorageData = () => {
+    const updatedValues = { ...overviewFormValues };
+    Object.keys(updatedValues).forEach((key) => {
+      const storedValue = getLocalData(key);
+      if (storedValue) {
+        updatedValues[key] = storedValue;
+      }
+    });
+    formik.setValues(updatedValues);
+  };
 
+  const doStepChange = async () => {
     const isValidFields = await customFormikFieldValidator(formik);
 
     if (!isValidFields) return false;
 
     const toastId = toast.loading("Updating your profile information");
-
     setLoading(true);
 
-    const response = await updateCurrentUserInfo(values);
+    const response = await updateCurrentUserInfo(formik.values);
 
-    if (response && response?.id) {
-      for (let value in formik.values) {
-        localStorage.removeItem(value);
-      }
-
+    if (response && response.id) {
+      Object.keys(formik.values).forEach((key) => localStorage.removeItem(key));
       toast.success("User profile has been updated successfully", {
         id: toastId,
       });
       return true;
     }
+
     toast.dismiss(toastId);
     setLoading(false);
     return false;
   };
 
   useEffect(() => {
-    formik.setValues(overviewFormValues);
-
+    loadLocalStorageData(); // Load data from local storage when the page is loaded
     document.title =
       "Complete profile - confirm profile information | Connectize";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <div className="container">
       <div className="my-4">
@@ -119,17 +126,19 @@ function Overview() {
           className="max-w-40"
         />
         <div className="capitalize">
-          <h4>{fullName || "No name"}</h4>
+          <h4>{getFullName() || "No name"}</h4>
           <p className="text-black/50">
-            {getLocalData(stateKey) + ", " + getLocalData(nationalityKey) + ""}
+            {`${getLocalData(stateKey) || "State"}, ${
+              getLocalData(nationalityKey) || "Nationality"
+            }`}
           </p>
           <small className="text-black/50">
-            {getLocalData(company_addressKey) +
-              ", " +
-              getLocalData(postal_codeKey) || "Postal code"}
+            {`${getLocalData(company_addressKey) || "Address"}, ${
+              getLocalData(postal_codeKey) || "Postal Code"
+            }`}
           </small>
           <p>
-            <strong>Role </strong>
+            <strong>Role: </strong>
             <small className="text-black/50">
               {getLocalData(roleKey) || "N/A"}
             </small>
@@ -140,14 +149,15 @@ function Overview() {
       <div className="space-y-4">
         <LightParagraph>
           <strong className="text-black">Bio: </strong>
-          {getLocalData(bioKey)}
+          {getLocalData(bioKey) || "No bio available"}
         </LightParagraph>
 
         <Form
           formik={formik}
-          status={"none"}
+          status="none"
           inputArray={overviewFields}
           hasButton={false}
+
         />
       </div>
 

@@ -51,6 +51,8 @@ export const createCompany = async (data, resetForm) => {
   const company = await makeApiRequest({
     url: `api/companies/`,
     method: "POST",
+    // logo: data.logo,
+    // banner: data.banner,
     data: {
       company_name: data.company_name,
       organization_type: data.company_category,
@@ -63,6 +65,9 @@ export const createCompany = async (data, resetForm) => {
       state: data.city,
       city: data.city,
       website: data.company_website,
+      registration_number: data.company_registration_no,
+      registration_date: data.company_registration_date,
+      annual_revenue: data.company_annual_revenue,
     },
   });
 

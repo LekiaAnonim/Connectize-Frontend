@@ -1,36 +1,26 @@
 import React from "react";
 import MoreOptions from "../../MoreOptions";
 import LightParagraph from "../../ParagraphText";
+import { Avatar } from "@chakra-ui/react";
 
-export default function Reviews() {
+export default function Reviews({ reviews = [] }) {
   return (
     <section className="bg-white my-4 p-3 md:!px-2 rounded-md space-y-4">
       <h1 className="p-2 text-xl md:text-lg font-bold">Reviews</h1>
       <section className="space-y-4 divide-y">
-        <Review
-          image="/images/bmw.PNG"
-          name="cody fisher"
-          date="05-06-2024"
-          text="Sed ut perspiciatis unde omnis iste natus error sit voluptatem   accusantium"
-        />
-        <Review
-          image="/images/bmwprofilepicture.png"
-          name="Mitsubishi"
-          date="05-06-2024"
-          text="Sed ut perspiciatis unde omnis iste natus error"
-        />
-        <Review
-          image="/images/bmw.PNG"
-          name="cody fisher"
-          date="05-06-2024"
-          text="Sed ut perspiciatis unde omnis iste natus error sit voluptatem   accusantium"
-        />
-        <Review
-          image="/images/bmwprofilepicture.png"
-          name="Mitsubishi"
-          date="05-06-2024"
-          text="Sed ut perspiciatis unde omnis iste natus error"
-        />
+        {reviews.length > 0 ? (
+          reviews.map((review) => (
+            <Review
+              key={review.id}
+              image={review.user.avatar}
+              name={review.user.first_name + " " + review.user.last_name}
+              date={review.reviewed_at}
+              text={review.review}
+            />
+          ))
+        ) : (
+          <LightParagraph>No reviews yet</LightParagraph>
+        )}
       </section>
     </section>
   );
@@ -39,7 +29,7 @@ export default function Reviews() {
 const Review = ({ image, name, date, text }) => {
   return (
     <div className="flex items-center gap-2 first:!pt-0 pt-4">
-      <img src={image} alt={name} className="size-[80px]" />
+      <Avatar src={image} name={name} size="md" />
 
       <div className="w-full">
         <div className="flex justify-between">

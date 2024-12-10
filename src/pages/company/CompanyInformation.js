@@ -54,13 +54,13 @@ const CompanyInformation = () => {
     },
     {
       name: "company_registration_date",
-      type: "text",
+      type: "date",
       label: "Company's registration date",
       placeholder: "01/02/2003",
     },
     {
       name: "company_annual_revenue",
-      type: "text",
+      type: "number",
       label: "Company's average annual revenue",
       placeholder: "Select range of average annual revenue",
     },

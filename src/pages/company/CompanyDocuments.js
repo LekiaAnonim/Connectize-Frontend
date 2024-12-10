@@ -56,6 +56,7 @@ const CompanyDocuments = () => {
     company_category: localStorage.getItem("company_category") || "",
     company_size: localStorage.getItem("company_size") || "",
     company_description: localStorage.getItem("company_description") || "",
+    company_tagline: localStorage.getItem("company_tagline") || "",
 
     // company information
     company_registration_no:
@@ -78,9 +79,11 @@ const CompanyDocuments = () => {
   const doStepChange = async () => {
     const isValidFields = await customFormikFieldValidator(formik);
 
-    if (!isValidFields) return false
+    if (!isValidFields) return false;
 
-    const toastId = toast.info("Processing your request...");
+    const toastId = toast.info(
+      `Onboarding ${formik.values.company_name} to connectize...`
+    );
 
     const newCompany = await createCompany(formik.values);
 
@@ -88,7 +91,7 @@ const CompanyDocuments = () => {
       for (let value in formik.values) {
         localStorage.removeItem(value);
       }
-      toast.success(formik.values["company_name"] + " created successfully", {
+      toast.success(formik.values["company_name"] + " onboarded successfully", {
         id: toastId,
       });
       newCompanyName = newCompany.company_name.replaceAll(" ", "_");

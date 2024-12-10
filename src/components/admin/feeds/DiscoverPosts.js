@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { Heart, VerifiedIcon } from "../../../icon";
 import { ConJoinedImages } from "../../ResponsiveNav";
 import { DownloadIcon, HeartIcon, Pencil2Icon } from "@radix-ui/react-icons";
@@ -108,7 +108,7 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
     doc.text(postItem.body, 10, 20, { maxWidth: 180 }); // Wraps text within 180mm
 
     // Save the PDF
-    doc.save(`${"Connectize_Post_" + postItem.id}.pdf`);
+    doc.save(`Connectize_post_${postItem.id}.pdf`);
   };
 
   useEffect(() => {
@@ -130,7 +130,7 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
         <div className="flex items-center gap-2">
           <Avatar
             name={postItem?.company?.company_name}
-            className="size-10"
+            size="sm"
             src={postItem?.company?.logo}
           />
 
@@ -231,7 +231,9 @@ const CommentSection = ({
   const [loading, setLoading] = useState(false);
   const { setRefetchInterval } = useCustomQuery();
 
-  const handleComment = async () => {
+  const handleComment = useCallback(async () => {
+    if (comment.trim().length < 1) return;
+
     setLoading(true);
     try {
       const { id } = await commentOnPost(postItem.id, postItem, comment);
@@ -241,44 +243,43 @@ const CommentSection = ({
       setTimeout(() => setRefetchInterval(false), 2000);
       setComment("");
     } catch (error) {
-      // throw error
+      toast.error("Failed to submit the comment. Please try again.");
     } finally {
       setLoading(false);
     }
-  };
+  }, [comment, postItem, setRefetchInterval]);
 
   useEffect(() => {
-    setComment("");
-  }, []);
+    if (!showCommentSection) setComment("");
+  }, [showCommentSection]);
+
   return (
     <section
       className={clsx("overflow-hidden transition-all duration-300", {
-        "mt-4 ": showCommentSection,
+        "mt-4": showCommentSection,
         "h-0 opacity-0": !showCommentSection,
       })}
     >
-      <div className="mb-4 flex justify-between">
+      <div className="mb-4 flex justify-between items-center">
         <h2 className="font-bold text-lg">Comments</h2>
         <CloseButton
           className="!text-xs"
           onClick={() => setShowCommentSection(false)}
         />
       </div>
+
       {commentsData.map((comment) => (
-        <CommentBlock
+        <MemoizedCommentBlock
           key={comment.id}
           comment={comment}
           postUserId={postItem.user.id}
         />
       ))}
+
       <div className="mt-4 border-t pt-4 relative">
         <ReactQuill
           value={comment}
-          onChange={(value) => {
-            // Remove <p><br></p> if the editor is empty
-            const cleanedValue = value === "<p><br></p>" ? "" : value;
-            setComment(cleanedValue);
-          }}
+          onChange={(value) => setComment(value === "<p><br></p>" ? "" : value)}
           theme="snow"
           placeholder="Type your comment here"
         />
@@ -295,44 +296,40 @@ const CommentSection = ({
 };
 
 const CommentBlock = ({ comment, postUserId }) => {
-  const [timestamp, setTimestamp] = useState(timeAgo(comment.commented_at));
+  const timestamp = timeAgo(comment.commented_at);
 
-  useEffect(() => {
-    const interval = setInterval(
-      () => setTimestamp(timeAgo(comment.commented_at)),
-      1000
-    );
-    return () => clearInterval(interval);
-  });
   return (
-    <div key={comment.id} className="mb-4">
+    <div className="mb-4">
       <div className="flex gap-2">
         <Avatar
-          name={comment.user.first_name + " " + comment.user.last_name}
+          name={`${comment.user.first_name} ${comment.user.last_name}`}
           className="!size-8"
-          src={baseURL + comment.user.avatar}
+          src={`${baseURL}${comment.user.avatar}`}
         />
-        <div className="flex items-center gap-1">
-          <h5 className="font-bold text-sm">
-            {comment.user.first_name} {comment.user.last_name}
-            <span className="text-[.65rem] text-gray-400 font-medium">
-              {comment.user?.id === postUserId ? "(author) •" : ""}
-            </span>
-          </h5>
-          <span className="text-gray-400 text-xs">{timestamp}</span>
+        <div className="flex flex-col">
+          <div className="flex items-center gap-1">
+            <h5 className="font-bold text-sm">
+              {comment.user.first_name} {comment.user.last_name}
+              {comment.user.id === postUserId && (
+                <span className="text-[.65rem] text-gray-400 font-medium">
+                  {" "}
+                  (author)
+                </span>
+              )}
+            </h5>
+            <span className="text-gray-400 text-xs">&bull; {timestamp}</span>
+          </div>
+          <MarkdownComponent
+            markdownContent={comment.content}
+            className="text-sm text-gray-600 mt-1"
+          />
         </div>
       </div>
-      <div className="my-1 text-gray-600">
-        <MarkdownComponent
-          markdownContent={comment.content}
-          className="text-sm"
-        />
-      </div>
-
-      <div></div>
     </div>
   );
 };
+
+const MemoizedCommentBlock = memo(CommentBlock);
 
 export function ButtonWithTooltipIcon({
   IconName,
