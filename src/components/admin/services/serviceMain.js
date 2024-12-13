@@ -51,14 +51,11 @@ export const PostCardWrapper = ({ postArray, isOverview = false }) => {
 
   return (
     <section
-      className={clsx(
-        "min-h-screen bg-white rounded-md p-2 grid gap-x-3 gap-y-4 ",
-        {
-          "sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3":
-            !isOverview,
-          // "max-lg:hidden": isOverview,
-        }
-      )}
+      className={clsx("bg-white rounded-md p-2 grid gap-x-3 gap-y-4 ", {
+        "sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3":
+          !isOverview,
+        // "max-lg:hidden": isOverview,
+      })}
     >
       {isLoading
         ? Array.from({ length: 6 }, (_, index) => (

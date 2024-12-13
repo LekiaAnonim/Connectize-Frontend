@@ -47,7 +47,11 @@ function DiscoverPosts() {
 
 export default DiscoverPosts;
 
-const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
+export const DiscoverPostItem = ({
+  postItem = {},
+  hasImage = false,
+  isSinglePost = false,
+}) => {
   const [showCommentSection, setShowCommentSection] = useState(false);
   const { setRefetchInterval } = useCustomQuery();
   const { user: currentUser } = useAuth();
@@ -122,8 +126,9 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
     <motion.article
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className={clsx("border-t border-gray-300 p-3", {
-        "bg-white !border-0 rounded-md": hasImage,
+      className={clsx("p-3", {
+        "bg-white !border-0 rounded-md": hasImage || isSinglePost,
+        "border-t border-gray-300": !isSinglePost,
       })}
     >
       <header className="flex items-center justify-between mb-2">
@@ -160,7 +165,11 @@ const DiscoverPostItem = ({ postItem = {}, hasImage = false }) => {
         </MoreOptions>
       </header>
 
-      <FormatPostText text={postItem.body} />
+      <FormatPostText
+        text={postItem.body}
+        postId={postItem.id}
+        isSinglePost={isSinglePost}
+      />
 
       {hasImage && (
         <section className="grid grid-cols-3 gap-2 mt-2">

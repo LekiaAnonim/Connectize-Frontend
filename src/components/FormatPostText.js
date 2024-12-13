@@ -1,8 +1,10 @@
 import React from "react";
 import LightParagraph from "./ParagraphText";
 import DOMPurify from "dompurify";
+import { useNavigate } from "react-router-dom";
 
-const FormatPostText = ({ text }) => {
+const FormatPostText = ({ text, isSinglePost = false, postId }) => {
+  const navigate = useNavigate();
   // Split the text into parts, keeping hashtags separate
   // Regex to detect spaces, #hashtags, ##large text, **bold**, and *italic*
   const parts = DOMPurify.sanitize(text)
@@ -84,7 +86,20 @@ const FormatPostText = ({ text }) => {
       return part;
     });
 
-  return <LightParagraph>{parts}</LightParagraph>;
+  return (
+    <LightParagraph>
+      {isSinglePost ? (
+        parts
+      ) : (
+        <div
+          className={"line-clamp-5 cursor-pointer"}
+          onClick={() => navigate(`/posts/${postId}`, { replace: true })}
+        >
+          {parts}
+        </div>
+      )}
+    </LightParagraph>
+  );
 };
 
 export default FormatPostText;

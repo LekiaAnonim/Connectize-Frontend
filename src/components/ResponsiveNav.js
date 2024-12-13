@@ -8,6 +8,7 @@ import { NotificationPopOver } from "./notifications";
 import { LinkWithTooltipIcon } from "./userProfile/Navbar";
 import { Avatar } from "@chakra-ui/react";
 import { useAuth } from "../context/userContext";
+import { Link } from "react-router-dom";
 
 function ResponsiveNav() {
   const { toggleNav } = useNav();
@@ -18,7 +19,9 @@ function ResponsiveNav() {
   ];
   return (
     <div className="flex justify-between items-center gap-2 sm:gap-4 w-full mb-4 max-md:mt-2">
-      <ConJoinedImages array={headerImages} />
+      <Link to="/">
+        <ConJoinedImages array={headerImages} />
+      </Link>
 
       <FeedSearch className="max-xs:hidden" />
 

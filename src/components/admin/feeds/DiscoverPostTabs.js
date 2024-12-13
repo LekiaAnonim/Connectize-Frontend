@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import DiscoverPosts from "./DiscoverPosts";
 import { bookmarkService } from "../../../api-services/services";
 import { useAuth } from "../../../context/userContext";
+import { BookmarkFilledIcon } from "@radix-ui/react-icons";
 
 const DiscoverPostTabs = () => {
   const tabsStyle = "w-full rounded";
@@ -215,7 +216,11 @@ export const BookMarkButton = React.memo(({ service }) => {
       disabled={loading}
       onClick={handleBookmark}
     >
-      <Bookmark isActive={bookmarked} />
+      {bookmarked ? (
+        <BookmarkFilledIcon className="size-7" />
+      ) : (
+        <Bookmark isActive={bookmarked} />
+      )}
     </button>
   );
 });

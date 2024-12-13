@@ -33,6 +33,8 @@ import CreateCompany from "./pages/company";
 import CompanyDocuments from "./pages/company/CompanyDocuments";
 import CompanyInformation from "./pages/company/CompanyInformation";
 import CompanyAdditionalInformation from "./pages/company/CompanyAdditionInformation";
+import SinglePostPage from "./pages/posts/singlePostPage";
+import FeedLayout from "./pages/FeedLayout";
 
 function App() {
   return (
@@ -40,7 +42,10 @@ function App() {
       <Routes>
         <Route>
           {/* Landing page */}
-          <Route path="/" element={<NewsFeed />} />
+          <Route element={<FeedLayout />}>
+            <Route path="/" element={<NewsFeed />} />
+            <Route path="/posts/:id" element={<SinglePostPage />} />
+          </Route>
 
           {/* authentication routes */}
           <Route path="/" element={<AuthLayout />}>
