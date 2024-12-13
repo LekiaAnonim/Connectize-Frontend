@@ -93,7 +93,7 @@ const FormatPostText = ({ text, isSinglePost = false, postId }) => {
       ) : (
         <div
           className={"line-clamp-5 cursor-pointer"}
-          onClick={() => navigate(`/posts/${postId}`, { replace: true })}
+          onClick={() => navigate(`/posts/${postId}`)}
         >
           {parts}
         </div>
