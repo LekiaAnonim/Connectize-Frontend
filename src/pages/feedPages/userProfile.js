@@ -1,134 +1,89 @@
-import React from 'react'
-import Navigationbar from '../../components/admin/services/navbar'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ShareIcon from '@mui/icons-material/Share';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ProductCard from '../../components/admin/feeds/listedProduct';
-import Reviews from '../../components/admin/feeds/reviews';
-import Summary from '../../components/admin/feeds/summary';
-import Suggested from '../../components/admin/feeds/suggested';
-import Company from '../../components/admin/feeds/company';
-
+import React, { useEffect } from "react";
+import Reviews from "../../components/admin/feeds/reviews";
+import { Suggestions } from "../../components/admin/feeds/TopServiceSuggestions";
+import Summary from "../../components/admin/feeds/summary";
+import ListedProducts from "../../components/admin/products/listedProducts";
+import Header from "../../components/userProfile/header";
+import Navbar from "../../components/userProfile/Navbar";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { getCompanies } from "../../api-services/companies";
+import { capitalizeFirst, formatNumber } from "../../lib/utils";
+import NoPage from "../../components/NoPage";
 
 export default function UserProfile() {
+  const { company: companyName } = useParams();
 
-  function ListedProduct({ post, followers, reviews }) {
+  const { data: companies } = useQuery({
+    queryKey: ["companies"],
+    queryFn: getCompanies,
+  });
 
-    return (
-      <div>
-        <div>
-          <h2>Dangote oil refinary</h2>
-          <div className='my-4'>
-            <button className='rounded-pill py-1 px-2 me-1 border border-none'>{post}</button>
-            <button className='rounded-pill py-1 px-2 me-1 border border-none'>{followers}</button>
-            <button className='rounded-pill py-1 px-2 border border-none'>{reviews}</button>
-          </div>
-        </div>
+  const company =
+    companies?.find(
+      (item) =>
+        item.company_name.toLowerCase().replaceAll(" ", "_") === companyName
+    ) || null;
 
-      </div>
-    )
-  }
+  useEffect(() => {
+    document.title = `${company?.company_name || ""} | Companies - Connectize`;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const ImageOne = () => {
-    return (
-      <>
-        <div>
-          <img src='images/passport5.png' className='w-25' alt='#' />
-          <img src='images/passport6.png' className='w-25' style={{ marginLeft: "-5px" }} alt='#' />
-        </div>
-      </>
-    )
-  }
-  const ImageTwo = () => {
-    return (
-      <>
-        <div>
-          <img src='images/passport5.png' className='w-25' alt='#' />
-          <img src='images/passport6.png' className='w-25' style={{ marginLeft: "-5px" }} alt='#' />
-          <img src='images/passportimg.png' className='w-25' style={{ marginLeft: "-5px" }} alt='#' />
-          <img src='images/passport6.png' className='w-25' style={{ marginLeft: "-5px" }} alt='#' />
-        </div>
-      </>
-    )
-  }
-  const ImageThree = () => {
-    return (
-      <>
-        <div>
-          <img src='images/passport5.png' className='w-25' alt='#' />
-          <img src='images/passport6.png' className='w-25' style={{ marginLeft: "-5px" }} alt='#' />
-          <img src='images/passportimg.png' className='w-25' style={{ marginLeft: "-5px" }} alt='#' />
-        </div>
-      </>
-    )
-  }
+  if (!company) return <NoPage />;
   return (
-    <div style={{ background: "#faf9f7" }} >
-      {/* <div className='mx-5'> */}
-      <Navigationbar />
-      <div className='row'>
-        <div className='col-12'>
-          <img src="images/dangote.png" alt='#' className='w-100' />
-          <img src="images/dangotelogo.png" alt='#' style={{ marginTop: "-10%", width: "70px", marginLeft: "10%" }} />
+    <>
+      <Navbar isUserProfile />
+      <main className="bg-background">
+        <Header company={company} />
+
+        <section className="mt-16 max-md:container flex flex-col items-start md:flex-row p-3 gap-2">
+          <ProductSidebar company={company} />
+          <section className="grid grid-cols-1 xl:grid-cols-3 md:px-2 xl:px-4 gap-2 py-2">
+            <Summary company={company} />
+            <div className="md:sticky top-2 md:max-h-screen md:overflow-y-auto scrollbar-hidden">
+              <Suggestions />
+            </div>
+          </section>
+        </section>
+      </main>
+    </>
+  );
+}
+
+function ProductSidebar({ company }) {
+  return (
+    <section className="space-y-8 max-md:mb-4 w-full md:max-w-[350px] shrink-0 md:sticky top-2 md:h-screen md:overflow-y-auto scrollbar-hidden">
+      <section className="space-y-5 px-2">
+        <h1 className="text-3xl md:text-2xl font-bold">
+          {capitalizeFirst(company.company_name) || "Dangote oil refinery"}
+        </h1>
+        <div className="flex gap-2 overflow-x-auto">
+          <StatsText
+            text={formatNumber(company.products.length) + "/ products"}
+          />
+          <StatsText
+            text={formatNumber(company.followers.length) + "/ followers"}
+          />
+          <StatsText
+            text={formatNumber(company.following.length) + "/ following"}
+          />
+          <StatsText
+            text={formatNumber(company.reviews.length) + "/ Reviews"}
+          />
         </div>
-      </div>
-      <div className='mx-5 mt-32'>
-        <div className='row'>
-          <div className='col-sm-5 col-md-5 col-lg-4'>
-            <ListedProduct
-              post='25k post'
-              followers='1M followers'
-              reviews='157 Reviews'
-            />
-            <div className='d-flex bg-white p-4 rounded'>
-              <h3>Listed products</h3>
-              <p className='ms-auto'><MoreHorizIcon /></p>
-            </div>
-            <ProductCard
-              image="images/drum1.PNG"
-              image1="images/ellipse4.PNG"
-              text="Lorem ipsum dolor sit"
-              icon={<MoreHorizIcon />}
-              icon1={<FavoriteIcon />}
-              icon2={<ShareIcon />}
-              gallery={<ImageOne />}
-              connect="connect"
-            />
-            <ProductCard
-              image="images/drum2.PNG"
-              image1="images/ellipse5.PNG"
-              text="Lorem ipsum dolor sit"
-              icon={<MoreHorizIcon />}
-              icon1={<FavoriteIcon />}
-              icon2={<ShareIcon />}
-              gallery={<ImageTwo />}
-              connect="connect"
-            />
-            <ProductCard
-              image="images/drum3.PNG"
-              image1="images/ellipse6.PNG"
-              text="Lorem ipsum dolor sit"
-              icon={<MoreHorizIcon />}
-              icon1={<FavoriteIcon />}
-              icon2={<ShareIcon />}
-              gallery={<ImageThree />}
-              connect="connect"
-            />
-            <Reviews />
-          </div>
-          <div className='col-sm-7 col-md-7 col-lg-5'>
-            <div>
-              <Summary />
-              <Company />
-            </div>
-          </div>
-          <div className='col-sm-4 col-md-4 col-lg-3'>
-            <div>
-              <Suggested />
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
+      <ListedProducts company={company} />
+      <Reviews reviews={company.reviews} />
+    </section>
+  );
+}
+
+function StatsText({ text }) {
+  return (
+    <div className="bg-gray-200/80 py-2 px-3 rounded-full md:text-xs text-sm shrink-0">
+      <span className="text-black font-semibold">{text.split("/")[0]}</span>
+      <span className="text-gray-500">{text.split("/")[1]}</span>
     </div>
-  )
+  );
 }

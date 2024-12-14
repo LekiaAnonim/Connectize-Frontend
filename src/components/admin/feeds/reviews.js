@@ -1,51 +1,48 @@
-import React from 'react'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import React from "react";
+import MoreOptions from "../../MoreOptions";
+import LightParagraph from "../../ParagraphText";
+import { Avatar } from "@chakra-ui/react";
 
-export default function Reviews() {
-    let Review = ({image,cody,icon,date,text})=>{
-        return(
-            <>
-            <div className='d-flex row'>
-                <div className='col-sm-12 col-md-12 col-lg-4'>
-                    <img src={image} style={{width:"100px",marginRight:"7px",marginTop:"10px"}} alt='#'/>
-                </div>
-                <div style={{lineHeight:"1"}} className='col-sm-12 col-md-12 col-lg-7'>
-                    <div className='d-flex '>
-                        <h4>{cody}</h4>
-                        <p className='ms-auto'>{icon}</p>
-                    </div>
-                    <div>
-                        <p>{date}</p>
-                        <p>{text}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </>
-        )
-    }
+export default function Reviews({ reviews = [] }) {
   return (
-    <div className='bg-white my-4 p-3 rounded'>
-        <h1 className='p-2'>Reviews</h1>
-        <div>
+    <section className="bg-white my-4 p-3 md:!px-2 rounded-md space-y-4">
+      <h1 className="p-2 text-xl md:text-lg font-bold">Reviews</h1>
+      <section className="space-y-4 divide-y">
+        {reviews.length > 0 ? (
+          reviews.map((review) => (
             <Review
-                image="images/bmw.PNG"
-                cody="cody fisher"
-                icon = {<MoreHorizIcon/>}
-                date = "05-06-2024"
-                text = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem   accusantium"
+              key={review.id}
+              image={review.user.avatar}
+              name={review.user.first_name + " " + review.user.last_name}
+              date={review.reviewed_at}
+              text={review.review}
             />
-        </div>
-        <hr/>
-        <div>
-            <Review
-                image="images/bmw.PNG"
-                cody="Mitsubishi"
-                icon = {<MoreHorizIcon/>}
-                date = "05-06-2024"
-                text = "Sed ut perspiciatis unde omnis iste natus error"
-            />
-        </div>
-    </div>
-  )
+          ))
+        ) : (
+          <LightParagraph>No reviews yet</LightParagraph>
+        )}
+      </section>
+    </section>
+  );
 }
+
+const Review = ({ image, name, date, text }) => {
+  return (
+    <div className="flex items-center gap-2 first:!pt-0 pt-4">
+      <Avatar src={image} name={name} size="md" />
+
+      <div className="w-full">
+        <div className="flex justify-between">
+          <h4 className="capitalize font-bold text-lg md:text-base">{name}</h4>
+          <MoreOptions>
+            <div>more options</div>
+          </MoreOptions>
+        </div>
+        <div>
+          <small className="text-custom_grey text-xs">{date}</small>
+          <LightParagraph>{text}</LightParagraph>
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -1,24 +1,22 @@
-
-import React from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import {Link} from "react-router-dom"
+import React from "react";
+import Logo from "./logo";
+import HeadingText from "./HeadingText";
 
 function NoPage() {
+  const year = new Date().getFullYear();
   return (
-    <div>
-        <div className='container'>
-          <Link to={"/"}>
-            <img src='/images/logo.png' style={{height:"80px", paddingTop:"5px",marginBottom:"2%"}} alt='logo'/> 
-          </Link>    
-            <div className='mx-auto justify-content-center text-center'>
-                <h1>Error 404: No Page</h1>
-            </div>
+    <section className="min-h-screen w-full flex flex-col">
+      <section className="container py-2 flex-1 flex flex-col">
+        <Logo />
+        <div className="flex flex-col justify-center items-center text-center flex-1">
+          <HeadingText>Error 404: No content found</HeadingText>
         </div>
-        <footer className='text-center py-5'>
-            <p>ALL RIGHT RESERVED &copy; 2024</p>
-        </footer>
-    </div>
-  )
+      </section>
+      <footer className="text-center py-5">
+        <p>ALL RIGHT RESERVED &copy; {year}</p>
+      </footer>
+    </section>
+  );
 }
 
-export default NoPage
+export default NoPage;

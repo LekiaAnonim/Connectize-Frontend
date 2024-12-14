@@ -1,0 +1,26 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import clsx from "clsx";
+import { useNav } from "../../context/navContext";
+
+function Logo({ className, url = "/", height = "60px", width = "60px" }) {
+  const { toggleNav } = useNav();
+  return (
+    <Link
+      to={url}
+      className={clsx(
+        "w-fit shrink-0 block transition-all duration-500",
+        className
+      )}
+      onClick={() => toggleNav(false)}
+    >
+      <img
+        src="/images/logo.png"
+        style={{ height, width }}
+        alt="connectize logo"
+      />
+    </Link>
+  );
+}
+
+export default Logo;

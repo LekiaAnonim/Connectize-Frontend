@@ -1,47 +1,42 @@
-import React from 'react'
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import { getProducts } from "../../../api-services/products";
+import HeadingText from "../../HeadingText";
+import { ProductListCard } from "../markets/newlyListed";
+import { PostSlider } from "../feeds/DiscoverPostTabs";
+import { SwiperSlide } from "swiper/react";
+import { useMediaQuery } from "react-responsive";
 
 export default function NewProducts() {
-    let ProductCard = ({image,gold,reserved})=>{
-        return(
-            <div>
-                <img src={image} className='w-100' alt='#'/>
-                <p>{gold} <br/> {reserved}</p>
-            </div>
-        )
-    }
+  const { data: products } = useQuery({
+    queryKey: ["products"],
+    queryFn: getProducts,
+  });
+
+  const isDesktopScreen = useMediaQuery({ minWidth: "1400px" });
+  const isLaptopScreen = useMediaQuery({ minWidth: "1028px" });
+  const isBigMobile = useMediaQuery({ minWidth: "640px" });
+
   return (
-    <div className='py-5'>
-        <h3>You may also like</h3>
-        <div className='row'>
-            <div className='col-sm-6 col-md-3'>
-                <ProductCard
-                    image="images/Rectangle6.png"
-                    gold="Premium Black Gold"
-                    reserved="Reserve"
-                />
-            </div>
-            <div className='col-sm-6 col-md-3'>
-                <ProductCard
-                    image="images/Rectangle6.png"
-                    gold="Premium Black Gold"
-                    reserved="Reserve"
-                />
-            </div>
-            <div className='col-sm-6 col-md-3'>
-                <ProductCard
-                    image="images/Rectangle6.png"
-                    gold="Premium Black Gold"
-                    reserved="Reserve"
-                />
-            </div>
-            <div className='col-sm-6 col-md-3'>
-                <ProductCard
-                    image="images/Rectangle6.png"
-                    gold="Premium Black Gold"
-                    reserved="Reserve"
-                />
-            </div>
-        </div>
-    </div>
-  )
+    <section className="space-y-4 mb-6 ">
+      <HeadingText>You may also like</HeadingText>
+      <section className="">
+        <PostSlider
+          customSlidesPerView={
+            isDesktopScreen ? 4 : isLaptopScreen ? 3 : isBigMobile ? 2 : 1
+          }
+        >
+          {products?.slice(0, 4).map((product, index) => (
+            <SwiperSlide key={product.id}>
+              <ProductListCard
+                image={product.images[index]?.image}
+                title={product.title}
+                subtitle={product.category}
+              />
+            </SwiperSlide>
+          ))}
+        </PostSlider>
+      </section>
+    </section>
+  );
 }

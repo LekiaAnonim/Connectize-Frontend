@@ -1,27 +1,47 @@
-import React from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import {Link} from "react-router-dom"
-
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+import Logo from "../logo";
+import { getSession } from "../../lib/session";
+import useRedirect from "../../hooks/useRedirect";
+import HeadingText from "../HeadingText";
+import { useAuth } from "../../context/userContext";
 
 function Profile() {
+  const session = getSession();
+
+  const { user: currentUser } = useAuth();
+
+  useRedirect(!session, "/login");
+
+  useRedirect(currentUser && !currentUser?.is_first_time_user, "/");
+
+  useEffect(() => {
+    document.title =
+      "Complete your profile to start enjoying connectize's great services | Connectize";
+  }, []);
+
   return (
-    <div>
-        <div className='container'>
-            <img src='/images/logo.png' style={{height:"60px",paddingTop:"5px",marginBottom:"2%"}} alt='logo'/>     
-            <div className='mx-auto justify-content-center text-center'>
-                <h1>Would you like to set up <br/>your profile now</h1>
-                <img src='/images/pasportOne.png' alt='passport'style={{width:"150px"}} className='my-5' />
-                <div>
-                    <Link to="/home" style={{width:"250px"}} className='btn btn-warning rounded-pill mb-3 ms-3'>Let's Go</Link>
-                    <button style={{width:"250px"}} className='btn btn-secondary rounded-pill mb-3 ms-3'>Not Now</button>
-                </div>
-            </div>
+    <main>
+      <div className="container py-4">
+        <Logo />
+        <div className="mx-auto flex flex-col justify-center items-center text-center space-y-6 min-h-[80vh]">
+          <HeadingText>
+            Would you like to set up <br />
+            your profile now?
+          </HeadingText>
+          <img src="/images/passportOne.png" alt="passport" width="140px" />
+          <div className="flex max-md:flex-col gap-3 font-semibold text-sm">
+            <Link to="/home" className="bg-gold rounded-full w-[250px] p-2">
+              Let's Go
+            </Link>
+            <Link to="/" className="bg-gray-300 rounded-full w-[250px] p-2">
+              Not Now
+            </Link>
+          </div>
         </div>
-        <footer className='text-center py-5'>
-            <p>ALL RIGHT RESERVED &copy; 2024</p>
-        </footer>
-    </div>
-  )
+      </div>
+    </main>
+  );
 }
 
-export default Profile
+export default Profile;

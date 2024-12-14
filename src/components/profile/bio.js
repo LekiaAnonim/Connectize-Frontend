@@ -1,69 +1,123 @@
-import React from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import {Link} from "react-router-dom"
-import { GreaterThan,ArrowLeft } from '../../icon';
+import React, { useEffect } from "react";
+import HeadingText from "../HeadingText";
+import LightParagraph from "../ParagraphText";
+import {
+  bioKey,
+  currentProfileIndexKey,
+  social_media_urlKey,
+  website_urlKey,
+} from "../../lib/data";
+import Form from "../form";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import StepButton from "./StepButton";
+import { customFormikFieldValidator } from "../../lib/utils";
+import useRedirect from "../../hooks/useRedirect";
 
+const validationSchema = Yup.object().shape({
+  bio: Yup.string().trim().required("This field is required"),
+  website_url: Yup.string()
+    .trim()
+    .url("Invalid url")
+    .required("This field is required"),
+  social_media_url: Yup.string().trim().optional(),
+});
 
 function Bio() {
+  useRedirect(
+    !(Number(localStorage.getItem(currentProfileIndexKey)) >= 3),
+    "/address"
+  );
+  const formValues = {
+    bio: localStorage.getItem(bioKey) || "",
+    website_url: localStorage.getItem(website_urlKey) || "",
+    social_media_url: localStorage.getItem(social_media_urlKey) || "",
+  };
+
+  const formik = useFormik({
+    initialValues: formValues,
+    validationSchema,
+  });
+
+  const doStepChange = async () => {
+    const isValidFields = await customFormikFieldValidator(formik);
+
+    if (!isValidFields) return false;
+
+    for (let value in formik.values) {
+      const key = value;
+      const keyValue = formik.values[value];
+
+      localStorage.setItem(key, keyValue);
+    }
+
+    localStorage.setItem(currentProfileIndexKey, "4");
+
+    return true;
+  };
+
+  useEffect(() => {
+    formik.setValues(formValues);
+    document.title = "Complete your profile - Bio data | connectize";
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fields = [
+    {
+      type: "grid",
+      gridInputs: [
+        {
+          name: bioKey,
+          type: "textarea",
+          label: "Bio",
+          placeholder: "say something",
+        },
+        {
+          name: website_urlKey,
+          type: "text",
+          label: "Website link",
+          placeholder: "westlandoil.com",
+        },
+        {
+          name: social_media_urlKey,
+          type: "text",
+          label: "Social media link",
+          placeholder: "e.g linkedin",
+        },
+      ],
+    },
+  ];
   return (
-    <div style={{background:"#"}}>
-         <Container>
-        <Navbar.Brand href="#home">
-            <img src='/images/logo.png'style={{height:"60px"}} alt='logo'/>
-        </Navbar.Brand>
-        <Navbar expand="md" className="bg-body-white">
-            <Nav className="#">
-                <Nav.Link href="/home" >Personal Information<GreaterThan/></Nav.Link>
-                <Nav.Link href="/contact">Contact <GreaterThan/></Nav.Link>
-                <Nav.Link href="/address">Address <GreaterThan/></Nav.Link>
-                <Nav.Link href="#" className='border-bottom border-2 border-dark'>Bio</Nav.Link>
-            </Nav>    
-        </Navbar>
-        </Container>
-        <div className='container'>
-            <div className='my-4'>
-                <h4>Create your  bio and add <br/>other infomation</h4>
-                <p className='text-black-50'>Please fill in the details below</p>
-            </div>
-            
-            <form>
-                <div className='row form-group'>
-                    <div className='me-3 col-sm-6 col-md-4 py-4'>
-                        <label>Bio</label><br/>
-                        <textarea className='form-control border-0 mt-3' style={{background:"#EEEEEE",height:"120%"}} placeholder='Say something'></textarea>
-                        
-                    </div>
-                    <div className='col-sm-6 col-md-4 py-4'>
-                        <label>Website Link</label><br/>
-                        <input type='text' className='form-control border-0 mt-3' style={{background:"#EEEEEE",height:"60%"}} placeholder='westlandoil.com'/>
-                    </div>
-                </div>
-                <div className='row form-group'>
-                    <div className='me-3 col-sm-6 col-md-4 py-4' style={{marginTop:"3%"}}>
-                        <label>State/Province</label><br/>
-                        <input type='text' className='form-control border-0 mt-3' style={{background:"#EEEEEE",height:"75%"}} placeholder='Abuja'/>
-                    </div>
-                    <div className='col-sm-6 col-md-4 py-1'>
-                        <label>Social media link</label><br/>
-                        <input type='text' className='form-control border-0 mt-3' style={{background:"#EEEEEE",height:"40%"}} placeholder='eg linkedin'/>
-                    </div>
-                </div>
-                
-                
-                <div className='row my-4'>
-                    <Link to="/address" className='btn rounded my-4 ms-2 py-2 shadow-lg bg-warning px-4 col-2'><ArrowLeft/>Back</Link>
-                    <Link to="/overview" className='btn btn-warning rounded my-4 me-2 py-2 shadow-lg px-4 col-2 offset-4'>Next<GreaterThan/></Link>
-                </div>
-            </form>
-        </div>
-        <footer className='text-center py-5'>
-            <p>ALL RIGHT RESERVED &copy; 2024</p>
-        </footer>
-    </div>
-  )
+    <section>
+      <div className="my-4">
+        <HeadingText>Create your bio and add other information</HeadingText>
+        <LightParagraph className="text-black-50">
+          Please fill in the details below
+        </LightParagraph>
+      </div>
+
+      <Form
+        formik={formik}
+        status={"none"}
+        inputArray={fields}
+        hasButton={false}
+      />
+
+      <div className="flex justify-between my-6">
+        <StepButton
+          nextStep="address"
+          stepDirection="back"
+          stepText="Back"
+          doStepChange={doStepChange}
+        />
+        <StepButton
+          doStepChange={doStepChange}
+          nextStep="overview"
+          stepText="Overview"
+        />
+      </div>
+    </section>
+  );
 }
 
-export default Bio
+export default Bio;
