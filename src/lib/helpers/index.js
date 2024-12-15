@@ -18,7 +18,7 @@ export function goToLogin() {
 }
 
 // Configure Axios Defaults
-export const baseURL = "http://localhost:8000";
+export const baseURL = "https://connectize.co"; // https://connectize.co/
 axios.defaults.withCredentials = true;
 
 // Mutex for Refresh Token
