@@ -199,12 +199,13 @@ export const DiscoverPostItem = ({
       )}
       <div className="flex items-center gap-2 justify-between mt-4">
         <ConJoinedImages
-          size={25}
+          size={30}
           array={postItem.likes.slice(0, 5).map((post) => ({
-            name: post.user.first_name,
+            name: `${post.user.first_name} ${post.user.last_name}`,
             src: baseURL + post.user.avatar,
             href: "/",
           }))}
+          sizeVariant="sm"
         />
 
         <div className="flex items-center gap-3">

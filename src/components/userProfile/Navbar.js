@@ -21,6 +21,7 @@ import { SearchPopOver } from "../SearchPopOver";
 import { useNav } from "../../context/navContext";
 
 import { Menu } from "@mui/icons-material";
+import { avatarStyle } from "../ResponsiveNav";
 
 const Navbar = ({ isUserProfile }) => {
   const { toggleNav } = useNav();
@@ -136,13 +137,12 @@ function ProfilePicture() {
   const { user } = useAuth();
 
   return (
-    // <Link to="/user-profile">
     <Avatar
-      src={user?.avatar || "/images/iconprofile.PNG"}
-      name={user?.first_name + " " + user?.last_name || "User"}
+      src={user?.avatar || ""}
+      name={user?.first_name + " " + user?.last_name || ""}
       size="sm"
+      className={avatarStyle}
     />
-    // </Link>
   );
 }
 

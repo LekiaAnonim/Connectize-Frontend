@@ -72,14 +72,21 @@ export default ResponsiveNav;
 
 export const avatarStyle = "!bg-gold !text-black border-2 border-white";
 
-export const ConJoinedImages = ({ size = 40, array, animate = true }) => {
+export const ConJoinedImages = ({
+  size = 40,
+  array,
+  animate = true,
+  className,
+  sizeVariant,
+}) => {
   return (
     <div className="flex group w-fit">
       {array.map(({ src, name, href }, index) => (
-        <Link href={href} key={index}>
+        <Link to={href} key={index}>
           <Avatar
             src={src}
             name={name}
+            size={sizeVariant}
             style={{
               transform: `translateX(-${5 * index}px)`,
               width: `${size}px`,
@@ -88,6 +95,7 @@ export const ConJoinedImages = ({ size = 40, array, animate = true }) => {
             className={clsx(
               "rounded-full transition-transform duration-500",
               avatarStyle,
+              className,
               {
                 "group-hover:!translate-x-2 delay-200": animate,
               }
