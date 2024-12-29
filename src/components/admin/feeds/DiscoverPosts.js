@@ -80,7 +80,7 @@ export const DiscoverPostItem = ({
             " - " +
             postItem.company.company_name,
           text: postItem.body,
-          url: shareUrlString, // You can replace this with the post's URL
+          url: shareUrlString,
         });
       } catch (error) {
         console.log("Error sharing:", error);
@@ -139,11 +139,11 @@ export const DiscoverPostItem = ({
             src={postItem?.company?.logo}
           />
 
-          <div className="flex items-center gap-1">
-            <h4 className=" md:text-sm lg:text-base font-bold capitalize">
-              {postItem?.company?.company_name}
+          <div className="flex max-xs:flex-col items-center gap-1">
+            <h4 className="md:text-sm lg:text-base font-bold capitalize">
+              <span></span>
+              {postItem?.company?.verify && <VerifiedIcon color="black" />}
             </h4>
-            {postItem?.company?.verify && <VerifiedIcon color="black" />}
             <small className="text-gray-400 lowercase">
               @{postItem.user.first_name} • {timestamp}
             </small>
