@@ -13,7 +13,7 @@ const MoreOptions = ({ children, className, triggerStyle, isOpen }) => {
   return (
     <Popover isOpen={isOpen}>
       <PopoverTrigger>
-        <Button className={clsx("bg-transparent", triggerStyle)}>
+        <Button className={clsx("bg-transparent shrink-0", triggerStyle)}>
           <MoreHoriz />
         </Button>
       </PopoverTrigger>

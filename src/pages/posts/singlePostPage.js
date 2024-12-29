@@ -3,7 +3,10 @@ import { useParams } from "react-router-dom";
 import { getPosts } from "../../api-services/posts";
 import { useQuery } from "@tanstack/react-query";
 import { useCustomQuery } from "../../context/queryContext";
-import { DiscoverPostItem } from "../../components/admin/feeds/DiscoverPosts";
+import {
+  DiscoverPostItem,
+  DiscoverPostSkeleton,
+} from "../../components/admin/feeds/DiscoverPosts";
 
 function SinglePostPage() {
   const { id } = useParams();
@@ -23,7 +26,7 @@ function SinglePostPage() {
     [posts, id]
   );
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <DiscoverPostSkeleton />;
   if (!postItem) return <p>No content found</p>;
 
   return (

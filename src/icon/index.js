@@ -775,7 +775,7 @@ export const VerifiedIcon = ({
   <svg
     width={width}
     height={height}
-    className={className}
+    className={`${className} shrink-0`}
     viewBox="0 0 15 15"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

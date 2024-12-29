@@ -19,6 +19,7 @@ import { motion } from "framer-motion";
 import ReactQuill from "react-quill";
 import { MarkdownComponent } from "../../MarkDownComponent";
 import { baseURL } from "../../../lib/helpers";
+import { Link } from "react-router-dom";
 
 function DiscoverPosts() {
   const { refetchInterval } = useCustomQuery();
@@ -126,43 +127,55 @@ export const DiscoverPostItem = ({
     <motion.article
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className={clsx("p-3", {
+      className={clsx("py-3 px-1 xs:px-3", {
         "bg-white !border-0 rounded-md": hasImage || isSinglePost,
         "border-t border-gray-300": !isSinglePost,
       })}
     >
-      <header className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
+      <header className="flex justify-between mb-2 gap-4 xs:gap-6 w-full overflow-hidden">
+        <section className="flex xs:items-center gap-2">
           <Avatar
             name={postItem?.company?.company_name}
             size="sm"
             src={postItem?.company?.logo}
           />
 
-          <div className="flex max-xs:flex-col items-center gap-1">
-            <h4 className="md:text-sm lg:text-base font-bold capitalize">
-              <span></span>
+          <section className="flex max-xs:flex-col xs:items-center gap-0.5 xs:gap-1">
+            <div className="flex">
+              <Link
+                to={
+                  "/" +
+                  postItem?.company?.company_name
+                    .toLowerCase()
+                    .replace(/\s/g, "_")
+                }
+                className="text-lg xs:text-base md:text-sm lg:text-base font-bold break-all line-clamp-1"
+              >
+                {postItem?.company?.company_name}
+              </Link>
               {postItem?.company?.verify && <VerifiedIcon color="black" />}
-            </h4>
+            </div>
             <small className="text-gray-400 lowercase">
               @{postItem.user.first_name} • {timestamp}
             </small>
-          </div>
-        </div>
+          </section>
+        </section>
 
-        <MoreOptions>
-          <div className="flex flex-col gap-2">
-            <ButtonWithTooltipIcon text="Edit post" IconName={Pencil2Icon} />
-            <ButtonWithTooltipIcon
-              text="Convert to draft"
-              IconName={ChangeCircleOutlined}
-            />
-            <ButtonWithTooltipIcon
-              text="Delete post"
-              className="!text-white !bg-red-700 hover:!bg-red-500"
-            />
-          </div>
-        </MoreOptions>
+        {postItem?.user?.id === currentUser?.id && (
+          <MoreOptions className="shrink-0">
+            <div className="flex flex-col gap-2">
+              <ButtonWithTooltipIcon text="Edit post" IconName={Pencil2Icon} />
+              <ButtonWithTooltipIcon
+                text="Convert to draft"
+                IconName={ChangeCircleOutlined}
+              />
+              <ButtonWithTooltipIcon
+                text="Delete post"
+                className="!text-white !bg-red-700 hover:!bg-red-500"
+              />
+            </div>
+          </MoreOptions>
+        )}
       </header>
 
       <FormatPostText
@@ -246,7 +259,7 @@ const CommentSection = ({
     setLoading(true);
     try {
       const { id } = await commentOnPost(postItem.id, postItem, comment);
-      if (id) toast.success("Comment has been submitted");
+      if (id) toast.success("Comment has been added");
 
       setRefetchInterval(1000);
       setTimeout(() => setRefetchInterval(false), 2000);
@@ -321,7 +334,6 @@ const CommentBlock = ({ comment, postUserId }) => {
               {comment.user.first_name} {comment.user.last_name}
               {comment.user.id === postUserId && (
                 <span className="text-[.65rem] text-gray-400 font-medium">
-                  {" "}
                   (author)
                 </span>
               )}
@@ -366,7 +378,9 @@ export function ButtonWithTooltipIcon({
           className
         )}
       >
-        {IconName && <IconName className="!size-4" />}
+        {IconName && (
+          <IconName className="xs:!size-4 !size-6 max-xs:!text-xl" />
+        )}
         {text && <span className={`${textClassName}`}>{text}</span>}
       </button>
     </Tooltip>
