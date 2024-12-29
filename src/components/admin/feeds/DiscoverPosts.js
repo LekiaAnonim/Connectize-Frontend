@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { Heart, VerifiedIcon } from "../../../icon";
-import { ConJoinedImages } from "../../ResponsiveNav";
+import { avatarStyle, ConJoinedImages } from "../../ResponsiveNav";
 import { DownloadIcon, HeartIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { MessageOutlined, ShareAltOutlined } from "@ant-design/icons";
 import clsx from "clsx";
@@ -138,6 +138,7 @@ export const DiscoverPostItem = ({
             name={postItem?.company?.company_name}
             size="sm"
             src={postItem?.company?.logo}
+            className={avatarStyle}
           />
 
           <section className="flex max-xs:flex-col xs:items-center gap-0.5 xs:gap-1">
@@ -202,6 +203,7 @@ export const DiscoverPostItem = ({
           array={postItem.likes.slice(0, 5).map((post) => ({
             name: post.user.first_name,
             src: baseURL + post.user.avatar,
+            href: "/",
           }))}
         />
 

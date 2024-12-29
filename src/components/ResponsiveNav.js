@@ -6,22 +6,49 @@ import { ChartBar, Setting } from "../icon";
 import FeedSearch from "./admin/feeds/FeedSearch";
 import { NotificationPopOver } from "./notifications";
 import { LinkWithTooltipIcon } from "./userProfile/Navbar";
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, SkeletonCircle } from "@chakra-ui/react";
 import { useAuth } from "../context/userContext";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { getCompanies } from "../api-services/companies";
 
 function ResponsiveNav() {
   const { toggleNav } = useNav();
   const { user } = useAuth();
-  const headerImages = [
-    { src: user?.avatar, name: user?.first_name + " " + user?.last_name },
-    { src: "", name: "Company Name" },
-  ];
+
+  const { data: companies, isLoading } = useQuery({
+    queryKey: ["companies"],
+    queryFn: getCompanies,
+  });
+
   return (
     <div className="flex justify-between items-center gap-2 sm:gap-4 w-full mb-4 max-md:mt-2">
-      <Link to="/">
-        <ConJoinedImages array={headerImages} />
-      </Link>
+      {isLoading ? (
+        <div className="flex">
+          <SkeletonCircle />
+          <SkeletonCircle className="-ml-1" />
+        </div>
+      ) : (
+        <ConJoinedImages
+          array={[
+            {
+              src: user?.avatar,
+              name: `${user?.first_name || ""} ${user?.last_name || ""}`,
+              href: "/",
+            },
+            {
+              src: companies?.[0]?.logo || "",
+              name: companies?.[0]?.company_name || "",
+              href:
+                companies?.length > 0
+                  ? `/${companies[0].company_name
+                      .toLowerCase()
+                      .replace(" ", "_")}`
+                  : "/create-company",
+            },
+          ]}
+        />
+      )}
 
       <FeedSearch className="max-xs:hidden" />
 
@@ -43,23 +70,30 @@ function ResponsiveNav() {
 
 export default ResponsiveNav;
 
+export const avatarStyle = "!bg-gold !text-black border-2 border-white";
+
 export const ConJoinedImages = ({ size = 40, array, animate = true }) => {
   return (
     <div className="flex group w-fit">
-      {array.map(({ src, name }, index) => (
-        <Avatar
-          key={index}
-          src={src}
-          name={name}
-          style={{
-            transform: `translateX(-${5 * index}px)`,
-            width: `${size}px`,
-            height: `${size}px`,
-          }}
-          className={clsx("rounded-full transition-transform duration-500", {
-            "group-hover:!translate-x-2 delay-200": animate,
-          })}
-        />
+      {array.map(({ src, name, href }, index) => (
+        <Link href={href} key={index}>
+          <Avatar
+            src={src}
+            name={name}
+            style={{
+              transform: `translateX(-${5 * index}px)`,
+              width: `${size}px`,
+              height: `${size}px`,
+            }}
+            className={clsx(
+              "rounded-full transition-transform duration-500",
+              avatarStyle,
+              {
+                "group-hover:!translate-x-2 delay-200": animate,
+              }
+            )}
+          />
+        </Link>
       ))}
     </div>
   );

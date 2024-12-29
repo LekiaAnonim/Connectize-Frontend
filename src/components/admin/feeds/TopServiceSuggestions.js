@@ -7,6 +7,7 @@ import { PostCard } from "./DiscoverPostTabs";
 import HeadingText from "../../HeadingText";
 import LightParagraph from "../../ParagraphText";
 import { Avatar } from "@chakra-ui/react";
+import { avatarStyle } from "../../ResponsiveNav";
 
 const TopServiceSuggestions = () => {
   return (
@@ -63,7 +64,12 @@ function SuggestionListItem({ user }) {
 
   return (
     <li className="flex items-center gap-2.5 pt-2">
-      <Avatar src={avatar} name={`${first_name} ${last_name}`} size="sm" />
+      <Avatar
+        src={avatar}
+        name={`${first_name} ${last_name}`}
+        size="sm"
+        className={avatarStyle}
+      />
       <div>
         <div className="flex items-center gap-x-0.5">
           <span className="text-base xs:leading-tight text-gray-700 font-bold capitalize">
