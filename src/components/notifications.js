@@ -8,6 +8,7 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import { Notification } from "../icon";
+import { avatarStyle } from "./ResponsiveNav";
 
 export function NotificationPopOver() {
   return (
@@ -44,7 +45,13 @@ export function Notifications({ className }) {
         {notificationMessages.map(
           ({ company, src, message, timeStamp }, index) => (
             <div key={index} className="flex items-start gap-2">
-              <Avatar src={src} alt={company} size="sm" name={company} />
+              <Avatar
+                src={src}
+                alt={company}
+                size="sm"
+                name={company}
+                className={avatarStyle}
+              />
               <div className="space-y-0">
                 <h3 className="leading-[1.125] font-bold m-0 line-clamp-1">
                   {company}
