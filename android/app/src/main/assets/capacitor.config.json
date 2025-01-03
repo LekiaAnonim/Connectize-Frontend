@@ -1,5 +1,12 @@
 {
 	"appId": "com.connectize.app",
 	"appName": "connectize",
-	"webDir": "build"
+	"webDir": "build",
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 0,
+			"launchAutoHide": true,
+			"backgroundColor": "#000"
+		}
+	}
 }
