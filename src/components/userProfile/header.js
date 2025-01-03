@@ -1,4 +1,6 @@
 import { Avatar } from "@chakra-ui/react";
+import clsx from "clsx";
+import { avatarStyle } from "../ResponsiveNav";
 
 const Header = ({ company }) => {
   return (
@@ -12,7 +14,10 @@ const Header = ({ company }) => {
       <Avatar
         src={company.logo}
         name={company.company_name}
-        className="!absolute !left-[7%] md:!left-[3%] !bottom-10 !size-[90px] lg:!size-[120px]"
+        className={clsx(
+          avatarStyle,
+          "!absolute !left-[7%] md:!left-[3%] !bottom-10 !size-[90px] lg:!size-[120px]"
+        )}
       />
     </section>
   );

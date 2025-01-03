@@ -16,6 +16,7 @@ import { LogoutOutlined } from "@ant-design/icons";
 import { useAuth } from "../../../context/userContext";
 import { getSession } from "../../../lib/session";
 import { logOutCurrentUser } from "../../../api-services/users";
+import { avatarStyle } from "../../ResponsiveNav";
 
 const Sidebar = () => {
   const { pathname } = useLocation();
@@ -151,7 +152,12 @@ function CompanyListItem({ company }) {
         to={`/${company_name.toLowerCase().replaceAll(" ", "_")}`}
         className="flex items-center gap-2 pt-2"
       >
-        <Avatar src={logo} name={company_name} size="sm" />
+        <Avatar
+          src={logo}
+          name={company_name}
+          size="sm"
+          className={avatarStyle}
+        />
         <div>
           <h1 className="text-base font-semibold leading-normal m-0 capitalize line-clamp-2">
             {company_name}

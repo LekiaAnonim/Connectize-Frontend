@@ -38,11 +38,9 @@ a {
   transition-duration: 350ms;
 }
 
-/* * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-} */
+.swiper-pagination-bullet-active {
+     background-color: #f1c644 !important;
+}
 
 :root {
   --font-drk-600: #242424;

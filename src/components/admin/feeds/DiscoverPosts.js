@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { Heart, VerifiedIcon } from "../../../icon";
-import { ConJoinedImages } from "../../ResponsiveNav";
+import { avatarStyle, ConJoinedImages } from "../../ResponsiveNav";
 import { DownloadIcon, HeartIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { MessageOutlined, ShareAltOutlined } from "@ant-design/icons";
 import clsx from "clsx";
@@ -19,6 +19,7 @@ import { motion } from "framer-motion";
 import ReactQuill from "react-quill";
 import { MarkdownComponent } from "../../MarkDownComponent";
 import { baseURL } from "../../../lib/helpers";
+import { Link } from "react-router-dom";
 
 function DiscoverPosts() {
   const { refetchInterval } = useCustomQuery();
@@ -80,7 +81,7 @@ export const DiscoverPostItem = ({
             " - " +
             postItem.company.company_name,
           text: postItem.body,
-          url: shareUrlString, // You can replace this with the post's URL
+          url: shareUrlString,
         });
       } catch (error) {
         console.log("Error sharing:", error);
@@ -126,43 +127,56 @@ export const DiscoverPostItem = ({
     <motion.article
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className={clsx("p-3", {
+      className={clsx("py-3 px-1 xs:px-3", {
         "bg-white !border-0 rounded-md": hasImage || isSinglePost,
         "border-t border-gray-300": !isSinglePost,
       })}
     >
-      <header className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
+      <header className="flex justify-between mb-2 gap-4 xs:gap-6 w-full overflow-hidden">
+        <section className="flex xs:items-center gap-2">
           <Avatar
             name={postItem?.company?.company_name}
             size="sm"
             src={postItem?.company?.logo}
+            className={avatarStyle}
           />
 
-          <div className="flex items-center gap-1">
-            <h4 className=" md:text-sm lg:text-base font-bold capitalize">
-              {postItem?.company?.company_name}
-            </h4>
-            {postItem?.company?.verify && <VerifiedIcon color="black" />}
+          <section className="flex max-xs:flex-col xs:items-center gap-0.5 xs:gap-1">
+            <div className="flex">
+              <Link
+                to={
+                  "/" +
+                  postItem?.company?.company_name
+                    .toLowerCase()
+                    .replace(/\s/g, "_")
+                }
+                className="text-lg xs:text-base md:text-sm lg:text-base font-bold break-all line-clamp-1"
+              >
+                {postItem?.company?.company_name}
+              </Link>
+              {postItem?.company?.verify && <VerifiedIcon color="black" />}
+            </div>
             <small className="text-gray-400 lowercase">
               @{postItem.user.first_name} • {timestamp}
             </small>
-          </div>
-        </div>
+          </section>
+        </section>
 
-        <MoreOptions>
-          <div className="flex flex-col gap-2">
-            <ButtonWithTooltipIcon text="Edit post" IconName={Pencil2Icon} />
-            <ButtonWithTooltipIcon
-              text="Convert to draft"
-              IconName={ChangeCircleOutlined}
-            />
-            <ButtonWithTooltipIcon
-              text="Delete post"
-              className="!text-white !bg-red-700 hover:!bg-red-500"
-            />
-          </div>
-        </MoreOptions>
+        {postItem?.user?.id === currentUser?.id && (
+          <MoreOptions className="shrink-0">
+            <div className="flex flex-col gap-2">
+              <ButtonWithTooltipIcon text="Edit post" IconName={Pencil2Icon} />
+              <ButtonWithTooltipIcon
+                text="Convert to draft"
+                IconName={ChangeCircleOutlined}
+              />
+              <ButtonWithTooltipIcon
+                text="Delete post"
+                className="!text-white !bg-red-700 hover:!bg-red-500"
+              />
+            </div>
+          </MoreOptions>
+        )}
       </header>
 
       <FormatPostText
@@ -185,11 +199,13 @@ export const DiscoverPostItem = ({
       )}
       <div className="flex items-center gap-2 justify-between mt-4">
         <ConJoinedImages
-          size={25}
+          size={30}
           array={postItem.likes.slice(0, 5).map((post) => ({
-            name: post.user.first_name,
+            name: `${post.user.first_name} ${post.user.last_name}`,
             src: baseURL + post.user.avatar,
+            href: "/",
           }))}
+          sizeVariant="sm"
         />
 
         <div className="flex items-center gap-3">
@@ -246,7 +262,7 @@ const CommentSection = ({
     setLoading(true);
     try {
       const { id } = await commentOnPost(postItem.id, postItem, comment);
-      if (id) toast.success("Comment has been submitted");
+      if (id) toast.success("Comment has been added");
 
       setRefetchInterval(1000);
       setTimeout(() => setRefetchInterval(false), 2000);
@@ -321,7 +337,6 @@ const CommentBlock = ({ comment, postUserId }) => {
               {comment.user.first_name} {comment.user.last_name}
               {comment.user.id === postUserId && (
                 <span className="text-[.65rem] text-gray-400 font-medium">
-                  {" "}
                   (author)
                 </span>
               )}
@@ -366,7 +381,9 @@ export function ButtonWithTooltipIcon({
           className
         )}
       >
-        {IconName && <IconName className="!size-4" />}
+        {IconName && (
+          <IconName className="xs:!size-4 !size-6 max-xs:!text-xl" />
+        )}
         {text && <span className={`${textClassName}`}>{text}</span>}
       </button>
     </Tooltip>
