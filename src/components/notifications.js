@@ -38,7 +38,7 @@ export function Notifications({ className }) {
       <header className="flex justify-between items-center gap-2 border-b border-gray-100 pb-1">
         <h4 className="text-xl font-semibold">Notifications</h4>
         <button className="text-gray-500 hover:text-black transition-colors duration-300 hover:underline !text-xs">
-          Clear All
+          Mark all as read
         </button>
       </header>
       <div className="space-y-4 overflow-y-auto max-h-[70vh]">

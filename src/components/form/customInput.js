@@ -17,6 +17,7 @@ import { MarkdownComponent } from "../MarkDownComponent";
 import { capitalizeFirst } from "../../lib/utils";
 
 import clsx from "clsx";
+import { SmallDashOutlined } from "@ant-design/icons";
 
 export const inputClassNames =
   "relative mt-2 !w-full !bg-background py-2.5 px-3 rounded-md placeholder:text-sm !text-sm transition-all duration-300 !z-0";
@@ -168,6 +169,19 @@ export function AvatarUpload({ formik, name, label, className }) {
 
 export const CustomTextArea = ({ formik, name, placeholder }) => {
   const selectedStyle = { color: "black", bg: "gray.100" };
+
+  const getTextLength = (html) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+
+    const textLength = div.innerText.replaceAll(" ", "").length;
+    return textLength === 0
+      ? ""
+      : textLength > 1
+      ? `${textLength} characters`
+      : `${textLength} character`;
+  };
+
   return (
     <>
       <Tabs>
@@ -184,7 +198,6 @@ export const CustomTextArea = ({ formik, name, placeholder }) => {
             <ReactQuill
               value={formik.values[`${name}`]}
               onChange={(value) => {
-                // Remove <p><br></p> if the editor is empty
                 const cleanedValue = value === "<p><br></p>" ? "" : value;
 
                 localStorage.setItem(name, cleanedValue);
@@ -193,6 +206,11 @@ export const CustomTextArea = ({ formik, name, placeholder }) => {
               theme="snow"
               placeholder={placeholder}
             />
+            <div className="flex justify-end mt-1">
+              <small className="text-xs">
+                {getTextLength(formik.values[`${name}`])}
+              </small>
+            </div>
           </TabPanel>
           <TabPanel className="mb-4 !px-0">
             <MarkdownComponent markdownContent={formik.values[`${name}`]} />
