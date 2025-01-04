@@ -37,13 +37,13 @@ export const days = [
 // const session = getSession();
 
 export const feedNavItems = [
-  { name: "Feeds", to: "/", icon: <HomeIcon /> },
-  { name: "Messages", to: "/chat", icon: <Message /> },
-  { name: "Services", to: "/services", icon: <UserGroup /> },
-  { name: "Market", to: "/market", icon: <StoreIcon /> },
-  { name: "Analysis", to: "/analysis", icon: <ChartBar /> },
-  { name: "Photos", to: "/photos", icon: <PhotosIcon /> },
-  { name: "Videos", to: "/videos", icon: <VideoIcon /> },
+  { name: "Feeds", to: "/", icon: HomeIcon },
+  { name: "Messages", to: "/chat", icon: Message },
+  { name: "Services", to: "/services", icon: UserGroup },
+  { name: "Market", to: "/market", icon: StoreIcon },
+  { name: "Analysis", to: "/analysis", icon: ChartBar },
+  { name: "Photos", to: "/photos", icon: PhotosIcon },
+  { name: "Videos", to: "/videos", icon: VideoIcon },
 ];
 
 // index key for complete profile

@@ -83,7 +83,7 @@ function NavigationSection({ pathname }) {
               }
             )}
           >
-            <>{item.icon}</>
+            <item.icon />
             <span>{item.name}</span>
           </Link>
         </li>

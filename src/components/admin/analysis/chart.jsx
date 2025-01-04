@@ -44,50 +44,7 @@ export default function Chart() {
       },
     ],
   };
-  // const option = {
-  //     tooltip: {
-  //       trigger: 'axis'
-  //     },
-  //     legend: {
-  //         data: ['Product1', 'Product2', 'Product3']
-  //       },
-  //     grid: {
-  //       left: '3%',
-  //       right: '4%',
-  //       bottom: '3%',
-  //       containLabel: true
-  //     },
-
-  //     xAxis: {
-  //       type: 'category',
-  //       boundaryGap: false,
-  //       data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
-  //     },
-  //     yAxis: {
-  //       type: 'value'
-  //     },
-  //     series: [
-  //       {
-  //         name: 'Product1',
-  //         type: 'line',
-
-  //         data: [-60, -20, -60, 60, 0, 20, -60]
-  //       },
-  //       {
-  //         name: 'Product2',
-  //         type: 'line',
-  //         stack: 'Total',
-  //         data: [30, 0, 20, 0, -20, 0, 20]
-  //       },
-  //       {
-  //         name: 'Product3',
-  //         type: 'line',
-  //         stack: 'Total',
-  //         data: [-30, 20, 0, -20, -60, -20, 0]
-  //       },
-
-  //     ]
-  //   };
+ 
   return (
     <section className="grid lg:grid-cols-2 gap-3 mt-3">
       <div className="bg-white p-3 rounded-md w-full">
