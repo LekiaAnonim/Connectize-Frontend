@@ -20,7 +20,7 @@ function FeedLayout() {
       <Sidebar />
 
       <section className="w-full grid grid-cols-1 xl:grid-cols-3 gap-3 py-2">
-        <section className="md:w-full xl:col-span-2 space-y-6 xs:space-y-4">
+        <section className="md:w-full xl:col-span-2 space-y-6 xs:space-y-6">
           <ResponsiveNav />
           <Outlet />
         </section>

@@ -7,7 +7,7 @@ import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
 import { commentOnPost, getPosts, likePost } from "../../../api-services/posts";
 import { formatNumber, timeAgo } from "../../../lib/utils";
-import { Avatar, CloseButton, Tooltip } from "@chakra-ui/react";
+import { Avatar, CloseButton, Spinner, Tooltip } from "@chakra-ui/react";
 import MoreOptions from "../../MoreOptions";
 import FormatPostText from "../../FormatPostText";
 import { ChangeCircleOutlined } from "@mui/icons-material";
@@ -54,6 +54,7 @@ export const DiscoverPostItem = ({
   isSinglePost = false,
 }) => {
   const [showCommentSection, setShowCommentSection] = useState(false);
+  const [liking, setLiking] = useState(false);
   const { setRefetchInterval } = useCustomQuery();
   const { user: currentUser } = useAuth();
   const [timestamp, setTimestamp] = useState(timeAgo(postItem.date_created));
@@ -65,9 +66,11 @@ export const DiscoverPostItem = ({
     : false;
 
   const handleLikePost = async () => {
+    setLiking(true);
     await likePost(postItem.id, postItem);
     setRefetchInterval(1000);
     setTimeout(() => setRefetchInterval(false), 2000);
+    setLiking(false);
   };
 
   const sharePost = async () => {
@@ -156,7 +159,7 @@ export const DiscoverPostItem = ({
               </Link>
               {postItem?.company?.verify && <VerifiedIcon color="black" />}
             </div>
-            <small className="text-gray-400 lowercase">
+            <small className="text-gray-400 lowercase shrink-0">
               @{postItem.user.first_name} • {timestamp}
             </small>
           </section>
@@ -220,6 +223,7 @@ export const DiscoverPostItem = ({
             IconName={userHasLikedPost ? Heart : HeartIcon}
             tip={userHasLikedPost ? "Unlike post" : "Like post"}
             onClick={handleLikePost}
+            loading={liking}
             textClassName="!text-[.6rem]"
             text={formatNumber(postItem.likes.length)}
           />
@@ -363,6 +367,7 @@ export function ButtonWithTooltipIcon({
   className,
   tooltipClassName,
   textClassName,
+  loading = false,
 }) {
   return (
     <Tooltip
@@ -370,21 +375,32 @@ export function ButtonWithTooltipIcon({
       fontSize="12"
       placement="auto"
       className={clsx(
-        "!rounded-md bg-white !text-custom_blue border",
+        "!rounded-md !bg-white !text-custom_blue border",
         tooltipClassName
       )}
     >
       <button
         onClick={onClick}
         className={clsx(
-          "flex items-center text-sm gap-1 bg-transparent text-gray-600 hover:text-custom_blue active:scale-95 transition-all duration-300",
+          "flex items-center text-sm gap-1 bg-transparent text-gray-600 hover:text-custom_blue active:scale-95 transition-all duration-300 overflow-hidden",
           className
         )}
       >
-        {IconName && (
-          <IconName className="xs:!size-4 !size-6 max-xs:!text-xl" />
+        {IconName && !loading && (
+          <IconName className="xs:!size-4 !size-6 xs:!text-[14px] !text-[20px]" />
         )}
-        {text && <span className={`${textClassName}`}>{text}</span>}
+        {loading && <Spinner size="xs" className="text-gold" />}
+        {text && (
+          <motion.span
+            initial={{ y: 30, opacity: 0.25 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -30, opacity: 0.25 }}
+            key={text}
+            className={`${textClassName} overflow-hidden`}
+          >
+            {text}
+          </motion.span>
+        )}
       </button>
     </Tooltip>
   );

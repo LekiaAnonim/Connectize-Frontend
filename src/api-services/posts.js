@@ -34,7 +34,6 @@ export const getLikes = async () => {
 };
 
 export const likePost = async (id, data) => {
-  const toastId = toast.info("processing like action...");
   const allPosts = await getPosts();
 
   const currentUser = await getCurrentUser();
@@ -47,7 +46,7 @@ export const likePost = async (id, data) => {
       method: "POST",
       data: { ...data, company_id: data.company.id },
     });
-    toast.success("Post has been unlike", { id: toastId });
+
     return;
   }
   await makeApiRequest({
@@ -55,7 +54,6 @@ export const likePost = async (id, data) => {
     method: "POST",
     data: { ...data, company_id: data.company.id },
   });
-  toast.success("Post has been liked", { id: toastId });
 };
 
 export const commentOnPost = async (id, data, comment) => {

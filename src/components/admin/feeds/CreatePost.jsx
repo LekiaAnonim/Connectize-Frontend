@@ -14,6 +14,8 @@ import { largeFileText, unSupportedText } from "../listing/newListing";
 import { useCustomQuery } from "../../../context/queryContext";
 import { useAuth } from "../../../context/userContext";
 
+import { motion } from "framer-motion";
+
 const isImageFile = (files) => {
   const imageTypes = [
     "image/jpeg",
@@ -41,8 +43,10 @@ function CreatePost() {
     queryKey: ["companies"],
     queryFn: getCompanies,
   });
+
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
   const [validImages, setValidImages] = useState([]);
   const [companyId, setCompanyId] = useState(-1);
   const [needsFocus, setNeedsFocus] = useState(false);
@@ -55,6 +59,7 @@ function CreatePost() {
     const validImageFiles = selectedFiles
       .filter(isImageFile)
       .filter(isImageSize);
+
     setValidImages(validImageFiles);
 
     if (validImageFiles.length < selectedFiles.length) {
@@ -63,10 +68,7 @@ function CreatePost() {
   }, []);
 
   useEffect(() => {
-    // Cleanup generated URLs on unmount or when validImages changes
-    return () => {
-      validImages.forEach((image) => URL.revokeObjectURL(image));
-    };
+    return () => validImages.forEach((image) => URL.revokeObjectURL(image));
   }, [validImages]);
 
   const onEmojiClick = useCallback((emojiObject) => {
@@ -96,10 +98,8 @@ function CreatePost() {
       return;
     }
 
-    if (message.length < 10) {
-      toast.info(
-        "Post length is too short. Minimum post character length is 10 characters"
-      );
+    if (message.trim().length < 10) {
+      setErrorMessage("Post message must be at least 10 characters long");
       return;
     }
 
@@ -157,14 +157,34 @@ function CreatePost() {
 
   return (
     <div className="bg-white px-4 py-4 rounded border-b-[5px] border-gold relative">
-      <textarea
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.currentTarget.value)}
-        minLength={10}
-        placeholder="What's happening?"
-        className="w-full min-h-10 h-10 max-h-40 pb-2 border-b border-gray-300 bg-transparent focus:outline-0 text-base resize-no_ne transition-all duration-300 scrollbar-hidden scroll-smooth placeholder:text-lg"
-      />
+      <div className="size-full">
+        <textarea
+          type="text"
+          value={message}
+          onChange={(e) => {
+            if (message.trim().length >= 10) {
+              setErrorMessage(null);
+            } else if (message.trim().length < 10) {
+              setErrorMessage(
+                "Post message must be at least 10 characters long"
+              );
+            }
+            setMessage(e.currentTarget.value);
+          }}
+          minLength={10}
+          placeholder="What's happening?"
+          className="w-full min-h-10 h-10 max-h-40 pb-2 border-b border-gray-300 bg-transparent focus:outline-0 text-base resize-no_ne transition-all duration-300 scrollbar-hidden scroll-smooth placeholder:text-lg"
+        />
+        {errorMessage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-[#9e3818] text-xs mt-0.5 mx-0.5"
+          >
+            {errorMessage}
+          </motion.div>
+        )}
+      </div>
 
       {validImages.length > 0 && (
         <div className="mt-2">
@@ -210,7 +230,7 @@ function CreatePost() {
         </div>
       )}
 
-      <div className="absolute right-3 top-2">
+      <div className="absolute right-1 top-0">
         <MoreOptions
           triggerStyle={`${
             needsFocus ? "!border-2 !border-red-600 " : ""
