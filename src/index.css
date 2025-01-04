@@ -4,6 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --font-drk-600: #242424;
+  --gold: #f1c644;
+  --grey: #828282;
+  --light-grey: #e5e5e5;
+  --mid-grey: #373737;
+}
+
 /* Hide scrollbar for Webkit browsers */
 .scrollbar-hidden::-webkit-scrollbar , body::-webkit-scrollbar {
   display: none;
@@ -38,19 +46,11 @@ a {
   transition-duration: 350ms;
 }
 
-/* * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-} */
-
-:root {
-  --font-drk-600: #242424;
-  --gold: #f1c644;
-  --grey: #828282;
-  --light-grey: #e5e5e5;
-  --mid-grey: #373737;
+.swiper-pagination-bullet-active {
+     background-color: #f1c644 !important;
 }
+
+
 
 .page-container {
   display: flex;
@@ -86,7 +86,4 @@ a {
   color: #000 !important;
   text-transform: capitalize !important;
 }
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
