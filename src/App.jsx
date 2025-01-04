@@ -9,10 +9,6 @@ import Address from "./components/profile/address";
 import Bio from "./components/profile/bio";
 import SuccessPage from "./pages/authentication/successpage";
 import Overview from "./components/profile/overview";
-import CompanyBioOne from "./components/profile/companyBioOne";
-import CompanyBioTwo from "./components/profile/companyBioTwo";
-import CompanyBioThree from "./components/profile/companyBioThree";
-import CompanyBioFour from "./components/profile/companyBioFour";
 import Services from "./pages/service/service";
 import ServiceOverView from "./pages/service/serviceOverview";
 import ServiceAdmin from "./pages/service/serviceAdmin";
@@ -20,9 +16,8 @@ import Market from "./pages/market/market";
 import Product from "./pages/market/product";
 import Analysis from "./pages/market/analysis";
 import Listing from "./pages/market/listing";
-import UserProfile from "./pages/feedPages/userProfile";
-import AdminProfile from "./pages/feedPages/adminProfile";
-import NewsFeed from "./pages/feedPages/newsFeed";
+import UserProfile from "./pages/feed/userProfile";
+import NewsFeed from "./pages/feed/newsFeed";
 import AuthLayout from "./pages/authentication/AuthLayout";
 import ResetPasswordPage from "./pages/authentication/reset-password";
 import ProfileLayout from "./components/profile/layout";
@@ -67,11 +62,6 @@ function App() {
             <Route path="overview" element={<Overview />} />
           </Route>
 
-          <Route path="bio-one" element={<CompanyBioOne />} />
-          <Route path="bio-two" element={<CompanyBioTwo />} />
-          <Route path="bio-three" element={<CompanyBioThree />} />
-          <Route path="bio-four" element={<CompanyBioFour />} />
-
           {/* Market place */}
           <Route element={<MarketPlaceLayout />}>
             <Route path="analysis" element={<Analysis />} />
@@ -87,7 +77,7 @@ function App() {
 
           {/* Company */}
           <Route path=":company" element={<UserProfile />} />
-          <Route path="admin/:company" element={<AdminProfile />} />
+          {/* <Route path="admin/:company" element={<AdminProfile />} /> */}
 
           {/* Company */}
           <Route element={<CompanyLayout />}>
