@@ -5,7 +5,8 @@ import { getServices } from "../../../api-services/services";
 import { useQuery } from "@tanstack/react-query";
 
 function ServiceMain({ isOverview }) {
-  const tabsStyle = "rounded-full font-medium lg:!text-base !text-sm";
+  const tabsStyle =
+    "rounded-full font-medium lg:!text-base xs:!text-sm !text-xs";
   const selectedStyle = { color: "black", bg: "#F1C644" };
   return (
     <Tabs
@@ -14,7 +15,7 @@ function ServiceMain({ isOverview }) {
         "max-lg:!hidden w-full": isOverview,
       })}
     >
-      <TabList className="gap-2 sm:gap-4 p-2 bg-white rounded-md">
+      <TabList className="gap-2 sm:gap-4 bg-white rounded-full !p-2">
         <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
           Featured
         </Tab>
@@ -27,13 +28,13 @@ function ServiceMain({ isOverview }) {
       </TabList>
 
       <TabPanels className="!w-full">
-        <TabPanel className="p-0 !w-full">
+        <TabPanel className="!p-0 !w-full">
           <PostCardWrapper isOverview={isOverview} />
         </TabPanel>
-        <TabPanel className="p-0 !w-full">
+        <TabPanel className="!p-0 !w-full">
           <PostCardWrapper isOverview={isOverview} />
         </TabPanel>
-        <TabPanel className="p-0 !w-full">
+        <TabPanel className="!p-0 !w-full">
           <PostCardWrapper isOverview={isOverview} />
         </TabPanel>
       </TabPanels>
