@@ -160,7 +160,7 @@ export function LinkWithTooltipIcon({
       fontSize="sm"
       placement="auto"
       className={clsx(
-        "!rounded-md bg-white !text-custom_blue border",
+        "!rounded-md !bg-white !text-custom_blue border",
         tooltipClassName
       )}
     >

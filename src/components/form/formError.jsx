@@ -18,7 +18,7 @@ export default function FormikErrorResponse({
             animate={{ opacity: 1 }}
             className={clsx("text-xs mt-0.5 mx-0.5", {
               "text-[#9e3818]": formik.errors[name],
-              "text-green-700": !formik.errors[name] && validate,
+              "text-green-600": !formik.errors[name] && validate,
             })}
           >
             {validate && !formik.errors[name] && (

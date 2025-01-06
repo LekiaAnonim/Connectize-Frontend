@@ -1,16 +1,22 @@
 import React, { memo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import HeadingText from "../../HeadingText";
 import { PostSlider } from "../feeds/DiscoverPostTabs";
 import { SwiperSlide } from "swiper/react";
-import { ChatSellerLink } from "./newlyListed";
+import { ChatSellerLink, ListCardSkeleton } from "./newlyListed";
 import { useQuery } from "@tanstack/react-query";
 import { getRecommendedProducts } from "../../../api-services/products";
 
 // Memoize Card component to avoid unnecessary re-renders
 const Card = memo(({ product }) => {
   return (
-    <div className="relative overflow-hidden rounded-lg">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="relative overflow-hidden rounded-lg"
+    >
       <img
         src={product.images[0]?.image || ""}
         className="w-full h-[300px] scale-105"
@@ -23,11 +29,12 @@ const Card = memo(({ product }) => {
         </h3>
         <ChatSellerLink text="Visit store" to={`/products/${product.id}`} />
       </div>
-    </div>
+    </motion.div>
   );
 });
 
 function Carousel() {
+  const navigate = useNavigate();
   const {
     data: recommendedProducts,
     isLoading,
@@ -39,24 +46,24 @@ function Carousel() {
   });
 
   // Early return in case of loading or error
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <ListCardSkeleton />;
   if (isError) return <div>Error loading products.</div>;
 
   return (
     <section className="space-y-4 max-md:container">
       <div className="mx-auto flex items-center justify-center gap-1 bg-tabs p-1 w-fit rounded-full">
         <button className="bg-white rounded-full px-4 py-1">market</button>
-        <Link
-          to="/services"
+        <button
+          onClick={() => navigate("/services")}
           className="text-decoration-none text-black px-4 py-1"
         >
           services
-        </Link>
+        </button>
       </div>
 
       <section className="space-y-4">
         <HeadingText>Recommended</HeadingText>
-        <PostSlider>
+        <PostSlider array={[1]}>
           {recommendedProducts?.map((product) => (
             <SwiperSlide key={product.id}>
               <Card product={product} />
