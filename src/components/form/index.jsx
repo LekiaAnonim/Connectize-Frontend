@@ -24,8 +24,8 @@ export default function Form({
     placeholder,
     options,
     disabled,
+    validate,
   }) => {
-
     return (
       <div className="w-full my-2.5" key={name}>
         <label htmlFor={name} className="font-medium">
@@ -70,7 +70,11 @@ export default function Form({
             className={clsx({ "opacity-80 pointer-events-none": disabled })}
           />
         )}
-        <FormikErrorResponse formik={formik} name={name} />
+        <FormikErrorResponse
+          formik={formik}
+          name={name}
+          validate={validate || false}
+        />
       </div>
     );
   };

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Input,
   Select,
@@ -17,7 +18,6 @@ import { MarkdownComponent } from "../MarkDownComponent";
 import { capitalizeFirst } from "../../lib/utils";
 
 import clsx from "clsx";
-import { SmallDashOutlined } from "@ant-design/icons";
 
 export const inputClassNames =
   "relative mt-2 !w-full !bg-background py-2.5 px-3 rounded-md placeholder:text-sm !text-sm transition-all duration-300 !z-0";
@@ -54,7 +54,6 @@ export default function CustomInput({
         id={name}
         name={name}
       />
-
       {type === "password" && isPassword ? (
         <span
           className="absolute top-5 right-3 cursor-pointer text-xs"

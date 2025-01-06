@@ -112,35 +112,42 @@ export const PostSlider = ({
     setSlidesPerView(isTabletScreen ? 2 : 1);
   }, [isTabletScreen]);
 
-  useEffect(() => {
-    setUpSlider();
-  }, [setUpSlider]);
+  useEffect(() => setUpSlider(), [setUpSlider]);
 
   return arrayLoading || loading ? (
     <PostCardSkeleton />
   ) : array.length <= 0 ? (
-    <div className="w-full h-16 flex items-center justify-center">
+    <div className="w-full h-20 flex items-center justify-center">
       <p className="text-gray-500 text-sm">
         No {fallback} available at the moment.
       </p>
     </div>
   ) : (
-    <Swiper
-      modules={[Pagination, Autoplay]}
-      spaceBetween={10}
-      slidesPerView={customSlidesPerView || slidesPerView}
-      autoplay={{ delay }}
-      pagination={{ clickable: true }}
-      className="z-0"
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="w-full"
     >
-      {children
-        ? children
-        : array.map((item, index) => (
-            <SwiperSlide key={index}>
-              <PostCard {...item} />
-            </SwiperSlide>
-          ))}
-    </Swiper>
+      <Swiper
+        modules={[Pagination, Autoplay]}
+        spaceBetween={10}
+        slidesPerView={
+          array.length === 1 ? 1 : customSlidesPerView || slidesPerView
+        }
+        autoplay={{ delay }}
+        pagination={{ clickable: true }}
+        className="z-0"
+      >
+        {children
+          ? children
+          : array.map((item, index) => (
+              <SwiperSlide key={index}>
+                <PostCard {...item} />
+              </SwiperSlide>
+            ))}
+      </Swiper>
+    </motion.div>
   );
 };
 
@@ -267,8 +274,7 @@ export const BookMarkButton = React.memo(({ service }) => {
     setLoading(true);
     await bookmarkService(service.id, service);
     setLoading(false);
-    setBookmarked((prev) => !prev); // Optimistic update
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setBookmarked((prev) => !prev);
   }, [bookmarked, service]);
 
   return (
