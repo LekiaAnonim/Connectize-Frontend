@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { ChevronRight } from "@mui/icons-material";
 import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import { getProducts } from "../../../api-services/products";
 import clsx from "clsx";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
@@ -42,7 +43,7 @@ function NewlyListed() {
 
   return (
     <Tabs variant="solid-rounded" className="space-y-2">
-      <TabList className="rounded-md bg-white p-1 gap-1">
+      <TabList className="rounded-full bg-white p-1 gap-1">
         {tabs.map((tab, index) => (
           <Tab
             key={index}
@@ -91,7 +92,10 @@ export const ProductListCard = ({
   chatUrl,
   isSummary = false,
 }) => (
-  <div
+  <motion.div
+    initial={{ opacity: 0, y: 10 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
     className={clsx(
       "rounded-lg overflow-hidden flex items-start flex-col gap-2",
       {
@@ -115,7 +119,7 @@ export const ProductListCard = ({
       </div>
       {!isSummary && <ChatSellerLink to={chatUrl} />}
     </div>
-  </div>
+  </motion.div>
 );
 
 export const ListCardSkeleton = () => (
@@ -132,7 +136,7 @@ export const ListCardSkeleton = () => (
 export const ChatSellerLink = ({ text = "Chat seller", to, id }) => (
   <Link
     to={to || ""}
-    className="shrink-0 flex items-center bg-black py-2 text-white px-3 text-sm rounded-full group w-fit"
+    className="shrink-0 flex items-center bg-black py-2 !text-white px-3 xs:text-xs rounded-full group w-fit"
     onClick={() => localStorage.setItem("productId", id)}
   >
     <span>{text}</span>
