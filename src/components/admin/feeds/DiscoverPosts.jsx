@@ -366,6 +366,7 @@ export function ButtonWithTooltipIcon({
   tip,
   className,
   tooltipClassName,
+  iconClassName,
   textClassName,
   loading = false,
 }) {
@@ -381,13 +382,18 @@ export function ButtonWithTooltipIcon({
     >
       <button
         onClick={onClick}
+        disabled={loading}
         className={clsx(
-          "flex items-center text-sm gap-1 bg-transparent text-gray-600 hover:text-custom_blue active:scale-95 transition-all duration-300 overflow-hidden",
+          "flex items-center text-sm gap-1 bg-transparent text-gray-600 hover:text-custom_blue active:scale-95 transition-all duration-300 overflow-hidden disabled:cursor-not-allowed",
           className
         )}
       >
         {IconName && !loading && (
-          <IconName className="xs:!size-4 !size-6 xs:!text-[14px] !text-[20px]" />
+          <IconName
+            className={clsx(iconClassName, {
+              "xs:!size-4 !size-6 xs:!text-[14px] !text-[20px]": !iconClassName,
+            })}
+          />
         )}
         {loading && <Spinner size="xs" className="text-gold" />}
         {text && (

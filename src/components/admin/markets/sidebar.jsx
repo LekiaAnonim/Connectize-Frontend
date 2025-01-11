@@ -61,7 +61,7 @@ function SidebarMenu() {
         <Link
           onClick={() => toggleNav(false)}
           to={pathname.startsWith("/services") ? "/services/add" : "/listing"}
-          className="flex items-center justify-between rounded-full bg-dark text-white text-sm py-2.5 px-3 w-full mb-4 mt-2"
+          className="flex items-center justify-between rounded-full bg-dark !text-white text-sm py-2.5 px-3 w-full mb-4 mt-2"
         >
           <span>
             {pathname.startsWith("/services")

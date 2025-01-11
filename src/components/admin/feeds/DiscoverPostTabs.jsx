@@ -19,6 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../../../api-services/products";
 import { MarkdownComponent } from "../../MarkDownComponent";
 import { motion } from "framer-motion";
+import { ButtonWithTooltipIcon } from "./DiscoverPosts";
 
 const DiscoverPostTabs = () => {
   const tabsStyle = "w-full rounded";
@@ -275,19 +276,15 @@ export const BookMarkButton = React.memo(({ service }) => {
     await bookmarkService(service.id, service);
     setLoading(false);
     setBookmarked((prev) => !prev);
-  }, [bookmarked, service]);
+  }, [service]);
 
   return (
-    <button
-      className="disabled:cursor-not-allowed"
-      disabled={loading}
+    <ButtonWithTooltipIcon
+      tip={"Bookmark " + service?.title}
+      loading={loading}
       onClick={handleBookmark}
-    >
-      {bookmarked ? (
-        <BookmarkFilledIcon className="size-7" />
-      ) : (
-        <Bookmark isActive={bookmarked} />
-      )}
-    </button>
+      IconName={bookmarked ? BookmarkFilledIcon : Bookmark}
+      iconClassName="!size-8 xs:!size-7"
+    />
   );
 });

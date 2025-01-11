@@ -18,7 +18,10 @@ export function goToLogin() {
 }
 
 // Configure Axios Defaults
-export const baseURL = "https://connectize.co"; // https://connectize.co/
+export const baseURL = "https://connectize.co";
+// process.env === "development"
+//   ? "http://127.0.0.1:8000"
+//   : "https://connectize.co"; // https://connectize.co/
 axios.defaults.withCredentials = true;
 
 // Mutex for Refresh Token
@@ -80,7 +83,6 @@ export async function refreshTokenIfNeeded() {
     refreshPromise = null;
   }
 }
-
 
 export async function makeApiRequest({
   url,
