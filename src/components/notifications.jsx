@@ -1,33 +1,66 @@
 import clsx from "clsx";
-import { notificationMessages } from "../lib/data/feed";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
   PopoverArrow,
   Avatar,
+  Badge,
+  ButtonSpinner,
 } from "@chakra-ui/react";
 import { Notification } from "../icon";
 import { avatarStyle } from "./ResponsiveNav";
+import {
+  getNotificationsForUser,
+  markAllNotificationsAsRead,
+  markNotificationAsRead,
+} from "../api-services/notifications";
+import { useQuery } from "@tanstack/react-query";
+import { timeAgo } from "../lib/utils";
+import TimeAgo from "./TimeAgo";
+import { useState } from "react";
+import { useCustomQuery } from "../context/queryContext";
 
 export function NotificationPopOver() {
+  const { data: notifications, isLoading } = useQuery({
+    queryKey: ["notifications"],
+    queryFn: getNotificationsForUser,
+    refetchInterval: 2000,
+  });
+
+  const unReadNotificationLength = notifications?.filter(
+    (notification) => notification.is_read == null
+  )?.length;
+
   return (
     <Popover>
       <PopoverTrigger>
-        <button>
+        <button className="relative">
+          {unReadNotificationLength > 0 && (
+            <Badge className="absolute -top-1.5 -right-1 size-4 !text-[.6rem] !bg-gold !rounded-full grid place-items-center">
+              <span>{unReadNotificationLength}</span>
+            </Badge>
+          )}
           <Notification />
         </button>
       </PopoverTrigger>
 
       <PopoverContent className="mx-2">
         <PopoverArrow />
-        <Notifications />
+        {isLoading ? (
+          <NotificationsSkeleton />
+        ) : (
+          <Notifications notifications={notifications} />
+        )}
       </PopoverContent>
     </Popover>
   );
 }
 
-export function Notifications({ className }) {
+export function Notifications({ className, notifications }) {
+  const [loading, setLoading] = useState(false);
+  const [allLoading, setAllLoading] = useState(false);
+
   return (
     <div
       className={clsx(
@@ -36,15 +69,27 @@ export function Notifications({ className }) {
       )}
     >
       <header className="flex justify-between items-center gap-2 border-b border-gray-100 pb-1">
-        <h4 className="text-xl font-semibold">Notifications</h4>
-        <button className="text-gray-500 hover:text-black transition-colors duration-300 hover:underline !text-xs">
-          Mark all as read
+        <h4 className="text-lg font-semibold">Notifications</h4>
+        <button
+          disabled={loading || allLoading}
+          className="text-gray-500 hover:text-black transition-colors duration-300 hover:underline !text-xs disabled:cursor-not-allowed disabled:no-underline"
+          onClick={async () => {
+            setAllLoading(true);
+            await markAllNotificationsAsRead();
+            setAllLoading(false);
+          }}
+        >
+          {allLoading ? (
+            <ButtonSpinner className="text-gold" />
+          ) : (
+            "Mark all as read"
+          )}
         </button>
       </header>
       <div className="space-y-4 overflow-y-auto max-h-[70vh]">
-        {notificationMessages.map(
-          ({ company, src, message, timeStamp }, index) => (
-            <div key={index} className="flex items-start gap-2">
+        {notifications?.map(
+          ({ id, company, src, message, timestamp, is_read, sender, link }) => (
+            <div key={id} className="flex items-start gap-2">
               <Avatar
                 src={src}
                 alt={company}
@@ -56,12 +101,70 @@ export function Notifications({ className }) {
                 <h3 className="leading-[1.125] font-bold m-0 line-clamp-1">
                   {company}
                 </h3>
-                <p className="text-sm text-gray-700 line-clamp-2">{message}</p>
-                <small className="text-gray-400 text-xs m-0">{timeStamp}</small>
+                <p className="text-sm text-gray-700 line-clamp-2 leading-none">
+                  {message}{" "}
+                  <Badge className="!text-[.6rem]">
+                    {is_read ? "" : "Unread"}
+                  </Badge>
+                </p>
+                <div className="flex items-center gap-2">
+                  <small className="text-gray-400 text-[.69rem]">
+                    <TimeAgo time={timestamp} />
+                  </small>
+
+                  {!is_read && (
+                    <button
+                      onClick={async () => {
+                        setLoading(true);
+                        await markNotificationAsRead(id);
+                        setLoading(false);
+                      }}
+                      disabled={loading || allLoading}
+                      className="text-xs disabled:cursor-not-allowed"
+                    >
+                      {allLoading ? (
+                        <ButtonSpinner className="text-gold" />
+                      ) : (
+                        "Mark as read"
+                      )}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           )
         )}
+      </div>
+    </div>
+  );
+}
+
+export function NotificationsSkeleton({ className }) {
+  return (
+    <div
+      className={clsx(
+        "bg-white rounded p-3 space-y-4 w-full min-w-[300px]",
+        className
+      )}
+    >
+      <header className="flex justify-between items-center gap-2 border-b border-gray-100 pb-1">
+        <div className="h-5 w-32 rounded skeleton"></div>
+        <div className="h-4 w-24 rounded skeleton"></div>
+      </header>
+      <div className="space-y-4 overflow-y-auto max-h-[70vh]">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div key={index} className="flex items-start gap-2">
+            {/* Avatar Skeleton */}
+            <div className="rounded-full size-8 shrink-0 skeleton"></div>
+            {/* Content Skeleton */}
+            <div className="space-y-1 w-full">
+              <div className="h-3 w-3/5 rounded skeleton"></div>
+              <div className="h-2.5 w-full rounded skeleton"></div>
+              <div className="h-2.5 w-4/5 rounded skeleton"></div>
+              <div className="h-2 w-20 rounded skeleton"></div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

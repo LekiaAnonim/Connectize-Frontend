@@ -148,10 +148,7 @@ function CompanyListItem({ company }) {
 
   return (
     <li>
-      <Link
-        to={`/${company_name.toLowerCase().replaceAll(" ", "_")}`}
-        className="flex items-center gap-2 pt-2"
-      >
+      <Link to={`/${company_name}`} className="flex items-center gap-2 pt-2">
         <Avatar
           src={logo}
           name={company_name}

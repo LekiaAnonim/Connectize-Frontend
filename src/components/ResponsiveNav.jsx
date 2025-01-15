@@ -41,9 +41,7 @@ function ResponsiveNav() {
               name: companies?.[0]?.company_name || "",
               href:
                 companies?.length > 0
-                  ? `/${companies[0].company_name
-                      .toLowerCase()
-                      .replace(" ", "_")}`
+                  ? `/${companies[0].company_name}`
                   : "/create-company",
             },
           ]}
@@ -88,7 +86,7 @@ export const ConJoinedImages = ({
             name={name}
             size={sizeVariant}
             style={{
-              transform: `translateX(-${5 * index}px)`,
+              transform: `translateX(-${6 * index}px)`,
               width: `${size}px`,
               height: `${size}px`,
             }}

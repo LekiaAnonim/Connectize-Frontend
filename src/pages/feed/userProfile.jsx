@@ -7,28 +7,25 @@ import Header from "../../components/userProfile/header";
 import Navbar from "../../components/userProfile/Navbar";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getCompanies } from "../../api-services/companies";
+import { getSingleCompany } from "../../api-services/companies";
 import { capitalizeFirst, formatNumber } from "../../lib/utils";
 import NoPage from "../../components/NoPage";
 
 export default function UserProfile() {
   const { company: companyName } = useParams();
 
-  const { data: companies } = useQuery({
-    queryKey: ["companies"],
-    queryFn: getCompanies,
+  const { data: company, isLoading } = useQuery({
+    queryKey: ["companies", companyName],
+    queryFn: () => getSingleCompany(companyName),
+    enabled: !!companyName,
   });
-
-  const company =
-    companies?.find(
-      (item) =>
-        item.company_name.toLowerCase().replaceAll(" ", "_") === companyName
-    ) || null;
 
   useEffect(() => {
     document.title = `${company?.company_name || ""} | Companies - Connectize`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (isLoading) return <div>Loading...</div>;
 
   if (!company) return <NoPage />;
   return (

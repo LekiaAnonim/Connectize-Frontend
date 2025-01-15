@@ -65,7 +65,7 @@ const DiscoverPostTabs = () => {
     <Tabs variant="solid-rounded" className="space-y-2">
       <TabList className="rounded-full bg-white p-1 gap-1">
         <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
-          Markets
+          Products
         </Tab>
         <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
           Services

@@ -18,7 +18,7 @@ root.render(
       <MyProvider>
         <App />
       </MyProvider>
-      <Toaster position="top-center" />
+      <Toaster position="top-center" closeButton duration={5} />
     </React.StrictMode>
   </BrowserRouter>
 );

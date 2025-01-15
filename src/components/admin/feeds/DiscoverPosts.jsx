@@ -6,7 +6,7 @@ import { MessageOutlined, ShareAltOutlined } from "@ant-design/icons";
 import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
 import { commentOnPost, getPosts, likePost } from "../../../api-services/posts";
-import { formatNumber, timeAgo } from "../../../lib/utils";
+import { formatNumber } from "../../../lib/utils";
 import { Avatar, CloseButton, Spinner, Tooltip } from "@chakra-ui/react";
 import MoreOptions from "../../MoreOptions";
 import FormatPostText from "../../FormatPostText";
@@ -20,6 +20,7 @@ import ReactQuill from "react-quill";
 import { MarkdownComponent } from "../../MarkDownComponent";
 import { baseURL } from "../../../lib/helpers";
 import { Link } from "react-router-dom";
+import TimeAgo from "../../TimeAgo";
 
 function DiscoverPosts() {
   const { refetchInterval } = useCustomQuery();
@@ -57,7 +58,6 @@ export const DiscoverPostItem = ({
   const [liking, setLiking] = useState(false);
   const { setRefetchInterval } = useCustomQuery();
   const { user: currentUser } = useAuth();
-  const [timestamp, setTimestamp] = useState(timeAgo(postItem.date_created));
 
   const userHasLikedPost = postItem.likes.find(
     (post) => post.user.id === currentUser?.id
@@ -119,13 +119,6 @@ export const DiscoverPostItem = ({
     doc.save(`Connectize_post_${postItem.id}.pdf`);
   };
 
-  useEffect(() => {
-    const interval = setInterval(
-      () => setTimestamp(timeAgo(postItem.date_created)),
-      1000
-    );
-    return () => clearInterval(interval);
-  });
   return (
     <motion.article
       initial={{ opacity: 0 }}
@@ -160,7 +153,8 @@ export const DiscoverPostItem = ({
               {postItem?.company?.verify && <VerifiedIcon color="black" />}
             </div>
             <small className="text-gray-400 lowercase shrink-0">
-              @{postItem.user.first_name} • {timestamp}
+              @{postItem.user.first_name} •{" "}
+              <TimeAgo time={postItem.date_created} />
             </small>
           </section>
         </section>
@@ -325,8 +319,6 @@ const CommentSection = ({
 };
 
 const CommentBlock = ({ comment, postUserId }) => {
-  const timestamp = timeAgo(comment.commented_at);
-
   return (
     <div className="mb-4">
       <div className="flex gap-2">
@@ -345,7 +337,9 @@ const CommentBlock = ({ comment, postUserId }) => {
                 </span>
               )}
             </h5>
-            <span className="text-gray-400 text-xs">&bull; {timestamp}</span>
+            <span className="text-gray-400 text-xs">
+              &bull; <TimeAgo time={comment.commented_at} />
+            </span>
           </div>
           <MarkdownComponent
             markdownContent={comment.content}
