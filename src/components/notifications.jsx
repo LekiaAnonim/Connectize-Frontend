@@ -7,6 +7,9 @@ import {
   Avatar,
   Badge,
   ButtonSpinner,
+  Tabs,
+  TabList,
+  Tab,
 } from "@chakra-ui/react";
 import { Notification } from "../icon";
 import { avatarStyle } from "./ResponsiveNav";
@@ -19,9 +22,10 @@ import { useQuery } from "@tanstack/react-query";
 import { timeAgo } from "../lib/utils";
 import TimeAgo from "./TimeAgo";
 import { useState } from "react";
-import { useCustomQuery } from "../context/queryContext";
+import { Link } from "react-router-dom";
 
 export function NotificationPopOver() {
+  const [allLoading, setAllLoading] = useState(false);
   const { data: notifications, isLoading } = useQuery({
     queryKey: ["notifications"],
     queryFn: getNotificationsForUser,
@@ -31,6 +35,9 @@ export function NotificationPopOver() {
   const unReadNotificationLength = notifications?.filter(
     (notification) => notification.is_read == null
   )?.length;
+
+  const tabsStyle = "w-full rounded";
+  const selectedStyle = { color: "black", bg: "gray.100" };
 
   return (
     <Popover>
@@ -50,7 +57,42 @@ export function NotificationPopOver() {
         {isLoading ? (
           <NotificationsSkeleton />
         ) : (
-          <Notifications notifications={notifications} />
+          <div
+            className={clsx(
+              "bg-white rounded p-3 space-y-2 w-full min-w-[300px]"
+            )}
+          >
+            <header className="flex justify-between items-center gap-2 border-b border-gray-100 pb-1">
+              <h4 className="text-lg font-semibold">Notifications</h4>
+              <button
+                disabled={allLoading}
+                className="text-gray-500 hover:text-black transition-colors duration-300 hover:underline !text-xs disabled:cursor-not-allowed disabled:no-underline"
+                onClick={async () => {
+                  setAllLoading(true);
+                  await markAllNotificationsAsRead();
+                  setAllLoading(false);
+                }}
+              >
+                {allLoading ? (
+                  <ButtonSpinner className="text-gold" />
+                ) : (
+                  "Mark all as read"
+                )}
+              </button>
+            </header>
+
+            <Tabs variant="solid-rounded" className="space-y-2">
+              <TabList className="rounded-full bg-white p-1 gap-1">
+                <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
+                  Products
+                </Tab>
+                <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
+                  Services
+                </Tab>
+              </TabList>
+            </Tabs>
+            <Notifications notifications={notifications} />
+          </div>
         )}
       </PopoverContent>
     </Popover>
@@ -59,82 +101,59 @@ export function NotificationPopOver() {
 
 export function Notifications({ className, notifications }) {
   const [loading, setLoading] = useState(false);
-  const [allLoading, setAllLoading] = useState(false);
 
   return (
-    <div
-      className={clsx(
-        "bg-white rounded p-3 space-y-4 w-full min-w-[300px]",
-        className
-      )}
-    >
-      <header className="flex justify-between items-center gap-2 border-b border-gray-100 pb-1">
-        <h4 className="text-lg font-semibold">Notifications</h4>
-        <button
-          disabled={loading || allLoading}
-          className="text-gray-500 hover:text-black transition-colors duration-300 hover:underline !text-xs disabled:cursor-not-allowed disabled:no-underline"
-          onClick={async () => {
-            setAllLoading(true);
-            await markAllNotificationsAsRead();
-            setAllLoading(false);
-          }}
-        >
-          {allLoading ? (
-            <ButtonSpinner className="text-gold" />
-          ) : (
-            "Mark all as read"
-          )}
-        </button>
-      </header>
-      <div className="space-y-4 overflow-y-auto max-h-[70vh]">
-        {notifications?.map(
-          ({ id, company, src, message, timestamp, is_read, sender, link }) => (
-            <div key={id} className="flex items-start gap-2">
-              <Avatar
-                src={src}
-                alt={company}
-                size="sm"
-                name={company}
-                className={avatarStyle}
-              />
-              <div className="space-y-0">
-                <h3 className="leading-[1.125] font-bold m-0 line-clamp-1">
-                  {company}
-                </h3>
-                <p className="text-sm text-gray-700 line-clamp-2 leading-none">
-                  {message}{" "}
-                  <Badge className="!text-[.6rem]">
-                    {is_read ? "" : "Unread"}
-                  </Badge>
-                </p>
-                <div className="flex items-center gap-2">
-                  <small className="text-gray-400 text-[.69rem]">
-                    <TimeAgo time={timestamp} />
-                  </small>
+    <div className="space-y-4 overflow-y-auto max-h-[70vh]">
+      {notifications?.map(
+        ({ id, company, src, message, timestamp, is_read, sender, link }) => (
+          <div key={id} className="flex items-start gap-2">
+            <Avatar
+              src={src}
+              alt={company}
+              size="sm"
+              name={company}
+              className={avatarStyle}
+            />
+            <div className="space-y-0">
+              <h3 className="leading-[1.125] font-bold m-0 line-clamp-1">
+                {company}
+              </h3>
+              <Link
+                to={link}
+                className="text-[.825rem] text-gray-700 line-clamp-2 leading-none"
+              >
+                {message}{" "}
+                <Badge className="!text-[.6rem]">
+                  {is_read ? "" : "Unread"}
+                </Badge>
+              </Link>
+              <div className="flex items-center gap-2">
+                <small className="text-gray-400 text-[.69rem]">
+                  <TimeAgo time={timestamp} />
+                </small>
 
-                  {!is_read && (
-                    <button
-                      onClick={async () => {
-                        setLoading(true);
-                        await markNotificationAsRead(id);
-                        setLoading(false);
-                      }}
-                      disabled={loading || allLoading}
-                      className="text-xs disabled:cursor-not-allowed"
-                    >
-                      {allLoading ? (
-                        <ButtonSpinner className="text-gold" />
-                      ) : (
-                        "Mark as read"
-                      )}
-                    </button>
-                  )}
-                </div>
+                {!is_read && (
+                  <button
+                    onClick={async () => {
+                      setLoading(true);
+                      await markNotificationAsRead(id);
+                      setLoading(false);
+                    }}
+                    disabled={loading}
+                    className="text-xs disabled:cursor-not-allowed"
+                  >
+                    {loading ? (
+                      <ButtonSpinner className="text-gold" />
+                    ) : (
+                      "Mark as read"
+                    )}
+                  </button>
+                )}
               </div>
             </div>
-          )
-        )}
-      </div>
+          </div>
+        )
+      )}
     </div>
   );
 }
