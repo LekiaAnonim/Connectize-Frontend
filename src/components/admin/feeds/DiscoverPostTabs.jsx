@@ -133,10 +133,15 @@ export const PostSlider = ({
       <Swiper
         modules={[Pagination, Autoplay]}
         spaceBetween={10}
+        loop={array.length > 2}
         slidesPerView={
           array.length === 1 ? 1 : customSlidesPerView || slidesPerView
         }
-        autoplay={{ delay }}
+        autoplay={{
+          delay,
+          pauseOnMouseEnter: true,
+          disableOnInteraction: true,
+        }}
         pagination={{ clickable: true }}
         className="z-0"
       >
@@ -166,8 +171,7 @@ export const PostCard = ({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      key={whole?.id}
-      className="p-4 lg:!px-3 bg-white rounded-md flex flex-col shadow"
+      className="p-4 lg:!px-3 bg-white rounded-md flex flex-col h-80"
     >
       <div className="flex items-start justify-between gap-2 ">
         <h3 className="font-bold capitalize text-lg line-clamp-1">
@@ -187,7 +191,7 @@ export const PostCard = ({
         </div>
       )}
 
-      <div className="my-4 line-clamp-3">
+      <div className="my-4 line-clamp-3 shrink-0">
         <MarkdownComponent
           markdownContent={
             summary ||
@@ -195,6 +199,8 @@ export const PostCard = ({
           }
         />
       </div>
+
+      <div className="h-full" />
 
       {!isService && (
         <ConJoinedImages
@@ -211,7 +217,7 @@ export const PostCard = ({
 
       <div className="flex items-center justify-between mt-4 pt-3 border-t">
         <div className="flex gap-2 items-center">
-          <div className="relative">
+          <Link to={`/${companyName}`} className="relative">
             <img
               src={logo || "/images/logo.png"}
               alt="bmw"
@@ -219,10 +225,13 @@ export const PostCard = ({
               width={50}
             />
             {verified && <VerifiedIcon className="absolute bottom-0 right-0" />}
-          </div>
-          <h4 className="text-sm font-bold capitalize line-clamp-1">
+          </Link>
+          <Link
+            to={`/${companyName}`}
+            className="text-sm font-bold capitalize line-clamp-1"
+          >
             {companyName || "West Land Oil"}
-          </h4>
+          </Link>
         </div>
 
         <Link
@@ -238,32 +247,35 @@ export const PostCard = ({
 };
 
 export const PostCardSkeleton = React.memo(() => (
-  <div className="p-3 lg:px-3 rounded-md bg-background flex flex-col animate-pulse">
+  <div className="p-3 lg:px-3 rounded-md bg-white flex flex-col h-80">
     <div className="flex items-start justify-between gap-2">
-      <div className="w-2/3 h-5 bg-gray-200 rounded-md"></div>
-      <div className="w-6 h-6 bg-gray-200 rounded"></div>
+      <div className="w-2/3 h-5 rounded-md skeleton" />
+      <div className="w-6 h-6 rounded skeleton" />
     </div>
 
-    <div className="my-4 space-y-3">
-      <div className="h-3 bg-gray-200 rounded"></div>
-      <div className="h-3 bg-gray-200 rounded w-5/6"></div>
-      <div className="h-3 bg-gray-200 rounded w-4/6"></div>
+    <div className="my-6 space-y-3 ">
+      <div className="h-2.5 skeleton rounded w-4/6" />
+      <div className="h-2.5 skeleton rounded w-5/6" />
+      <div className="h-2.5 skeleton rounded w-4/6" />
+      <div className="h-2.5 skeleton rounded w-5/6" />
     </div>
+
+    <div className="h-full" />
 
     <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
       <div className="flex gap-2 items-center">
         <div className="relative">
-          <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+          <div className="w-12 h-12 skeleton rounded-full" />
         </div>
-        <div className="w-28 h-3 bg-gray-200 rounded"></div>
+        <div className="w-28 h-3 skeleton rounded" />
       </div>
 
-      <div className="bg-gray-200 rounded-full py-2 px-10 h-8"></div>
+      <div className="skeleton rounded-full py-2 px-10 h-8" />
     </div>
   </div>
 ));
 
-export const BookMarkButton = React.memo(({ service }) => {
+export const BookMarkButton = ({ service }) => {
   const { user: currentUser } = useAuth();
   const userHasLikedProduct = service?.likes?.find(
     (product) => product.user.id === currentUser?.id
@@ -271,20 +283,20 @@ export const BookMarkButton = React.memo(({ service }) => {
   const [bookmarked, setBookmarked] = useState(userHasLikedProduct);
   const [loading, setLoading] = useState(false);
 
-  const handleBookmark = useCallback(async () => {
+  const handleBookmark = async () => {
     setLoading(true);
     await bookmarkService(service.id, service);
     setLoading(false);
     setBookmarked((prev) => !prev);
-  }, [service]);
+  };
 
   return (
     <ButtonWithTooltipIcon
-      tip={"Bookmark " + service?.title}
+      tip={"Bookmark " + service ? service?.title : "this"}
       loading={loading}
-      onClick={handleBookmark}
+      onClick={service ? handleBookmark : null}
       IconName={bookmarked ? BookmarkFilledIcon : Bookmark}
       iconClassName="!size-8 xs:!size-7"
     />
   );
-});
+};

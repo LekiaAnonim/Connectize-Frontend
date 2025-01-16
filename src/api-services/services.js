@@ -112,11 +112,11 @@ export const bookmarkService = async (serviceId, data) => {
   const currentUser = await getCurrentUser();
 
   const currentService = allServices.find(
-    (service) => service.id === serviceId
+    (service) => service?.id === serviceId
   );
 
   if (
-    currentService.likes.find((service) => service.user.id === currentUser.id)
+    currentService?.likes.find((service) => service.user.id === currentUser.id)
   ) {
     await makeApiRequest({
       url: `api/services/${serviceId}/unlike/`,
