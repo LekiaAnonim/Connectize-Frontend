@@ -1,14 +1,12 @@
+import { DesignServices } from "@mui/icons-material";
 import {
   ChartBar,
+  CompanyIcon,
   HomeIcon,
   Message,
-  PhotosIcon,
   StoreIcon,
   UserGroup,
-  VideoIcon,
 } from "../../icon";
-// import { PersonIcon } from "@radix-ui/react-icons";
-// import { getSession } from "../session";
 
 export const months = [
   "January",
@@ -38,12 +36,12 @@ export const days = [
 
 export const feedNavItems = [
   { name: "Home", to: "/", icon: HomeIcon },
-  { name: "Messages", to: "/chat", icon: Message },
-  { name: "Services", to: "/services", icon: UserGroup },
+  { name: "Messages", to: "/messages", icon: Message },
+  { name: "Representatives", to: "/representatives", icon: UserGroup },
+  { name: "Companies", to: "/companies", icon: CompanyIcon },
+  { name: "Services", to: "/services", icon: DesignServices },
   { name: "Market", to: "/market", icon: StoreIcon },
   { name: "Analysis", to: "/analysis", icon: ChartBar },
-  // { name: "Photos", to: "/photos", icon: PhotosIcon },
-  // { name: "Videos", to: "/videos", icon: VideoIcon },
 ];
 
 // index key for complete profile

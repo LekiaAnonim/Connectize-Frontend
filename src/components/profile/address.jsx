@@ -16,6 +16,7 @@ import { customFormikFieldValidator } from "../../lib/utils";
 import * as Yup from "yup";
 import { getCountries } from "@loophq/country-state-list";
 import useRedirect from "../../hooks/useRedirect";
+import { useAuth } from "../../context/userContext";
 
 const validationSchema = Yup.object().shape({
   nationality: Yup.string().trim().required("This field is required"),
@@ -27,6 +28,7 @@ const validationSchema = Yup.object().shape({
 
 function Address() {
   const countries = getCountries();
+  const { user: currentUser } = useAuth();
 
   useRedirect(
     !(Number(localStorage.getItem(currentProfileIndexKey)) >= 2),
@@ -34,11 +36,13 @@ function Address() {
   );
 
   const initialValues = {
-    nationality: localStorage.getItem(nationalityKey) || "",
-    state: localStorage.getItem(stateKey) || "",
-    city: localStorage.getItem(cityKey) || "",
-    postal_code: localStorage.getItem(postal_codeKey) || "",
-    company_address: localStorage.getItem(company_addressKey) || "",
+    nationality:
+      currentUser?.country || localStorage.getItem(nationalityKey) || "",
+    state: currentUser?.region || localStorage.getItem(stateKey) || "",
+    city: currentUser?.city || localStorage.getItem(cityKey) || "",
+    postal_code: localStorage.getItem(postal_codeKey) || "123456",
+    company_address:
+      currentUser?.address || localStorage.getItem(company_addressKey) || "",
   };
 
   const formik = useFormik({

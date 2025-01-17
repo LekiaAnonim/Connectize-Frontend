@@ -851,3 +851,24 @@ export const ImageIcon = ({ className }) => {
     </svg>
   );
 };
+
+export const CompanyIcon = ({ className }) => {
+  return (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 26 26"
+      fill="none"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M20.5833 22.75V5.41667C20.5833 4.22005 19.6133 3.25 18.4167 3.25H7.58333C6.38672 3.25 5.41667 4.22005 5.41667 5.41667V22.75M20.5833 22.75L22.75 22.75M20.5833 22.75H15.1667M5.41667 22.75L3.25 22.75M5.41667 22.75H10.8333M9.75 7.58331H10.8333M9.75 11.9166H10.8333M15.1667 7.58331H16.25M15.1667 11.9166H16.25M10.8333 22.75V17.3333C10.8333 16.735 11.3184 16.25 11.9167 16.25H14.0833C14.6816 16.25 15.1667 16.735 15.1667 17.3333V22.75M10.8333 22.75H15.1667"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};

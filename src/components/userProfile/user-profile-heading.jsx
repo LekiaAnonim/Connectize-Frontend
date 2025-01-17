@@ -12,7 +12,7 @@ export default function UserProfileHeadings({
   last_name,
   verified,
   company,
-  paramUser,
+  id,
   is_first_time_user,
 }) {
   const { user: currentUser } = useAuth();
@@ -37,7 +37,7 @@ export default function UserProfileHeadings({
         </div>
       </section>
 
-      {currentUser?.id === paramUser?.id ? (
+      {currentUser?.id === id ? (
         <Link
           to="/home"
           className="block font-bold py-1.5 px-10 !bg-gold w-fit !rounded-full transition-all duration-300 active:scale-95 text-sm"

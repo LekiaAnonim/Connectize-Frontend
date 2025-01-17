@@ -5,7 +5,6 @@ import { Avatar } from "@chakra-ui/react";
 import { NavigationSection } from "../../NavigationSection";
 import { avatarStyle } from "../../ResponsiveNav";
 import { VerifiedIcon } from "../../../icon";
-import LightParagraph from "../../ParagraphText";
 import { capitalizeFirst } from "../../../lib/utils";
 import { Link } from "react-router-dom";
 
@@ -35,7 +34,7 @@ function Sidebar() {
       {/* <CloseOverlay /> */}
       <section
         className={clsx(
-          "max-md:absolute max-md:top-0 max-md:left-0 max-md:h-screen bg-white rounded-md p-4 shrink-0 max-w-[300px] md:w-[240px] lg:w-[260px] 2xl:w-[280px] min-h-screen max-md:transition-all duration-500 ease-out scrollbar-hidden max-md:!py-6 max-md:shadow md:sticky md:top-2 overflow-y-auto md:max-h-screen space-y-4"
+          "max-md:hidden bg-white rounded-md p-4 shrink-0 max-w-[300px] md:w-[240px] lg:w-[260px] 2xl:w-[280px] h-screen scrollbar-hidden max-md:!py-6 max-md:shadow md:sticky md:top-2 overflow-y-auto md:max-h-screen space-y-4"
         )}
       >
         <UserProfile currentUser={currentUser} />

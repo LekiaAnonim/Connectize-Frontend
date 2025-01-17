@@ -50,7 +50,7 @@ export function NavigationSection({ hasHeader }) {
                 "size-5 xs:size-3.5 text-xs": hasHeader,
               })}
             />
-            <span>{item.name}</span>
+            <span className="max-sm:sr-only">{item.name}</span>
           </Link>
         </li>
       ))}
@@ -67,7 +67,11 @@ export function NavigationSection({ hasHeader }) {
             disabled={loading}
           >
             <LogoutOutlined className="xs:text-xs" />
-            <span className={clsx({ "text-xs xs:text-[.65rem]": hasHeader })}>
+            <span
+              className={clsx({
+                "text-[.65rem] max-sm:sr-only": hasHeader,
+              })}
+            >
               {loading ? "Logging out..." : "Logout"}
             </span>
           </button>

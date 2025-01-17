@@ -15,6 +15,7 @@ import {
   roleKey,
 } from "../../lib/data";
 import { customFormikFieldValidator } from "../../lib/utils";
+import { useAuth } from "../../context/userContext";
 
 const validationSchema = Yup.object().shape({
   first_name: Yup.string().trim().required("This field is required"),
@@ -46,12 +47,17 @@ const validationSchema = Yup.object().shape({
 });
 
 function Home() {
+  const { user: currentUser } = useAuth();
+
+  // useRedirect()
   const initialValues = {
-    first_name: localStorage.getItem(first_nameKey) || "",
-    last_name: localStorage.getItem(last_nameKey) || "",
-    gender: localStorage.getItem(genderKey) || "",
-    role: localStorage.getItem(roleKey) || "",
-    age: localStorage.getItem(ageKey) || "",
+    first_name:
+      currentUser?.first_name || localStorage.getItem(first_nameKey) || "",
+    last_name:
+      currentUser?.last_name || localStorage.getItem(last_nameKey) || "",
+    gender: currentUser?.gender || localStorage.getItem(genderKey) || "",
+    role: currentUser?.role || localStorage.getItem(roleKey) || "",
+    age: currentUser?.date_of_birth || localStorage.getItem(ageKey) || "",
   };
 
   const formik = useFormik({

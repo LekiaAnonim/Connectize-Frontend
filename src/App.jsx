@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Signup from "./pages/authentication/signup";
 import Login from "./pages/authentication/login";
-import NoPage from "./components/NoPage";
 import Profile from "./components/profile/profile";
 import Home from "./components/profile/home";
 import Contact from "./components/profile/contact";
@@ -32,15 +31,19 @@ import SinglePostPage from "./pages/posts/singlePostPage";
 import FeedLayout from "./pages/FeedLayout";
 import VerifyAccount from "./pages/authentication/verify-account";
 import CompanyProfile from "./pages/feed/companyProfile";
+import NotFound from "./pages/not-found";
+import MessagesPage from "./pages/messages";
+import RepresentativesPage from "./pages/representatives";
+import CompaniesPage from "./pages/companies";
 
 function App() {
   return (
     <>
       <Routes>
         <Route>
+          <Route path="*" element={<NotFound />} />
           {/* Market place */}
           <Route path="/" element={<MarketPlaceLayout />}>
-            <Route path="*" element={<NoPage />} />
             {/* Landing page */}
             <Route path="/" element={<FeedLayout />}>
               <Route path="/" element={<NewsFeed />} />
@@ -48,6 +51,9 @@ function App() {
             </Route>
             <Route path="co/:userId" element={<UserProfile />} />
             <Route path="analysis" element={<Analysis />} />
+            <Route path="messages" element={<MessagesPage />} />
+            <Route path="representatives" element={<RepresentativesPage />} />
+            <Route path="companies" element={<CompaniesPage />} />
             <Route path="market" element={<Market />} />
             <Route path="products/:id" element={<Product />} />
             <Route path="listing" element={<Listing />} />
@@ -70,7 +76,7 @@ function App() {
           </Route>
 
           <Route path="/success" element={<SuccessPage />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile />} />
 
           {/* Complete profile */}
           <Route path="/" element={<ProfileLayout />}>
@@ -83,8 +89,6 @@ function App() {
 
           {/* Company */}
           <Route path=":company" element={<CompanyProfile />} />
-
-          {/* <Route path="admin/:company" element={<AdminProfile />} /> */}
 
           {/* Company */}
           <Route element={<CompanyLayout />}>
@@ -99,8 +103,6 @@ function App() {
               element={<CompanyAdditionalInformation />}
             />
           </Route>
-
-          {/* 404 Page */}
         </Route>
       </Routes>
     </>
