@@ -64,6 +64,7 @@ function Signup() {
 
       if (success) {
         localStorage.setItem(SUCCESS_TYPE_KEY, REGISTER_EMAIL_KEY);
+        localStorage.setItem(REGISTER_EMAIL_KEY, email);
         navigate("/success");
       }
     },

@@ -149,16 +149,19 @@ export function Notifications({ notifications = [] }) {
             index
           ) => {
             const handleMarkAsRead = async () => {
+              if (is_read) return;
+
               setLoading(true);
               await markNotificationAsRead(id);
               setLoading(false);
             };
+
             return (
               <motion.div
                 key={index}
-                initial={{ x: "50%", opacity: 0 }}
+                initial={{ x: 20, opacity: 0 }}
                 whileInView={{ x: 0, opacity: 1 }}
-                transition={{ delay: index * 0.25 }}
+                transition={{ delay: index * 0.15 }}
                 className="flex items-start gap-2"
               >
                 <Avatar

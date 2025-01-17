@@ -33,7 +33,7 @@ function DiscoverPosts() {
   return (
     <section className="space-y-4 mt-4">
       {isLoading
-        ? Array.from({ length: 4 }, (_, index) => (
+        ? Array.from({ length: 5 }, (_, index) => (
             <DiscoverPostSkeleton key={index} />
           ))
         : posts?.map((post, index) => (
@@ -307,7 +307,7 @@ const CommentSection = ({
           placeholder="Type your comment here"
         />
         <button
-          className="absolute bottom-1.5 right-2 bg-gray-300 disabled:bg-gray-200 hover:bg-gray-400 text-xs p-2 active:scale-95 disabled:active:scale-100 transition-all duration-300 rounded disabled:cursor-not-allowed"
+          className="absolute bottom-1.5 right-2 bg-gray-300 disabled:skeleton hover:bg-gray-400 text-xs p-2 active:scale-95 disabled:active:scale-100 transition-all duration-300 rounded disabled:cursor-not-allowed"
           onClick={handleComment}
           disabled={loading || comment.trim().length < 1}
         >
@@ -409,64 +409,70 @@ export function ButtonWithTooltipIcon({
 export const DiscoverPostSkeleton = ({ hasImage }) => {
   return (
     <div
-      className={clsx(
-        "border-t border-gray-200 p-3 animate-[pulse_5s_infinite]",
-        {
-          "bg-gray-100 !border-0 rounded-md": hasImage,
-        }
-      )}
+      className={clsx("border-t border-gray-200 p-3", {
+        "bg-gray-100 !border-0 rounded-md": hasImage,
+      })}
     >
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {/* Placeholder for logo */}
-          <div className="size-10 rounded-full bg-gray-200" />
+          <div className="size-10 rounded-full skeleton" />
 
           <div className="flex flex-col gap-1">
             {/* Placeholder for company name */}
-            <div className="h-4 w-24 bg-gray-200 rounded-md" />
+            <div className="h-4 w-24 skeleton rounded-md" />
             {/* Placeholder for small text */}
-            <div className="h-3 w-40 bg-gray-200 rounded-md" />
+            <div className="h-3 w-40 skeleton rounded-md" />
           </div>
         </div>
 
         {/* Placeholder for More Options */}
-        <div className="h-6 w-6 bg-gray-200 rounded-md" />
+        <div className="h-6 w-6 skeleton rounded-md" />
       </header>
 
       {/* Placeholder for post body */}
       <div className="mt-2 space-y-2">
-        <div className="h-4 w-full bg-gray-200 rounded-md" />
-        <div className="h-4 w-full bg-gray-200 rounded-md" />
-        <div className="h-4 w-3/4 bg-gray-200 rounded-md" />
+        <div className="h-4 w-full skeleton rounded-md" />
+        <div className="h-4 w-full skeleton rounded-md" />
+        <div className="h-4 w-3/4 skeleton rounded-md" />
       </div>
 
       {/* Placeholder for images */}
       {hasImage && (
         <section className="grid grid-cols-3 gap-2 mt-2">
           {[...Array(3)].map((_, index) => (
-            <div key={index} className="size-full rounded-lg bg-gray-200" />
+            <div key={index} className="size-full rounded-lg skeleton" />
           ))}
         </section>
       )}
 
       {/* Placeholder for footer */}
-      <div className="flex items-center gap-2 justify-between mt-4">
+      <div className="flex items-center gap-2 justify-between mt-6">
         {/* Placeholder for joined images */}
-        <div className="flex -space-x-1 hover:space-x-1">
-          {[...Array(5)].map((_, index) => (
-            <div
-              key={index}
-              className="size-6 bg-gray-200 rounded-full border border-white transition-all duration-300"
-            />
-          ))}
-        </div>
+        <ConjoinedAvatarSkeleton />
 
         {/* Placeholder for action buttons */}
         <div className="flex items-center gap-2">
           {[...Array(4)].map((_, index) => (
-            <div key={index} className="size-6 bg-gray-200 rounded-md" />
+            <div key={index} className="size-6 skeleton rounded-md" />
           ))}
         </div>
+      </div>
+    </div>
+  );
+};
+
+export const ConjoinedAvatarSkeleton = ({ length = 5 }) => {
+  return (
+    <div className="flex items-center gap-2 justify-between">
+      {/* Placeholder for joined images */}
+      <div className="flex -space-x-1 hover:space-x-1">
+        {[...Array(length)].map((_, index) => (
+          <div
+            key={index}
+            className="size-8 skeleton rounded-full border border-white transition-all duration-300"
+          />
+        ))}
       </div>
     </div>
   );

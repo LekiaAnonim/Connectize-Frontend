@@ -8,6 +8,7 @@ import HeadingText from "../../HeadingText";
 import LightParagraph from "../../ParagraphText";
 import { Avatar } from "@chakra-ui/react";
 import { avatarStyle } from "../../ResponsiveNav";
+import { getServices } from "../../../api-services/services";
 
 const TopServiceSuggestions = () => {
   return (
@@ -22,14 +23,35 @@ const TopServiceSuggestions = () => {
 export default TopServiceSuggestions;
 
 export function TopServices() {
+  const { data: services, isLoading } = useQuery({
+    queryKey: ["services"],
+    queryFn: getServices,
+  });
+
+  const getRandomNumber = () => {
+    const num = Math.floor(Math.random() * services?.length - 1);
+
+    return num || 0;
+  };
+
+  const service = services?.[getRandomNumber()];
+
   return (
-    <div className="p-3 sm:p-4 lg:!px-2 rounded-md bg-white">
-      <div className="mb-2">
+    <section className="">
+      <div className="p-3 sm:p-4 lg:!px-2">
         <HeadingText>Top Services</HeadingText>
       </div>
 
-      <PostCard />
-    </div>
+      <PostCard
+        whole={service}
+        companyName={service?.company}
+        logo={service?.avatar}
+        summary={service?.description}
+        url={"/services/" + service?.id}
+        title={service?.title}
+        verified={service?.featured}
+      />
+    </section>
   );
 }
 

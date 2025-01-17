@@ -30,6 +30,7 @@ import CompanyInformation from "./pages/company/CompanyInformation";
 import CompanyAdditionalInformation from "./pages/company/CompanyAdditionInformation";
 import SinglePostPage from "./pages/posts/singlePostPage";
 import FeedLayout from "./pages/FeedLayout";
+import VerifyAccount from "./pages/authentication/verify-account";
 
 function App() {
   return (
@@ -46,14 +47,18 @@ function App() {
           <Route path="/" element={<AuthLayout />}>
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/verify-account" element={<VerifyAccount />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route
               path="/confirm-reset-password"
               element={<ConfirmResetPassword />}
             />
           </Route>
+
           <Route path="/success" element={<SuccessPage />} />
           <Route path="profile" element={<Profile />} />
+
+          {/* Complete profile */}
           <Route path="/" element={<ProfileLayout />}>
             <Route path="home" element={<Home />} />
             <Route path="contact" element={<Contact />} />
@@ -77,6 +82,7 @@ function App() {
 
           {/* Company */}
           <Route path=":company" element={<UserProfile />} />
+          <Route path=":userId" element={<UserProfile />} />
           {/* <Route path="admin/:company" element={<AdminProfile />} /> */}
 
           {/* Company */}
@@ -92,10 +98,6 @@ function App() {
               element={<CompanyAdditionalInformation />}
             />
           </Route>
-
-          {/* <Route path="feed-page" element={<FeedPage />} /> */}
-          {/* <Route path="testing" element={<Testing />} /> */}
-          {/* <Route path="antway" element={<Navbar />} /> */}
 
           {/* 404 Page */}
           <Route path="*" element={<NoPage />} />

@@ -143,7 +143,7 @@ export async function makeApiRequest({
             params,
           });
 
-          if (response.status >= 200 && response.status <= 204) {
+          if (response.status >= 200 && response.status < 300) {
             resetForm?.();
             console.log("Request succeeded after retry:", response.data);
             toast.success(response.data.message);
@@ -151,17 +151,19 @@ export async function makeApiRequest({
           }
         }
       } catch (retryError) {
-        // Handle failure of retry attempt here
         console.error("Token refresh failed:", retryError);
       }
     }
 
     // Handle general errors
     const errorResponse = error?.response?.data;
-    const errorMsg = extractErrorMessage(errorResponse);
 
-    console.error("API request failed:", error);
-    if (errorResponse) toast.error(errorMsg);
+    if (errorResponse) {
+      const errorMsg = extractErrorMessage(errorResponse);
+
+      toast.error(errorMsg);
+      console.error("API request failed:", error, errorMsg);
+    }
   }
 }
 
@@ -176,6 +178,7 @@ function extractErrorMessage(errorResponse) {
     apiErrorResponse?.gender?.[0] ||
     apiErrorResponse?.non_field_errors?.[0] ||
     errorResponse?.company_name?.[0] ||
+    errorResponse?.message ||
     errorResponse?.detail ||
     "Something went wrong!"
   );

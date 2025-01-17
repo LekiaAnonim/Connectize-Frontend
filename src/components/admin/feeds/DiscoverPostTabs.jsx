@@ -19,7 +19,11 @@ import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../../../api-services/products";
 import { MarkdownComponent } from "../../MarkDownComponent";
 import { motion } from "framer-motion";
-import { ButtonWithTooltipIcon } from "./DiscoverPosts";
+import {
+  ButtonWithTooltipIcon,
+  ConjoinedAvatarSkeleton,
+} from "./DiscoverPosts";
+import { baseURL } from "../../../lib/helpers";
 
 const DiscoverPostTabs = () => {
   const tabsStyle = "w-full rounded";
@@ -127,7 +131,7 @@ export const PostSlider = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.35 }}
       className="w-full"
     >
       <Swiper
@@ -202,18 +206,17 @@ export const PostCard = ({
 
       <div className="h-full" />
 
-      {!isService && (
-        <ConJoinedImages
-          size={30}
-          array={[
-            "/images/passport9.PNG",
-            "/images/passport10.PNG",
-            "/images/passport11.PNG",
-            "/images/passport12.PNG",
-            "/images/iconprofile.PNG",
-          ]}
-        />
-      )}
+      {!isService ||
+        (whole?.likes && (
+          <ConJoinedImages
+            size={30}
+            array={whole?.likes.slice(0, 5).map((post) => ({
+              name: `${post.user.first_name} ${post.user.last_name}`,
+              src: baseURL + post.user.avatar,
+              href: "/",
+            }))}
+          />
+        ))}
 
       <div className="flex items-center justify-between mt-4 pt-3 border-t">
         <div className="flex gap-2 items-center">
@@ -262,6 +265,8 @@ export const PostCardSkeleton = React.memo(() => (
 
     <div className="h-full" />
 
+    <ConjoinedAvatarSkeleton />
+
     <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
       <div className="flex gap-2 items-center">
         <div className="relative">
@@ -284,6 +289,7 @@ export const BookMarkButton = ({ service }) => {
   const [loading, setLoading] = useState(false);
 
   const handleBookmark = async () => {
+    if (!service) return;
     setLoading(true);
     await bookmarkService(service.id, service);
     setLoading(false);
@@ -292,9 +298,9 @@ export const BookMarkButton = ({ service }) => {
 
   return (
     <ButtonWithTooltipIcon
-      tip={"Bookmark " + service ? service?.title : "this"}
+      tip={`Bookmark ${service ? service?.title : "this"}`}
       loading={loading}
-      onClick={service ? handleBookmark : null}
+      onClick={handleBookmark}
       IconName={bookmarked ? BookmarkFilledIcon : Bookmark}
       iconClassName="!size-8 xs:!size-7"
     />

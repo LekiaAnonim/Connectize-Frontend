@@ -30,6 +30,8 @@ export default function CustomInput({
   value,
   name,
   className,
+  validate,
+  error,
 }) {
   const [isPassword, setIsPassword] = useState(true);
   const [passwordType, setPasswordType] = useState("password");
@@ -42,7 +44,10 @@ export default function CustomInput({
     <div className="relative w-full">
       <Input
         autoComplete="true"
-        className={`${className} ${inputClassNames}`}
+        className={clsx(className, inputClassNames, {
+          "!border-green-800 !bg-green-50/50": validate && !error,
+          "!border-[#9e3818] !bg-[#9e3818]/5": error,
+        })}
         type={type === "password" ? passwordType : type}
         placeholder={placeholder}
         onChange={(e) => {
