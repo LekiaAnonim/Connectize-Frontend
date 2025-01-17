@@ -8,6 +8,7 @@ import clsx from "clsx";
 import { feedNavItems } from "../lib/data";
 import { LogoutOutlined } from "@ant-design/icons";
 import { LinkWithTooltipIcon } from "./userProfile/Navbar";
+import { ButtonWithTooltipIcon } from "./admin/feeds/DiscoverPosts";
 
 export function NavigationSection({ hasHeader }) {
   const { pathname } = useLocation();
@@ -46,11 +47,7 @@ export function NavigationSection({ hasHeader }) {
               }
             )}
           >
-            <LinkWithTooltipIcon
-              IconName={item.icon}
-              tip={item.name}
-              to={item.t0}
-            />
+            <ButtonWithTooltipIcon IconName={item.icon} tip={item.name} />
             <span className="max-sm:sr-only">{item.name}</span>
           </Link>
         </li>
