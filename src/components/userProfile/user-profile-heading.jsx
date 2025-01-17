@@ -5,17 +5,19 @@ import { StatsText } from "../../pages/feed/companyProfile";
 import clsx from "clsx";
 import { avatarStyle } from "../ResponsiveNav";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/userContext";
 
 export default function UserProfileHeadings({
   first_name,
   last_name,
   verified,
   company,
-  currentUser,
   paramUser,
+  is_first_time_user,
 }) {
+  const { user: currentUser } = useAuth();
   return (
-    <section className="flex max-md:flex-col gap-4">
+    <section className="flex max-md:flex-col md:items-center gap-4 md:justify-between">
       <section className="space-y-1">
         <div className="flex items-center gap-x-0.5">
           <h2 className="text-2xl xs:leading-tight text-gray-700 font-bold capitalize">
@@ -35,8 +37,15 @@ export default function UserProfileHeadings({
         </div>
       </section>
 
-      {currentUser?.id !== paramUser?.id && (
-        <Button className="!bg-gold w-fit !rounded-full transition-all duration-300 active:scale-95">
+      {currentUser?.id === paramUser?.id ? (
+        <Link
+          to="/home"
+          className="block font-bold py-1.5 px-10 !bg-gold w-fit !rounded-full transition-all duration-300 active:scale-95 text-sm"
+        >
+          {is_first_time_user ? "Complete your profile" : "Edit profile"}
+        </Link>
+      ) : (
+        <Button className="!bg-gold w-fit !px-10 !py-1.5 !h-fit !rounded-full transition-all duration-300 active:scale-95 !text-sm">
           Connect
         </Button>
       )}

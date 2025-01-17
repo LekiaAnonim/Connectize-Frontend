@@ -32,7 +32,7 @@ const marketPlaceItems = [
   },
 ];
 
-function SidebarMenu() {
+function Sidebar() {
   const { navOpen, toggleNav } = useNav();
   const { pathname } = useLocation();
 
@@ -76,7 +76,7 @@ function SidebarMenu() {
   );
 }
 
-export default SidebarMenu;
+export default Sidebar;
 
 function MarketPlaceNavigation() {
   const { pathname } = useLocation();

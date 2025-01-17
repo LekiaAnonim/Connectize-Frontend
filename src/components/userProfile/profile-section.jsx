@@ -1,8 +1,14 @@
+import clsx from "clsx";
 import React from "react";
 
-export default function ProfileSection({ title, children }) {
+export default function ProfileSection({ title, children, className }) {
   return (
-    <section className="p-4 border border-gray-200 rounded-xl space-y-2">
+    <section
+      className={clsx(
+        "p-4 border border-gray-200 rounded-xl space-y-2 shrink-0",
+        className
+      )}
+    >
       <h2 className="font-semibold text-2xl xs:text-xl capitalize">{title}</h2>
 
       <div>{children} </div>

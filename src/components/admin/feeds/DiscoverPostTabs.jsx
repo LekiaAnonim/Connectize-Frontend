@@ -210,10 +210,11 @@ export const PostCard = ({
         (whole?.likes && (
           <ConJoinedImages
             size={30}
+            sizeVariant="sm"
             array={whole?.likes.slice(0, 5).map((post) => ({
-              name: `${post.user.first_name} ${post.user.last_name}`,
-              src: baseURL + post.user.avatar,
-              href: "/",
+              name: `${post?.user?.first_name} ${post?.user?.last_name}`,
+              src: baseURL + post?.user?.avatar,
+              href: `/co/${post?.user?.id}`,
             }))}
           />
         ))}

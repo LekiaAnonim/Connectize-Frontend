@@ -38,12 +38,25 @@ function App() {
     <>
       <Routes>
         <Route>
-          {/* Landing page */}
-          <Route element={<FeedLayout />}>
-            <Route path="/" element={<NewsFeed />} />
-            <Route path="/posts/:id" element={<SinglePostPage />} />
-          </Route>
+          {/* Market place */}
+          <Route path="/" element={<MarketPlaceLayout />}>
+            <Route path="*" element={<NoPage />} />
+            {/* Landing page */}
+            <Route path="/" element={<FeedLayout />}>
+              <Route path="/" element={<NewsFeed />} />
+              <Route path="/posts/:id" element={<SinglePostPage />} />
+            </Route>
+            <Route path="co/:userId" element={<UserProfile />} />
+            <Route path="analysis" element={<Analysis />} />
+            <Route path="market" element={<Market />} />
+            <Route path="products/:id" element={<Product />} />
+            <Route path="listing" element={<Listing />} />
+            {/* Services */}
+            <Route path="services" element={<Services />} />
 
+            <Route path="services/:id" element={<ServiceOverView />} />
+            <Route path="services/add" element={<ServiceAdmin />} />
+          </Route>
           {/* authentication routes */}
           <Route path="/" element={<AuthLayout />}>
             <Route path="/signup" element={<Signup />} />
@@ -68,22 +81,9 @@ function App() {
             <Route path="overview" element={<Overview />} />
           </Route>
 
-          {/* Market place */}
-          <Route element={<MarketPlaceLayout />}>
-            <Route path="analysis" element={<Analysis />} />
-            <Route path="market" element={<Market />} />
-            <Route path="products/:id" element={<Product />} />
-            <Route path="listing" element={<Listing />} />
-            {/* Services */}
-            <Route path="services" element={<Services />} />
-
-            <Route path="services/:id" element={<ServiceOverView />} />
-            <Route path="services/add" element={<ServiceAdmin />} />
-          </Route>
-
           {/* Company */}
           <Route path=":company" element={<CompanyProfile />} />
-          <Route path="co/:userId" element={<UserProfile />} />
+
           {/* <Route path="admin/:company" element={<AdminProfile />} /> */}
 
           {/* Company */}
@@ -101,7 +101,6 @@ function App() {
           </Route>
 
           {/* 404 Page */}
-          <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
     </>

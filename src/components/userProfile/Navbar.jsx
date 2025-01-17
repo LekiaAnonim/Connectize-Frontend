@@ -14,7 +14,7 @@ import { Tooltip } from "@chakra-ui/react";
 import { NavigationSection } from "../admin/feeds/SideBar";
 
 const Navbar = () => {
-  const weirdFlex = "flex w-full gap-4 md:!gap-6 items-center justify-between";
+  const weirdFlex = "flex w-full gap-4 md:!gap-6 items-center";
   const [showBottomNav, setShowBottomNav] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -45,7 +45,7 @@ const Navbar = () => {
               <FeedSearch />
             </div>
 
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex items-center gap-3 xs:gap-5 md:gap-7 shrink-0">
               <NotificationPopOver />
               <JoinedUserCompanyImages />
             </div>
@@ -57,7 +57,7 @@ const Navbar = () => {
         className="md:hidden bg-gold fixed bottom-0 left-0 w-full z-[999999999999]"
         initial={{ y: 0 }}
         animate={{ y: showBottomNav ? 0 : 100 }}
-        transition={{ type: "spring", stiffness: 300 }}
+        transition={{ type: "tween", stiffness: 300 }}
       >
         <section className="container">
           <NavigationSection hasHeader />

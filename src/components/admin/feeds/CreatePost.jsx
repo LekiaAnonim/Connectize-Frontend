@@ -268,7 +268,7 @@ function CreatePost() {
         </MoreOptions>
       </div>
 
-      <div className="mt-4 flex max-sm:flex-col md:flex-col lg:flex-row sm:items-center justify-between max-sm:gap-4 md:gap-4 lg:gap-1">
+      <div className="mt-4 flex max-sm:flex-col sm:items-center justify-between max-sm:gap-4 md:gap-4 lg:gap-1">
         <div className="flex items-center gap-2 relative">
           <input
             name="post_images"
@@ -294,7 +294,7 @@ function CreatePost() {
         {(showEmojiPicker || showGifPicker) && renderEmojiGifPickers}
 
         <button
-          className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-4 transition-all duration-300 md:w-full lg:w-fit disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-8 transition-all duration-300 md:w-fit disabled:bg-gray-400 disabled:cursor-not-allowed"
           onClick={handleCreatePost}
           disabled={isLoading}
         >
