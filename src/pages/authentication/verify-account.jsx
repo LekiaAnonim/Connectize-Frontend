@@ -8,6 +8,7 @@ import {
   RESET_PASSWORD_EMAIL_KEY,
   RESET_PASSWORD_KEY,
   SUCCESS_TYPE_KEY,
+  VERIFY_ACCOUNT_KEY,
 } from "../../lib/data/authentication";
 import HeadingText from "../../components/HeadingText";
 import LightParagraph from "../../components/ParagraphText";
@@ -31,19 +32,17 @@ function VerifyAccount() {
     initialValues: formValues,
     validationSchema: validationSchema,
     onSubmit: async ({ email }, { resetForm }) => {
-      if (!uid || !token) {
-        toast.error("Please check your mail for a valid verification link");
-      }
       const success = await authenticationService({
         values: { email },
-        url: `verify-account/${uid}/${token}`,
+        url: `resend_verification_email`,
+        method: "POST",
         resetForm,
       });
 
       if (success) {
-        localStorage.setItem(SUCCESS_TYPE_KEY, RESET_PASSWORD_KEY);
-        localStorage.setItem(RESET_PASSWORD_EMAIL_KEY, email);
-        navigate("/success");
+        toast.success(
+          "Verification email has been sent. Please check your email"
+        );
       }
     },
   });
@@ -51,8 +50,23 @@ function VerifyAccount() {
   useEffect(() => {
     formik.setValues(formValues);
     document.title = "Account Verification | connectize";
+    verifyAccount();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const verifyAccount = async () => {
+    if (uid && token) {
+      const success = await authenticationService({
+        url: `verify-account/${uid}/${token}`,
+        method: "GET",
+      });
+
+      if (success) {
+        localStorage.setItem(SUCCESS_TYPE_KEY, VERIFY_ACCOUNT_KEY);
+        navigate("/success");
+      }
+    }
+  };
 
   const fields = [
     {
@@ -66,9 +80,10 @@ function VerifyAccount() {
 
   return (
     <section className="space-y-4">
-      <HeadingText>Password recovery</HeadingText>
+      <HeadingText>Account Verification</HeadingText>
       <LightParagraph className="text-custom_grey">
-        Please enter your email address to send a password recovery email.
+        Please enter your email address to receive an account verification
+        email.
       </LightParagraph>
       <Form
         formik={formik}
@@ -76,7 +91,7 @@ function VerifyAccount() {
         inputArray={fields}
         button={{
           type: "submit",
-          text: "Retrieve password",
+          text: "Verify email",
           submitText: "Checking email...",
           style: "!md:w-[60%] mt-4",
         }}

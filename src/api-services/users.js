@@ -11,6 +11,15 @@ export const getAllUsers = async () => {
   return results;
 };
 
+export const getUserById = async (id) => {
+  const results = await makeApiRequest({
+    url: `api/users/${id}`,
+    method: "GET",
+  });
+
+  return results;
+};
+
 export const getCurrentUser = async () => {
   const currentUser = await makeApiRequest({
     url: `api/current-user/`,

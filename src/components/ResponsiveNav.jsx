@@ -11,6 +11,7 @@ import { useAuth } from "../context/userContext";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getCompanies } from "../api-services/companies";
+import { ConjoinedAvatarSkeleton } from "./admin/feeds/DiscoverPosts";
 
 function ResponsiveNav() {
   const { toggleNav } = useNav();
@@ -24,17 +25,14 @@ function ResponsiveNav() {
   return (
     <div className="flex justify-between items-center gap-2 sm:gap-4 w-full mb-4 max-md:mt-2">
       {isLoading ? (
-        <div className="flex">
-          <SkeletonCircle />
-          <SkeletonCircle className="-ml-1" />
-        </div>
+        <ConjoinedAvatarSkeleton length={2} />
       ) : (
         <ConJoinedImages
           array={[
             {
               src: user?.avatar,
               name: `${user?.first_name || ""} ${user?.last_name || ""}`,
-              href: "/",
+              href: `/co/${user?.id}`,
             },
             {
               src: companies?.[0]?.logo || "",

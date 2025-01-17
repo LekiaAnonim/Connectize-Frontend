@@ -69,7 +69,7 @@ export default function Form({
             value={formik.values[`${name}`]}
             className={clsx({ "opacity-80 pointer-events-none": disabled })}
             validate={formik.touched[name] && validate}
-            error={formik.errors[name]}
+            error={formik.touched[name] && formik.errors[name]}
           />
         )}
         <FormikErrorResponse

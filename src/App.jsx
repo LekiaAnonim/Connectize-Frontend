@@ -31,6 +31,7 @@ import CompanyAdditionalInformation from "./pages/company/CompanyAdditionInforma
 import SinglePostPage from "./pages/posts/singlePostPage";
 import FeedLayout from "./pages/FeedLayout";
 import VerifyAccount from "./pages/authentication/verify-account";
+import CompanyProfile from "./pages/feed/companyProfile";
 
 function App() {
   return (
@@ -81,8 +82,8 @@ function App() {
           </Route>
 
           {/* Company */}
-          <Route path=":company" element={<UserProfile />} />
-          <Route path=":userId" element={<UserProfile />} />
+          <Route path=":company" element={<CompanyProfile />} />
+          <Route path="co/:userId" element={<UserProfile />} />
           {/* <Route path="admin/:company" element={<AdminProfile />} /> */}
 
           {/* Company */}

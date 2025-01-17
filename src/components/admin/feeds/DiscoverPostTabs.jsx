@@ -131,7 +131,7 @@ export const PostSlider = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35 }}
+      transition={{ duration: 0.4 }}
       className="w-full"
     >
       <Swiper
@@ -250,7 +250,7 @@ export const PostCard = ({
 };
 
 export const PostCardSkeleton = React.memo(() => (
-  <div className="p-3 lg:px-3 rounded-md bg-white flex flex-col h-80">
+  <div className="p-3 lg:px-3 rounded-md bg-white flex flex-col h-80 w-full">
     <div className="flex items-start justify-between gap-2">
       <div className="w-2/3 h-5 rounded-md skeleton" />
       <div className="w-6 h-6 rounded skeleton" />
@@ -283,7 +283,7 @@ export const PostCardSkeleton = React.memo(() => (
 export const BookMarkButton = ({ service }) => {
   const { user: currentUser } = useAuth();
   const userHasLikedProduct = service?.likes?.find(
-    (product) => product.user.id === currentUser?.id
+    (product) => product?.user?.id === currentUser?.id
   );
   const [bookmarked, setBookmarked] = useState(userHasLikedProduct);
   const [loading, setLoading] = useState(false);

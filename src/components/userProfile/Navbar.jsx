@@ -137,12 +137,14 @@ function ProfilePicture() {
   const { user } = useAuth();
 
   return (
-    <Avatar
-      src={user?.avatar || ""}
-      name={user?.first_name + " " + user?.last_name || ""}
-      size="sm"
-      className={avatarStyle}
-    />
+    <Link to={`/co/${user?.id}`}>
+      <Avatar
+        src={user?.avatar || ""}
+        name={user?.first_name + " " + user?.last_name || ""}
+        size="sm"
+        className={avatarStyle}
+      />
+    </Link>
   );
 }
 

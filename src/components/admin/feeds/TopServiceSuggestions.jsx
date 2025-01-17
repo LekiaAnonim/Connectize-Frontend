@@ -3,12 +3,14 @@ import { VerifiedIcon } from "../../../icon";
 
 import { useQuery } from "@tanstack/react-query";
 import { getSuggestedUsersForCurrentUser } from "../../../api-services/users";
-import { PostCard } from "./DiscoverPostTabs";
+import { PostCard, PostCardSkeleton } from "./DiscoverPostTabs";
 import HeadingText from "../../HeadingText";
 import LightParagraph from "../../ParagraphText";
 import { Avatar } from "@chakra-ui/react";
 import { avatarStyle } from "../../ResponsiveNav";
 import { getServices } from "../../../api-services/services";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const TopServiceSuggestions = () => {
   return (
@@ -29,14 +31,21 @@ export function TopServices() {
   });
 
   const getRandomNumber = () => {
-    const num = Math.floor(Math.random() * services?.length - 1);
+    const num = Math.floor(Math.random() * services?.length);
 
     return num || 0;
   };
 
   const service = services?.[getRandomNumber()];
 
-  return (
+  return isLoading ? (
+    <section className="w-full">
+      <div className="p-3 sm:p-4 lg:!px-2">
+        <div className="w-1/3 h-7 rounded-md skeleton" />
+      </div>
+      <PostCardSkeleton />
+    </section>
+  ) : (
     <section className="">
       <div className="p-3 sm:p-4 lg:!px-2">
         <HeadingText>Top Services</HeadingText>
@@ -67,7 +76,14 @@ export function Suggestions() {
       <ul className="space-y-2 divide-y divide-gray-100 p-0">
         {isLoading ? (
           Array.from({ length: 6 }).map((_, index) => (
-            <CirceTitleSubtitleSkeleton key={index} />
+            <motion.div
+              // initial={{ y: 10 }}
+              // animate={{ y: 0 }}
+              // transition={{ repeat: Infinity, delay: index * 0.2, duration: 2 }}
+              key={index}
+            >
+              <CirceTitleSubtitleSkeleton />
+            </motion.div>
           ))
         ) : suggestedUsers?.length === 0 ? (
           <LightParagraph>No suggested users...</LightParagraph>
@@ -82,7 +98,7 @@ export function Suggestions() {
 }
 
 function SuggestionListItem({ user }) {
-  const { first_name, last_name, avatar, email: hashtag, verified } = user;
+  const { first_name, last_name, avatar, email: hashtag, verified, id } = user;
 
   return (
     <li className="flex items-center gap-2.5 pt-2">
@@ -94,9 +110,12 @@ function SuggestionListItem({ user }) {
       />
       <div>
         <div className="flex items-center gap-x-0.5">
-          <span className="text-base xs:leading-tight text-gray-700 font-bold capitalize">
+          <Link
+            to={`/co/${id}`}
+            className="text-base xs:leading-tight text-gray-700 font-bold capitalize"
+          >
             {first_name} {last_name}
-          </span>
+          </Link>
           {verified && <VerifiedIcon color="black" height="18" width="18" />}
         </div>
         <p className="text-sm text-gray-400 m-0">{hashtag}</p>
@@ -106,14 +125,14 @@ function SuggestionListItem({ user }) {
 }
 
 export const CirceTitleSubtitleSkeleton = () => (
-  <li className="flex items-center gap-3 pt-3 animate-pulse mb-3">
-    <div className="size-8 rounded-full bg-gray-200"></div>
+  <li className="flex items-center gap-3 pt-3 mb-3">
+    <div className="size-8 rounded-full skeleton"></div>
     <div className="flex-1">
       <div className="flex items-center gap-x-0.5">
-        <div className="h-2 w-24 bg-gray-200 rounded"></div>
-        <div className="size-3 bg-gray-200 rounded-full"></div>
+        <div className="h-2 w-24 skeleton rounded"></div>
+        <div className="size-3 skeleton rounded-full"></div>
       </div>
-      <div className="h-2 w-36 bg-gray-200 rounded mt-1"></div>
+      <div className="h-2 w-36 skeleton rounded mt-1"></div>
     </div>
   </li>
 );

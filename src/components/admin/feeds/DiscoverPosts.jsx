@@ -59,8 +59,8 @@ export const DiscoverPostItem = ({
   const { setRefetchInterval } = useCustomQuery();
   const { user: currentUser } = useAuth();
 
-  const userHasLikedPost = postItem.likes.find(
-    (post) => post.user.id === currentUser?.id
+  const userHasLikedPost = postItem?.likes.find(
+    (post) => post?.user?.id === currentUser?.id
   )
     ? true
     : false;
@@ -140,12 +140,7 @@ export const DiscoverPostItem = ({
           <section className="flex max-xs:flex-col xs:items-center gap-0.5 xs:gap-1">
             <div className="flex">
               <Link
-                to={
-                  "/" +
-                  postItem?.company?.company_name
-                    .toLowerCase()
-                    .replace(/\s/g, "_")
-                }
+                to={"/" + postItem?.company?.company_name}
                 className="text-lg xs:text-base md:text-sm lg:text-base font-bold break-all line-clamp-1"
               >
                 {postItem?.company?.company_name}
@@ -153,8 +148,10 @@ export const DiscoverPostItem = ({
               {postItem?.company?.verify && <VerifiedIcon color="black" />}
             </div>
             <small className="text-gray-400 lowercase shrink-0">
-              @{postItem.user.first_name} •{" "}
-              <TimeAgo time={postItem.date_created} />
+              <Link to={`/co/${postItem?.user?.id}`}>
+                @{postItem.user.first_name}{" "}
+              </Link>
+              • <TimeAgo time={postItem.date_created} />
             </small>
           </section>
         </section>
@@ -197,9 +194,9 @@ export const DiscoverPostItem = ({
       <div className="flex items-center gap-2 justify-between mt-4">
         <ConJoinedImages
           size={30}
-          array={postItem.likes.slice(0, 5).map((post) => ({
-            name: `${post.user.first_name} ${post.user.last_name}`,
-            src: baseURL + post.user.avatar,
+          array={postItem?.likes.slice(0, 5).map((post) => ({
+            name: `${post?.user?.first_name} ${post?.user?.last_name}`,
+            src: baseURL + post?.user?.avatar,
             href: "/",
           }))}
           sizeVariant="sm"
