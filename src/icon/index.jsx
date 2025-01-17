@@ -253,8 +253,9 @@ export const ChartBar = ({
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
     fill={color}
-    width="22"
-    height="22"
+    width={width}
+    height={height}
+    className={className}
   >
     <path
       fillRule="evenodd"

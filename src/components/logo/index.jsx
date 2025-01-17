@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { useNav } from "../../context/navContext";
 
-function Logo({ className, url = "/", height = "60px", width = "60px" }) {
+function Logo({ className, url = "/", height = "60px", width = "60px", size }) {
   const { toggleNav } = useNav();
   return (
     <Link
@@ -16,7 +16,7 @@ function Logo({ className, url = "/", height = "60px", width = "60px" }) {
     >
       <img
         src="/images/logo.png"
-        style={{ height, width }}
+        style={{ height: size || height, width: size || width }}
         alt="connectize logo"
       />
     </Link>

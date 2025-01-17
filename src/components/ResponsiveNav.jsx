@@ -1,12 +1,12 @@
 import React from "react";
 import { useNav } from "../context/navContext";
-import { Menu } from "@mui/icons-material";
+import { ChevronLeft, Menu } from "@mui/icons-material";
 import clsx from "clsx";
 import { ChartBar, Setting } from "../icon";
 import FeedSearch from "./admin/feeds/FeedSearch";
 import { NotificationPopOver } from "./notifications";
 import { LinkWithTooltipIcon } from "./userProfile/Navbar";
-import { Avatar, SkeletonCircle } from "@chakra-ui/react";
+import { Avatar } from "@chakra-ui/react";
 import { useAuth } from "../context/userContext";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -15,36 +15,10 @@ import { ConjoinedAvatarSkeleton } from "./admin/feeds/DiscoverPosts";
 
 function ResponsiveNav() {
   const { toggleNav } = useNav();
-  const { user } = useAuth();
-
-  const { data: companies, isLoading } = useQuery({
-    queryKey: ["companies"],
-    queryFn: getCompanies,
-  });
 
   return (
     <div className="flex justify-between items-center gap-2 sm:gap-4 w-full mb-4 max-md:mt-2">
-      {isLoading ? (
-        <ConjoinedAvatarSkeleton length={2} />
-      ) : (
-        <ConJoinedImages
-          array={[
-            {
-              src: user?.avatar,
-              name: `${user?.first_name || ""} ${user?.last_name || ""}`,
-              href: `/co/${user?.id}`,
-            },
-            {
-              src: companies?.[0]?.logo || "",
-              name: companies?.[0]?.company_name || "",
-              href:
-                companies?.length > 0
-                  ? `/${companies[0].company_name}`
-                  : "/create-company",
-            },
-          ]}
-        />
-      )}
+      <JoinedUserCompanyImages />
 
       <FeedSearch className="max-xs:hidden" />
 
@@ -67,6 +41,42 @@ function ResponsiveNav() {
 export default ResponsiveNav;
 
 export const avatarStyle = "!bg-gold !text-black border-2 border-white";
+
+export const JoinedUserCompanyImages = () => {
+  const { user } = useAuth();
+
+  const { data: companies, isLoading } = useQuery({
+    queryKey: ["companies"],
+    queryFn: getCompanies,
+  });
+
+  return isLoading ? (
+    <ConjoinedAvatarSkeleton length={2} />
+  ) : (
+    <div className="relative h-fit w-fit">
+      <ChevronLeft className="absolute -left-1 -bottom-2 -rotate-45 !size-4" />
+      <ConJoinedImages
+        sizeVariant={"sm"}
+        size={35}
+        array={[
+          {
+            src: user?.avatar,
+            name: `${user?.first_name || ""} ${user?.last_name || ""}`,
+            href: `/co/${user?.id}`,
+          },
+          {
+            src: companies?.[0]?.logo || "",
+            name: companies?.[0]?.company_name || "",
+            href:
+              companies?.length > 0
+                ? `/${companies[0].company_name}`
+                : "/create-company",
+          },
+        ]}
+      />
+    </div>
+  );
+};
 
 export const ConJoinedImages = ({
   size = 40,
