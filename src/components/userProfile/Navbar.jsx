@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { JoinedUserCompanyImages } from "../ResponsiveNav";
 import { Tooltip } from "@chakra-ui/react";
-import { NavigationSection } from "../admin/feeds/SideBar";
+import { NavigationSection } from "../NavigationSection";
 
 const Navbar = () => {
   const weirdFlex = "flex w-full gap-4 md:!gap-6 items-center";

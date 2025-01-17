@@ -37,7 +37,7 @@ export const days = [
 // const session = getSession();
 
 export const feedNavItems = [
-  { name: "Feeds", to: "/", icon: HomeIcon },
+  { name: "Home", to: "/", icon: HomeIcon },
   { name: "Messages", to: "/chat", icon: Message },
   { name: "Services", to: "/services", icon: UserGroup },
   { name: "Market", to: "/market", icon: StoreIcon },
