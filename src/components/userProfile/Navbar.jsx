@@ -54,7 +54,7 @@ const Navbar = () => {
       </Headroom>
 
       <motion.nav
-        className="md:hidden bg-gold fixed bottom-0 left-0 w-full z-[999999999999]"
+        className="md:hidden bg-gold fixed bottom-0 left-0 w-full z-[99999]"
         initial={{ y: 0 }}
         animate={{ y: showBottomNav ? 0 : 100 }}
         transition={{ type: "tween", stiffness: 300 }}
@@ -90,11 +90,11 @@ export function LinkWithTooltipIcon({
       <Link
         to={to}
         className={clsx(
-          "flex items-center font-bold text-sm gap-3 text-gray-400 hover:text-custom_blue transition-colors duration-300",
+          "inline-flex items-center font-bold text-sm gap-3 text-gray-400 hover:text-custom_blue transition-colors duration-300",
           className
         )}
       >
-        <IconName />
+        <IconName className="!size-5 !text-sm active:scale-95 transition-all duration-200" />
         {text && <span>{text}</span>}
       </Link>
     </Tooltip>

@@ -7,6 +7,7 @@ import { logOutCurrentUser } from "../api-services/users";
 import clsx from "clsx";
 import { feedNavItems } from "../lib/data";
 import { LogoutOutlined } from "@ant-design/icons";
+import { LinkWithTooltipIcon } from "./userProfile/Navbar";
 
 export function NavigationSection({ hasHeader }) {
   const { pathname } = useLocation();
@@ -45,10 +46,10 @@ export function NavigationSection({ hasHeader }) {
               }
             )}
           >
-            <item.icon
-              className={clsx(" active:scale-95 transition-all duration-300", {
-                "size-5 xs:size-3.5 text-xs": hasHeader,
-              })}
+            <LinkWithTooltipIcon
+              IconName={item.icon}
+              tip={item.name}
+              to={item.t0}
             />
             <span className="max-sm:sr-only">{item.name}</span>
           </Link>
