@@ -91,7 +91,9 @@ export function NavigationSection({ hasHeader }) {
             )}
           >
             <item.icon
-              className={clsx({ "size-5 xs:size-3.5 text-xs": hasHeader })}
+              className={clsx(" active:scale-95 transition-all duration-300", {
+                "size-5 xs:size-3.5 text-xs": hasHeader,
+              })}
             />
             <span>{item.name}</span>
           </Link>

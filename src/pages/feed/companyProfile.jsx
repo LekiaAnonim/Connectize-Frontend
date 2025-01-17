@@ -83,7 +83,7 @@ function ProductSidebar({ company }) {
   );
 }
 
-function StatsText({ text }) {
+export function StatsText({ text }) {
   return (
     <div className="bg-gray-200/80 py-2 px-3 rounded-full md:text-xs text-sm shrink-0">
       <span className="text-black font-semibold">{text.split("/")[0]}</span>

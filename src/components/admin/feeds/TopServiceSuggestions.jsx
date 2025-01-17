@@ -64,18 +64,26 @@ export function TopServices() {
   );
 }
 
-export function Suggestions() {
+export function Suggestions({ fn, heading, isSuggested }) {
+  return (
+    <div className="bg-white rounded p-4 space-y-4 w-full h-fit">
+      <h2 className="text-xl font-bold">Suggested</h2>
+      <SuggestionList />
+    </div>
+  );
+}
+
+export function SuggestionList({ hasSeeMore }) {
   const { data: suggestedUsers, isLoading } = useQuery({
     queryKey: ["suggestedUsers"],
     queryFn: getSuggestedUsersForCurrentUser,
   });
 
   return (
-    <div className="bg-white rounded p-4 space-y-4 w-full h-fit">
-      <h2 className="text-xl font-bold">Suggested</h2>
+    <div className="">
       <ul className="space-y-2 divide-y divide-gray-100 p-0">
         {isLoading ? (
-          Array.from({ length: 6 }).map((_, index) => (
+          Array.from({ length: 8 }, (_, index) => (
             <motion.div
               // initial={{ y: 10 }}
               // animate={{ y: 0 }}
@@ -88,39 +96,53 @@ export function Suggestions() {
         ) : suggestedUsers?.length === 0 ? (
           <LightParagraph>No suggested users...</LightParagraph>
         ) : (
-          suggestedUsers?.map((user) => (
-            <SuggestionListItem key={user.id} user={user} />
-          ))
+          suggestedUsers?.map((user) => {
+            const {
+              first_name,
+              last_name,
+              avatar,
+              email: hashtag,
+              verified,
+              id,
+            } = user;
+            return (
+              <li className="flex items-center gap-2.5 pt-2">
+                <Avatar
+                  src={avatar}
+                  name={`${first_name} ${last_name}`}
+                  size="sm"
+                  className={avatarStyle}
+                />
+                <div>
+                  <div className="flex items-center gap-x-0.5">
+                    <Link
+                      to={`/co/${id}`}
+                      className="text-base xs:leading-tight text-gray-700 font-bold capitalize"
+                    >
+                      {first_name} {last_name}
+                    </Link>
+                    {verified && (
+                      <VerifiedIcon color="black" height="18" width="18" />
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-400 m-0">{hashtag}</p>
+                </div>
+              </li>
+            );
+          })
         )}
       </ul>
-    </div>
-  );
-}
-
-function SuggestionListItem({ user }) {
-  const { first_name, last_name, avatar, email: hashtag, verified, id } = user;
-
-  return (
-    <li className="flex items-center gap-2.5 pt-2">
-      <Avatar
-        src={avatar}
-        name={`${first_name} ${last_name}`}
-        size="sm"
-        className={avatarStyle}
-      />
-      <div>
-        <div className="flex items-center gap-x-0.5">
+      {hasSeeMore && suggestedUsers?.length > 10 && (
+        <div className="p-3 pb-0 mt-3 border-t flex justify-center items-center text-center w-full">
           <Link
-            to={`/co/${id}`}
-            className="text-base xs:leading-tight text-gray-700 font-bold capitalize"
+            to=""
+            className="transition-colors duration-300 !text-gray-400 hover:!text-black"
           >
-            {first_name} {last_name}
+            See more
           </Link>
-          {verified && <VerifiedIcon color="black" height="18" width="18" />}
         </div>
-        <p className="text-sm text-gray-400 m-0">{hashtag}</p>
-      </div>
-    </li>
+      )}
+    </div>
   );
 }
 

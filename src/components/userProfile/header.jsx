@@ -12,12 +12,13 @@ const Header = ({ banner, name, logo }) => {
           className="w-full h-60 max-h-[45vh] aspect-auto"
         />
       ) : (
-        <div className="w-full h-40 bg-gold" />
+        <div className="w-full h-40 bg-gradient-to-r from-gold to-transparent from-70%" />
       )}
 
       <Avatar
         src={logo}
         name={name}
+        size="xl"
         className={clsx(
           avatarStyle,
           "!absolute !left-[7%] md:!left-[3%]  !size-[90px] lg:!size-[120px]",
