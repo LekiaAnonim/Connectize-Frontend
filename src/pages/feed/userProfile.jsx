@@ -35,7 +35,7 @@ export default function UserProfile() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (isLoading) return <PageLoading />;
+  if (isLoading) return <PageLoading hasLogo={false} />;
 
   if (!paramUser) return <NoPage />;
 
