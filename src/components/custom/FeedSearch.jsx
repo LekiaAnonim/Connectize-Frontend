@@ -9,10 +9,17 @@ function FeedSearch({ className }) {
   const { updateSearchParams, searchParams } = useCustomSearchParams();
 
   const searchQuery = searchParams.get("search_query");
+
   const handleSearch = (evt) => {
     const value = evt.currentTarget.value;
 
-    updateSearchParams({ search_query: value });
+    if (evt.key === "Enter") {
+      if (value.trim()) {
+        updateSearchParams({ search_query: value });
+      } else {
+        updateSearchParams({ search_query: null });
+      }
+    }
   };
   return (
     <>
