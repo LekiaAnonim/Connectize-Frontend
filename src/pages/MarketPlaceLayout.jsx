@@ -6,7 +6,7 @@ import clsx from "clsx";
 
 const MarketPlaceLayout = () => {
   return (
-    <main className={clsx("bg-background")}>
+    <main className={clsx("bg-background min-h-screen")}>
       <Navbar />
       <section className="max-md:container flex flex-col items-start md:flex-row p-3 gap-4 xl:!gap-5">
         <Sidebar />

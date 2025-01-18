@@ -21,6 +21,7 @@ import { MarkdownComponent } from "../../MarkDownComponent";
 import { baseURL } from "../../../lib/helpers";
 import { Link } from "react-router-dom";
 import TimeAgo from "../../TimeAgo";
+import CompanyName from "../../company/CompanyName";
 
 function DiscoverPosts() {
   const { refetchInterval } = useCustomQuery();
@@ -138,15 +139,10 @@ export const DiscoverPostItem = ({
           />
 
           <section className="flex max-xs:flex-col xs:items-center gap-0.5 xs:gap-1">
-            <div className="flex">
-              <Link
-                to={"/" + postItem?.company?.company_name}
-                className="text-lg xs:text-base md:text-sm lg:text-base font-bold break-all line-clamp-1"
-              >
-                {postItem?.company?.company_name}
-              </Link>
-              {postItem?.company?.verify && <VerifiedIcon color="black" />}
-            </div>
+            <CompanyName
+              name={postItem?.company?.company_name}
+              verified={postItem?.company?.verify}
+            />
             <small className="text-gray-400 lowercase shrink-0">
               <Link to={`/co/${postItem?.user?.id}`}>
                 @{postItem.user.first_name}{" "}
