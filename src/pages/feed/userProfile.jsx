@@ -31,7 +31,7 @@ export default function UserProfile() {
   useEffect(() => {
     document.title = `${paramUser?.first_name || paramUser?.email || ""} ${
       paramUser?.last_name || ""
-    }  - Connectize`;
+    } Connectize`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
