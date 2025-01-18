@@ -42,12 +42,23 @@ export function NavigationSection({ hasHeader }) {
                 "bg-mid_grey pointer-events-none": item.to === pathname,
                 "!text-gold rounded": item.to === pathname && !hasHeader,
                 "!text-white": item.to === pathname && hasHeader,
-                "!text-gray-600": item.to !== pathname,
+                "!text-gray-500": item.to !== pathname,
                 "flex-col text-xs xs:text-[.65rem] ": hasHeader,
               }
             )}
           >
-            <ButtonWithTooltipIcon IconName={item.icon} tip={item.name} />
+            <ButtonWithTooltipIcon
+              IconName={item.icon}
+              tip={item.name}
+              iconClassName={clsx(
+                "hover:!text-mid_grey text-xl !size-5 xs:!size-4",
+                {
+                  "!text-gold rounded": item.to === pathname && !hasHeader,
+                  "!text-white": item.to === pathname && hasHeader,
+                  "!text-gray-500": item.to !== pathname,
+                }
+              )}
+            />
             <span className="max-sm:sr-only">{item.name}</span>
           </Link>
         </li>

@@ -381,7 +381,7 @@ export function ButtonWithTooltipIcon({
       >
         {IconName && !loading && (
           <IconName
-            className={clsx(iconClassName, {
+            className={clsx("", iconClassName, {
               "xs:!size-4 !size-6 xs:!text-[14px] !text-[20px]": !iconClassName,
             })}
           />
