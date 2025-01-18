@@ -34,7 +34,7 @@ export default function CompanyProfile() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (isLoading) return <PageLoading />;
+  if (isLoading) return <PageLoading hasLogo={false} />;
 
   if (!company) return <NoPage />;
 
