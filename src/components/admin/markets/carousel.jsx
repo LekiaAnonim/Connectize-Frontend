@@ -25,9 +25,9 @@ const Card = memo(({ product }) => {
       <div className="absolute top-2 left-3 bg-custom_grey/70 rounded-full size-5 border-2" />
       <div className="text-white flex items-center justify-between absolute left-0 bottom-0 pl-4 pr-1 pb-4 pt-8 gap-2 bg-gradient-to-t from-black/70 to-transparent w-full">
         <h3 className="max-w-[60%]">
-          {product.title || "Efficiency Unlashed: Mid-Tier Blend"}
+          {product?.title || "Efficiency Unlashed: Mid-Tier Blend"}
         </h3>
-        <ChatSellerLink text="Visit store" to={`/products/${product.id}`} />
+        <ChatSellerLink text="Visit store" to={`/products/${product?.id}`} />
       </div>
     </motion.div>
   );
@@ -63,7 +63,7 @@ function Carousel() {
 
       <section className="space-y-4">
         <HeadingText>Recommended</HeadingText>
-        <PostSlider array={[1]}>
+        <PostSlider array={recommendedProducts}  >
           {recommendedProducts?.map((product) => (
             <SwiperSlide key={product.id}>
               <Card product={product} />

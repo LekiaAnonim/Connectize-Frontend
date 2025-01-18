@@ -39,7 +39,7 @@ export const feedNavItems = [
   { name: "Messages", to: "/messages", icon: Message },
   { name: "Representatives", to: "/representatives", icon: UserGroup },
   { name: "Companies", to: "/companies", icon: CompanyIcon },
-  { name: "Services", to: "/services", icon: DesignServices },
+  // { name: "Services", to: "/services", icon: DesignServices },
   { name: "Market", to: "/market", icon: StoreIcon },
   { name: "Analysis", to: "/analysis", icon: ChartBar },
 ];

@@ -7,7 +7,6 @@ import { logOutCurrentUser } from "../api-services/users";
 import clsx from "clsx";
 import { feedNavItems } from "../lib/data";
 import { LogoutOutlined } from "@ant-design/icons";
-import { LinkWithTooltipIcon } from "./userProfile/Navbar";
 import { ButtonWithTooltipIcon } from "./admin/feeds/DiscoverPosts";
 
 export function NavigationSection({ hasHeader }) {
