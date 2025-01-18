@@ -19,10 +19,6 @@ import { motion } from "framer-motion";
 const sortOptions = ["name", "companies", "products", "location"];
 
 export default function CompaniesPage() {
-  const [searchParams] = useSearchParams();
-  const { updateSearchParams } = useCustomSearchParams();
-
-  const selectedSortOption = searchParams.get("sort_by") || "name";
   // const currentPage = Number(searchParams.get("page")) || 1;
   const { data: companiesList, isLoading } = useQuery({
     queryKey: ["companiesList"],
@@ -31,6 +27,23 @@ export default function CompaniesPage() {
 
   if (isLoading)
     return <PageLoading hasLogo={false} text="Getting companies" />;
+
+  return (
+    <section className="space-y-4">
+      <Heading companyLength={companiesList?.count} />
+      <CompaniesArray />
+    </section>
+  );
+}
+
+export const CompaniesArray = ({ hasFilter = true }) => {
+  const { data: companiesList } = useQuery({
+    queryKey: ["companiesList"],
+    queryFn: getAllCompanies,
+  });
+  const { updateSearchParams, searchParams } = useCustomSearchParams();
+
+  const selectedSortOption = searchParams.get("sort_by") || "name";
 
   const sortedCompanies = companiesList?.results.sort((a, b) => {
     switch (selectedSortOption) {
@@ -44,12 +57,9 @@ export default function CompaniesPage() {
         return a.company_name.localeCompare(b?.company_name);
     }
   });
-
   return (
     <section className="space-y-4">
-      <Heading companyLength={companiesList?.count} />
-
-      <section className="space-y-4">
+      {hasFilter && (
         <section className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-semibold">Sort By</h2>
 
@@ -74,72 +84,72 @@ export default function CompaniesPage() {
             })}
           </div>
         </section>
+      )}
 
-        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {sortedCompanies?.map((company) => {
-            return (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white p-2 rounded-md h-72 flex flex-col"
-              >
-                <div className="flex gap-2 items-center">
-                  <Avatar
-                    className={avatarStyle}
-                    size="xl"
-                    src={company?.logo || "/images/default-company-logo.png"}
+      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        {sortedCompanies?.map((company) => {
+          return (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white p-2 rounded-md h-72 flex flex-col"
+            >
+              <div className="flex gap-2 items-center">
+                <Avatar
+                  className={avatarStyle}
+                  size="xl"
+                  src={company?.logo || "/images/default-company-logo.png"}
+                  name={company?.company_name}
+                />
+
+                <div>
+                  <CompanyName
                     name={company?.company_name}
+                    verified={company?.verify}
                   />
-
-                  <div>
-                    <CompanyName
-                      name={company?.company_name}
-                      verified={company?.verify}
-                    />
-                    {company?.organization_type && (
-                      <div className="flex mb-1">
-                        <span className="!line-clamp-1 xs:text-sm sm:text-xs">
-                          {company?.organization_type}
-                        </span>
-                      </div>
-                    )}
-                    <div className="flex items-center text-gray-400">
-                      <LocationOnOutlined className="sm:!size-4 !size-5" />
-                      <span className="text-sm sm:text-xs">
-                        {company?.address} {company?.city}, {company?.state},{" "}
-                        {company?.country}.
+                  {company?.organization_type && (
+                    <div className="flex mb-1">
+                      <span className="!line-clamp-1 xs:text-sm sm:text-xs">
+                        {company?.organization_type}
                       </span>
                     </div>
+                  )}
+                  <div className="flex items-center text-gray-400">
+                    <LocationOnOutlined className="sm:!size-4 !size-5" />
+                    <span className="text-sm sm:text-xs">
+                      {company?.address} {company?.city}, {company?.state},{" "}
+                      {company?.country}.
+                    </span>
                   </div>
                 </div>
+              </div>
 
-                <div className="line-clamp-3 p-2 shrink-0">
-                  <LightParagraph>{company?.about} </LightParagraph>
-                </div>
+              <div className="line-clamp-3 p-2 shrink-0">
+                <LightParagraph>{company?.about} </LightParagraph>
+              </div>
 
-                <div className="h-full" />
+              <div className="h-full" />
 
-                <div className="py-4 border-t mt-4 flex items-center justify-between">
-                  {company?.reviews ? (
-                    <ConJoinedImages
-                      size={30}
-                      sizeVariant="sm"
-                      array={company?.reviews.slice(0, 5).map((post) => ({
-                        name: `${post?.user?.first_name} ${post?.user?.last_name}`,
-                        src: baseURL + post?.user?.avatar,
-                        href: `/co/${post?.user?.id}`,
-                      }))}
-                    />
-                  ) : (
-                    <div />
-                  )}
-                  <ConnectButton />
-                </div>
-              </motion.div>
-            );
-          })}
-        </section>
+              <div className="py-4 border-t mt-4 flex items-center justify-between">
+                {company?.reviews ? (
+                  <ConJoinedImages
+                    size={30}
+                    sizeVariant="sm"
+                    array={company?.reviews.slice(0, 5).map((post) => ({
+                      name: `${post?.user?.first_name} ${post?.user?.last_name}`,
+                      src: baseURL + post?.user?.avatar,
+                      href: `/co/${post?.user?.id}`,
+                    }))}
+                  />
+                ) : (
+                  <div />
+                )}
+                <ConnectButton />
+              </div>
+            </motion.div>
+          );
+        })}
       </section>
     </section>
   );
-}
+};

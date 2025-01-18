@@ -107,7 +107,7 @@ function ProductSidebar({ company }) {
           />
         </ul>
       </ProfileSection>
-      <ProfileSection title="People Associated" className="h-fit lg:w-1/3">
+      <ProfileSection title="People Associated" className="h-fit">
         <SuggestionList hasSeeMore />
       </ProfileSection>
       <ListedProducts company={company} />

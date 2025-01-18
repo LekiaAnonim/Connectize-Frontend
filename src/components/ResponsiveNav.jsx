@@ -3,7 +3,7 @@ import { useNav } from "../context/navContext";
 import { ChevronLeft, Menu } from "@mui/icons-material";
 import clsx from "clsx";
 import { ChartBar, Setting } from "../icon";
-import FeedSearch from "./admin/feeds/FeedSearch";
+import FeedSearch from "./custom/FeedSearch";
 import { NotificationPopOver } from "./notifications";
 import { LinkWithTooltipIcon } from "./userProfile/Navbar";
 import { Avatar } from "@chakra-ui/react";

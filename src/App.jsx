@@ -35,6 +35,7 @@ import NotFound from "./pages/not-found";
 import MessagesPage from "./pages/messages";
 import RepresentativesPage from "./pages/representatives";
 import CompaniesPage from "./pages/companies";
+import Search from "./pages/search";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
             {/* User Profile */}
             <Route path="co/:userId" element={<UserProfile />} />
             {/* Company Profile */}
+            <Route path="search" element={<Search />} />
             <Route path=":company" element={<CompanyProfile />} />
             <Route path="analysis" element={<Analysis />} />
             <Route path="messages" element={<MessagesPage />} />

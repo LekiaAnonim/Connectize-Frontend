@@ -5,7 +5,7 @@ import Headroom from "react-headroom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-import FeedSearch from "../../components/admin/feeds/FeedSearch";
+import FeedSearch from "../custom/FeedSearch";
 import { NotificationPopOver } from "../../components/notifications";
 import { Link } from "react-router-dom";
 import clsx from "clsx";

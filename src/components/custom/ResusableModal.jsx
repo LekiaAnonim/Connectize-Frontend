@@ -14,7 +14,7 @@ import {
 const ReusableModal = ({
   isOpen,
   onClose,
-  title = "Modal Title",
+  title,
   children,
   footerContent,
   size = "md",
@@ -22,7 +22,7 @@ const ReusableModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} size={size}>
       <ModalOverlay />
-      <ModalContent className="rounded-lg shadow-lg">
+      <ModalContent className="rounded-lg shadow-lg !mx-2">
         <ModalHeader className="text-lg font-bold text-gray-800">
           {title}
         </ModalHeader>
@@ -31,7 +31,11 @@ const ReusableModal = ({
         <ModalBody className="text-gray-700">{children}</ModalBody>
         <ModalFooter className="flex justify-end space-x-2">
           {footerContent || (
-            <Button colorScheme="blue" onClick={onClose} className="px-4 py-2">
+            <Button
+              colorScheme=""
+              onClick={onClose}
+              className="px-4 py-2 !bg-gold !text-black"
+            >
               Close
             </Button>
           )}

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import DOMPurify from "dompurify";
-import ReusableModal from "./ResusableModal";
+import ReusableModal from "./custom/ResusableModal";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
