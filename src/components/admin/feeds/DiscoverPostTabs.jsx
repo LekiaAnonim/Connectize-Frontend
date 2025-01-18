@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import {
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Avatar,
+} from "@chakra-ui/react";
 import clsx from "clsx";
 import {
   Bookmark,
@@ -10,7 +17,7 @@ import {
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import { useMediaQuery } from "react-responsive";
-import { ConJoinedImages } from "../../ResponsiveNav";
+import { avatarStyle, ConJoinedImages } from "../../ResponsiveNav";
 import { Link } from "react-router-dom";
 import { bookmarkService, getServices } from "../../../api-services/services";
 import { useAuth } from "../../../context/userContext";
@@ -222,11 +229,12 @@ export const PostCard = ({
       <div className="flex items-center justify-between mt-4 pt-3 border-t">
         <div className="flex gap-2 items-center">
           <Link to={`/${companyName}`} className="relative">
-            <img
-              src={logo || "/images/logo.png"}
-              alt="bmw"
-              className="rounded-full"
-              width={50}
+            <Avatar
+              src={logo || "images/default-company-logo.png"}
+              alt={companyName}
+              name={companyName}
+              className={avatarStyle}
+              size="md"
             />
             {verified && <VerifiedIcon className="absolute bottom-0 right-0" />}
           </Link>

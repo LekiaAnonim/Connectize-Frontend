@@ -32,53 +32,55 @@ function Summary({ company }) {
 }
 
 function SummaryTabs({ company }) {
+  const tabsHeading = ["Activities", "Services", "Products", "Reviews"];
+
   const tabsStyle = "w-full rounded-full font-medium md:!text-xs lg:!text-sm";
   const selectedStyle = { color: "black", bg: "#F1C644" };
   return (
     <Tabs variant="solid-rounded" className="space-y-4">
-      <TabList className="gap-1 px-2">
-        <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
-          Markets
-        </Tab>
-        <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
-          Services
-        </Tab>
-        <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
-          Products
-        </Tab>
-        <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
-          Reviews
-        </Tab>
+      <TabList className="gap-1">
+        {tabsHeading.map((item, index) => (
+          <Tab
+            key={index}
+            className={clsx("", tabsStyle)}
+            _selected={selectedStyle}
+          >
+            {item}
+          </Tab>
+        ))}
       </TabList>
 
       <TabPanels className="!w-full">
-        <TabPanel className="p-0 !w-full">
+        <TabPanel className="!p-0 !w-full">
           <section className="space-y-6">
-            <h1 className="text-2xl font-semibold px-3 py-2">Activities</h1>
+            {/* <div className="space-y-3">
+              <h1 className="text-2xl font-semibold p-1">Activities</h1>
+            </div> */}
             <CreatePost />
             <RecommendedProducts />
             <DiscoverPosts />
           </section>
         </TabPanel>
-        <TabPanel className="p-0 !w-full">
+        <TabPanel className="!p-0 !w-full">
           <div className="bg-white rounded-md p-2 grid gap-x-3 gap-y-4">
-            {company.services?.map((service, index) => (
+            {company?.services?.map((service, index) => (
               <PostCard
                 key={index}
-                companyName={service.company}
+                companyName={service?.company}
                 verified={service?.companyInfo?.verified}
                 logo={service?.companyInfo?.logo}
-                title={service.title}
-                summary={service.sub_title}
-                url={`/services/${service.id}`}
+                title={service?.title}
+                summary={service?.sub_title}
+                url={`/services/${service?.id}`}
+                whole={service}
                 isService
               />
             ))}
           </div>
         </TabPanel>
-        <TabPanel className="p-0 !w-full">
+        <TabPanel className="!p-0 !w-full">
           <div className="p-2 grid gap-x-3 gap-y-4 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3">
-            {company.products?.map((product, index) => (
+            {company?.products?.map((product, index) => (
               <ProductListCard
                 key={index}
                 title={product.title}
@@ -90,7 +92,7 @@ function SummaryTabs({ company }) {
             ))}
           </div>
         </TabPanel>
-        <TabPanel className="p-0 !w-full">
+        <TabPanel className="!p-0 !w-full">
           <Reviews />
         </TabPanel>
       </TabPanels>

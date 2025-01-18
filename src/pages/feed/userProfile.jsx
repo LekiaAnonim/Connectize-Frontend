@@ -125,7 +125,7 @@ export default function UserProfile() {
   );
 }
 
-const ProfileAboutList = ({ title, value, Icon }) => {
+export const ProfileAboutList = ({ title, value, Icon }) => {
   return (
     <li className="flex gap-2 items-start pt-4">
       <Icon className="!size-6 xs:!size-5" />

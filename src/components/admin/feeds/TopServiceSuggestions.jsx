@@ -11,6 +11,7 @@ import { avatarStyle } from "../../ResponsiveNav";
 import { getServices } from "../../../api-services/services";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import clsx from "clsx";
 
 const TopServiceSuggestions = () => {
   return (
@@ -64,9 +65,11 @@ export function TopServices() {
   );
 }
 
-export function Suggestions({ fn, heading, isSuggested }) {
+export function Suggestions({ fn, heading, isSuggested, className }) {
   return (
-    <div className="bg-white rounded p-4 space-y-4 w-full h-fit">
+    <div
+      className={clsx("bg-white rounded p-4 space-y-4 w-full h-fit", className)}
+    >
       <h2 className="text-xl font-bold">Suggested</h2>
       <SuggestionList />
     </div>

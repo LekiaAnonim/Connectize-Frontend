@@ -57,7 +57,7 @@ const Navbar = () => {
         className="md:hidden bg-gold fixed bottom-0 left-0 w-full z-[99999]"
         initial={{ y: 0 }}
         animate={{ y: showBottomNav ? 0 : 100 }}
-        transition={{ type: "tween", stiffness: 300 }}
+        transition={{ type: "spring", stiffness: 150 }}
       >
         <section className="container">
           <NavigationSection hasHeader />

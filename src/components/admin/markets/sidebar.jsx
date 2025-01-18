@@ -34,7 +34,7 @@ function Sidebar() {
       {/* <CloseOverlay /> */}
       <section
         className={clsx(
-          "max-md:hidden bg-white rounded-md p-4 shrink-0 max-w-[300px] md:w-[240px] lg:w-[260px] 2xl:w-[280px] h-screen scrollbar-hidden max-md:!py-6 max-md:shadow md:sticky md:top-2 overflow-y-auto md:max-h-screen space-y-4"
+          "max-md:hidden bg-white rounded-md py-4 px-2 shrink-0 max-w-[300px] md:w-[240px] lg:w-[260px] 2xl:w-[280px] h-screen scrollbar-hidden max-md:!py-6 max-md:shadow md:sticky md:top-2 overflow-y-auto md:max-h-screen space-y-4"
         )}
       >
         <UserProfile currentUser={currentUser} />
@@ -52,7 +52,7 @@ const UserProfile = ({ currentUser }) => {
       <Link to={`/co/${currentUser?.id}`}>
         <Avatar
           name={`${currentUser?.first_name} ${currentUser?.last_name}`}
-          src={currentUser?.avatar}
+          src={currentUser?.avatar || ""}
           className={clsx(avatarStyle)}
           size="md"
         />
@@ -67,7 +67,7 @@ const UserProfile = ({ currentUser }) => {
           </Link>
           <VerifiedIcon color="black" />
         </div>
-        <span className="text-sm text-gray-400">
+        <span className="text-[.75rem] text-gray-400 !-mt-0.5 block">
           {capitalizeFirst(currentUser?.role || "")}{" "}
         </span>
       </div>

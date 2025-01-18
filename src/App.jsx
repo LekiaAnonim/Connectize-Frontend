@@ -49,7 +49,10 @@ function App() {
               <Route path="/" element={<NewsFeed />} />
               <Route path="/posts/:id" element={<SinglePostPage />} />
             </Route>
+            {/* User Profile */}
             <Route path="co/:userId" element={<UserProfile />} />
+            {/* Company Profile */}
+            <Route path=":company" element={<CompanyProfile />} />
             <Route path="analysis" element={<Analysis />} />
             <Route path="messages" element={<MessagesPage />} />
             <Route path="representatives" element={<RepresentativesPage />} />
@@ -63,6 +66,7 @@ function App() {
             <Route path="services/:id" element={<ServiceOverView />} />
             <Route path="services/add" element={<ServiceAdmin />} />
           </Route>
+
           {/* authentication routes */}
           <Route path="/" element={<AuthLayout />}>
             <Route path="/signup" element={<Signup />} />
@@ -87,10 +91,7 @@ function App() {
             <Route path="overview" element={<Overview />} />
           </Route>
 
-          {/* Company */}
-          <Route path=":company" element={<CompanyProfile />} />
-
-          {/* Company */}
+          {/* Create Company */}
           <Route element={<CompanyLayout />}>
             <Route path="create-company" element={<CreateCompany />} />
             <Route path="company-documents" element={<CompanyDocuments />} />

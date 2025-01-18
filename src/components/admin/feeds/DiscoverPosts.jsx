@@ -133,7 +133,7 @@ export const DiscoverPostItem = ({
           <Avatar
             name={postItem?.company?.company_name}
             size="sm"
-            src={postItem?.company?.logo}
+            src={postItem?.company?.logo || "images/default-company-logo.png"}
             className={avatarStyle}
           />
 
@@ -197,7 +197,7 @@ export const DiscoverPostItem = ({
           array={postItem?.likes.slice(0, 5).map((post) => ({
             name: `${post?.user?.first_name} ${post?.user?.last_name}`,
             src: baseURL + post?.user?.avatar,
-            href: "/",
+            href: `/co/${post?.user?.id}`,
           }))}
           sizeVariant="sm"
         />

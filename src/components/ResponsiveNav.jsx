@@ -60,12 +60,12 @@ export const JoinedUserCompanyImages = () => {
         size={35}
         array={[
           {
-            src: user?.avatar,
+            src: user?.avatar || "",
             name: `${user?.first_name || ""} ${user?.last_name || ""}`,
             href: `/co/${user?.id}`,
           },
           {
-            src: companies?.[0]?.logo || "",
+            src: companies?.[0]?.logo || "images/default-company-logo.png",
             name: companies?.[0]?.company_name || "",
             href:
               companies?.length > 0
