@@ -184,7 +184,7 @@ export const PostCard = ({
       animate={{ opacity: 1 }}
       className="p-4 lg:!px-3 bg-white rounded-md flex flex-col h-80"
     >
-      <div className="flex items-start justify-between gap-2 ">
+      <div className="flex items-start justify-between gap-2">
         <h3 className="font-bold capitalize text-lg line-clamp-1">
           {title || "Remote Monitoring and Control"}
         </h3>

@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import Heading from "../../components/company/Heading";
 import { useQuery } from "@tanstack/react-query";
 import { getAllCompanies } from "../../api-services/companies";
 import PageLoading from "../../components/PageLoading";
-import { Avatar, Badge, Button } from "@chakra-ui/react";
+import { Avatar, Button } from "@chakra-ui/react";
 import clsx from "clsx";
-import { avatarStyle } from "../../components/ResponsiveNav";
+import { avatarStyle, ConJoinedImages } from "../../components/ResponsiveNav";
 import CompanyName from "../../components/company/CompanyName";
 import { LocationOnOutlined } from "@mui/icons-material";
 import LightParagraph from "../../components/ParagraphText";
 import { useSearchParams } from "react-router-dom";
 import { useCustomSearchParams } from "../../hooks/useCustomSearchParams";
 import ConnectButton from "../../components/ConnectButton";
+import { baseURL } from "../../lib/helpers";
+
+import { motion } from "framer-motion";
 
 const sortOptions = ["name", "companies", "products", "location"];
 
@@ -75,7 +78,11 @@ export default function CompaniesPage() {
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {sortedCompanies?.map((company) => {
             return (
-              <div className="bg-white p-2 rounded-md">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white p-2 rounded-md h-72 flex flex-col"
+              >
                 <div className="flex gap-2 items-center">
                   <Avatar
                     className={avatarStyle}
@@ -91,12 +98,14 @@ export default function CompaniesPage() {
                     />
                     {company?.organization_type && (
                       <div className="flex mb-1">
-                        <Badge>{company?.organization_type} </Badge>
+                        <span className="!line-clamp-1 xs:text-sm sm:text-xs">
+                          {company?.organization_type}
+                        </span>
                       </div>
                     )}
                     <div className="flex items-center text-gray-400">
-                      <LocationOnOutlined />
-                      <span className="text-sm xs:text-xs">
+                      <LocationOnOutlined className="sm:!size-4 !size-5" />
+                      <span className="text-sm sm:text-xs">
                         {company?.address} {company?.city}, {company?.state},{" "}
                         {company?.country}.
                       </span>
@@ -104,15 +113,29 @@ export default function CompaniesPage() {
                   </div>
                 </div>
 
-                <div className="line-clamp-3 p-2">
+                <div className="line-clamp-3 p-2 shrink-0">
                   <LightParagraph>{company?.about} </LightParagraph>
                 </div>
 
+                <div className="h-full" />
+
                 <div className="py-4 border-t mt-4 flex items-center justify-between">
-                  <div className=""></div>
+                  {company?.reviews ? (
+                    <ConJoinedImages
+                      size={30}
+                      sizeVariant="sm"
+                      array={company?.reviews.slice(0, 5).map((post) => ({
+                        name: `${post?.user?.first_name} ${post?.user?.last_name}`,
+                        src: baseURL + post?.user?.avatar,
+                        href: `/co/${post?.user?.id}`,
+                      }))}
+                    />
+                  ) : (
+                    <div />
+                  )}
                   <ConnectButton />
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </section>
