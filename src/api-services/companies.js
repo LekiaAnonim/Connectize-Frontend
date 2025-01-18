@@ -20,11 +20,12 @@ import { getCurrentUser } from "./users";
 // }
 
 export const getAllCompanies = async () => {
-  const { results: companies } = await makeApiRequest({
+  const companies = await makeApiRequest({
     url: `api/companies/`,
     method: "GET",
   });
-  return companies || [];
+
+  return companies;
 };
 
 export const getCompanies = async () => {
@@ -32,7 +33,7 @@ export const getCompanies = async () => {
   const { results: companies } = await makeApiRequest({
     url: `api/companies/`,
     method: "GET",
-    params: { profile: currentUser.email }, // Send email to filter
+    params: { profile: currentUser?.email }, // Send email to filter
   });
   return companies || [];
 };

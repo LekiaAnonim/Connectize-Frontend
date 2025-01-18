@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { avatarStyle } from "../ResponsiveNav";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/userContext";
+import ConnectButton from "../ConnectButton";
 
 export default function UserProfileHeadings({
   first_name,
@@ -45,9 +46,7 @@ export default function UserProfileHeadings({
           {is_first_time_user ? "Complete your profile" : "Edit profile"}
         </Link>
       ) : (
-        <Button className="!bg-gold w-fit !px-10 !py-1.5 !h-fit !rounded-full transition-all duration-300 active:scale-95 !text-sm">
-          Connect
-        </Button>
+        <ConnectButton />
       )}
     </section>
   );
