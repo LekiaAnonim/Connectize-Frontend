@@ -36,6 +36,7 @@ import MessagesPage from "./pages/messages";
 import RepresentativesPage from "./pages/representatives";
 import CompaniesPage from "./pages/companies";
 import Search from "./pages/search";
+import AssignRepresentative from "./pages/representatives/AssignRepresentative";
 
 function App() {
   return (
@@ -58,6 +59,10 @@ function App() {
             <Route path="analysis" element={<Analysis />} />
             <Route path="messages" element={<MessagesPage />} />
             <Route path="representatives" element={<RepresentativesPage />} />
+            <Route
+              path="representatives/assign"
+              element={<AssignRepresentative />}
+            />
             <Route path="companies" element={<CompaniesPage />} />
             <Route path="market" element={<Market />} />
             <Route path="products/:id" element={<Product />} />

@@ -23,11 +23,15 @@ const ReusableModal = ({
     <Modal isOpen={isOpen} onClose={onClose} size={size}>
       <ModalOverlay />
       <ModalContent className="rounded-lg shadow-lg !mx-2">
-        <ModalHeader className="text-lg font-bold text-gray-800">
-          {title}
-        </ModalHeader>
-        <Divider className="mb-3 mx-auto !w-[96%]" />
-        <ModalCloseButton className="focus:outline-none" />
+        {title && (
+          <>
+            <ModalHeader className="text-lg font-bold text-gray-800">
+              {title}
+            </ModalHeader>
+            <Divider className="mb-3 mx-auto !w-[96%]" />
+            <ModalCloseButton className="focus:!outline-none" />
+          </>
+        )}
         <ModalBody className="text-gray-700">{children}</ModalBody>
         <ModalFooter className="flex justify-end space-x-2">
           {footerContent || (

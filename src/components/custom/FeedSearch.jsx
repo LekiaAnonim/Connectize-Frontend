@@ -4,9 +4,12 @@ import React from "react";
 import { useCustomSearchParams } from "../../hooks/useCustomSearchParams";
 import ReusableModal from "./ResusableModal";
 import { SearchTab } from "../../pages/search";
+import LightParagraph from "../ParagraphText";
+import { Link } from "react-router-dom";
 
 function FeedSearch({ className }) {
-  const { updateSearchParams, searchParams } = useCustomSearchParams();
+  const { updateSearchParams, searchParams, pathname } =
+    useCustomSearchParams();
 
   const searchQuery = searchParams.get("search_query");
 
@@ -26,7 +29,7 @@ function FeedSearch({ className }) {
       <div className="relative">
         <SearchOutlined className="absolute top-1/2 -translate-y-1/2 left-2.5 size-3 text-gray-400" />
         <input
-          type="text"
+          type="search"
           placeholder="Search anything..."
           onKeyUp={handleSearch}
           className={clsx(
@@ -37,10 +40,17 @@ function FeedSearch({ className }) {
       </div>
 
       <ReusableModal
-        isOpen={searchQuery}
+        isOpen={searchQuery && pathname !== "/search"}
         onClose={() => updateSearchParams({ search_query: null })}
-        title={"<FeedSearch />"}
         footerContent={<></>}
+        title={
+          <div className="flex items-baseline gap-1">
+            <span>Search Results for</span>{" "}
+            <Link to={`/search?search_query=${searchQuery}`}>
+              <LightParagraph> {searchQuery}</LightParagraph>
+            </Link>{" "}
+          </div>
+        }
         size="2xl"
       >
         <SearchTab />

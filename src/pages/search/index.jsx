@@ -15,12 +15,12 @@ export default function Search() {
   );
 }
 
-export const SearchTab = () => {
+export const SearchTab = ({ isSearch }) => {
   const tabsHeading = ["Posts", "Companies", "People", "Products", "Services"];
   const tabsPanels = [
     <DiscoverPosts />,
-    <CompaniesArray hasFilter={false} />,
-    <CompaniesArray hasFilter={false} />,
+    <CompaniesArray hasFilter={false} isSearch={isSearch} />,
+    <CompaniesArray hasFilter={false} isSearch={isSearch} />,
     <div className="grid gap-x-3 gap-y-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
       {[1, 2, 3, 4]?.map((service, index) => (
         <ProductListCard key={index} />

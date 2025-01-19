@@ -36,7 +36,7 @@ export default function CompaniesPage() {
   );
 }
 
-export const CompaniesArray = ({ hasFilter = true }) => {
+export const CompaniesArray = ({ hasFilter = true, isSearch }) => {
   const { data: companiesList } = useQuery({
     queryKey: ["companiesList"],
     queryFn: getAllCompanies,
@@ -92,7 +92,10 @@ export const CompaniesArray = ({ hasFilter = true }) => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white p-2 rounded-md h-72 flex flex-col"
+              className={clsx("p-2 rounded-md h-72 flex flex-col", {
+                "bg-white": !isSearch,
+                "bg-background": isSearch,
+              })}
             >
               <div className="flex gap-2 items-center">
                 <Avatar
