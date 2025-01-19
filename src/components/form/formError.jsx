@@ -14,7 +14,7 @@ export default function FormikErrorResponse({
         <>
           <motion.div
             key={formik.errors[name]}
-            initial={{ opacity: 0, y: 5 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             className={clsx("text-xs mt-0.5 mx-0.5", {
               "text-[#9e3818]": formik.errors[name],
