@@ -1,14 +1,43 @@
 import React, { useState } from "react";
 import HeadingText from "../../components/HeadingText";
 import LightParagraph from "../../components/ParagraphText";
-import { Input } from "@chakra-ui/react";
+import { Avatar, Input } from "@chakra-ui/react";
 import clsx from "clsx";
 import { inputClassNames } from "../../components/form/customInput";
 import { motion } from "framer-motion";
 import { SearchOutlined } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
+import { getAllUsers } from "../../api-services/users";
+import { useAuth } from "../../context/userContext";
+import { avatarStyle } from "../../components/ResponsiveNav";
+import { Link } from "react-router-dom";
+import { UserGroup, VerifiedIcon } from "../../icon";
+import Username from "../../components/Username";
+import { PlusIcon } from "@radix-ui/react-icons";
 
 export default function AssignRepresentative() {
   const [username, setUsername] = useState(null);
+  const [representativeRole, setRepresentativeRole] = useState(null);
+  const { user: currentUser } = useAuth();
+
+  const { data: users } = useQuery({
+    queryKey: ["users"],
+    queryFn: getAllUsers,
+  });
+
+  const filteredUsers = users?.filter((user) => {
+    const thisUsername = (user?.first_name + user?.last_name)
+      ?.toString()
+      .toLowerCase();
+    const currentUsername = (currentUser?.first_name + currentUser?.last_name)
+      ?.toString()
+      ?.toLowerCase();
+    return (
+      user?.first_name !== null &&
+      currentUsername !== thisUsername &&
+      thisUsername.includes(username?.toLowerCase().trim())
+    );
+  });
   return (
     <section>
       <section className="space-y-6">
@@ -23,38 +52,80 @@ export default function AssignRepresentative() {
           </LightParagraph>
         </div>
 
-        <div className="">
-          <div className="flex flex-col gap-1 w-full">
-            <label
-              htmlFor="username"
-              className="text-base leading-none px-1 font-semibold"
-            >
-              Username
-            </label>
-            <div className="relative">
-              <SearchOutlined className="size-4 text-gray-400 absolute left-4 z-30 top-1/2 -translate-y-1/2" />
-              <Input
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Find users"
-                className={clsx(
-                  inputClassNames,
-                  "!rounded-full focus:!border-0 inset-none focus:!outline-none !mt-0 indent-6"
-                )}
-              />
-            </div>
-            {username.length > 1 && (
-              <motion.small
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-gray-400 px-1"
-              >
-                Search for: <strong className="text-black">{username}</strong>
-              </motion.small>
-            )}
+        <div className="flex flex-col gap-1 w-full">
+          <label
+            htmlFor="username"
+            className="text-base leading-none px-1 font-semibold w-fit"
+          >
+            Username
+          </label>
+          <div className="relative">
+            <SearchOutlined className="size-4 text-gray-400 absolute left-4 z-30 top-1/2 -translate-y-1/2" />
+            <input
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Find users"
+              className={clsx(
+                "w-full max-w-screen-xs py-1.5 px-3 border border-gray-200 bg-gray-100/70 rounded-full placeholder:text-xs text-sm focus:outline-0 focus:border-gold transition-all duration-300 indent-6"
+              )}
+            />
           </div>
+          {username?.length > 1 && (
+            <motion.small
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-gray-400 px-1"
+            >
+              Search for: <strong className="text-black">{username}</strong>
+            </motion.small>
+          )}
         </div>
+
+        <section className="flex flex-col gap-4">
+          <HeadingText>Users</HeadingText>
+          {filteredUsers?.map((user) => (
+            <motion.section
+              key={user?.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex sm:items-center sm:justify-between max-sm:flex-col gap-4"
+            >
+              <div className="flex gap-2 items-center">
+                <Avatar
+                  src={user?.avatar || ""}
+                  name={user?.first_name + " " + user?.last_name}
+                  size="md"
+                  className={clsx(avatarStyle)}
+                />
+                <div className="flex flex-col">
+                  <Username user={user} />
+
+                  <small className="text-gray-400 !-my-1 line-clamp-2">
+                    {user?.role}
+                  </small>
+                </div>
+              </div>
+
+              <div className="relative w-fit">
+                <UserGroup className="size-4 text-gray-400 absolute left-4 z-30 top-1/2 -translate-y-1/2" />
+                <input
+                  id={user?.id.toString()}
+                  value={representativeRole}
+                  onChange={(e) => setRepresentativeRole(e.target.value)}
+                  placeholder="e.g Human Resources"
+                  className={clsx(
+                    "peer w-80 py-1.5 px-3 border border-gray-200 bg-gray-100/70 rounded-full placeholder:text-xs text-sm focus:outline-0 focus:border-gold transition-all duration-300 indent-6"
+                  )}
+                />
+
+                <button className="absolute right-1 top-1/2 -translate-y-1/2 bg-gold hover:bg-gold/60 active:scale-95 transition-all duration-300 py-1.5 px-4 rounded-full">
+                  <PlusIcon />
+                </button>
+              </div>
+            </motion.section>
+          ))}
+        </section>
       </section>
     </section>
   );
