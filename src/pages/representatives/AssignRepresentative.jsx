@@ -1,26 +1,24 @@
 import React, { useState } from "react";
 import HeadingText from "../../components/HeadingText";
 import LightParagraph from "../../components/ParagraphText";
-import { Avatar, Input } from "@chakra-ui/react";
+import { Avatar } from "@chakra-ui/react";
 import clsx from "clsx";
-import { inputClassNames } from "../../components/form/customInput";
 import { motion } from "framer-motion";
 import { SearchOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { getAllUsers } from "../../api-services/users";
 import { useAuth } from "../../context/userContext";
 import { avatarStyle } from "../../components/ResponsiveNav";
-import { Link } from "react-router-dom";
-import { UserGroup, VerifiedIcon } from "../../icon";
 import Username from "../../components/Username";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { CircleTitleSubtitleSkeleton } from "../../components/admin/feeds/TopServiceSuggestions";
+import RepRoleInput from "../../components/form/RepRoleInput";
 
 export default function AssignRepresentative() {
   const [username, setUsername] = useState(null);
-  const [representativeRole, setRepresentativeRole] = useState(null);
+
   const { user: currentUser } = useAuth();
 
-  const { data: users } = useQuery({
+  const { data: users, isLoading } = useQuery({
     queryKey: ["users"],
     queryFn: getAllUsers,
   });
@@ -38,6 +36,7 @@ export default function AssignRepresentative() {
       thisUsername.includes(username?.toLowerCase().trim())
     );
   });
+
   return (
     <section>
       <section className="space-y-6">
@@ -82,55 +81,46 @@ export default function AssignRepresentative() {
           )}
         </div>
 
-        <section className="">
-          <HeadingText>Users</HeadingText>
-          <section className="divide-y divide-gray-200/70">
-            {filteredUsers?.map((user) => (
-              <motion.section
-                key={user?.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex sm:items-center sm:justify-between max-sm:flex-col gap-4 mb-4 pt-4"
-              >
-                <div className="flex gap-2 items-center">
-                  <Avatar
-                    src={user?.avatar || ""}
-                    name={user?.first_name + " " + user?.last_name}
-                    size="md"
-                    className={clsx(avatarStyle)}
-                  />
-                  <div className="flex flex-col">
-                    <Username user={user} />
+        {filteredUsers?.length > 0 && (
+          <section className="">
+            <HeadingText weight="semibold">Users</HeadingText>
+            <section className="divide-y divide-gray-200/70">
+              {isLoading
+                ? Array.from({ length: 5 }, (item) => (
+                    <CircleTitleSubtitleSkeleton key={item} />
+                  ))
+                : filteredUsers?.slice(0, 10).map((user) => (
+                    <motion.section
+                      key={user?.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex sm:items-center sm:justify-between max-sm:flex-col gap-4 mb-4 pt-4"
+                    >
+                      <div className="flex gap-2 items-center">
+                        <Avatar
+                          src={user?.avatar || ""}
+                          name={user?.first_name + " " + user?.last_name}
+                          size="md"
+                          className={clsx(avatarStyle)}
+                        />
+                        <div className="flex flex-col">
+                          <Username user={user} />
 
-                    <small className="text-gray-400 !-my-1 line-clamp-2">
-                      {user?.role}
-                    </small>
-                  </div>
-                </div>
+                          <small className="text-gray-400 !-my-1 line-clamp-2">
+                            {user?.role}
+                          </small>
+                        </div>
+                      </div>
 
-                <div className="relative w-fit">
-                  <UserGroup className="size-4 text-gray-400 absolute left-4 z-30 top-1/2 -translate-y-1/2" />
-                  <input
-                    id={user?.id.toString()}
-                    value={representativeRole}
-                    onChange={(e) => setRepresentativeRole(e.target.value)}
-                    placeholder="e.g Human Resources"
-                    className={clsx(
-                      "peer w-80 py-1.5 px-10 border border-gray-200 bg-gray-100/70 rounded-full placeholder:text-xs text-sm focus:outline-0 focus:border-gold transition-all duration-300"
-                    )}
-                  />
-
-                  <button className="absolute right-1 top-1/2 -translate-y-1/2 bg-gold hover:bg-gold/60 active:scale-95 transition-all duration-300 py-1.5 px-4 rounded-full">
-                    <PlusIcon />
-                  </button>
-                </div>
-              </motion.section>
-            ))}
+                      <RepRoleInput user={user} />
+                    </motion.section>
+                  ))}
+            </section>
           </section>
-        </section>
+        )}
 
         <section className="flex flex-col">
-          <HeadingText>Representatives</HeadingText>
+          <HeadingText weight="semibold">Representatives</HeadingText>
           <section className="divide-y divide-gray-200/70">
             {filteredUsers?.map((user) => (
               <motion.section

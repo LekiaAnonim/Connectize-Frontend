@@ -298,7 +298,7 @@ function CreatePost() {
           onClick={handleCreatePost}
           disabled={isLoading}
         >
-          {isLoading ? "creating post" : "create post"}
+          {isLoading ? "Creating Post" : "Create Post"}
         </button>
       </div>
     </div>

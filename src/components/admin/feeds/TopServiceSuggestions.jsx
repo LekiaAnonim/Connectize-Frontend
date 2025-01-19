@@ -93,7 +93,7 @@ export function SuggestionList({ hasSeeMore }) {
               // transition={{ repeat: Infinity, delay: index * 0.2, duration: 2 }}
               key={index}
             >
-              <CirceTitleSubtitleSkeleton />
+              <CircleTitleSubtitleSkeleton />
             </motion.div>
           ))
         ) : suggestedUsers?.length === 0 ? (
@@ -149,7 +149,7 @@ export function SuggestionList({ hasSeeMore }) {
   );
 }
 
-export const CirceTitleSubtitleSkeleton = () => (
+export const CircleTitleSubtitleSkeleton = () => (
   <li className="flex items-center gap-3 pt-3 mb-3">
     <div className="size-8 rounded-full skeleton"></div>
     <div className="flex-1">

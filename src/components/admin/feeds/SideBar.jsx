@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCompanies } from "../../../api-services/companies";
 import LightParagraph from "../../ParagraphText";
 import CloseOverlay from "../../CloseOverlay";
-import { CirceTitleSubtitleSkeleton } from "../feeds/TopServiceSuggestions";
+import { CircleTitleSubtitleSkeleton } from "../feeds/TopServiceSuggestions";
 import { Avatar } from "@chakra-ui/react";
 import { avatarStyle } from "../../ResponsiveNav";
 
@@ -71,7 +71,7 @@ function Companies({ toggleNav }) {
       <ul className="space-y-2 divide-y divide-gray-100/80 xs:text-sm p-0">
         {isLoading ? (
           Array.from({ length: 4 }).map((_, index) => (
-            <CirceTitleSubtitleSkeleton key={index} />
+            <CircleTitleSubtitleSkeleton key={index} />
           ))
         ) : companies?.length === 0 ? (
           <LightParagraph>No company yet...</LightParagraph>

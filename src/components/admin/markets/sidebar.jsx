@@ -111,7 +111,7 @@ const UserProfile = ({ currentUser }) => {
 //       <div className="space-y-2 xs:text-sm p-2">
 //         {isLoading ? (
 //           Array.from({ length: 5 }, (_, index) => (
-//             <CirceTitleSubtitleSkeleton key={index} />
+//             <CircleTitleSubtitleSkeleton key={index} />
 //           ))
 //         ) : !categories?.length ? (
 //           <LightParagraph>No categories available</LightParagraph>
