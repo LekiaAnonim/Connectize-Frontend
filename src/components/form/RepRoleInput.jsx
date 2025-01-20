@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { UserGroup } from "../../icon";
 import clsx from "clsx";
 import { PlusIcon } from "@radix-ui/react-icons";
@@ -8,6 +8,8 @@ import { getCompanies } from "../../api-services/companies";
 import { assignRepresentative } from "../../api-services/representatives";
 import { toast } from "sonner";
 import { Spinner } from "@chakra-ui/react";
+import { useCustomQuery } from "../../context/queryContext";
+import { debounce } from "lodash";
 
 export default function RepRoleInput({ user }) {
   const emptyRepsRole = "Representative role cannot be empty";
@@ -15,12 +17,17 @@ export default function RepRoleInput({ user }) {
   const [roleError, setRoleError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { setRefetchInterval } = useCustomQuery();
+
   const { data: companies } = useQuery({
     queryKey: ["companies"],
     queryFn: getCompanies,
   });
-  const handleAddRepresentative = async () => {
-    if (!companies) {
+
+  const memoizedCompanies = useMemo(() => companies, [companies]);
+
+  const handleAddRepresentative = useCallback(async () => {
+    if (!memoizedCompanies) {
       toast.info("You have not created a company yet");
       return;
     }
@@ -29,29 +36,39 @@ export default function RepRoleInput({ user }) {
       setRoleError(emptyRepsRole);
       return;
     }
-    console.log(companies);
 
     const repsData = {
       user,
-      company: companies[0],
+      company: memoizedCompanies[0],
       role: representativeRole,
     };
 
     setIsLoading(true);
 
     try {
-      await assignRepresentative(repsData);
-      toast.success(
-        `A representation request has been sent to ${user?.first_name}`
-      );
-      setRepresentativeRole("");
-      setRoleError(null);
+      const value = await assignRepresentative(repsData);
+      if (value?.user) {
+        setRepresentativeRole("");
+        setRoleError(null);
+        setRefetchInterval(1000);
+
+        setTimeout(() => setRefetchInterval(false), 1000);
+      }
     } catch (error) {
       console.error(`Representative error ${error}`);
     } finally {
       setIsLoading(false);
     }
+  }, [memoizedCompanies, representativeRole, user, setRefetchInterval]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleInputChange = (e) => {
+    setRepresentativeRole(e.target.value);
+    setRoleError(null);
+
+    if (e.target.value.trim() === "") setRoleError(emptyRepsRole);
   };
+
   return (
     <section>
       <div className="relative w-fit">
@@ -59,12 +76,7 @@ export default function RepRoleInput({ user }) {
         <input
           id={user?.id.toString()}
           value={representativeRole}
-          onChange={(e) => {
-            setRepresentativeRole(e.target.value);
-            setRoleError(null);
-
-            if (e.target.value.trim() === "") setRoleError(emptyRepsRole);
-          }}
+          onChange={handleInputChange}
           placeholder="e.g Human Resources"
           className={clsx(
             "peer w-80 py-1.5 px-10 border border-gray-200 bg-gray-100/70 rounded-full placeholder:text-xs text-sm focus:outline-0 focus:border-gold transition-all duration-300"

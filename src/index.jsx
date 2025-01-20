@@ -16,13 +16,13 @@ root.render(
     <React.StrictMode>
       <MyProvider>
         <App />
-        <Toaster
-          position="top-center"
-          closeButton
-          duration={5}
-          pauseWhenPageIsHidden
-        />
       </MyProvider>
+      <Toaster
+        position="top-center"
+        closeButton
+        duration={10000}
+        pauseWhenPageIsHidden
+      />
     </React.StrictMode>
   </BrowserRouter>
 );

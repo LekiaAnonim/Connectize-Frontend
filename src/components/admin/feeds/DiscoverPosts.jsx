@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { Heart, VerifiedIcon } from "../../../icon";
+import { Heart } from "../../../icon";
 import { avatarStyle, ConJoinedImages } from "../../ResponsiveNav";
 import { DownloadIcon, HeartIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { MessageOutlined, ShareAltOutlined } from "@ant-design/icons";

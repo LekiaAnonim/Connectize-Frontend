@@ -109,7 +109,7 @@ export function SuggestionList({ hasSeeMore }) {
               id,
             } = user;
             return (
-              <li className="flex items-center gap-2.5 pt-2">
+              <li className="flex items-center gap-2.5 pt-2" key={id}>
                 <Avatar
                   src={avatar}
                   name={`${first_name} ${last_name}`}
