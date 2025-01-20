@@ -9,7 +9,6 @@ import { assignRepresentative } from "../../api-services/representatives";
 import { toast } from "sonner";
 import { Spinner } from "@chakra-ui/react";
 import { useCustomQuery } from "../../context/queryContext";
-import { debounce } from "lodash";
 
 export default function RepRoleInput({ user }) {
   const emptyRepsRole = "Representative role cannot be empty";
