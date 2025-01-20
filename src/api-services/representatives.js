@@ -25,8 +25,7 @@ export const assignRepresentative = async (rep) => {
     method: "POST",
     data: {
       user: rep.user,
-      company: rep.company,
-      company_id: rep.company.id,
+      company: rep.company._name,
       category,
       status: false,
       slug: `${rep.role.replaceAll(" ", "-")}_${rep.company.id}_${rep.user.id}`,
