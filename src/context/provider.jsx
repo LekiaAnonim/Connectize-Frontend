@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { UserProvider } from "./userContext";
 import { NavProvider } from "./navContext";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -9,6 +9,16 @@ import { QueryProvider } from "./queryContext";
 const queryClient = new QueryClient();
 
 const MyProvider = ({ children }) => {
+  const [pageLoaded, setPageLoaded] = useState(false);
+
+  useEffect(() => {
+    setPageLoaded(true);
+  }, [pageLoaded]);
+
+  if (!pageLoaded) {
+    return <></>;
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>

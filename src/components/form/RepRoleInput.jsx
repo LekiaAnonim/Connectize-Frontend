@@ -5,23 +5,31 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { getCompanies } from "../../api-services/companies";
-import { createRepresentatives } from "../../api-services/representatives";
+import { assignRepresentative } from "../../api-services/representatives";
 import { toast } from "sonner";
+import { Spinner } from "@chakra-ui/react";
 
 export default function RepRoleInput({ user }) {
   const emptyRepsRole = "Representative role cannot be empty";
-  const [representativeRole, setRepresentativeRole] = useState(null);
+  const [representativeRole, setRepresentativeRole] = useState("");
   const [roleError, setRoleError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { data: companies } = useQuery({
     queryKey: ["companies"],
     queryFn: getCompanies,
   });
   const handleAddRepresentative = async () => {
-    if (representativeRole === null || representativeRole.trim() === "") {
+    if (!companies) {
+      toast.info("You have not created a company yet");
+      return;
+    }
+    setIsLoading(false);
+    if (representativeRole.trim() === "") {
       setRoleError(emptyRepsRole);
       return;
     }
+    console.log(companies);
 
     const repsData = {
       user,
@@ -29,13 +37,19 @@ export default function RepRoleInput({ user }) {
       role: representativeRole,
     };
 
+    setIsLoading(true);
+
     try {
-      await createRepresentatives(repsData);
+      await assignRepresentative(repsData);
       toast.success(
-        `A representative request has been sent to ${user?.first_name}`
+        `A representation request has been sent to ${user?.first_name}`
       );
+      setRepresentativeRole("");
+      setRoleError(null);
     } catch (error) {
-      console.log(`Representative error ${error}`);
+      console.error(`Representative error ${error}`);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -58,10 +72,17 @@ export default function RepRoleInput({ user }) {
         />
 
         <button
-          className="absolute right-1 top-1/2 -translate-y-1/2 bg-gold hover:bg-gold/60 active:scale-95 transition-all duration-300 py-1.5 px-4 rounded-full"
+          className={clsx(
+            "absolute right-1 top-1/2 -translate-y-1/2 bg-gold hover:bg-gold/60 active:scale-95 transition-all duration-300 px-4 rounded-full disabled:bg-gray-200 disabled:cursor-not-allowed",
+            {
+              "py-0.5": isLoading,
+              "py-1.5": !isLoading,
+            }
+          )}
           onClick={handleAddRepresentative}
+          disabled={isLoading}
         >
-          <PlusIcon />
+          {isLoading ? <Spinner size="xs" className="" /> : <PlusIcon />}
         </button>
       </div>
 

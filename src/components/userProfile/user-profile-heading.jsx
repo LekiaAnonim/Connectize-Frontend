@@ -15,6 +15,8 @@ export default function UserProfileHeadings({
   company,
   id,
   is_first_time_user,
+  followers_count,
+  following_count,
 }) {
   const { user: currentUser } = useAuth();
   return (
@@ -27,8 +29,8 @@ export default function UserProfileHeadings({
           {verified && <VerifiedIcon />}
         </div>
         <div className="flex flex-wrap gap-2">
-          <StatsText text={`${formatNumber(25000)} /post`} />
-          <StatsText text={`${formatNumber(1000000)} /connections`} />
+          <StatsText text={`${formatNumber(following_count)} /following`} />
+          <StatsText text={`${formatNumber(followers_count)} /connections`} />
           {company && (
             <div className="flex items-center gap-1.5 text-sm">
               <Avatar size="xs" name={company} className={clsx(avatarStyle)} />

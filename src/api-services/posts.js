@@ -44,7 +44,7 @@ export const likePost = async (id, data) => {
     await makeApiRequest({
       url: `api/posts/${id}/unlike/`,
       method: "POST",
-      data: { ...data, company_id: data.company.id },
+      // data: { ...data, company_id: data.company.id },
     });
 
     return;
@@ -52,7 +52,7 @@ export const likePost = async (id, data) => {
   await makeApiRequest({
     url: `api/posts/${id}/like/`,
     method: "POST",
-    data: { ...data, company_id: data.company.id },
+    // data: { ...data, company_id: data.company.id },
   });
 };
 
@@ -66,20 +66,4 @@ export const commentOnPost = async (id, data, comment) => {
   return result;
 };
 
-export const getComments = async () => {
-  const { results } = await makeApiRequest({
-    url: `api/comments/`,
-    method: "GET",
-  });
 
-  return results;
-};
-
-export const getFollows = async () => {
-  const { results } = await makeApiRequest({
-    url: `api/follows/`,
-    method: "GET",
-  });
-
-  return results;
-};

@@ -1,4 +1,3 @@
-import { data } from "autoprefixer";
 import { makeApiRequest } from "../lib/helpers";
 import { toast } from "sonner";
 
@@ -11,12 +10,15 @@ export const getAllRepresentatives = async () => {
   return results;
 };
 
-export const createRepresentatives = async (rep) => {
-  if (!rep.user || !rep.category) {
+export const assignRepresentative = async (rep) => {
+  if (!rep.user || !rep.role) {
     toast.info("Incomplete representative data");
     return;
   }
-  const category = await getOrCreateRepresentativeCategory(rep.role);
+
+  const category = await getOrCreateRepresentativeCategory(
+    rep.role.toLowerCase()
+  );
 
   const results = await makeApiRequest({
     url: `api/representatives/`,
@@ -24,6 +26,7 @@ export const createRepresentatives = async (rep) => {
     data: {
       user: rep.user,
       company: rep.company,
+      company_id: rep.company.id,
       category,
       status: false,
       slug: `${rep.role.replaceAll(" ", "-")}_${rep.company.id}_${rep.user.id}`,
@@ -34,17 +37,24 @@ export const createRepresentatives = async (rep) => {
 };
 
 const getOrCreateRepresentativeCategory = async (category) => {
+  if (!category) return null;
+
   const { results } = await makeApiRequest({
     url: "api/representative-categories/",
     method: "GET",
   });
 
-  if (results?.filter((data) => data.type === category).length > 0 || !category)
-    return results;
+  const existingCategory = results.find(
+    (data) => data.type.toLowerCase() === category
+  );
 
-  return await makeApiRequest({
+  if (existingCategory) return existingCategory.type;
+
+  const newCategory = await makeApiRequest({
     url: "api/representative-categories/",
     method: "POST",
     data: { type: category },
   });
+
+  return newCategory.type;
 };
