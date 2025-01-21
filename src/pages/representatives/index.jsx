@@ -24,10 +24,8 @@ export default function RepresentativesPage() {
 
   const { data: representatives, isLoading: repsLoading } = useQuery({
     queryKey: ["representatives"],
-    queryFn: getAllRepresentatives,
+    queryFn: () => getAllRepresentatives({ status: "True" }),
   });
-
-  console.log(representatives);
 
   const { data: representativeCategories, isLoading: repsCatLoading } =
     useQuery({
@@ -39,7 +37,7 @@ export default function RepresentativesPage() {
     return <PageLoading hasLogo={false} />;
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-4">
       <HeadingText>Representatives</HeadingText>
 
       <section className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">

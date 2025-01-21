@@ -71,3 +71,24 @@ export const getOrCreateRepresentativeCategory = async ({ type, id }) => {
 
   return existingCategory.id;
 };
+
+export const changeRepStatus = async (id, repData) => {
+  const results = await makeApiRequest({
+    url: `api/representatives/${id}/`,
+    method: "PUT",
+    data: {
+      user: repData.user,
+      company: repData.company,
+      category: repData.category,
+      status: repData.status,
+    },
+  });
+
+  if (results?.category) {
+    toast.success(
+      `Representative status has been changed to ${repData.status}`
+    );
+  }
+
+  return results;
+};

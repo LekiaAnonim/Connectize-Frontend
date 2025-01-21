@@ -18,9 +18,9 @@ root.render(
         <App />
       </MyProvider>
       <Toaster
-        position="top-center"
+        position="bottom-right"
         closeButton
-        duration={10000}
+        duration={5000}
         pauseWhenPageIsHidden
       />
     </React.StrictMode>

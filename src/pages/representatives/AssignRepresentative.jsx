@@ -7,7 +7,10 @@ import { useAuth } from "../../context/userContext";
 import { RepresentativesList } from "../../components/representatives/RepresentativesList";
 import { UserSearchInput } from "../../components/representatives/UserSearchInput";
 import { UserList } from "../../components/representatives/UserList";
-import { getAllRepresentatives } from "../../api-services/representatives";
+import {
+  getAllRepresentatives,
+  getOrCreateRepresentativeCategory,
+} from "../../api-services/representatives";
 import { getCompanies } from "../../api-services/companies";
 import { useCustomQuery } from "../../context/queryContext";
 
@@ -35,6 +38,12 @@ export default function AssignRepresentative() {
     enabled: !!company_id,
     refetchInterval,
   });
+
+  const { data: representativeCategories, isLoading: repsCatLoading } =
+    useQuery({
+      queryKey: ["representatives-categories"],
+      queryFn: getOrCreateRepresentativeCategory,
+    });
 
   const filteredUsers = users?.filter((user) => {
     // const alreadyHasRepStatus =
@@ -81,15 +90,21 @@ export default function AssignRepresentative() {
         <UserSearchInput username={username} setUsername={setUsername} />
         <UserList isLoading={isLoading} filteredUsers={filteredUsers} />
         <RepresentativesList
-          isLoading={repsLoading || companyLoading}
+          isLoading={repsLoading || companyLoading || repsCatLoading}
           representatives={representatives?.map((reps) => {
             const user = users?.find((user) => reps?.user === user?.id);
+            const role = representativeCategories?.find(
+              (category) => category?.id === reps?.category
+            );
 
             const company = companies?.[0];
             return {
+              id: reps?.id,
               user,
               company,
               status: reps?.status,
+              role: role?.type,
+              category: role?.id,
             };
           })}
         />
