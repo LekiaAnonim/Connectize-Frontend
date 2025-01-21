@@ -41,7 +41,7 @@ export const RepresentativesList = ({ representatives, isLoading }) => {
   );
 };
 
-const RepsTile = ({ id, user, company, status, role, category }) => {
+const RepsTile = ({ id, user, company, status, role, category, invited }) => {
   const [isChecked, setIsChecked] = useState(status);
 
   const handleToggle = async () => {
@@ -82,7 +82,7 @@ const RepsTile = ({ id, user, company, status, role, category }) => {
           <Username user={user} />
           <small className="text-gray-400 !-my-1 line-clamp-2">
             {capitalizeFirst(user?.role)}{" "}
-            {!status && (
+            {!invited && (
               <>
                 &bull;{" "}
                 <Badge

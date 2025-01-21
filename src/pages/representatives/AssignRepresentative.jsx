@@ -105,6 +105,7 @@ export default function AssignRepresentative() {
               status: reps?.status,
               role: role?.type,
               category: role?.id,
+              invited: reps?.invited,
             };
           })}
         />
