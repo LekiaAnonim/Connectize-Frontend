@@ -47,7 +47,7 @@ export const JoinedUserCompanyImages = () => {
 
   const { data: companies, isLoading } = useQuery({
     queryKey: ["companies"],
-    queryFn: getCompanies,
+    queryFn: () => getCompanies(),
   });
 
   return isLoading ? (
@@ -65,7 +65,7 @@ export const JoinedUserCompanyImages = () => {
             href: `/co/${user?.id}`,
           },
           {
-            src: companies?.[0]?.logo || "images/default-company-logo.png",
+            src: companies?.[0]?.logo || "/images/default-company-logo.png",
             name: companies?.[0]?.company_name || "",
             href:
               companies?.length > 0

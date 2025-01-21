@@ -6,6 +6,7 @@ import { ConJoinedImages } from "../ResponsiveNav";
 import Username from "../Username";
 import { baseURL } from "../../lib/helpers";
 import { Badge } from "@chakra-ui/react";
+import { capitalizeFirst } from "../../lib/utils";
 
 export const RepresentativesList = ({ representatives, isLoading }) => {
   console.log(representatives);
@@ -41,7 +42,7 @@ export const RepresentativesList = ({ representatives, isLoading }) => {
                     },
                     {
                       name: `${user?.first_name} ${user?.last_name}`,
-                      src: baseURL + user?.avatar,
+                      src: user?.avatar,
                       href: `/co/${user?.id}`,
                     },
                   ]}
@@ -51,7 +52,7 @@ export const RepresentativesList = ({ representatives, isLoading }) => {
                 <div className="flex flex-col">
                   <Username user={user} />
                   <small className="text-gray-400 !-my-1 line-clamp-2">
-                    {user?.role}{" "}
+                    {capitalizeFirst(user?.role)}{" "}
                     {!status && (
                       <>
                         &bull;{" "}

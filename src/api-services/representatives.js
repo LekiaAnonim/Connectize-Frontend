@@ -5,14 +5,12 @@ export const getAllRepresentatives = async ({
   company_id = null,
   status = null,
 }) => {
-  const params = {};
-  if (company_id) params.company_id = company_id;
-  if (status) params.status = status;
+  const params = company_id ? { company_id } : status ? { status } : null;
 
   const { results } = await makeApiRequest({
     url: `api/representatives/`,
     method: "GET",
-    params: Object.keys(params).length ? params : null,
+    params,
   });
 
   return results;
@@ -24,9 +22,9 @@ export const assignRepresentative = async (rep) => {
     return;
   }
 
-  const category = await getOrCreateRepresentativeCategory(
-    rep.role.toLowerCase()
-  );
+  const category = await getOrCreateRepresentativeCategory({
+    type: rep.role.toLowerCase(),
+  });
 
   const results = await makeApiRequest({
     url: `api/representatives/`,
@@ -35,7 +33,9 @@ export const assignRepresentative = async (rep) => {
       user: rep.user.id,
       company: rep.company.id,
       category,
-      slug: `${rep.role.replaceAll(" ", "_")}_${rep.company.id}_${rep.user.id}`,
+      slug: `${rep.user.first_name}_${rep.role.replaceAll(" ", "_")}_${
+        rep.company.id
+      }_${rep.user.id}`,
     },
   });
 
@@ -48,23 +48,24 @@ export const assignRepresentative = async (rep) => {
   return results;
 };
 
-const getOrCreateRepresentativeCategory = async (category) => {
-  if (!category) return null;
-
+export const getOrCreateRepresentativeCategory = async ({ type, id }) => {
   const { results } = await makeApiRequest({
     url: "api/representative-categories/",
     method: "GET",
   });
+  if (!type && !id) return results;
+
+  if (id) return results.find((data) => data?.id === id);
 
   let existingCategory = results.find(
-    (data) => data.type.toLowerCase() === category
+    (data) => data.type.toLowerCase() === type
   );
 
   if (!existingCategory) {
     existingCategory = await makeApiRequest({
       url: "api/representative-categories/",
       method: "POST",
-      data: { type: category },
+      data: { type },
     });
   }
 

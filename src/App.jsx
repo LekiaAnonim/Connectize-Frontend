@@ -60,7 +60,7 @@ function App() {
             <Route path="messages" element={<MessagesPage />} />
             <Route path="representatives" element={<RepresentativesPage />} />
             <Route
-              path="representatives/assign"
+              path="representatives/manage"
               element={<AssignRepresentative />}
             />
             <Route path="companies" element={<CompaniesPage />} />

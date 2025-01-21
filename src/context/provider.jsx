@@ -17,12 +17,13 @@ const MyProvider = ({ children }) => {
 
   if (!pageLoaded) {
     return (
-      <main className="h-screen flex bg-background items-center justify-center">
-        <section className="flex flex-col justify-center items-center">
-          <img src="/images/logo.png" alt="" className="size-10" />
-          <h2 className="font-bold text-lg ">Connectize</h2>
-        </section>
-      </main>
+      <></>
+      // <main className="h-screen flex bg-background items-center justify-center">
+      //   <section className="flex flex-col justify-center items-center">
+      //     <img src="/images/logo.png" alt="" className="size-10" />
+      //     <h2 className="font-bold text-lg ">Connectize</h2>
+      //   </section>
+      // </main>
     );
   }
 

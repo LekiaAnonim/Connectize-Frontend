@@ -20,7 +20,7 @@ export default function RepRoleInput({ user }) {
 
   const { data: companies } = useQuery({
     queryKey: ["companies"],
-    queryFn: getCompanies,
+    queryFn: ()=> getCompanies(),
   });
 
   const memoizedCompanies = useMemo(() => companies, [companies]);

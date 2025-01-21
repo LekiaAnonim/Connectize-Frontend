@@ -20,20 +20,21 @@ import { getCurrentUser } from "./users";
 // }
 
 export const getAllCompanies = async () => {
-  const companies = await makeApiRequest({
+  const { results: companies } = await makeApiRequest({
     url: `api/companies/`,
     method: "GET",
   });
 
-  return companies;
+  return companies || [];
 };
 
-export const getCompanies = async () => {
+export const getCompanies = async (id) => {
   const currentUser = await getCurrentUser();
+  const params = id ? { id } : { profile: currentUser?.email };
   const { results: companies } = await makeApiRequest({
     url: `api/companies/`,
     method: "GET",
-    params: { profile: currentUser?.email }, // Send email to filter
+    params,
   });
   return companies || [];
 };

@@ -51,7 +51,7 @@ export default Sidebar;
 function Companies({ toggleNav }) {
   const { data: companies, isLoading } = useQuery({
     queryKey: ["companies"],
-    queryFn: getCompanies,
+    queryFn: () => getCompanies(),
   });
 
   return (

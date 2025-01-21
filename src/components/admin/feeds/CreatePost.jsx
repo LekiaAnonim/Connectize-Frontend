@@ -41,7 +41,7 @@ function CreatePost() {
   const { user: currentUser } = useAuth();
   const { data: companies } = useQuery({
     queryKey: ["companies"],
-    queryFn: getCompanies,
+    queryFn: ()=> getCompanies(),
   });
 
   const [isLoading, setIsLoading] = useState(false);
