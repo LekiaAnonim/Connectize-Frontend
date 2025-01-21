@@ -7,7 +7,11 @@ import Username from "../Username";
 import { Badge, Switch } from "@chakra-ui/react";
 import { capitalizeFirst } from "../../lib/utils";
 import { useState } from "react";
-import { changeRepStatus } from "../../api-services/representatives";
+import {
+  cancelOrDeclineRepRequest,
+  changeRepStatus,
+} from "../../api-services/representatives";
+import { useCustomQuery } from "../../context/queryContext";
 
 export const RepresentativesList = ({ representatives, isLoading }) => {
   return (
@@ -43,6 +47,7 @@ export const RepresentativesList = ({ representatives, isLoading }) => {
 
 const RepsTile = ({ id, user, company, status, role, category, invited }) => {
   const [isChecked, setIsChecked] = useState(status);
+  const { setRefreshInterval } = useCustomQuery();
 
   const handleToggle = async () => {
     setIsChecked(!isChecked);
@@ -55,7 +60,7 @@ const RepsTile = ({ id, user, company, status, role, category, invited }) => {
   };
   return (
     <motion.section
-      key={user?.id}
+      key={id}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="flex items-center justify-between gap-4 mb-10 lg:mb-4 pt-4 relative"
@@ -87,7 +92,11 @@ const RepsTile = ({ id, user, company, status, role, category, invited }) => {
                 &bull;{" "}
                 <Badge
                   className="!text-[.6rem] cursor-pointer"
-                  onClick={() => {}}
+                  onClick={async () => {
+                    await cancelOrDeclineRepRequest(id);
+                    setRefreshInterval(1000);
+                    setTimeout(() => setRefreshInterval(false), 2000);
+                  }}
                 >
                   Cancel Request
                 </Badge>
@@ -101,13 +110,17 @@ const RepsTile = ({ id, user, company, status, role, category, invited }) => {
         <Badge className="!w-fit">{role}</Badge>
       </div>
 
-      <div className="">
-        <Switch
-          id={`rep_${user?.id}`}
-          isChecked={isChecked}
-          onChange={handleToggle}
-        />
-      </div>
+      {invited ? (
+        <div className="">
+          <Switch
+            id={`rep_${user?.id}`}
+            isChecked={isChecked}
+            onChange={handleToggle}
+          />
+        </div>
+      ) : (
+        <div />
+      )}
     </motion.section>
   );
 };

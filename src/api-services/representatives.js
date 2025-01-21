@@ -92,3 +92,12 @@ export const changeRepStatus = async (id, repData) => {
 
   return results;
 };
+
+export const cancelOrDeclineRepRequest = async (id) => {
+  
+  const results = await makeApiRequest({
+    url: `api/representatives/${id}/`,
+    method: "DELETE",
+  });
+  return results;
+};
