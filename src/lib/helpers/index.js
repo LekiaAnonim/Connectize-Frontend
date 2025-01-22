@@ -158,11 +158,10 @@ export async function makeApiRequest({
     // Handle general errors
     const errorResponse = error?.response?.data;
 
-    if (errorResponse) {
-      const errorMsg = extractErrorMessage(errorResponse);
-
+    const errorMsg = extractErrorMessage(errorResponse);
+    if (errorMsg) {
       toast.error(errorMsg);
-      console.error("API request failed:", error, errorMsg);
+      console.error("API request failed:", error);
     }
   }
 }
@@ -180,6 +179,6 @@ function extractErrorMessage(errorResponse) {
     errorResponse?.company_name?.[0] ||
     errorResponse?.message ||
     errorResponse?.detail ||
-    "Something went wrong!"
+    null
   );
 }

@@ -161,7 +161,7 @@ export const DiscoverPostItem = ({
           {postItem.images.map(({ image: src, id }) => (
             <img
               key={id}
-              src={src}
+              src={baseURL + src}
               className="size-full rounded-lg"
               alt="some images for post"
             />
