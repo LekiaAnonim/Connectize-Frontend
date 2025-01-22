@@ -14,23 +14,25 @@ function AuthLayout({ redirectUrl = "/" }) {
   }
 
   return (
-    <main className="flex justify-center">
-      <section className="w-full flex flex-col items-center justify-center py-8 px-4 lg:basis-1/2 shrink-0">
+    <main className="flex justify-center h-screen p-4">
+      <section className="size-full max-h-screen overflow-y-auto flex flex-col items-center justify-center py-4 lg:!w-1/2 shrink-0 scrollbar-hidden">
         <section className="w-full max-w-sm lg:max-w-md">
           <Logo />
-          <section className="w-full mt-4">
+          <section className="size-full mt-4">
             <Outlet />
           </section>
         </section>
       </section>
 
-      <div className="hidden lg:block basis-1/2">
+      <picture className="max-lg:hidden !w-[48%] shrink-0">
         <img
-          src="/images/signup-image.png"
-          alt="Oil dripping for connectize"
-          className="w-full aspect-square "
+          src={`/images/${
+            pathname === "/login" ? "signin-image" : "signup-image"
+          }.png`}
+          alt="connectize"
+          className="size-full aspect-square "
         />
-      </div>
+      </picture>
     </main>
   );
 }

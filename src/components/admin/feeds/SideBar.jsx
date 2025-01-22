@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { feedNavItems } from "../../../lib/data";
+import React from "react";
+import { Link } from "react-router-dom";
 import Logo from "../../logo";
 import clsx from "clsx";
 import { useNav } from "../../../context/navContext";
@@ -10,16 +9,11 @@ import { useQuery } from "@tanstack/react-query";
 import { getCompanies } from "../../../api-services/companies";
 import LightParagraph from "../../ParagraphText";
 import CloseOverlay from "../../CloseOverlay";
-import { CirceTitleSubtitleSkeleton } from "../feeds/TopServiceSuggestions";
+import { CircleTitleSubtitleSkeleton } from "../feeds/TopServiceSuggestions";
 import { Avatar } from "@chakra-ui/react";
-import { LogoutOutlined } from "@ant-design/icons";
-import { useAuth } from "../../../context/userContext";
-import { getSession } from "../../../lib/session";
-import { logOutCurrentUser } from "../../../api-services/users";
 import { avatarStyle } from "../../ResponsiveNav";
 
 const Sidebar = () => {
-  const { pathname } = useLocation();
   const { navOpen, toggleNav } = useNav();
 
   const isTablet = useMediaQuery({ minWidth: 768 });
@@ -44,7 +38,7 @@ const Sidebar = () => {
 
         <FeedSearch className="xs:hidden mb-4" />
 
-        <NavigationSection pathname={pathname} />
+        {/* <NavigationSection /> */}
 
         <Companies toggleNav={toggleNav} />
       </div>
@@ -54,62 +48,10 @@ const Sidebar = () => {
 
 export default Sidebar;
 
-function NavigationSection({ pathname }) {
-  const { toggleNav } = useNav();
-  const { user: currentUser } = useAuth();
-  const session = getSession();
-  const [loading, setLoading] = useState(false);
-
-  const handleLogout = async () => {
-    setLoading(true);
-
-    logOutCurrentUser();
-    setLoading(false);
-  };
-
-  return (
-    <ul className="mb-6 space-y-1 xs:text-sm p-2 bg-background rounded">
-      {feedNavItems.map((item, index) => (
-        <li className="" key={index}>
-          <Link
-            to={item.to}
-            onClick={() => toggleNav(false)}
-            className={clsx(
-              "flex gap-2 items-center transition-colors duration-300 p-2 rounded  hover:!text-mid_grey",
-              {
-                "!text-gold bg-mid_grey pointer-events-none":
-                  item.to === pathname,
-                "!text-gray-500": item.to !== pathname,
-              }
-            )}
-          >
-            <item.icon />
-            <span>{item.name}</span>
-          </Link>
-        </li>
-      ))}
-      {currentUser && session && (
-        <li>
-          <button
-            className={clsx(
-              "flex gap-2 items-center transition-colors duration-300 p-2 rounded  hover:text-red-600 text-gray-500 disabled:cursor-not-allowed disabled:text-red-600"
-            )}
-            onClick={handleLogout}
-            disabled={loading}
-          >
-            <LogoutOutlined />
-            <span>{loading ? "Logging out..." : "Logout"}</span>
-          </button>
-        </li>
-      )}
-    </ul>
-  );
-}
-
 function Companies({ toggleNav }) {
   const { data: companies, isLoading } = useQuery({
     queryKey: ["companies"],
-    queryFn: getCompanies,
+    queryFn: () => getCompanies(),
   });
 
   return (
@@ -129,7 +71,7 @@ function Companies({ toggleNav }) {
       <ul className="space-y-2 divide-y divide-gray-100/80 xs:text-sm p-0">
         {isLoading ? (
           Array.from({ length: 4 }).map((_, index) => (
-            <CirceTitleSubtitleSkeleton key={index} />
+            <CircleTitleSubtitleSkeleton key={index} />
           ))
         ) : companies?.length === 0 ? (
           <LightParagraph>No company yet...</LightParagraph>
@@ -148,10 +90,7 @@ function CompanyListItem({ company }) {
 
   return (
     <li>
-      <Link
-        to={`/${company_name.toLowerCase().replaceAll(" ", "_")}`}
-        className="flex items-center gap-2 pt-2"
-      >
+      <Link to={`/${company_name}`} className="flex items-center gap-2 pt-2">
         <Avatar
           src={logo}
           name={company_name}

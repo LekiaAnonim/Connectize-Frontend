@@ -73,7 +73,7 @@ const validationSchema = Yup.object().shape({
 export default function NewListing() {
   const { data: companies } = useQuery({
     queryKey: ["companies"],
-    queryFn: getCompanies,
+    queryFn: ()=> getCompanies(),
   });
 
   const formValues = {

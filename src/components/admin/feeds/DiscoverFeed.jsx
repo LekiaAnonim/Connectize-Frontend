@@ -3,6 +3,7 @@ import CreatePost from "./CreatePost";
 import DiscoverPostTabs from "./DiscoverPostTabs";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../context/userContext";
+import DiscoverPosts from "./DiscoverPosts";
 
 const DiscoverFeed = () => {
   const { user: currentUser } = useAuth();
@@ -21,6 +22,7 @@ const DiscoverFeed = () => {
       </div>
       <CreatePost />
       <DiscoverPostTabs />
+      <DiscoverPosts />
     </>
   );
 };

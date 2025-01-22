@@ -14,6 +14,8 @@ import { largeFileText, unSupportedText } from "../listing/newListing";
 import { useCustomQuery } from "../../../context/queryContext";
 import { useAuth } from "../../../context/userContext";
 
+import { motion } from "framer-motion";
+
 const isImageFile = (files) => {
   const imageTypes = [
     "image/jpeg",
@@ -39,10 +41,12 @@ function CreatePost() {
   const { user: currentUser } = useAuth();
   const { data: companies } = useQuery({
     queryKey: ["companies"],
-    queryFn: getCompanies,
+    queryFn: () => getCompanies(),
   });
+
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
   const [validImages, setValidImages] = useState([]);
   const [companyId, setCompanyId] = useState(-1);
   const [needsFocus, setNeedsFocus] = useState(false);
@@ -55,6 +59,7 @@ function CreatePost() {
     const validImageFiles = selectedFiles
       .filter(isImageFile)
       .filter(isImageSize);
+
     setValidImages(validImageFiles);
 
     if (validImageFiles.length < selectedFiles.length) {
@@ -63,10 +68,7 @@ function CreatePost() {
   }, []);
 
   useEffect(() => {
-    // Cleanup generated URLs on unmount or when validImages changes
-    return () => {
-      validImages.forEach((image) => URL.revokeObjectURL(image));
-    };
+    return () => validImages.forEach((image) => URL.revokeObjectURL(image));
   }, [validImages]);
 
   const onEmojiClick = useCallback((emojiObject) => {
@@ -96,10 +98,8 @@ function CreatePost() {
       return;
     }
 
-    if (message.length < 10) {
-      toast.info(
-        "Post length is too short. Minimum post character length is 10 characters"
-      );
+    if (message.trim().length < 10) {
+      setErrorMessage("Post message must be at least 10 characters long");
       return;
     }
 
@@ -109,19 +109,22 @@ function CreatePost() {
       return;
     }
 
-    setIsLoading(true);
-    const toastId = toast.info("Creating post. Please hold on...");
-
     try {
-      await createPost(message, companyId, validImages);
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.append("company", companyId);
+      formData.append("body", message);
+      validImages.forEach((image) => {
+        formData.append("images", image);
+      });
+      await createPost(formData);
       setMessage("");
       setSelectedGif("");
-      toast.success("Your post has been created", { id: toastId });
+      toast.success("Your post has been created");
       setRefetchInterval(1000);
       setTimeout(() => setRefetchInterval(false), 2000);
       setValidImages([]);
     } catch (error) {
-      toast.dismiss(toastId);
       console.error("Post error: ", error);
     } finally {
       setIsLoading(false);
@@ -157,14 +160,34 @@ function CreatePost() {
 
   return (
     <div className="bg-white px-4 py-4 rounded border-b-[5px] border-gold relative">
-      <textarea
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.currentTarget.value)}
-        minLength={10}
-        placeholder="What's happening?"
-        className="w-full min-h-10 h-10 max-h-40 pb-2 border-b border-gray-300 bg-transparent focus:outline-0 text-base resize-no_ne transition-all duration-300 scrollbar-hidden scroll-smooth placeholder:text-lg"
-      />
+      <div className="size-full">
+        <textarea
+          type="text"
+          value={message}
+          onChange={(e) => {
+            if (message.trim().length >= 10) {
+              setErrorMessage(null);
+            } else if (message.trim().length < 10) {
+              setErrorMessage(
+                "Post message must be at least 10 characters long"
+              );
+            }
+            setMessage(e.currentTarget.value);
+          }}
+          minLength={10}
+          placeholder="What's happening?"
+          className="w-full min-h-10 h-10 max-h-40 pb-2 border-b border-gray-300 bg-transparent focus:outline-0 text-base resize-no_ne transition-all duration-300 scrollbar-hidden scroll-smooth placeholder:text-lg"
+        />
+        {errorMessage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-[#9e3818] text-xs mx-0.5"
+          >
+            {errorMessage}
+          </motion.div>
+        )}
+      </div>
 
       {validImages.length > 0 && (
         <div className="mt-2">
@@ -210,7 +233,7 @@ function CreatePost() {
         </div>
       )}
 
-      <div className="absolute right-3 top-2">
+      <div className="absolute right-1 top-0">
         <MoreOptions
           triggerStyle={`${
             needsFocus ? "!border-2 !border-red-600 " : ""
@@ -248,7 +271,7 @@ function CreatePost() {
         </MoreOptions>
       </div>
 
-      <div className="mt-4 flex max-sm:flex-col md:flex-col lg:flex-row sm:items-center justify-between max-sm:gap-4 md:gap-4 lg:gap-1">
+      <div className="mt-4 flex max-sm:flex-col sm:items-center justify-between max-sm:gap-4 md:gap-4 lg:gap-1">
         <div className="flex items-center gap-2 relative">
           <input
             name="post_images"
@@ -274,11 +297,11 @@ function CreatePost() {
         {(showEmojiPicker || showGifPicker) && renderEmojiGifPickers}
 
         <button
-          className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-4 transition-all duration-300 md:w-full lg:w-fit disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-8 transition-all duration-300 md:w-fit disabled:bg-gray-300 disabled:cursor-not-allowed"
           onClick={handleCreatePost}
           disabled={isLoading}
         >
-          {isLoading ? "creating post" : "create post"}
+          {isLoading ? "Creating Post" : "Create Post"}
         </button>
       </div>
     </div>

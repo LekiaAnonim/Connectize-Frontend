@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Signup from "./pages/authentication/signup";
 import Login from "./pages/authentication/login";
-import NoPage from "./components/NoPage";
 import Profile from "./components/profile/profile";
 import Home from "./components/profile/home";
 import Contact from "./components/profile/contact";
@@ -30,30 +29,70 @@ import CompanyInformation from "./pages/company/CompanyInformation";
 import CompanyAdditionalInformation from "./pages/company/CompanyAdditionInformation";
 import SinglePostPage from "./pages/posts/singlePostPage";
 import FeedLayout from "./pages/FeedLayout";
+import VerifyAccount from "./pages/authentication/verify-account";
+import CompanyProfile from "./pages/feed/companyProfile";
+import NotFound from "./pages/not-found";
+import MessagesPage from "./pages/messages";
+import RepresentativesPage from "./pages/representatives";
+import CompaniesPage from "./pages/companies";
+import Search from "./pages/search";
+import AssignRepresentative from "./pages/representatives/AssignRepresentative";
+import BookMark from "./pages/bookmark";
 
 function App() {
   return (
     <>
       <Routes>
         <Route>
-          {/* Landing page */}
-          <Route element={<FeedLayout />}>
-            <Route path="/" element={<NewsFeed />} />
-            <Route path="/posts/:id" element={<SinglePostPage />} />
+          <Route path="*" element={<NotFound />} />
+          {/* Market place */}
+          <Route path="/" element={<MarketPlaceLayout />}>
+            {/* Landing page */}
+            <Route path="/" element={<FeedLayout />}>
+              <Route path="/" element={<NewsFeed />} />
+              <Route path="/posts/:id" element={<SinglePostPage />} />
+            </Route>
+            {/* Bookmark */}
+            <Route path="co/bookmark" element={<BookMark />} />
+            {/* User Profile */}
+            <Route path="co/:userId" element={<UserProfile />} />
+            {/* Company Profile */}
+            <Route path="search" element={<Search />} />
+            <Route path=":company" element={<CompanyProfile />} />
+            <Route path="analysis" element={<Analysis />} />
+            <Route path="messages" element={<MessagesPage />} />
+            <Route path="representatives" element={<RepresentativesPage />} />
+            <Route
+              path="representatives/manage"
+              element={<AssignRepresentative />}
+            />
+            <Route path="companies" element={<CompaniesPage />} />
+            <Route path="market" element={<Market />} />
+            <Route path="products/:id" element={<Product />} />
+            <Route path="products/listing" element={<Listing />} />
+            {/* Services */}
+            <Route path="services" element={<Services />} />
+
+            <Route path="services/:id" element={<ServiceOverView />} />
+            <Route path="services/add" element={<ServiceAdmin />} />
           </Route>
 
           {/* authentication routes */}
           <Route path="/" element={<AuthLayout />}>
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/verify-account" element={<VerifyAccount />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route
               path="/confirm-reset-password"
               element={<ConfirmResetPassword />}
             />
           </Route>
+
           <Route path="/success" element={<SuccessPage />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile />} />
+
+          {/* Complete profile */}
           <Route path="/" element={<ProfileLayout />}>
             <Route path="home" element={<Home />} />
             <Route path="contact" element={<Contact />} />
@@ -62,24 +101,7 @@ function App() {
             <Route path="overview" element={<Overview />} />
           </Route>
 
-          {/* Market place */}
-          <Route element={<MarketPlaceLayout />}>
-            <Route path="analysis" element={<Analysis />} />
-            <Route path="market" element={<Market />} />
-            <Route path="products/:id" element={<Product />} />
-            <Route path="listing" element={<Listing />} />
-            {/* Services */}
-            <Route path="services" element={<Services />} />
-
-            <Route path="services/:id" element={<ServiceOverView />} />
-            <Route path="services/add" element={<ServiceAdmin />} />
-          </Route>
-
-          {/* Company */}
-          <Route path=":company" element={<UserProfile />} />
-          {/* <Route path="admin/:company" element={<AdminProfile />} /> */}
-
-          {/* Company */}
+          {/* Create Company */}
           <Route element={<CompanyLayout />}>
             <Route path="create-company" element={<CreateCompany />} />
             <Route path="company-documents" element={<CompanyDocuments />} />
@@ -92,13 +114,6 @@ function App() {
               element={<CompanyAdditionalInformation />}
             />
           </Route>
-
-          {/* <Route path="feed-page" element={<FeedPage />} /> */}
-          {/* <Route path="testing" element={<Testing />} /> */}
-          {/* <Route path="antway" element={<Navbar />} /> */}
-
-          {/* 404 Page */}
-          <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
     </>

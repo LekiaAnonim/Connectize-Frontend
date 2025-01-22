@@ -1,13 +1,13 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
-import { Heart, VerifiedIcon } from "../../../icon";
+import { Heart } from "../../../icon";
 import { avatarStyle, ConJoinedImages } from "../../ResponsiveNav";
 import { DownloadIcon, HeartIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { MessageOutlined, ShareAltOutlined } from "@ant-design/icons";
 import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
 import { commentOnPost, getPosts, likePost } from "../../../api-services/posts";
-import { formatNumber, timeAgo } from "../../../lib/utils";
-import { Avatar, CloseButton, Tooltip } from "@chakra-ui/react";
+import { formatNumber, shareThis } from "../../../lib/utils";
+import { Avatar, CloseButton, Spinner, Tooltip } from "@chakra-ui/react";
 import MoreOptions from "../../MoreOptions";
 import FormatPostText from "../../FormatPostText";
 import { ChangeCircleOutlined } from "@mui/icons-material";
@@ -20,6 +20,8 @@ import ReactQuill from "react-quill";
 import { MarkdownComponent } from "../../MarkDownComponent";
 import { baseURL } from "../../../lib/helpers";
 import { Link } from "react-router-dom";
+import TimeAgo from "../../TimeAgo";
+import CompanyName from "../../company/CompanyName";
 
 function DiscoverPosts() {
   const { refetchInterval } = useCustomQuery();
@@ -32,12 +34,12 @@ function DiscoverPosts() {
   return (
     <section className="space-y-4 mt-4">
       {isLoading
-        ? Array.from({ length: 4 }, (_, index) => (
+        ? Array.from({ length: 5 }, (_, index) => (
             <DiscoverPostSkeleton key={index} />
           ))
         : posts?.map((post, index) => (
             <DiscoverPostItem
-              hasImage={post.images.length > 0}
+              hasImage={post?.images?.length > 0}
               key={index}
               postItem={post}
             />
@@ -54,48 +56,33 @@ export const DiscoverPostItem = ({
   isSinglePost = false,
 }) => {
   const [showCommentSection, setShowCommentSection] = useState(false);
+  const [liking, setLiking] = useState(false);
   const { setRefetchInterval } = useCustomQuery();
   const { user: currentUser } = useAuth();
-  const [timestamp, setTimestamp] = useState(timeAgo(postItem.date_created));
 
-  const userHasLikedPost = postItem.likes.find(
-    (post) => post.user.id === currentUser?.id
+  const images = postItem?.images;
+
+  const userHasLikedPost = postItem?.likes.find(
+    (post) => post?.user?.id === currentUser?.id
   )
     ? true
     : false;
 
   const handleLikePost = async () => {
+    setLiking(true);
     await likePost(postItem.id, postItem);
     setRefetchInterval(1000);
     setTimeout(() => setRefetchInterval(false), 2000);
+    setLiking(false);
+  };
+  const shareUrlString = window.location.href + "posts/" + postItem.id;
+  const shareData = {
+    title: "Connectize Post by - " + postItem?.company?.company_name,
+    text: postItem.body,
+    url: shareUrlString,
   };
 
-  const sharePost = async () => {
-    const shareUrlString = window.location.href + "posts/" + postItem.id;
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title:
-            "Connectize Post " +
-            postItem.id +
-            " - " +
-            postItem.company.company_name,
-          text: postItem.body,
-          url: shareUrlString,
-        });
-      } catch (error) {
-        console.log("Error sharing:", error);
-        toast.error("An error occurred while sharing post");
-      }
-    } else {
-      // Fallback for browsers that don't support the Web Share API
-      const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-        shareUrlString
-      )}`;
-      window.open(shareUrl, "_blank");
-    }
-  };
-
+  const sharePost = async () => await shareThis({ shareUrlString, shareData });
   const handlePostDownloadPDF = () => {
     const doc = new jsPDF();
 
@@ -116,13 +103,6 @@ export const DiscoverPostItem = ({
     doc.save(`Connectize_post_${postItem.id}.pdf`);
   };
 
-  useEffect(() => {
-    const interval = setInterval(
-      () => setTimestamp(timeAgo(postItem.date_created)),
-      1000
-    );
-    return () => clearInterval(interval);
-  });
   return (
     <motion.article
       initial={{ opacity: 0 }}
@@ -137,27 +117,20 @@ export const DiscoverPostItem = ({
           <Avatar
             name={postItem?.company?.company_name}
             size="sm"
-            src={postItem?.company?.logo}
+            src={postItem?.company?.logo || "images/default-company-logo.png"}
             className={avatarStyle}
           />
 
           <section className="flex max-xs:flex-col xs:items-center gap-0.5 xs:gap-1">
-            <div className="flex">
-              <Link
-                to={
-                  "/" +
-                  postItem?.company?.company_name
-                    .toLowerCase()
-                    .replace(/\s/g, "_")
-                }
-                className="text-lg xs:text-base md:text-sm lg:text-base font-bold break-all line-clamp-1"
-              >
-                {postItem?.company?.company_name}
+            <CompanyName
+              name={postItem?.company?.company_name}
+              verified={postItem?.company?.verify}
+            />
+            <small className="text-gray-400 lowercase shrink-0">
+              <Link to={`/co/${postItem?.user?.id}`}>
+                @{postItem.user.first_name}{" "}
               </Link>
-              {postItem?.company?.verify && <VerifiedIcon color="black" />}
-            </div>
-            <small className="text-gray-400 lowercase">
-              @{postItem.user.first_name} • {timestamp}
+              • <TimeAgo time={postItem.date_created} />
             </small>
           </section>
         </section>
@@ -180,30 +153,41 @@ export const DiscoverPostItem = ({
       </header>
 
       <FormatPostText
-        text={postItem.body}
-        postId={postItem.id}
+        text={postItem?.body}
+        postId={postItem?.id}
         isSinglePost={isSinglePost}
       />
 
       {hasImage && (
-        <section className="grid grid-cols-3 gap-2 mt-2">
-          {postItem.images.map(({ image: src, id }) => (
-            <img
-              key={id}
-              src={src}
-              className="size-full rounded-lg"
-              alt="some images for post"
-            />
-          ))}
+        <section className="grid grid-cols-3 gap-2 gap-5 mt-2">
+          {(isSinglePost ? images : images?.slice(0, 3)).map((src, index) => {
+            return (
+              <img
+                key={index}
+                src={baseURL + src}
+                className="size-full rounded-lg"
+                alt="some images for post"
+              />
+            );
+          })}
+
+          {images?.length > 3 && !isSinglePost && (
+            <Link
+              to={`/posts/${postItem?.id}`}
+              className="text-sm !text-gray-500 hover:!underline hover:!text-black"
+            >
+              +{formatNumber(images?.length - 3 || 0)} images{" "}
+            </Link>
+          )}
         </section>
       )}
       <div className="flex items-center gap-2 justify-between mt-4">
         <ConJoinedImages
           size={30}
-          array={postItem.likes.slice(0, 5).map((post) => ({
-            name: `${post.user.first_name} ${post.user.last_name}`,
-            src: baseURL + post.user.avatar,
-            href: "/",
+          array={postItem?.likes.slice(0, 5).map((post) => ({
+            name: `${post?.user?.first_name} ${post?.user?.last_name}`,
+            src: baseURL + post?.user?.avatar,
+            href: `/co/${post?.user?.id}`,
           }))}
           sizeVariant="sm"
         />
@@ -220,6 +204,7 @@ export const DiscoverPostItem = ({
             IconName={userHasLikedPost ? Heart : HeartIcon}
             tip={userHasLikedPost ? "Unlike post" : "Like post"}
             onClick={handleLikePost}
+            loading={liking}
             textClassName="!text-[.6rem]"
             text={formatNumber(postItem.likes.length)}
           />
@@ -309,7 +294,7 @@ const CommentSection = ({
           placeholder="Type your comment here"
         />
         <button
-          className="absolute bottom-1.5 right-2 bg-gray-300 disabled:bg-gray-200 hover:bg-gray-400 text-xs p-2 active:scale-95 disabled:active:scale-100 transition-all duration-300 rounded disabled:cursor-not-allowed"
+          className="absolute bottom-1.5 right-2 bg-gray-300 disabled:skeleton hover:bg-gray-400 text-xs p-2 active:scale-95 disabled:active:scale-100 transition-all duration-300 rounded disabled:cursor-not-allowed"
           onClick={handleComment}
           disabled={loading || comment.trim().length < 1}
         >
@@ -321,8 +306,6 @@ const CommentSection = ({
 };
 
 const CommentBlock = ({ comment, postUserId }) => {
-  const timestamp = timeAgo(comment.commented_at);
-
   return (
     <div className="mb-4">
       <div className="flex gap-2">
@@ -341,7 +324,9 @@ const CommentBlock = ({ comment, postUserId }) => {
                 </span>
               )}
             </h5>
-            <span className="text-gray-400 text-xs">&bull; {timestamp}</span>
+            <span className="text-gray-400 text-xs">
+              &bull; <TimeAgo time={comment.commented_at} />
+            </span>
           </div>
           <MarkdownComponent
             markdownContent={comment.content}
@@ -362,29 +347,47 @@ export function ButtonWithTooltipIcon({
   tip,
   className,
   tooltipClassName,
+  iconClassName,
   textClassName,
+  loading = false,
 }) {
   return (
     <Tooltip
-      label={tip}
+      label={loading ? "" : tip}
       fontSize="12"
       placement="auto"
       className={clsx(
-        "!rounded-md bg-white !text-custom_blue border",
+        "!rounded-md !bg-white !text-custom_blue border",
         tooltipClassName
       )}
     >
       <button
         onClick={onClick}
+        disabled={loading}
         className={clsx(
-          "flex items-center text-sm gap-1 bg-transparent text-gray-600 hover:text-custom_blue active:scale-95 transition-all duration-300",
+          "flex items-center text-sm gap-1 bg-transparent text-gray-600 hover:text-custom_blue active:scale-95 transition-all duration-300 overflow-hidden disabled:cursor-not-allowed",
           className
         )}
       >
-        {IconName && (
-          <IconName className="xs:!size-4 !size-6 max-xs:!text-xl" />
+        {IconName && !loading && (
+          <IconName
+            className={clsx("", iconClassName, {
+              "xs:!size-4 !size-6 xs:!text-[14px] !text-[20px]": !iconClassName,
+            })}
+          />
         )}
-        {text && <span className={`${textClassName}`}>{text}</span>}
+        {loading && <Spinner size="xs" className="text-gold" />}
+        {text && (
+          <motion.span
+            initial={{ y: 30, opacity: 0.25 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -30, opacity: 0.25 }}
+            key={text}
+            className={`${textClassName} overflow-hidden`}
+          >
+            {text}
+          </motion.span>
+        )}
       </button>
     </Tooltip>
   );
@@ -393,64 +396,70 @@ export function ButtonWithTooltipIcon({
 export const DiscoverPostSkeleton = ({ hasImage }) => {
   return (
     <div
-      className={clsx(
-        "border-t border-gray-200 p-3 animate-[pulse_5s_infinite]",
-        {
-          "bg-gray-100 !border-0 rounded-md": hasImage,
-        }
-      )}
+      className={clsx("border-t border-gray-200 p-3", {
+        "bg-gray-100 !border-0 rounded-md": hasImage,
+      })}
     >
       <header className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {/* Placeholder for logo */}
-          <div className="size-10 rounded-full bg-gray-200" />
+          <div className="size-10 rounded-full skeleton" />
 
           <div className="flex flex-col gap-1">
             {/* Placeholder for company name */}
-            <div className="h-4 w-24 bg-gray-200 rounded-md" />
+            <div className="h-4 w-24 skeleton rounded-md" />
             {/* Placeholder for small text */}
-            <div className="h-3 w-40 bg-gray-200 rounded-md" />
+            <div className="h-3 w-40 skeleton rounded-md" />
           </div>
         </div>
 
         {/* Placeholder for More Options */}
-        <div className="h-6 w-6 bg-gray-200 rounded-md" />
+        <div className="h-6 w-6 skeleton rounded-md" />
       </header>
 
       {/* Placeholder for post body */}
       <div className="mt-2 space-y-2">
-        <div className="h-4 w-full bg-gray-200 rounded-md" />
-        <div className="h-4 w-full bg-gray-200 rounded-md" />
-        <div className="h-4 w-3/4 bg-gray-200 rounded-md" />
+        <div className="h-4 w-full skeleton rounded-md" />
+        <div className="h-4 w-full skeleton rounded-md" />
+        <div className="h-4 w-3/4 skeleton rounded-md" />
       </div>
 
       {/* Placeholder for images */}
       {hasImage && (
         <section className="grid grid-cols-3 gap-2 mt-2">
           {[...Array(3)].map((_, index) => (
-            <div key={index} className="size-full rounded-lg bg-gray-200" />
+            <div key={index} className="size-full rounded-lg skeleton" />
           ))}
         </section>
       )}
 
       {/* Placeholder for footer */}
-      <div className="flex items-center gap-2 justify-between mt-4">
+      <div className="flex items-center gap-2 justify-between mt-6">
         {/* Placeholder for joined images */}
-        <div className="flex -space-x-1 hover:space-x-1">
-          {[...Array(5)].map((_, index) => (
-            <div
-              key={index}
-              className="size-6 bg-gray-200 rounded-full border border-white transition-all duration-300"
-            />
-          ))}
-        </div>
+        <ConjoinedAvatarSkeleton />
 
         {/* Placeholder for action buttons */}
         <div className="flex items-center gap-2">
           {[...Array(4)].map((_, index) => (
-            <div key={index} className="size-6 bg-gray-200 rounded-md" />
+            <div key={index} className="size-6 skeleton rounded-md" />
           ))}
         </div>
+      </div>
+    </div>
+  );
+};
+
+export const ConjoinedAvatarSkeleton = ({ length = 5 }) => {
+  return (
+    <div className="flex items-center gap-2 justify-between">
+      {/* Placeholder for joined images */}
+      <div className="flex -space-x-1 hover:space-x-1">
+        {[...Array(length)].map((_, index) => (
+          <div
+            key={index}
+            className="size-8 skeleton rounded-full border border-white transition-all duration-300"
+          />
+        ))}
       </div>
     </div>
   );

@@ -1,89 +1,147 @@
 import React, { useEffect } from "react";
-import Reviews from "../../components/admin/feeds/reviews";
-import { Suggestions } from "../../components/admin/feeds/TopServiceSuggestions";
-import Summary from "../../components/admin/feeds/summary";
-import ListedProducts from "../../components/admin/products/listedProducts";
-import Header from "../../components/userProfile/header";
-import Navbar from "../../components/userProfile/Navbar";
-import { useParams } from "react-router-dom";
+import { getUserById } from "../../api-services/users";
 import { useQuery } from "@tanstack/react-query";
-import { getCompanies } from "../../api-services/companies";
-import { capitalizeFirst, formatNumber } from "../../lib/utils";
+import { useParams } from "react-router-dom";
 import NoPage from "../../components/NoPage";
+import PageLoading from "../../components/PageLoading";
+import Header from "../../components/userProfile/header";
+import UserProfileHeadings from "../../components/userProfile/user-profile-heading";
+import ProfileSection from "../../components/userProfile/profile-section";
+import LightParagraph from "../../components/ParagraphText";
+import { LocationOnOutlined, PersonOutline } from "@mui/icons-material";
+import {
+  CalendarOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  TagOutlined,
+} from "@ant-design/icons";
+import { VerifiedIcon } from "../../icon";
+import { Badge } from "@chakra-ui/react";
+import { SuggestionList } from "../../components/admin/feeds/TopServiceSuggestions";
 
 export default function UserProfile() {
-  const { company: companyName } = useParams();
+  const { userId } = useParams();
 
-  const { data: companies } = useQuery({
-    queryKey: ["companies"],
-    queryFn: getCompanies,
+  const { data: paramUser, isLoading } = useQuery({
+    queryKey: ["users", userId],
+    queryFn: () => getUserById(userId),
+    enabled: !!userId,
   });
 
-  const company =
-    companies?.find(
-      (item) =>
-        item.company_name.toLowerCase().replaceAll(" ", "_") === companyName
-    ) || null;
-
   useEffect(() => {
-    document.title = `${company?.company_name || ""} | Companies - Connectize`;
+    document.title = `${paramUser?.first_name || paramUser?.email || ""} ${
+      paramUser?.last_name || ""
+    } Connectize`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!company) return <NoPage />;
-  return (
-    <>
-      <Navbar isUserProfile />
-      <main className="bg-background">
-        <Header company={company} />
+  if (isLoading) return <PageLoading hasLogo={false} />;
 
-        <section className="mt-16 max-md:container flex flex-col items-start md:flex-row p-3 gap-2">
-          <ProductSidebar company={company} />
-          <section className="grid grid-cols-1 xl:grid-cols-3 md:px-2 xl:px-4 gap-2 py-2">
-            <Summary company={company} />
-            <div className="md:sticky top-2 md:max-h-screen md:overflow-y-auto scrollbar-hidden">
-              <Suggestions />
-            </div>
+  if (!paramUser) return <NoPage />;
+
+  const headerProps = {
+    banner: paramUser?.banner || "",
+    name: `${paramUser?.first_name || ""} ${paramUser?.last_name || ""}`,
+    logo: paramUser?.avatar || "",
+  };
+
+  const {
+    verified,
+    bio,
+    email,
+    gender,
+    date_of_birth,
+    role,
+    address,
+    city,
+    region,
+    phone_number,
+    country,
+  } = paramUser;
+
+  return (
+    <section className="rounded-md overflow-hidden">
+      <Header {...headerProps} />
+
+      <section className="mt-8 container !px-0 space-y-6">
+        <UserProfileHeadings {...paramUser} />
+
+        <section className="flex max-lg:flex-col gap-y-6 gap-x-3 w-full">
+          <section className="space-y-6 lg:w-[65.5%] shrink-0">
+            <ProfileSection title="Short Bio">
+              <LightParagraph>{bio} </LightParagraph>
+            </ProfileSection>
+            <ProfileSection title="about">
+              <ul className="space-y-4 divide-y">
+                <ProfileAboutList
+                  Icon={PersonOutline}
+                  title="Gender"
+                  value={gender}
+                />
+                <ProfileAboutList
+                  Icon={CalendarOutlined}
+                  title="Date of Birth"
+                  value={date_of_birth}
+                />
+                <ProfileAboutList
+                  Icon={TagOutlined}
+                  title="Role"
+                  value={role}
+                />
+                <ProfileAboutList
+                  Icon={LocationOnOutlined}
+                  title="Location"
+                  value={`${address}, ${city}. ${region}. ${country}`}
+                />
+                <ProfileAboutList
+                  Icon={PhoneOutlined}
+                  title="Phone number"
+                  value={phone_number}
+                />
+                <ProfileAboutList
+                  Icon={MailOutlined}
+                  title="Email"
+                  value={email}
+                />
+              </ul>
+            </ProfileSection>
+
+            <ProfileSection title="Badges">
+              <section className="flex flex-wrap gap-x-4 gap-y-2">
+                {verified && (
+                  <ProfileBadge text="Identity Verified" color="black" />
+                )}
+                <ProfileBadge text="Premium" />
+              </section>
+            </ProfileSection>
           </section>
-        </section>
-      </main>
-    </>
-  );
-}
 
-function ProductSidebar({ company }) {
-  return (
-    <section className="space-y-8 max-md:mb-4 w-full md:max-w-[350px] shrink-0 md:sticky top-2 md:h-screen md:overflow-y-auto scrollbar-hidden">
-      <section className="space-y-5 px-2">
-        <h1 className="text-3xl md:text-2xl font-bold">
-          {capitalizeFirst(company.company_name) || "Dangote oil refinery"}
-        </h1>
-        <div className="flex gap-2 overflow-x-auto">
-          <StatsText
-            text={formatNumber(company.products.length) + "/ products"}
-          />
-          <StatsText
-            text={formatNumber(company.followers.length) + "/ followers"}
-          />
-          <StatsText
-            text={formatNumber(company.following.length) + "/ following"}
-          />
-          <StatsText
-            text={formatNumber(company.reviews.length) + "/ Reviews"}
-          />
-        </div>
+          <ProfileSection title="People Associated" className="h-fit lg:w-1/3">
+            <SuggestionList hasSeeMore />
+          </ProfileSection>
+        </section>
       </section>
-      <ListedProducts company={company} />
-      <Reviews reviews={company.reviews} />
     </section>
   );
 }
 
-function StatsText({ text }) {
+export const ProfileAboutList = ({ title, value, Icon }) => {
   return (
-    <div className="bg-gray-200/80 py-2 px-3 rounded-full md:text-xs text-sm shrink-0">
-      <span className="text-black font-semibold">{text.split("/")[0]}</span>
-      <span className="text-gray-500">{text.split("/")[1]}</span>
-    </div>
+    <li className="flex gap-2 items-start pt-4">
+      <Icon className="!size-6 xs:!size-5" />
+      <div className="flex gap-x-1 items-baseline max-xs:flex-col">
+        <strong className="leading-none">{title}:</strong>
+        <LightParagraph>{value} </LightParagraph>
+      </div>
+    </li>
   );
-}
+};
+
+const ProfileBadge = ({ color, text }) => {
+  return (
+    <Badge className="!normal-case !flex gap-1.5 items-center !bg-gray-100 !text-base xs:!text-sm">
+      <VerifiedIcon color={color} className={color} />
+      <span>{text}</span>
+    </Badge>
+  );
+};

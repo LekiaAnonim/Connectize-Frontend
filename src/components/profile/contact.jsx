@@ -12,6 +12,7 @@ import { useFormik } from "formik";
 import StepButton from "./StepButton";
 import { customFormikFieldValidator } from "../../lib/utils";
 import useRedirect from "../../hooks/useRedirect";
+import { useAuth } from "../../context/userContext";
 
 const validationSchema = Yup.object().shape({
   phone_number: Yup.string().required("This field is required"),
@@ -21,13 +22,16 @@ const validationSchema = Yup.object().shape({
 });
 
 function Contact() {
+  const { user: currentUser } = useAuth();
   useRedirect(
     !(Number(localStorage.getItem(currentProfileIndexKey)) >= 1),
     "/home"
   );
   const initialValues = {
-    personal_email: localStorage.getItem(personal_emailKey) || "",
-    phone_number: localStorage.getItem(phone_numberKey) || "",
+    personal_email:
+      currentUser?.email || localStorage.getItem(personal_emailKey) || "",
+    phone_number:
+      currentUser?.phone_number || localStorage.getItem(phone_numberKey) || "",
   };
 
   const formik = useFormik({

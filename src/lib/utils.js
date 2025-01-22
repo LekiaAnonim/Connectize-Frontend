@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs) {
@@ -55,3 +56,20 @@ export async function customFormikFieldValidator(formik) {
   }
   return true;
 }
+
+export const shareThis = async ({ shareUrlString, shareData }) => {
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+    } catch (error) {
+      console.log("Error sharing: ", error);
+      toast.error("An error occurred while sharing post");
+    }
+  } else {
+    // Fallback for browsers that don't support the Web Share API
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      shareUrlString
+    )}`;
+    window.open(shareUrl, "_blank");
+  }
+};

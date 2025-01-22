@@ -7,7 +7,7 @@ import { getCompanies } from "../../api-services/companies";
 const CompanyLayout = () => {
   const { data: companies = [] } = useQuery({
     queryKey: ["companies"],
-    queryFn: getCompanies,
+    queryFn: ()=> getCompanies(),
   });
 
   return (

@@ -168,8 +168,7 @@ export const getOrCreateProductCategories = async (name) => {
   return newCategory;
 };
 
-export const favoriteProduct = async (productId, data) => {
-  const toastId = toast.info("processing like action...");
+export const bookmarkProduct = async (productId, data) => {
   const allProducts = await getProducts();
 
   const currentUser = await getCurrentUser();
@@ -186,7 +185,7 @@ export const favoriteProduct = async (productId, data) => {
       method: "POST",
       data: { ...data, company_id: data.company.id },
     });
-    toast.success(data.title + " has been unfavorite", { id: toastId });
+    toast.success(data.title + " has been removed from bookmark");
     return;
   }
   await makeApiRequest({
@@ -194,5 +193,5 @@ export const favoriteProduct = async (productId, data) => {
     method: "POST",
     data: { ...data, company_id: data.company.id },
   });
-  toast.success(data.title + " has been favorited", { id: toastId });
+  toast.success(data.title + " has been added to bookmark");
 };

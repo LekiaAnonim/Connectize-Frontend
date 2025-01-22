@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { useEffect } from "react";
 import * as Yup from "yup";
 import Form from "../../components/form";
@@ -13,9 +14,10 @@ const validationSchema = Yup.object().shape({
     .email("Invalid Email Address")
     .required("Fill in a valid email address"),
   password: Yup.string()
+    .min(8, "Password should be at least 8 characters long")
     .matches(
-      /^[a-zA-Z0-9!#$%^&*()]+$/,
-      "Only letters, numbers and some specific punctuations allowed."
+      /^[a-zA-Z0-9!#$%^&*()_+|~=`{}[\]:";'<>?,./-]+$/,
+      "Only alphanumeric characters and special characters allowed."
     )
     .required("Fill in your password"),
 });
@@ -78,14 +80,17 @@ function Login() {
       type: "email",
       label: "Company email",
       placeholder: "Enter a valid email address",
+      validate: true,
     },
     {
       name: "password",
       type: "password",
       label: "Password",
       placeholder: "Enter a 8 digit password",
+      validate: true,
     },
   ];
+
   return (
     <section className="space-y-4">
       <HeadingText>Login to your account</HeadingText>
@@ -113,7 +118,7 @@ function Login() {
       />
 
       <p className="text-center xs:text-sm">
-        Don't have an account?{" "}
+        {"Don't have an account? "}
         <Link to="/signup" className="text-black font-bold no-underline">
           Sign Up
         </Link>

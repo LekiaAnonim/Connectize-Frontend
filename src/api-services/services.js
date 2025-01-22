@@ -107,34 +107,29 @@ export const getOrCreateServiceCategories = async (name) => {
 };
 
 export const bookmarkService = async (serviceId, data) => {
-  const toastId = toast.info("Bookmarking service...");
   const allServices = await getServices();
 
   const currentUser = await getCurrentUser();
 
   const currentService = allServices.find(
-    (service) => service.id === serviceId
+    (service) => service?.id === serviceId
   );
 
-  console.log(serviceId);
-
   if (
-    currentService.likes.find((service) => service.user.id === currentUser.id)
+    currentService?.likes.find((service) => service.user.id === currentUser.id)
   ) {
     await makeApiRequest({
       url: `api/services/${serviceId}/unlike/`,
       method: "POST",
-      data: { ...data, company_id: data.company.id },
+      // data: { ...data, company_id: data.company.id },
     });
-    toast.success(data.title + " has been removed from bookmark", {
-      id: toastId,
-    });
+    toast.success(data.title + " has been removed from bookmark");
     return;
   }
   await makeApiRequest({
     url: `api/services/${serviceId}/like/`,
     method: "POST",
-    data: { ...data, company_id: data.company.id },
+    // data: { ...data, company_id: data.company.id },
   });
-  toast.success(data.title + " has been bookmarked", { id: toastId });
+  toast.success(data.title + " has been bookmarked");
 };

@@ -59,13 +59,13 @@ function ListedProduct({ src, title, likes }) {
           ))}
         </div>
 
-        <div className="absolute bottom-3 right-4 flex gap-3">
+        {/* <div className="absolute bottom-3 right-4 flex gap-3">
           <div className="flex items-center gap-0.5">
             <Heart />
             <small className="text-[.6rem] font-bold">{likes || "178k"}</small>
           </div>
           <ShareAltOutlined />
-        </div>
+        </div> */}
       </div>
     </div>
   );

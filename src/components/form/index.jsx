@@ -24,8 +24,8 @@ export default function Form({
     placeholder,
     options,
     disabled,
+    validate,
   }) => {
-
     return (
       <div className="w-full my-2.5" key={name}>
         <label htmlFor={name} className="font-medium">
@@ -68,9 +68,15 @@ export default function Form({
             onBlur={formik.handleBlur}
             value={formik.values[`${name}`]}
             className={clsx({ "opacity-80 pointer-events-none": disabled })}
+            validate={formik.touched[name] && validate}
+            error={formik.touched[name] && formik.errors[name]}
           />
         )}
-        <FormikErrorResponse formik={formik} name={name} />
+        <FormikErrorResponse
+          formik={formik}
+          name={name}
+          validate={validate || false}
+        />
       </div>
     );
   };
@@ -80,7 +86,6 @@ export default function Form({
 
   const renderField = (field, index) => {
     const { type, gridInputs, disabled } = field;
-
 
     return (
       <div key={index} className="w-full">

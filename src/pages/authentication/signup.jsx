@@ -15,11 +15,11 @@ const validationSchema = Yup.object().shape({
     .required("Fill in a valid email address"),
 
   password: Yup.string()
+    .min(8, "Password should be at least 8 characters long")
     .matches(
-      /^[a-zA-Z0-9!#$%^&*()]+$/,
-      "Only letters, numbers and some specific punctuations allowed."
+      /^[a-zA-Z0-9!#$%^&*()_+|~=`{}[\]:";'<>?,./-]+$/,
+      "Only alphanumeric characters and special characters allowed."
     )
-    .min(8, "Password must be at least 8 characters long")
     .required("Fill in your password"),
   confirmPassword: Yup.string()
     .required("Password confirmation is required")
@@ -64,6 +64,7 @@ function Signup() {
 
       if (success) {
         localStorage.setItem(SUCCESS_TYPE_KEY, REGISTER_EMAIL_KEY);
+        localStorage.setItem(REGISTER_EMAIL_KEY, email);
         navigate("/success");
       }
     },
@@ -81,18 +82,21 @@ function Signup() {
       type: "email",
       label: "Company email",
       placeholder: "Example@companymail.com",
+      validate: true,
     },
     {
       name: "password",
       type: "password",
       label: "Password",
       placeholder: "At least 8 digit",
+      validate: true,
     },
     {
       name: "confirmPassword",
       type: "password",
       label: "Confirm Password",
       placeholder: "Enter the same password as above",
+      validate: true,
     },
   ];
   return (

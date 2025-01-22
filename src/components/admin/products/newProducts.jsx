@@ -22,6 +22,7 @@ export default function NewProducts() {
       <HeadingText>You may also like</HeadingText>
       <section className="">
         <PostSlider
+          array={products?.slice(0, 4)}
           customSlidesPerView={
             isDesktopScreen ? 4 : isLaptopScreen ? 3 : isBigMobile ? 2 : 1
           }

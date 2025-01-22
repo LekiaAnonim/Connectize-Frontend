@@ -23,6 +23,27 @@
   scrollbar-width: none; /* Firefox */
 }
 
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(230, 230, 230, 1) 25%,
+    rgba(245, 245, 245, 1) 50%,
+    rgba(230, 230, 230, 1) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 2s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+
 body {
   overflow-x: hidden;
   scroll-behavior: smooth;

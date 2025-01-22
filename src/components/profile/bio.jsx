@@ -13,6 +13,7 @@ import { useFormik } from "formik";
 import StepButton from "./StepButton";
 import { customFormikFieldValidator } from "../../lib/utils";
 import useRedirect from "../../hooks/useRedirect";
+import { useAuth } from "../../context/userContext";
 
 const validationSchema = Yup.object().shape({
   bio: Yup.string().trim().required("This field is required"),
@@ -24,12 +25,13 @@ const validationSchema = Yup.object().shape({
 });
 
 function Bio() {
+  const { user: currentUser } = useAuth();
   useRedirect(
     !(Number(localStorage.getItem(currentProfileIndexKey)) >= 3),
     "/address"
   );
   const formValues = {
-    bio: localStorage.getItem(bioKey) || "",
+    bio: currentUser?.bio || localStorage.getItem(bioKey) || "",
     website_url: localStorage.getItem(website_urlKey) || "",
     social_media_url: localStorage.getItem(social_media_urlKey) || "",
   };

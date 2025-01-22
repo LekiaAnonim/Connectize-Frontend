@@ -1,4 +1,3 @@
-import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
 import { getCurrentUser } from "./users";
 
@@ -11,13 +10,13 @@ export const getPosts = async () => {
   return posts.filter((post) => post.status.toUpperCase() === "PUBLISHED");
 };
 
-export const createPost = async (body, companyId, images) => {
-  console.log(images);
+export const createPost = async (formData) => {
+  console.log(formData);
 
   const post = await makeApiRequest({
     url: `api/posts/`,
     method: "POST",
-    data: { body, company: companyId, images },
+    data: formData,
     contentType: "multipart/form-data",
   });
 
@@ -34,7 +33,6 @@ export const getLikes = async () => {
 };
 
 export const likePost = async (id, data) => {
-  const toastId = toast.info("processing like action...");
   const allPosts = await getPosts();
 
   const currentUser = await getCurrentUser();
@@ -45,17 +43,16 @@ export const likePost = async (id, data) => {
     await makeApiRequest({
       url: `api/posts/${id}/unlike/`,
       method: "POST",
-      data: { ...data, company_id: data.company.id },
+      // data: { ...data, company_id: data.company.id },
     });
-    toast.success("Post has been unlike", { id: toastId });
+
     return;
   }
   await makeApiRequest({
     url: `api/posts/${id}/like/`,
     method: "POST",
-    data: { ...data, company_id: data.company.id },
+    // data: { ...data, company_id: data.company.id },
   });
-  toast.success("Post has been liked", { id: toastId });
 };
 
 export const commentOnPost = async (id, data, comment) => {
@@ -66,22 +63,4 @@ export const commentOnPost = async (id, data, comment) => {
   });
 
   return result;
-};
-
-export const getComments = async () => {
-  const { results } = await makeApiRequest({
-    url: `api/comments/`,
-    method: "GET",
-  });
-
-  return results;
-};
-
-export const getFollows = async () => {
-  const { results } = await makeApiRequest({
-    url: `api/follows/`,
-    method: "GET",
-  });
-
-  return results;
 };

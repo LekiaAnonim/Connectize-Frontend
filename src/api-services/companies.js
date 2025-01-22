@@ -19,21 +19,30 @@ import { getCurrentUser } from "./users";
 //     "verify": false
 // }
 
-export const getCompanies = async () => {
-  const currentUser = await getCurrentUser();
+export const getAllCompanies = async () => {
   const { results: companies } = await makeApiRequest({
     url: `api/companies/`,
     method: "GET",
-    params: { profile: currentUser.email }, // Send email to filter
+  });
+
+  return companies || [];
+};
+
+export const getCompanies = async (id) => {
+  const currentUser = await getCurrentUser();
+  const params = id ? { id } : { profile: currentUser?.email };
+  const { results: companies } = await makeApiRequest({
+    url: `api/companies/`,
+    method: "GET",
+    params,
   });
   return companies || [];
 };
 
-export const getSingleCompany = async (company) => {
+export const getSingleCompany = async (companyName) => {
   const singleCompany = await makeApiRequest({
-    url: `api/companies/`,
+    url: `api/companies/${companyName}`,
     method: "GET",
-    params: { company }, // Send email to filter
   });
   return singleCompany;
 };
@@ -64,6 +73,7 @@ export const createCompany = async (data, resetForm) => {
       country: data.country,
       state: data.city,
       city: data.city,
+      slug: data.company_name.toString().replaceAll(" ", "-"),
       website: data.company_website,
       registration_number: data.company_registration_no,
       registration_date: data.company_registration_date,

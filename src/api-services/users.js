@@ -11,6 +11,15 @@ export const getAllUsers = async () => {
   return results;
 };
 
+export const getUserById = async (id) => {
+  const results = await makeApiRequest({
+    url: `api/users/${id}`,
+    method: "GET",
+  });
+
+  return results;
+};
+
 export const getCurrentUser = async () => {
   const currentUser = await makeApiRequest({
     url: `api/current-user/`,
@@ -99,3 +108,22 @@ export const getOrCreateGender = async (gender) => {
 };
 
 export const logOutCurrentUser = () => goToLogin();
+
+export const connectWithUser = async (id) => {
+  // const currentUser = await getCurrentUser();
+
+  //  const allUsers = await getAllUsers();
+
+  //  if (allUsers.likes.find((user) => user.user.id === currentUser.id)) {
+  //    await makeApiRequest({
+  //      url: `api/users/${id}/unfollow/`,
+  //      method: "POST",
+  //    });
+
+  //    return;
+  //  }
+  return await makeApiRequest({
+    url: `api/users/${id}/follow/`,
+    method: "POST",
+  });
+};

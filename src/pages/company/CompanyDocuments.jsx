@@ -27,7 +27,6 @@ export const largeFileText =
 
 export function checkFileFormat(value) {
   if (!value) return true;
-  console.log(value);
 
   return value && SUPPORTED_FORMATS.includes(value.type.toLowerCase());
 }

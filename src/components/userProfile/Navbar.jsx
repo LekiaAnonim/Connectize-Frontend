@@ -1,150 +1,73 @@
 import React from "react";
 import Logo from "../logo";
-import MoreOptions from "../MoreOptions";
 import Headroom from "react-headroom";
-import { useAuth } from "../../context/userContext";
-import { Avatar, Tooltip } from "@chakra-ui/react";
 
-import {
-  ChartBar,
-  HomeIcon,
-  Message,
-  Setting,
-  StoreIcon,
-  UserGroup,
-} from "../../icon";
-import FeedSearch from "../../components/admin/feeds/FeedSearch";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+
+import FeedSearch from "../custom/FeedSearch";
 import { NotificationPopOver } from "../../components/notifications";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
-import { SearchPopOver } from "../SearchPopOver";
-import { useNav } from "../../context/navContext";
+import { JoinedUserCompanyImages } from "../ResponsiveNav";
+import { Tooltip } from "@chakra-ui/react";
+import { NavigationSection } from "../NavigationSection";
 
-import { Menu } from "@mui/icons-material";
-import { avatarStyle } from "../ResponsiveNav";
+const Navbar = () => {
+  const weirdFlex = "flex w-full gap-4 md:!gap-6 items-center";
+  const [showBottomNav, setShowBottomNav] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
-const Navbar = ({ isUserProfile }) => {
-  const { toggleNav } = useNav();
-  const weirdFlex = "flex w-full gap-4 md:!gap-6 items-center justify-between";
-  const groupFlex = "flex w-full gap-4 md:!gap-3 xl:!gap-6 items-center";
+  const handleScroll = () => {
+    if (window.scrollY > lastScrollY) {
+      setShowBottomNav(false);
+    } else {
+      setShowBottomNav(true);
+    }
+    setLastScrollY(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastScrollY]);
+
   return (
-    <Headroom>
-      <nav className="w-full h-20 flex items-center bg-white">
-        <section className="max-md:container w-full py-2 md:px-4 flex items-center justify-between gap-2 lg:!gap-10 xl:!gap-14">
-          <div className={weirdFlex}>
-            <Logo />
-            <div className={groupFlex}>
-              <LinkWithTooltipIcon
-                IconName={HomeIcon}
-                text="Home"
-                to="/"
-                className="max-lg:hidden"
-              />
-              <LinkWithTooltipIcon
-                IconName={Message}
-                to="/messages"
-                tip="Messages"
-                className="max-md:hidden"
-              />
-              <SearchPopOver />
+    <>
+      <Headroom>
+        <nav className="w-full h-16 flex items-center bg-white">
+          <section className="container w-full py-2 md:px-4 flex items-center justify-between !gap-2 lg:!gap-10 xl:!gap-14">
+            <div className={weirdFlex}>
+              <Logo size="50px" />
+              <FeedSearch />
             </div>
-          </div>
 
-          <FeedSearch className="max-md:hidden" />
-
-          <div className={weirdFlex}>
-            <div className={groupFlex}>
+            <div className="flex items-center gap-3 xs:gap-5 md:gap-7 shrink-0">
               <NotificationPopOver />
-              <LinkWithTooltipIcon
-                IconName={ChartBar}
-                to="/analysis"
-                tip="Analysis"
-                className="max-sm:hidden"
-              />
-              <LinkWithTooltipIcon
-                IconName={StoreIcon}
-                to="/market"
-                tip="Market"
-                className="max-sm:hidden"
-              />
-              <LinkWithTooltipIcon
-                IconName={UserGroup}
-                to="/services"
-                tip="Services"
-                className="max-md:hidden"
-              />
-              <LinkWithTooltipIcon
-                IconName={Setting}
-                to="/settings"
-                tip="Settings"
-                className="max-xs:hidden"
-              />
-
-              <MoreOptions className="mx-2 md:!hidden" triggerStyle="md:hidden">
-                <LinkWithTooltipIcon
-                  IconName={ChartBar}
-                  to="/analysis"
-                  text="Analysis"
-                  className="sm:hidden"
-                />
-                <LinkWithTooltipIcon
-                  IconName={StoreIcon}
-                  to="/market"
-                  text="Market"
-                  className="pt-3 sm:hidden"
-                />
-                <LinkWithTooltipIcon
-                  IconName={Message}
-                  to="/messages"
-                  text="Messages"
-                  className="pt-3 md:hidden"
-                />
-
-                <LinkWithTooltipIcon
-                  IconName={UserGroup}
-                  to="/services"
-                  text="Services"
-                  className="pt-3 md:hidden"
-                />
-
-                <LinkWithTooltipIcon
-                  IconName={Setting}
-                  to="/settings"
-                  text="Settings"
-                  className="pt-3 xs:hidden"
-                />
-              </MoreOptions>
+              <JoinedUserCompanyImages />
             </div>
+          </section>
+        </nav>
+      </Headroom>
 
-            <div className="flex items-center gap-3 shrink-0">
-              <ProfilePicture />
-              {!isUserProfile && (
-                <button onClick={() => toggleNav(true)} className="md:hidden">
-                  <Menu />
-                </button>
-              )}
-            </div>
-          </div>
+      <motion.nav
+        className="md:hidden bg-gold fixed bottom-0 left-0 w-full z-[99999]"
+        initial={{ y: 0 }}
+        animate={{ y: showBottomNav ? 0 : 100 }}
+        transition={{ type: "spring", stiffness: 150 }}
+      >
+        <section className="container">
+          <NavigationSection hasHeader />
         </section>
-      </nav>
-    </Headroom>
+      </motion.nav>
+    </>
   );
 };
 
 export default Navbar;
-
-function ProfilePicture() {
-  const { user } = useAuth();
-
-  return (
-    <Avatar
-      src={user?.avatar || ""}
-      name={user?.first_name + " " + user?.last_name || ""}
-      size="sm"
-      className={avatarStyle}
-    />
-  );
-}
 
 export function LinkWithTooltipIcon({
   IconName,
@@ -160,18 +83,18 @@ export function LinkWithTooltipIcon({
       fontSize="sm"
       placement="auto"
       className={clsx(
-        "!rounded-md bg-white !text-custom_blue border",
+        "!rounded-md !bg-white !text-custom_blue border",
         tooltipClassName
       )}
     >
       <Link
         to={to}
         className={clsx(
-          "flex items-center font-bold text-sm gap-3 text-gray-400 hover:text-custom_blue transition-colors duration-300",
+          "inline-flex items-center font-bold text-sm gap-3 text-gray-400 hover:text-custom_blue transition-colors duration-300",
           className
         )}
       >
-        <IconName />
+        <IconName className="!size-5 !text-sm active:scale-95 transition-all duration-200" />
         {text && <span>{text}</span>}
       </Link>
     </Tooltip>

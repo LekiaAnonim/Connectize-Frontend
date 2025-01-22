@@ -33,9 +33,6 @@ function ResetPasswordPage() {
         url: "password-reset",
         resetForm,
       });
-
-      console.log(success);
-
       if (success) {
         localStorage.setItem(SUCCESS_TYPE_KEY, RESET_PASSWORD_KEY);
         localStorage.setItem(RESET_PASSWORD_EMAIL_KEY, email);
@@ -56,6 +53,7 @@ function ResetPasswordPage() {
       type: "email",
       label: "Email Address",
       placeholder: "Enter a valid email address",
+      validate: true,
     },
   ];
 

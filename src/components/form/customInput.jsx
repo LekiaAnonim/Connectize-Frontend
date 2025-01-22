@@ -15,9 +15,9 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { MarkdownComponent } from "../MarkDownComponent";
 import { capitalizeFirst } from "../../lib/utils";
+import { motion } from "framer-motion";
 
 import clsx from "clsx";
-import { SmallDashOutlined } from "@ant-design/icons";
 
 export const inputClassNames =
   "relative mt-2 !w-full !bg-background py-2.5 px-3 rounded-md placeholder:text-sm !text-sm transition-all duration-300 !z-0";
@@ -30,6 +30,8 @@ export default function CustomInput({
   value,
   name,
   className,
+  validate,
+  error,
 }) {
   const [isPassword, setIsPassword] = useState(true);
   const [passwordType, setPasswordType] = useState("password");
@@ -42,7 +44,10 @@ export default function CustomInput({
     <div className="relative w-full">
       <Input
         autoComplete="true"
-        className={`${className} ${inputClassNames}`}
+        className={clsx(className, inputClassNames, {
+          "!border-green-800 !bg-green-50/50": validate && !error,
+          "!border-[#9e3818] !bg-[#9e3818]/5": error,
+        })}
         type={type === "password" ? passwordType : type}
         placeholder={placeholder}
         onChange={(e) => {
@@ -54,7 +59,6 @@ export default function CustomInput({
         id={name}
         name={name}
       />
-
       {type === "password" && isPassword ? (
         <span
           className="absolute top-5 right-3 cursor-pointer text-xs"
@@ -168,19 +172,17 @@ export function AvatarUpload({ formik, name, label, className }) {
 }
 
 export const CustomTextArea = ({ formik, name, placeholder }) => {
-  const selectedStyle = { color: "black", bg: "gray.100" };
+  const selectedStyle = { color: "black", bg: "#F1C644", borderRadius: 6 };
 
   const getTextLength = (html) => {
     const div = document.createElement("div");
     div.innerHTML = html;
 
     const textLength = div.innerText.replaceAll(" ", "").length;
-    return textLength === 0
-      ? ""
-      : textLength > 1
-      ? `${textLength} characters`
-      : `${textLength} character`;
+    return textLength;
   };
+
+  const textLength = getTextLength(formik.values[`${name}`]);
 
   return (
     <>
@@ -206,10 +208,20 @@ export const CustomTextArea = ({ formik, name, placeholder }) => {
               theme="snow"
               placeholder={placeholder}
             />
-            <div className="flex justify-end mt-1">
-              <small className="text-xs">
-                {getTextLength(formik.values[`${name}`])}
-              </small>
+            <div className="flex justify-end gap-0.5 mt-1 text-xs">
+              <motion.small
+                key={formik.values[`${name}`].trim()}
+                initial={{ y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-xs"
+              >
+                {textLength === 0 ? "" : textLength}
+              </motion.small>
+              {textLength === 0
+                ? ""
+                : textLength > 1
+                ? "characters"
+                : "character"}
             </div>
           </TabPanel>
           <TabPanel className="mb-4 !px-0">
