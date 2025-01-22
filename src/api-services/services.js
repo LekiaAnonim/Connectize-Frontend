@@ -121,7 +121,7 @@ export const bookmarkService = async (serviceId, data) => {
     await makeApiRequest({
       url: `api/services/${serviceId}/unlike/`,
       method: "POST",
-      data: { ...data, company_id: data.company.id },
+      // data: { ...data, company_id: data.company.id },
     });
     toast.success(data.title + " has been removed from bookmark");
     return;
@@ -129,7 +129,7 @@ export const bookmarkService = async (serviceId, data) => {
   await makeApiRequest({
     url: `api/services/${serviceId}/like/`,
     method: "POST",
-    data: { ...data, company_id: data.company.id },
+    // data: { ...data, company_id: data.company.id },
   });
   toast.success(data.title + " has been bookmarked");
 };

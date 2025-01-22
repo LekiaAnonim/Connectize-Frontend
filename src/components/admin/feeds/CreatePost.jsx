@@ -41,7 +41,7 @@ function CreatePost() {
   const { user: currentUser } = useAuth();
   const { data: companies } = useQuery({
     queryKey: ["companies"],
-    queryFn: ()=> getCompanies(),
+    queryFn: () => getCompanies(),
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -109,19 +109,22 @@ function CreatePost() {
       return;
     }
 
-    setIsLoading(true);
-    const toastId = toast.info("Creating post. Please hold on...");
-
     try {
-      await createPost(message, companyId, validImages);
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.append("company", companyId);
+      formData.append("body", message);
+      validImages.forEach((image) => {
+        formData.append("images", image);
+      });
+      await createPost(formData);
       setMessage("");
       setSelectedGif("");
-      toast.success("Your post has been created", { id: toastId });
+      toast.success("Your post has been created");
       setRefetchInterval(1000);
       setTimeout(() => setRefetchInterval(false), 2000);
       setValidImages([]);
     } catch (error) {
-      toast.dismiss(toastId);
       console.error("Post error: ", error);
     } finally {
       setIsLoading(false);
@@ -294,7 +297,7 @@ function CreatePost() {
         {(showEmojiPicker || showGifPicker) && renderEmojiGifPickers}
 
         <button
-          className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-8 transition-all duration-300 md:w-fit disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="text-sm rounded-full bg-gold hover:bg-gold/60 py-2.5 px-8 transition-all duration-300 md:w-fit disabled:bg-gray-300 disabled:cursor-not-allowed"
           onClick={handleCreatePost}
           disabled={isLoading}
         >

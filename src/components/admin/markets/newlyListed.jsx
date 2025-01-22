@@ -133,14 +133,13 @@ export const ListCardSkeleton = () => (
   </div>
 );
 
-export const ChatSellerLink = ({ text = "Chat seller", to, id }) => (
+export const ChatSellerLink = ({ text = "Chat seller", to }) => (
   <Link
     to={to || ""}
-    className="shrink-0 flex items-center bg-black py-2 !text-white px-3 xs:text-xs rounded-full group w-fit"
-    onClick={() => localStorage.setItem("productId", id)}
+    className="shrink-0 flex items-center bg-black py-2 xs:py-1 !text-white px-4 xs:text-xs rounded-full group w-fit"
   >
     <span>{text}</span>
     <span className="text-custom_grey ml-1">|</span>
-    <ChevronRight className="w-4 transition-all duration-300 -translate-x-1 group-hover:translate-x-1" />
+    <ChevronRight className="!size-4 transition-all duration-300 translate-x-0 group-hover:translate-x-1" />
   </Link>
 );

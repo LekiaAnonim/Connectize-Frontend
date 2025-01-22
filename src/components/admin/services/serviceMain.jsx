@@ -1,44 +1,19 @@
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import clsx from "clsx";
 import { PostCard, PostCardSkeleton } from "../feeds/DiscoverPostTabs";
 import { getServices } from "../../../api-services/services";
 import { useQuery } from "@tanstack/react-query";
+import CustomTabs from "../../custom/tabs";
 
 function ServiceMain({ isOverview }) {
-  const tabsStyle =
-    "rounded-full font-medium lg:!text-base xs:!text-sm !text-xs";
-  const selectedStyle = { color: "black", bg: "#F1C644" };
   return (
-    <Tabs
-      variant="solid-rounded"
-      className={clsx("space-y-4", {
-        "max-lg:!hidden w-full": isOverview,
-      })}
-    >
-      <TabList className="gap-2 sm:gap-4 bg-white rounded-full !p-2">
-        <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
-          Featured
-        </Tab>
-        <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
-          Most Recent
-        </Tab>
-        <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
-          Best Matches
-        </Tab>
-      </TabList>
-
-      <TabPanels className="!w-full">
-        <TabPanel className="!p-0 !w-full">
-          <PostCardWrapper isOverview={isOverview} />
-        </TabPanel>
-        <TabPanel className="!p-0 !w-full">
-          <PostCardWrapper isOverview={isOverview} />
-        </TabPanel>
-        <TabPanel className="!p-0 !w-full">
-          <PostCardWrapper isOverview={isOverview} />
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
+    <CustomTabs
+      tabsHeading={["Featured", "Most Recent", "Best Matches"]}
+      tabsPanels={[
+        <PostCardWrapper isOverview={isOverview} />,
+        <PostCardWrapper isOverview={isOverview} />,
+        <PostCardWrapper isOverview={isOverview} />,
+      ]}
+    />
   );
 }
 

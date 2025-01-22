@@ -1,4 +1,3 @@
-import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
 import { getCurrentUser } from "./users";
 
@@ -11,13 +10,13 @@ export const getPosts = async () => {
   return posts.filter((post) => post.status.toUpperCase() === "PUBLISHED");
 };
 
-export const createPost = async (body, companyId, images) => {
-  console.log(images);
+export const createPost = async (formData) => {
+  console.log(formData);
 
   const post = await makeApiRequest({
     url: `api/posts/`,
     method: "POST",
-    data: { body, company: companyId, images },
+    data: formData,
     contentType: "multipart/form-data",
   });
 
@@ -65,5 +64,3 @@ export const commentOnPost = async (id, data, comment) => {
 
   return result;
 };
-
-

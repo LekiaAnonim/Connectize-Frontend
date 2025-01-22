@@ -18,7 +18,7 @@ root.render(
         <App />
       </MyProvider>
       <Toaster
-        position="bottom-right"
+        position="top-center"
         closeButton
         duration={5000}
         pauseWhenPageIsHidden

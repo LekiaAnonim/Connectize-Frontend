@@ -1,14 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
 import {
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-  Avatar,
-} from "@chakra-ui/react";
-import clsx from "clsx";
-import {
   Bookmark,
   StarFilledIcon,
   StarOutlinedIcon,
@@ -23,7 +14,7 @@ import { bookmarkService, getServices } from "../../../api-services/services";
 import { useAuth } from "../../../context/userContext";
 import { BookmarkFilledIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "../../../api-services/products";
+import { bookmarkProduct, getProducts } from "../../../api-services/products";
 import { MarkdownComponent } from "../../MarkDownComponent";
 import { motion } from "framer-motion";
 import {
@@ -31,11 +22,10 @@ import {
   ConjoinedAvatarSkeleton,
 } from "./DiscoverPosts";
 import { baseURL } from "../../../lib/helpers";
+import CustomTabs from "../../custom/tabs";
+import { Avatar } from "@chakra-ui/react";
 
 const DiscoverPostTabs = () => {
-  const tabsStyle = "w-full rounded";
-  const selectedStyle = { color: "black", bg: "gray.100" };
-
   const { data: products, isLoading: productsLoading } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
@@ -61,7 +51,7 @@ const DiscoverPostTabs = () => {
 
   const servicesForSlider = services?.map((service) => {
     return {
-      isService: false,
+      isService: true,
       title: service?.title,
       summary: service?.description,
       companyName: service?.company,
@@ -73,33 +63,21 @@ const DiscoverPostTabs = () => {
   });
 
   return (
-    <Tabs variant="solid-rounded" className="space-y-2">
-      <TabList className="rounded-full bg-white p-1 gap-1">
-        <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
-          Products
-        </Tab>
-        <Tab className={clsx("", tabsStyle)} _selected={selectedStyle}>
-          Services
-        </Tab>
-      </TabList>
-
-      <TabPanels className="!w-full">
-        <TabPanel className="!p-0 !w-full">
-          <PostSlider
-            array={productsForSlider}
-            fallback="products"
-            arrayLoading={productsLoading}
-          />
-        </TabPanel>
-        <TabPanel className="!p-0 !w-full">
-          <PostSlider
-            fallback="services"
-            array={servicesForSlider}
-            arrayLoading={servicesLoading}
-          />
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
+    <CustomTabs
+      tabsHeading={["Products", "Services"]}
+      tabsPanels={[
+        <PostSlider
+          array={productsForSlider}
+          fallback="products"
+          arrayLoading={productsLoading}
+        />,
+        <PostSlider
+          fallback="services"
+          array={servicesForSlider}
+          arrayLoading={servicesLoading}
+        />,
+      ]}
+    />
   );
 };
 
@@ -188,19 +166,20 @@ export const PostCard = ({
         <h3 className="font-bold capitalize text-lg line-clamp-1">
           {title || "Remote Monitoring and Control"}
         </h3>
-        <BookMarkButton service={whole} />
+        <BookMarkButton
+          service={isService ? whole : null}
+          product={!isService ? whole : null}
+        />
       </div>
 
-      {!isService && (
-        <div className="flex mt-2">
-          {[1, 2, 3].map((_, index) => (
-            <StarFilledIcon key={index} />
-          ))}
-          {[1, 2].map((_, index) => (
-            <StarOutlinedIcon key={index} />
-          ))}
-        </div>
-      )}
+      <div className="flex mt-2">
+        {[1, 2, 3].map((_, index) => (
+          <StarFilledIcon key={index} />
+        ))}
+        {[1, 2].map((_, index) => (
+          <StarOutlinedIcon key={index} />
+        ))}
+      </div>
 
       <div className="my-4 line-clamp-3 shrink-0">
         <MarkdownComponent
@@ -213,18 +192,17 @@ export const PostCard = ({
 
       <div className="h-full" />
 
-      {!isService ||
-        (whole?.likes && (
-          <ConJoinedImages
-            size={30}
-            sizeVariant="sm"
-            array={whole?.likes.slice(0, 5).map((post) => ({
-              name: `${post?.user?.first_name} ${post?.user?.last_name}`,
-              src: baseURL + post?.user?.avatar,
-              href: `/co/${post?.user?.id}`,
-            }))}
-          />
-        ))}
+      {whole?.likes && (
+        <ConJoinedImages
+          size={30}
+          sizeVariant="sm"
+          array={whole?.likes.slice(0, 5).map((post) => ({
+            name: `${post?.user?.first_name} ${post?.user?.last_name}`,
+            src: baseURL + post?.user?.avatar,
+            href: `/co/${post?.user?.id}`,
+          }))}
+        />
+      )}
 
       <div className="flex items-center justify-between mt-4 pt-3 border-t">
         <div className="flex gap-2 items-center">
@@ -289,7 +267,7 @@ export const PostCardSkeleton = React.memo(() => (
   </div>
 ));
 
-export const BookMarkButton = ({ service }) => {
+export const BookMarkButton = ({ service, product }) => {
   const { user: currentUser } = useAuth();
   const userHasLikedProduct = service?.likes?.find(
     (product) => product?.user?.id === currentUser?.id
@@ -298,9 +276,13 @@ export const BookMarkButton = ({ service }) => {
   const [loading, setLoading] = useState(false);
 
   const handleBookmark = async () => {
-    if (!service) return;
+    if (!service && !product) return;
     setLoading(true);
-    await bookmarkService(service.id, service);
+    if (product) {
+      await bookmarkProduct(product?.id);
+    } else if (service) {
+      await bookmarkService(service.id, service);
+    }
     setLoading(false);
     setBookmarked((prev) => !prev);
   };

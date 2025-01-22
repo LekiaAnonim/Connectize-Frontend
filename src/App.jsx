@@ -37,6 +37,7 @@ import RepresentativesPage from "./pages/representatives";
 import CompaniesPage from "./pages/companies";
 import Search from "./pages/search";
 import AssignRepresentative from "./pages/representatives/AssignRepresentative";
+import BookMark from "./pages/bookmark";
 
 function App() {
   return (
@@ -51,6 +52,8 @@ function App() {
               <Route path="/" element={<NewsFeed />} />
               <Route path="/posts/:id" element={<SinglePostPage />} />
             </Route>
+            {/* Bookmark */}
+            <Route path="co/bookmark" element={<BookMark />} />
             {/* User Profile */}
             <Route path="co/:userId" element={<UserProfile />} />
             {/* Company Profile */}
@@ -66,7 +69,7 @@ function App() {
             <Route path="companies" element={<CompaniesPage />} />
             <Route path="market" element={<Market />} />
             <Route path="products/:id" element={<Product />} />
-            <Route path="listing" element={<Listing />} />
+            <Route path="products/listing" element={<Listing />} />
             {/* Services */}
             <Route path="services" element={<Services />} />
 

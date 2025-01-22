@@ -23,7 +23,7 @@ module.exports = {
         background: "#F7F7F7",
         tabs: "#E1E1E1",
         dark: "#242424",
-        gold: " #F1C644", // f1c644
+        gold: "#F1C644", // f1c644
         custom_yellow: "#FFFAB7",
         services_yellow: "#f0d77f",
         custom_grey: " #828282",

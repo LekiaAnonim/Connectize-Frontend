@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 import Reviews from "../../components/admin/feeds/reviews";
-import {
-  SuggestionList,
-  Suggestions,
-} from "../../components/admin/feeds/TopServiceSuggestions";
+import { SuggestionList } from "../../components/admin/feeds/TopServiceSuggestions";
 import Summary from "../../components/admin/feeds/summary";
 import ListedProducts from "../../components/admin/products/listedProducts";
 import Header from "../../components/userProfile/header";

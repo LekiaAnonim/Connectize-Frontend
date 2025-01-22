@@ -6,7 +6,7 @@ import { MessageOutlined, ShareAltOutlined } from "@ant-design/icons";
 import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
 import { commentOnPost, getPosts, likePost } from "../../../api-services/posts";
-import { formatNumber } from "../../../lib/utils";
+import { formatNumber, shareThis } from "../../../lib/utils";
 import { Avatar, CloseButton, Spinner, Tooltip } from "@chakra-ui/react";
 import MoreOptions from "../../MoreOptions";
 import FormatPostText from "../../FormatPostText";
@@ -39,7 +39,7 @@ function DiscoverPosts() {
           ))
         : posts?.map((post, index) => (
             <DiscoverPostItem
-              hasImage={post.images.length > 0}
+              hasImage={post?.images?.length > 0}
               key={index}
               postItem={post}
             />
@@ -73,33 +73,14 @@ export const DiscoverPostItem = ({
     setTimeout(() => setRefetchInterval(false), 2000);
     setLiking(false);
   };
-
-  const sharePost = async () => {
-    const shareUrlString = window.location.href + "posts/" + postItem.id;
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title:
-            "Connectize Post " +
-            postItem.id +
-            " - " +
-            postItem.company.company_name,
-          text: postItem.body,
-          url: shareUrlString,
-        });
-      } catch (error) {
-        console.log("Error sharing:", error);
-        toast.error("An error occurred while sharing post");
-      }
-    } else {
-      // Fallback for browsers that don't support the Web Share API
-      const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-        shareUrlString
-      )}`;
-      window.open(shareUrl, "_blank");
-    }
+  const shareUrlString = window.location.href + "posts/" + postItem.id;
+  const shareData = {
+    title: "Connectize Post by - " + postItem?.company?.company_name,
+    text: postItem.body,
+    url: shareUrlString,
   };
 
+  const sharePost = async () => await shareThis({ shareUrlString, shareData });
   const handlePostDownloadPDF = () => {
     const doc = new jsPDF();
 
@@ -359,7 +340,7 @@ export function ButtonWithTooltipIcon({
 }) {
   return (
     <Tooltip
-      label={tip}
+      label={loading ? "" : tip}
       fontSize="12"
       placement="auto"
       className={clsx(

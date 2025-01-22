@@ -7,6 +7,8 @@ import { SwiperSlide } from "swiper/react";
 import { ChatSellerLink, ListCardSkeleton } from "./newlyListed";
 import { useQuery } from "@tanstack/react-query";
 import { getRecommendedProducts } from "../../../api-services/products";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { ButtonWithTooltipIcon } from "../feeds/DiscoverPosts";
 
 // Memoize Card component to avoid unnecessary re-renders
 const Card = memo(({ product }) => {
@@ -61,9 +63,12 @@ function Carousel() {
         </button>
       </div>
 
-      <section className="space-y-4">
-        <HeadingText>Recommended</HeadingText>
-        <PostSlider array={recommendedProducts}  >
+      <section className="space-y-2">
+        <div className="flex items-center justify-between">
+          <HeadingText>Recommended</HeadingText>
+          <CreateNewLink />
+        </div>
+        <PostSlider array={recommendedProducts}>
           {recommendedProducts?.map((product) => (
             <SwiperSlide key={product.id}>
               <Card product={product} />
@@ -76,3 +81,21 @@ function Carousel() {
 }
 
 export default Carousel;
+
+const CreateNewLink = ({
+  url = "/products/listing",
+  text = "Add new product",
+}) => {
+  return (
+    <Link
+      to={url}
+      className="p-3 rounded-md flex items-center gap-2 bg-black hover:bg-opacity-70 hover:scale-90 transition-all duration-300 fixed bottom-12 right-5 z-[999999]"
+    >
+      <ButtonWithTooltipIcon
+        tip={text}
+        IconName={PlusIcon}
+        iconClassName="!text-white"
+      />
+    </Link>
+  );
+};

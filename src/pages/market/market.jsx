@@ -4,7 +4,7 @@ import NewlyListed from "../../components/admin/markets/newlyListed";
 
 export default function Market() {
   useEffect(() => {
-    document.title = `Marketplace - Connectize`;
+    document.title = `Connectize Marketplace`;
   }, []);
   return (
     <section className="space-y-16 w-full bg-background">

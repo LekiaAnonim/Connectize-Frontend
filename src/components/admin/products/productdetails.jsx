@@ -2,17 +2,23 @@ import React, { useRef, useState, useCallback } from "react";
 import { ChatSellerLink } from "../markets/newlyListed";
 import HeadingText from "../../HeadingText";
 import {
+  BookmarkFilledIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  HeartFilledIcon,
-  HeartIcon,
 } from "@radix-ui/react-icons";
 import { Button, Divider } from "@chakra-ui/react";
 import { MarkdownComponent } from "../../MarkDownComponent";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import { useAuth } from "../../../context/userContext";
-import { favoriteProduct } from "../../../api-services/products";
+import { bookmarkProduct } from "../../../api-services/products";
+import { Bookmark } from "../../../icon";
+import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import {
+  getCompanies,
+  getSingleCompany,
+} from "../../../api-services/companies";
 
 const NAVIGATION_BUTTONS = [
   {
@@ -33,6 +39,12 @@ function Productdetails({ product }) {
   const swiperRef = useRef(null);
   const { user: currentUser } = useAuth();
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+
+  const { data: company } = useQuery({
+    queryKey: ["companies", product?.company],
+    queryFn: () => getSingleCompany(product?.company),
+    enabled: !!product?.company,
+  });
 
   // Memoized navigation handler
   const handleNavigation = useCallback((action) => {
@@ -105,8 +117,8 @@ function Productdetails({ product }) {
           </div>
         ) : (
           <img
-            src={"/images/Rectangle3.png"}
-            className="w-full max-h-[300px] shrink-0"
+            src={"/public/images/produc_drum.jpeg"}
+            className="w-full md:w-1/2 max-h-[300px] shrink-0"
             alt={product?.title || "product"}
           />
         )}
@@ -150,12 +162,21 @@ function Productdetails({ product }) {
         <section className="space-y-4 lg:w-1/2 shrink-0">
           <HeadingText>Seller's information</HeadingText>
           <div className="flex items-center gap-3">
-            <img src="/images/Ellipsewww.png" className="size-16" alt="#" />
-            <div>
-              <h5 className="font-bold capitalize">
-                {product?.company || "west land energy"}
-              </h5>
-              <span className="text-gray-400 text-sm">since 15th 2023</span>
+            <img
+              src={company?.logo || "/images/default-company-logo.png"}
+              className="size-16"
+              alt={product?.company}
+            />
+            <div className="flex flex-col">
+              <Link
+                to={`/${product?.company}`}
+                className="font-bold capitalize"
+              >
+                {product?.company || ""}
+              </Link>
+              <span className="text-gray-400 text-sm">
+                since {company?.registration_date}
+              </span>
             </div>
           </div>
         </section>
@@ -168,21 +189,21 @@ function FavoriteButton({ userHasLikedProduct, product }) {
   const [favorited, setFavorited] = useState(userHasLikedProduct);
   const [loading, setLoading] = useState(false);
 
-  const handleFavorite = async () => {
+  const handleBookmark = async () => {
     setLoading(true);
-    await favoriteProduct(product.id, product);
+    await bookmarkProduct(product.id, product);
     setFavorited((prev) => !prev); // Optimistic UI update
     setLoading(false);
   };
 
   return (
     <button
-      className="rounded-full px-4 py-1.5 border !border-black/60 flex items-center justify-center gap-2 text-sm font-bold disabled:cursor-not-allowed"
-      onClick={handleFavorite}
+      className="rounded-full px-4 py-1.5 border !border-black/40 flex items-center justify-center gap-1 text-sm font-semibold disabled:cursor-not-allowed"
+      onClick={handleBookmark}
       disabled={loading}
     >
-      {favorited ? <HeartFilledIcon /> : <HeartIcon />}
-      <span>Add to favorite</span>
+      {favorited ? <BookmarkFilledIcon className="size-6" /> : <Bookmark />}
+      <span>Bookmark Product</span>
     </button>
   );
 }
