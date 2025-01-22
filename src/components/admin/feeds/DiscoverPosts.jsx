@@ -60,6 +60,8 @@ export const DiscoverPostItem = ({
   const { setRefetchInterval } = useCustomQuery();
   const { user: currentUser } = useAuth();
 
+  const images = postItem?.images;
+
   const userHasLikedPost = postItem?.likes.find(
     (post) => post?.user?.id === currentUser?.id
   )
@@ -151,21 +153,32 @@ export const DiscoverPostItem = ({
       </header>
 
       <FormatPostText
-        text={postItem.body}
-        postId={postItem.id}
+        text={postItem?.body}
+        postId={postItem?.id}
         isSinglePost={isSinglePost}
       />
 
       {hasImage && (
-        <section className="grid grid-cols-3 gap-2 mt-2">
-          {postItem.images.map(({ image: src, id }) => (
-            <img
-              key={id}
-              src={baseURL + src}
-              className="size-full rounded-lg"
-              alt="some images for post"
-            />
-          ))}
+        <section className="grid grid-cols-3 gap-2 gap-5 mt-2">
+          {(isSinglePost ? images : images?.slice(0, 3)).map((src, index) => {
+            return (
+              <img
+                key={index}
+                src={baseURL + src}
+                className="size-full rounded-lg"
+                alt="some images for post"
+              />
+            );
+          })}
+
+          {images?.length > 3 && !isSinglePost && (
+            <Link
+              to={`/posts/${postItem?.id}`}
+              className="text-sm !text-gray-500 hover:!underline hover:!text-black"
+            >
+              +{formatNumber(images?.length - 3 || 0)} images{" "}
+            </Link>
+          )}
         </section>
       )}
       <div className="flex items-center gap-2 justify-between mt-4">

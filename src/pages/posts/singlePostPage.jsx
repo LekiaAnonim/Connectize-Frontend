@@ -7,6 +7,8 @@ import {
   DiscoverPostItem,
   DiscoverPostSkeleton,
 } from "../../components/admin/feeds/DiscoverPosts";
+import { Button } from "@chakra-ui/react";
+import { ArrowBackIos } from "@mui/icons-material";
 
 function SinglePostPage() {
   const { id } = useParams();
@@ -27,10 +29,17 @@ function SinglePostPage() {
   );
 
   if (isLoading) return <DiscoverPostSkeleton />;
-  if (!postItem) return <p>No content found</p>;
+  if (!postItem) return <p>No post found</p>;
 
   return (
     <section className="space-y-4">
+      <Button
+        className="!bg-gold hover:!bg-opacity-70 !text-xs !h-fit !py-2 transition-all duration-300 active:scale-95"
+        onClick={() => window.history.back()}
+      >
+        <ArrowBackIos fontSize="10" />
+        <span>Go Back</span>
+      </Button>
       <DiscoverPostItem
         postItem={postItem}
         hasImage={postItem.images?.length > 0}
