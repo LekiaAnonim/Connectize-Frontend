@@ -9,6 +9,7 @@ import {
 } from "../../components/admin/feeds/DiscoverPosts";
 import { Button } from "@chakra-ui/react";
 import { ArrowBackIos } from "@mui/icons-material";
+import LightParagraph from "../../components/ParagraphText";
 
 function SinglePostPage() {
   const { id } = useParams();
@@ -29,7 +30,7 @@ function SinglePostPage() {
   );
 
   if (isLoading) return <DiscoverPostSkeleton />;
-  if (!postItem) return <p>No post found</p>;
+  if (!postItem) return <LightParagraph>No post found</LightParagraph>;
 
   return (
     <section className="space-y-4">

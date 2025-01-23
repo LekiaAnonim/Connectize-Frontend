@@ -30,7 +30,7 @@ function ResetPasswordPage() {
     onSubmit: async ({ email }, { resetForm }) => {
       const success = await authenticationService({
         values: { email },
-        url: "password-reset",
+        url: "reset-password",
         resetForm,
       });
       if (success) {
@@ -69,7 +69,7 @@ function ResetPasswordPage() {
         inputArray={fields}
         button={{
           type: "submit",
-          text: "Retrieve password",
+          text: "Reset password",
           submitText: "Checking email...",
           style: "!md:w-[60%] mt-4",
         }}
