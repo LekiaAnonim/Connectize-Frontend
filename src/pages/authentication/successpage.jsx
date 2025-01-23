@@ -7,6 +7,7 @@ import {
   RESET_PASSWORD_EMAIL_KEY,
   RESET_PASSWORD_KEY,
   SUCCESS_TYPE_KEY,
+  VERIFY_ACCOUNT_KEY,
 } from "../../lib/data/authentication";
 import HeadingText from "../../components/HeadingText";
 import { REGISTER_EMAIL_KEY } from "../../lib/helpers";
@@ -29,9 +30,11 @@ const SuccessPage = () => {
   const getMessage = () => {
     switch (hasSuccess) {
       case RESET_PASSWORD_KEY:
-        return "A mail has been sent to your email account";
+        return "A mail on how to reset your password has been sent to your email address";
       case CONFIRM_RESET_PASSWORD_KEY:
         return "Your password has been reset, kindly login with your new password";
+      case VERIFY_ACCOUNT_KEY:
+        return "Your account has been verified successfully. You can now proceed to login";
       default:
         return "Your registration was successful. Proceed to your mail service to activate your account";
     }

@@ -49,7 +49,7 @@ function ConfirmResetPassword() {
     onSubmit: async ({ password }, { resetForm }) => {
       const success = await authenticationService({
         values: { new_password: password },
-        url: `password-reset-confirm/${uid}/${token}`,
+        url: `confirm-reset-password/${uid}/${token}`,
         resetForm,
       });
 
@@ -62,7 +62,7 @@ function ConfirmResetPassword() {
 
   useEffect(() => {
     formik.setValues(formValues);
-    document.title = "Confirm password reset portal | connectize";
+    document.title = "Confirm password reset | connectize";
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -72,12 +72,14 @@ function ConfirmResetPassword() {
       type: "password",
       label: "Password",
       placeholder: "Enter a 8 digit password",
+      validate:true,
     },
     {
       name: "confirmPassword",
       type: "password",
       label: "Confirm Password",
       placeholder: "Enter the same password as above",
+      validate:true,
     },
   ];
 

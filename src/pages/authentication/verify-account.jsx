@@ -5,14 +5,13 @@ import { useFormik } from "formik";
 import { authenticationService } from "../../api-services/authentication";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
-  RESET_PASSWORD_EMAIL_KEY,
-  RESET_PASSWORD_KEY,
   SUCCESS_TYPE_KEY,
   VERIFY_ACCOUNT_KEY,
 } from "../../lib/data/authentication";
 import HeadingText from "../../components/HeadingText";
 import LightParagraph from "../../components/ParagraphText";
 import { toast } from "sonner";
+import PageLoading from "../../components/PageLoading";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -32,25 +31,23 @@ function VerifyAccount() {
     initialValues: formValues,
     validationSchema: validationSchema,
     onSubmit: async ({ email }, { resetForm }) => {
-      const success = await authenticationService({
+      await authenticationService({
         values: { email },
         url: `resend_verification_email`,
         method: "POST",
         resetForm,
       });
-
-      if (success) {
-        toast.success(
-          "Verification email has been sent. Please check your email"
-        );
-      }
     },
   });
 
   useEffect(() => {
     formik.setValues(formValues);
     document.title = "Account Verification | connectize";
-    verifyAccount();
+
+    async function checkForToken() {
+      await verifyAccount();
+    }
+    checkForToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -65,6 +62,8 @@ function VerifyAccount() {
         localStorage.setItem(SUCCESS_TYPE_KEY, VERIFY_ACCOUNT_KEY);
         navigate("/success");
       }
+
+      return <PageLoading />;
     }
   };
 
@@ -91,7 +90,7 @@ function VerifyAccount() {
         inputArray={fields}
         button={{
           type: "submit",
-          text: "Verify email",
+          text: "Send verification email",
           submitText: "Checking email...",
           style: "!md:w-[60%] mt-4",
         }}
