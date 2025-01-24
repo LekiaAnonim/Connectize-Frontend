@@ -7,9 +7,13 @@ import { avatarStyle } from "../../ResponsiveNav";
 import { VerifiedIcon } from "../../../icon";
 import { capitalizeFirst } from "../../../lib/utils";
 import { Link } from "react-router-dom";
+import { useCustomSearchParams } from "../../../hooks/useCustomSearchParams";
 
 function Sidebar() {
   const { user: currentUser } = useAuth();
+  const { pathname } = useCustomSearchParams();
+
+  const isProductPages = pathname.startsWith("/market" || "/product");
 
   return (
     <nav
@@ -19,6 +23,7 @@ function Sidebar() {
     >
       <UserProfile currentUser={currentUser} />
       <NavigationSection />
+      {isProductPages ? <NavigationSection /> : <></>}
     </nav>
   );
 }

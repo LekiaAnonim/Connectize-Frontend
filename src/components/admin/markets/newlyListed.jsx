@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { getProducts } from "../../../api-services/products";
 import clsx from "clsx";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import CustomTabs from "../../custom/tabs";
 
 function NewlyListed() {
   const [searchParams] = useSearchParams();
@@ -28,7 +29,7 @@ function NewlyListed() {
     [productCategory, products]
   );
 
-  const newlyListedProducts = useMemo(() => products.slice(0, 6), [products]);
+  const newlyListedProducts = useMemo(() => products?.slice(0, 6), [products]);
 
   const tabs = useMemo(
     () => [
@@ -38,48 +39,31 @@ function NewlyListed() {
     [filteredProducts, newlyListedProducts]
   );
 
-  const tabsStyle = "w-full rounded";
-  const selectedStyle = { color: "black", bg: "gray.100" };
-
   return (
-    <Tabs variant="solid-rounded" className="space-y-2">
-      <TabList className="rounded-full bg-white p-1 gap-1">
-        {tabs.map((tab, index) => (
-          <Tab
-            key={index}
-            className={clsx("", tabsStyle)}
-            _selected={selectedStyle}
-          >
-            {tab.label}
-          </Tab>
-        ))}
-      </TabList>
-
-      <TabPanels className="!w-full">
-        {tabs.map((tab, index) => (
-          <TabPanel key={index} className="p-0 !w-full">
-            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-              {isLoading
-                ? Array.from({ length: 6 }, (_, index) => (
-                    <ListCardSkeleton key={index} />
-                  ))
-                : tab.products.map((product) => (
-                    <ProductListCard
-                      key={product.id}
-                      id={product.id}
-                      image={
-                        product.images[0]?.image || "/images/Rectangle5.png"
-                      }
-                      title={product.title}
-                      subtitle={product.category}
-                      chatUrl={`/products/${product.id}`}
-                    />
-                  ))}
-            </div>
-          </TabPanel>
-        ))}
-      </TabPanels>
-    </Tabs>
+    <CustomTabs
+      tabsHeading={tabs.map((tab) => tab.label)}
+      tabsPanels={tabs.map((tab, index) => (
+        <div
+          key={index}
+          className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+        >
+          {isLoading
+            ? Array.from({ length: 6 }, (_, index) => (
+                <ListCardSkeleton key={index} />
+              ))
+            : tab.products.map((product) => (
+                <ProductListCard
+                  key={product.id}
+                  id={product.id}
+                  image={product.images[0]?.image || "/images/Rectangle5.png"}
+                  title={product.title}
+                  subtitle={product.category}
+                  chatUrl={`/products/${product.id}`}
+                />
+              ))}
+        </div>
+      ))}
+    />
   );
 }
 
@@ -136,7 +120,7 @@ export const ListCardSkeleton = () => (
 export const ChatSellerLink = ({ text = "Chat seller", to }) => (
   <Link
     to={to || ""}
-    className="shrink-0 flex items-center bg-black py-2 xs:py-1 !text-white px-4 xs:text-xs rounded-full group w-fit"
+    className="shrink-0 flex items-center bg-black py-2 xs:py-2 !text-white px-4 xs:text-xs rounded-full group w-fit"
   >
     <span>{text}</span>
     <span className="text-custom_grey ml-1">|</span>

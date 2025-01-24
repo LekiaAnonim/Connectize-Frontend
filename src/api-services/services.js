@@ -19,7 +19,23 @@ export const getServices = async () => {
     method: "GET",
   });
 
-  return services;
+    let mergedServicesWIthImage = [];
+
+    const serviceImages = await getServiceImages();
+    console.log(serviceImages);
+
+    services?.forEach((service) => {
+      const serviceImage = serviceImages?.filter(
+        (image) => service.id === image.product
+      );
+
+      mergedServicesWIthImage.push({
+        ...service,
+        images: serviceImage,
+      });
+    });
+
+    return mergedServicesWIthImage;
 };
 
 export const getSingleService = async (id) => {

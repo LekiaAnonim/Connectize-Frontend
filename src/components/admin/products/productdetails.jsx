@@ -117,7 +117,7 @@ function Productdetails({ product }) {
           </div>
         ) : (
           <img
-            src={"/public/images/produc_drum.jpeg"}
+            src={"/images/produc_drum.jpeg"}
             className="w-full md:w-1/2 max-h-[300px] shrink-0"
             alt={product?.title || "product"}
           />
@@ -138,7 +138,7 @@ function Productdetails({ product }) {
             />
           </div>
           <div className="flex gap-4 items-center">
-            <ChatSellerLink to="/chat" />
+            <ChatSellerLink to="/messages" />
             <FavoriteButton
               userHasLikedProduct={userHasLikedProduct}
               product={product}
