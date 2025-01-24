@@ -18,6 +18,7 @@ import {
 import { VerifiedIcon } from "../../icon";
 import { Badge } from "@chakra-ui/react";
 import { SuggestionList } from "../../components/admin/feeds/TopServiceSuggestions";
+import { CreateNewLink } from "../../components/admin/markets/carousel";
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -57,6 +58,7 @@ export default function UserProfile() {
     region,
     phone_number,
     country,
+    companies,
   } = paramUser;
 
   return (
@@ -65,6 +67,10 @@ export default function UserProfile() {
 
       <section className="mt-8 container !px-0 space-y-6">
         <UserProfileHeadings {...paramUser} />
+
+        {companies?.length < 1 && (
+          <CreateNewLink text="Create company" url="/create-company" />
+        )}
 
         <section className="flex max-lg:flex-col gap-y-6 gap-x-3 w-full">
           <section className="space-y-6 lg:w-[65.5%] shrink-0">

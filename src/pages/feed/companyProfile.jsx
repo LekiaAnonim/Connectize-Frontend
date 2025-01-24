@@ -4,7 +4,7 @@ import { SuggestionList } from "../../components/admin/feeds/TopServiceSuggestio
 import Summary from "../../components/admin/feeds/summary";
 import ListedProducts from "../../components/admin/products/listedProducts";
 import Header from "../../components/userProfile/header";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getSingleCompany } from "../../api-services/companies";
 import { capitalizeFirst, formatNumber } from "../../lib/utils";
@@ -16,6 +16,7 @@ import LightParagraph from "../../components/ParagraphText";
 import { LocationOnOutlined } from "@mui/icons-material";
 import { GlobeIcon, Link1Icon } from "@radix-ui/react-icons";
 import { MailOutlined } from "@ant-design/icons";
+import { Button } from "@chakra-ui/react";
 
 export default function CompanyProfile() {
   const { company: companyName } = useParams();
@@ -45,7 +46,13 @@ export default function CompanyProfile() {
     <section className="rounded-md overflow-hidden w-full">
       <Header {...headerProps} />
 
-      <section className="mt-10 max-md:container flex max-lg:flex-col items-start gap-2">
+      <section className="mt-11 md:mt-14 max-md:container flex max-lg:flex-col items-start gap-2 relative">
+        <Link
+          to="/representatives/manage"
+          className="bg-gold hover:bg-opacity-70 text-sm xs:text-xs lg:text-sm font-semibold absolute right-0 -top-9 md:-top-12 py-1.5 px-2 rounded-full"
+        >
+          Manage Representatives
+        </Link>
         <ProductSidebar company={company} />
         <section className="grid grid-cols-1 gap-2 max-lg:py-2">
           <Summary company={company} />

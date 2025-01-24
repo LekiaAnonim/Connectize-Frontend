@@ -22,8 +22,9 @@ import { baseURL } from "../../../lib/helpers";
 import { Link } from "react-router-dom";
 import TimeAgo from "../../TimeAgo";
 import CompanyName from "../../company/CompanyName";
+import LightParagraph from "../../ParagraphText";
 
-function DiscoverPosts() {
+function DiscoverPosts({ searchArray, isSearch, searchLoading }) {
   const { refetchInterval } = useCustomQuery();
   const { data: posts, isLoading } = useQuery({
     queryKey: ["posts"],
@@ -31,19 +32,26 @@ function DiscoverPosts() {
     refetchInterval,
   });
 
+  const finalArray = isSearch ? searchArray : posts;
+  const postLoading = isSearch ? searchLoading : isLoading;
+
   return (
     <section className="space-y-4 mt-4">
-      {isLoading
-        ? Array.from({ length: 5 }, (_, index) => (
-            <DiscoverPostSkeleton key={index} />
-          ))
-        : posts?.map((post, index) => (
-            <DiscoverPostItem
-              hasImage={post?.images?.length > 0}
-              key={index}
-              postItem={post}
-            />
-          ))}
+      {postLoading ? (
+        Array.from({ length: 5 }, (_, index) => (
+          <DiscoverPostSkeleton key={index} />
+        ))
+      ) : finalArray?.length < 1 ? (
+        <LightParagraph>No post found..</LightParagraph>
+      ) : (
+        finalArray?.map((post, index) => (
+          <DiscoverPostItem
+            hasImage={post?.images?.length > 0}
+            key={index}
+            postItem={post}
+          />
+        ))
+      )}
     </section>
   );
 }

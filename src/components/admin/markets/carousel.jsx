@@ -82,7 +82,7 @@ function Carousel() {
 
 export default Carousel;
 
-const CreateNewLink = ({
+export const CreateNewLink = ({
   url = "/products/listing",
   text = "Add new product",
 }) => {

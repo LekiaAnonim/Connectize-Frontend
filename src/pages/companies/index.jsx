@@ -34,7 +34,12 @@ export default function CompaniesPage() {
   );
 }
 
-export const CompaniesArray = ({ hasFilter = true, isSearch }) => {
+export const CompaniesArray = ({
+  hasFilter = true,
+  isSearch,
+  array,
+  searchLoading,
+}) => {
   const { data: companiesList } = useQuery({
     queryKey: ["companiesList"],
     queryFn: getAllCompanies,
@@ -43,7 +48,9 @@ export const CompaniesArray = ({ hasFilter = true, isSearch }) => {
 
   const selectedSortOption = searchParams.get("sort_by") || "name";
 
-  const sortedCompanies = companiesList?.results?.sort((a, b) => {
+  const companyArray = isSearch ? array : companiesList?.results;
+
+  const sortedCompanies = companyArray?.sort((a, b) => {
     switch (selectedSortOption) {
       case "companies":
         return a.organization_type.localeCompare(b.organization_type);
@@ -55,9 +62,11 @@ export const CompaniesArray = ({ hasFilter = true, isSearch }) => {
         return a.company_name.localeCompare(b?.company_name);
     }
   });
-  return (
+  return searchLoading ? (
+    <PageLoading />
+  ) : (
     <section className="space-y-4">
-      {companiesList?.results && hasFilter && (
+      {companyArray && hasFilter && (
         <section className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-semibold">Sort By</h2>
 

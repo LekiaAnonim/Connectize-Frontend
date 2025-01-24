@@ -11,7 +11,7 @@ function FeedSearch({ className }) {
   const { updateSearchParams, searchParams, pathname } =
     useCustomSearchParams();
 
-  const searchQuery = searchParams.get("search_query");
+  const searchQuery = searchParams.get("search_query") || "";
 
   const handleSearch = (evt) => {
     const value = evt.currentTarget.value;
@@ -32,6 +32,7 @@ function FeedSearch({ className }) {
           type="search"
           placeholder="Search anything..."
           onKeyUp={handleSearch}
+          defaultValue={searchQuery}
           className={clsx(
             "w-full xs:!max-w-[200px] sm:!max-w-[400px] max-w-[250px] py-1.5 px-3 border border-gray-200 bg-gray-100/70 rounded-full placeholder:text-xs text-sm focus:outline-0 focus:border-gold transition-all duration-300 indent-4",
             className
