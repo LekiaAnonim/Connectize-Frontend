@@ -1,6 +1,5 @@
 import React from "react";
 import { Heart, StarFilledIcon, StarOutlinedIcon } from "../../../icon";
-import MoreOptions from "../../MoreOptions";
 import { ShareAltOutlined } from "@ant-design/icons";
 import { ButtonWithTooltipIcon } from "../feeds/DiscoverPosts";
 import { formatNumber, shareThis } from "../../../lib/utils";
@@ -16,11 +15,13 @@ const ListedProducts = ({ company }) => {
       </div>
       <section className="space-y-4">
         {company.products.map((product) => {
+
           return (
             <ListedProduct
               key={product.id}
               title={product.title}
               likes={product.likes.length || "0"}
+              src={product?.images?.[0]?.image}
             />
           );
         })}
@@ -72,7 +73,11 @@ function ListedProduct({ src, title, likes }) {
             IconName={ShareAltOutlined}
             onClick={() => {
               const shareUrlString = "";
-              const shareData = {};
+              const shareData = {
+                title,
+                text: "",
+                url: shareUrlString,
+              };
               shareThis({ shareUrlString, shareData });
             }}
             tip={`share ${title.toLowerCase()}`}

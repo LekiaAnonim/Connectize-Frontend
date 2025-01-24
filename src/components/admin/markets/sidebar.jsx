@@ -17,11 +17,10 @@ import LightParagraph from "../../ParagraphText";
 
 function Sidebar() {
   const { user: currentUser } = useAuth();
-  const { pathname } = useCustomSearchParams();
+  const { pathname } = useLocation();
 
-  const isMarketPages = pathname.startsWith(
-    "/market" || "/product" || "/service"
-  );
+  // .startsWith("/market" || "/product" || "/service");
+  const isMarketPages = /^\/(market|product|service)/.test(pathname);
 
   return (
     <nav
@@ -103,7 +102,7 @@ const UserProfile = ({ currentUser }) => {
 // }
 
 function ProductCategory() {
-  const pathname = useLocation();
+  const { pathname } = useLocation();
 
   const { data: categories, isLoading } = useQuery({
     queryKey: pathname.startsWith("/services")
