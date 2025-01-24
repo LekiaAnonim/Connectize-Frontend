@@ -39,6 +39,18 @@ const SuccessPage = () => {
         return "Your registration was successful. Proceed to your mail service to activate your account";
     }
   };
+  const getHeader = () => {
+    switch (hasSuccess) {
+      case RESET_PASSWORD_KEY:
+        return "Reset Instruction Sent";
+      case CONFIRM_RESET_PASSWORD_KEY:
+        return "Password Reset Successfully";
+      case VERIFY_ACCOUNT_KEY:
+        return "Account Verification Successful";
+      default:
+        return "Congratulations";
+    }
+  };
 
   const getLink = () => {
     return hasSuccess === RESET_PASSWORD_KEY ||
@@ -65,8 +77,8 @@ const SuccessPage = () => {
           alt="success tick"
           className="w-24"
         />
-        <HeadingText>Congratulations</HeadingText>
-        <LightParagraph>{getMessage()}</LightParagraph>
+        <HeadingText>{getHeader()}</HeadingText>
+        <LightParagraph center >{getMessage()}</LightParagraph>
         <Link
           to={getLink()}
           className="text-white no-underline btn-primary mt-2"

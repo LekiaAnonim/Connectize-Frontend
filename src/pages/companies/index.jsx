@@ -9,7 +9,6 @@ import { avatarStyle, ConJoinedImages } from "../../components/ResponsiveNav";
 import CompanyName from "../../components/company/CompanyName";
 import { LocationOnOutlined } from "@mui/icons-material";
 import LightParagraph from "../../components/ParagraphText";
-import { useSearchParams } from "react-router-dom";
 import { useCustomSearchParams } from "../../hooks/useCustomSearchParams";
 import ConnectButton from "../../components/ConnectButton";
 import { baseURL } from "../../lib/helpers";
@@ -19,7 +18,6 @@ import { motion } from "framer-motion";
 const sortOptions = ["name", "companies", "products", "location"];
 
 export default function CompaniesPage() {
-  // const currentPage = Number(searchParams.get("page")) || 1;
   const { data: companiesList, isLoading } = useQuery({
     queryKey: ["companiesList"],
     queryFn: getAllCompanies,
@@ -29,7 +27,7 @@ export default function CompaniesPage() {
     return <PageLoading hasLogo={false} text="Getting companies" />;
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-6">
       <Heading companyLength={companiesList?.count} />
       <CompaniesArray />
     </section>
@@ -45,7 +43,7 @@ export const CompaniesArray = ({ hasFilter = true, isSearch }) => {
 
   const selectedSortOption = searchParams.get("sort_by") || "name";
 
-  const sortedCompanies = companiesList?.results.sort((a, b) => {
+  const sortedCompanies = companiesList?.results?.sort((a, b) => {
     switch (selectedSortOption) {
       case "companies":
         return a.organization_type.localeCompare(b.organization_type);
@@ -59,7 +57,7 @@ export const CompaniesArray = ({ hasFilter = true, isSearch }) => {
   });
   return (
     <section className="space-y-4">
-      {hasFilter && (
+      {companiesList?.results && hasFilter && (
         <section className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-semibold">Sort By</h2>
 
@@ -87,11 +85,12 @@ export const CompaniesArray = ({ hasFilter = true, isSearch }) => {
       )}
 
       <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {sortedCompanies?.map((company) => {
+        {sortedCompanies?.map((company, index) => {
           return (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              key={index}
               className={clsx("p-2 rounded-md h-72 flex flex-col", {
                 "bg-white": !isSearch,
                 "bg-background": isSearch,
