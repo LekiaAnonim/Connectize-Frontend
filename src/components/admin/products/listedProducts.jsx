@@ -1,16 +1,18 @@
-import { ShareAltOutlined } from "@ant-design/icons";
 import React from "react";
 import { Heart, StarFilledIcon, StarOutlinedIcon } from "../../../icon";
 import MoreOptions from "../../MoreOptions";
+import { ShareAltOutlined } from "@ant-design/icons";
+import { ButtonWithTooltipIcon } from "../feeds/DiscoverPosts";
+import { formatNumber, shareThis } from "../../../lib/utils";
 
 const ListedProducts = ({ company }) => {
   return (
     <section className="bg-white p-3 md:!px-2 rounded-md">
       <div className="flex items-center justify-between mb-3">
         <h4 className="text-xl md:text-lg font-semibold">Listed Products</h4>
-        <MoreOptions>
+        {/* <MoreOptions>
           <div>more options</div>
-        </MoreOptions>
+        </MoreOptions> */}
       </div>
       <section className="space-y-4">
         {company.products.map((product) => {
@@ -43,11 +45,11 @@ function ListedProduct({ src, title, likes }) {
           <h4 className="max-md:text-xl font-bold">
             {title || "Premium Black Gold Reserve"}
           </h4>
-          <div className="max-md:absolute top-4 right-4">
+          {/* <div className="max-md:absolute top-4 right-4">
             <MoreOptions>
               <div>more options</div>
             </MoreOptions>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex mt-2.5 md:mt-3.5">
@@ -59,13 +61,23 @@ function ListedProduct({ src, title, likes }) {
           ))}
         </div>
 
-        {/* <div className="absolute bottom-3 right-4 flex gap-3">
+        <div className="absolute bottom-3 right-4 flex gap-3">
           <div className="flex items-center gap-0.5">
             <Heart />
-            <small className="text-[.6rem] font-bold">{likes || "178k"}</small>
+            <small className="text-[.6rem] font-bold">
+              {formatNumber(likes) || "0"}
+            </small>
           </div>
-          <ShareAltOutlined />
-        </div> */}
+          <ButtonWithTooltipIcon
+            IconName={ShareAltOutlined}
+            onClick={() => {
+              const shareUrlString = "";
+              const shareData = {};
+              shareThis({ shareUrlString, shareData });
+            }}
+            tip={`share ${title.toLowerCase()}`}
+          />
+        </div>
       </div>
     </div>
   );

@@ -29,7 +29,7 @@ export default function CompanyProfile() {
   useEffect(() => {
     document.title = `${company?.company_name || ""} | Companies in Connectize`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [!!companyName]);
 
   if (isLoading) return <PageLoading hasLogo={false} />;
 

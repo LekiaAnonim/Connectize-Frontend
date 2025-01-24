@@ -33,7 +33,7 @@ export default function UserProfile() {
       paramUser?.last_name || ""
     } Connectize`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [!!userId]);
 
   if (isLoading) return <PageLoading hasLogo={false} />;
 
