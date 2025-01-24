@@ -20,12 +20,12 @@ import { getCurrentUser } from "./users";
 // }
 
 export const getAllCompanies = async () => {
-  const { results: companies } = await makeApiRequest({
+  const companies = await makeApiRequest({
     url: `api/companies/`,
     method: "GET",
   });
 
-  return companies || [];
+  return companies;
 };
 
 export const getCompanies = async (id) => {

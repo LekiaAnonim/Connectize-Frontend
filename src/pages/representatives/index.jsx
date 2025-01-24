@@ -10,6 +10,7 @@ import {
 import RepresentativeCard from "../../components/representatives/RepresentativeCard";
 import PageLoading from "../../components/PageLoading";
 import LightParagraph from "../../components/ParagraphText";
+import { useEffect } from "react";
 
 export default function RepresentativesPage() {
   const { data: users, isLoading } = useQuery({
@@ -32,6 +33,10 @@ export default function RepresentativesPage() {
       queryKey: ["representatives-categories"],
       queryFn: getOrCreateRepresentativeCategory,
     });
+
+  useEffect(() => {
+    document.title = "Representatives | Connectize";
+  }, []);
 
   if (isLoading || companyLoading || repsLoading || repsCatLoading)
     return <PageLoading hasLogo={false} />;

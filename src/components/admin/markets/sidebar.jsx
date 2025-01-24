@@ -4,12 +4,23 @@ import { useAuth } from "../../../context/userContext";
 import { Avatar } from "@chakra-ui/react";
 import { NavigationSection } from "../../NavigationSection";
 import { avatarStyle } from "../../ResponsiveNav";
-import { VerifiedIcon } from "../../../icon";
+import { CategoryIcon, VerifiedIcon } from "../../../icon";
 import { capitalizeFirst } from "../../../lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useCustomSearchParams } from "../../../hooks/useCustomSearchParams";
+import { useQuery } from "@tanstack/react-query";
+import { getServiceCategories } from "../../../api-services/services";
+import { getProductCategories } from "../../../api-services/products";
+import HeadingText from "../../HeadingText";
+import { CircleTitleSubtitleSkeleton } from "../feeds/TopServiceSuggestions";
+import LightParagraph from "../../ParagraphText";
 
 function Sidebar() {
   const { user: currentUser } = useAuth();
+  const { pathname } = useLocation();
+
+  // .startsWith("/market" || "/product" || "/service");
+  const isMarketPages = /^\/(market|product|service)/.test(pathname);
 
   return (
     <nav
@@ -19,6 +30,7 @@ function Sidebar() {
     >
       <UserProfile currentUser={currentUser} />
       <NavigationSection />
+      {isMarketPages && <ProductCategory />}
     </nav>
   );
 }
@@ -89,50 +101,49 @@ const UserProfile = ({ currentUser }) => {
 //   );
 // }
 
-// function ProductCategory({ pathname }) {
-//   const { toggleNav } = useNav();
+function ProductCategory() {
+  const { pathname } = useLocation();
 
-//   const { data: categories, isLoading } = useQuery({
-//     queryKey: pathname.startsWith("/services")
-//       ? ["serviceCategories"]
-//       : ["productCategories"],
-//     queryFn: pathname.startsWith("/services")
-//       ? getServiceCategories
-//       : getProductCategories,
-//     enabled: !!pathname,
-//   });
+  const { data: categories, isLoading } = useQuery({
+    queryKey: pathname.startsWith("/services")
+      ? ["serviceCategories"]
+      : ["productCategories"],
+    queryFn: pathname.startsWith("/services")
+      ? getServiceCategories
+      : getProductCategories,
+    enabled: !!pathname,
+  });
 
-//   return (
-//     <section className="space-y-2">
-//       <div className="flex gap-2 items-center">
-//         <CategoryIcon />
-//         <HeadingText>Category</HeadingText>
-//       </div>
-//       <div className="space-y-2 xs:text-sm p-2">
-//         {isLoading ? (
-//           Array.from({ length: 5 }, (_, index) => (
-//             <CircleTitleSubtitleSkeleton key={index} />
-//           ))
-//         ) : !categories?.length ? (
-//           <LightParagraph>No categories available</LightParagraph>
-//         ) : (
-//           categories?.map((item, index) => (
-//             <Link
-//               to={
-//                 (pathname.startsWith("/services") ? "/services" : "/market") +
-//                 "?category=" +
-//                 item.name.toLowerCase()
-//               }
-//               key={index}
-//               onClick={() => toggleNav(false)}
-//               className="flex items-center gap-2 p-2"
-//             >
-//               <span className="size-5 bg-dark rounded-full shrink-0" />
-//               <span className="line-clamp-2">{item.name}</span>
-//             </Link>
-//           ))
-//         )}
-//       </div>
-//     </section>
-//   );
-// }
+  return (
+    <section className="space-y-2">
+      <div className="flex gap-2 items-center">
+        <CategoryIcon />
+        <HeadingText>Category</HeadingText>
+      </div>
+      <div className="space-y-2 xs:text-sm p-2">
+        {isLoading ? (
+          Array.from({ length: 5 }, (_, index) => (
+            <CircleTitleSubtitleSkeleton key={index} />
+          ))
+        ) : !categories?.length ? (
+          <LightParagraph>No categories available</LightParagraph>
+        ) : (
+          categories?.map((item, index) => (
+            <Link
+              to={
+                (pathname.startsWith("/services") ? "/services" : "/market") +
+                "?category=" +
+                item.name.toLowerCase()
+              }
+              key={index}
+              className="flex items-center gap-2 p-2"
+            >
+              <span className="size-5 bg-dark rounded-full shrink-0" />
+              <span className="line-clamp-2">{item.name}</span>
+            </Link>
+          ))
+        )}
+      </div>
+    </section>
+  );
+}

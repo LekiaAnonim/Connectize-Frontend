@@ -81,19 +81,21 @@ const BookmarkedProductsCard = ({
         <img
           src={product?.images?.[0]?.image || "/images/produc_drum.jpeg"}
           alt={product?.images?.[0]?.caption || ""}
-          className="size-24 rounded-md overflow-hidden shrink-0"
+          className="size-20 sm:size-24 rounded-md overflow-hidden shrink-0"
         />
 
-        <div className="flex flex-col">
-          <Link
-            to={`/products/${product?.id}`}
-            className="!line-clamp-1 !break-all text-lg md:text-xl font-semibold"
-          >
-            {product?.title}
-          </Link>
-          <small className="w-fit text-gray-400 mb-2  !line-clamp-1 !break-all">
-            {product?.category}
-          </small>
+        <div className="flex flex-col justify-between">
+          <div className="">
+            <Link
+              to={`/products/${product?.id}`}
+              className="!line-clamp-1 !break-all text-lg md:text-xl font-semibold"
+            >
+              {product?.title}
+            </Link>
+            <small className="w-fit text-gray-400 mb-2  !line-clamp-1 !break-all block leading-none">
+              {product?.category}
+            </small>
+          </div>
           <ChatSellerLink text="Chat seller" to={`/messages?${product?.id}`} />
         </div>
       </div>

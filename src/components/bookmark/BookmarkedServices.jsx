@@ -72,6 +72,9 @@ const BookmarkedServicesCard = ({
       cachedServices?.filter((cacheservice) => cacheservice?.id !== service?.id)
     );
   };
+
+  console.log(cachedServices);
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 20 }}
@@ -85,17 +88,27 @@ const BookmarkedServicesCard = ({
           className="size-24 rounded-md overflow-hidden shrink-0"
         />
 
-        <div className="flex flex-col">
+        <div className="flex flex-col justify-between">
+          <div>
+            <Link
+              to={`/services/${service?.id}`}
+              className="!line-clamp-1 !break-all text-lg md:text-xl font-semibold"
+            >
+              {service?.title}
+            </Link>
+            <small className="w-fit text-gray-400 mb-2  !line-clamp-1 !break-all block leading-none">
+              {service?.category}
+            </small>
+          </div>
+
           <Link
             to={`/services/${service?.id}`}
-            className="!line-clamp-1 !break-all text-lg md:text-xl font-semibold"
+            replace
+            className="bg-gold hover:opacity-60 rounded-full py-1 px-6 text-sm w-fit"
           >
-            {service?.title}
+            View
           </Link>
-          <small className="w-fit text-gray-400 mb-2  !line-clamp-1 !break-all">
-            {service?.category}
-          </small>
-          <ChatSellerLink text="Chat seller" to={`/messages?${service?.id}`} />
+          {/* <ChatSellerLink text="Chat seller" to={} /> */}
         </div>
       </div>
 

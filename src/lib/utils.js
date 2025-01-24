@@ -63,7 +63,7 @@ export const shareThis = async ({ shareUrlString, shareData }) => {
       await navigator.share(shareData);
     } catch (error) {
       console.log("Error sharing: ", error);
-      toast.error("An error occurred while sharing post");
+      toast.error("An error occurred while sharing");
     }
   } else {
     // Fallback for browsers that don't support the Web Share API
