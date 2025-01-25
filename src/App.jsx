@@ -38,6 +38,7 @@ import CompaniesPage from "./pages/companies";
 import Search from "./pages/search";
 import AssignRepresentative from "./pages/representatives/AssignRepresentative";
 import BookMark from "./pages/bookmark";
+import AcceptRepresentation from "./pages/representatives/AcceptRepresentation";
 
 function App() {
   return (
@@ -65,6 +66,10 @@ function App() {
             <Route
               path="representatives/manage"
               element={<AssignRepresentative />}
+            />
+            <Route
+              path="representatives/accept"
+              element={<AcceptRepresentation />}
             />
             <Route path="companies" element={<CompaniesPage />} />
             <Route path="market" element={<Market />} />

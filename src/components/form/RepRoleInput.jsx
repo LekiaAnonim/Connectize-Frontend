@@ -8,9 +8,8 @@ import { getCompanies } from "../../api-services/companies";
 import { assignRepresentative } from "../../api-services/representatives";
 import { toast } from "sonner";
 import { Spinner } from "@chakra-ui/react";
-import { useCustomQuery } from "../../context/queryContext";
 
-export default function RepRoleInput({ user, setCachedReps }) {
+export default function RepRoleInput({ user, setCachedReps, cachedReps }) {
   const emptyRepsRole = "Representative role cannot be empty";
   const [representativeRole, setRepresentativeRole] = useState("");
   const [roleError, setRoleError] = useState(null);
@@ -44,17 +43,19 @@ export default function RepRoleInput({ user, setCachedReps }) {
 
     try {
       const value = await assignRepresentative(repsData);
+      console.log(value);
+
       if (value?.user) {
         setRepresentativeRole("");
         setRoleError(null);
-        setCachedReps((prev) => prev.push(repsData));
+        setCachedReps(cachedReps?.push(repsData));
       }
     } catch (error) {
       console.error(`Representative error ${error}`);
     } finally {
       setIsLoading(false);
     }
-  }, [memoizedCompanies, representativeRole, user, setCachedReps]);
+  }, [memoizedCompanies, representativeRole, user, setCachedReps, cachedReps]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleInputChange = (e) => {

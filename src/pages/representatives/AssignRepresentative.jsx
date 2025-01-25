@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import HeadingText from "../../components/HeadingText";
 import LightParagraph from "../../components/ParagraphText";
 import { useQuery } from "@tanstack/react-query";
@@ -71,30 +71,30 @@ export default function AssignRepresentative() {
 
   const [cachedReps, setCachedReps] = useState([]);
 
-  useState(() => {
+  useEffect(() => {
     document.title = "Manage Representatives | Connectize";
     setCachedReps(representatives);
-  }, [!!cachedReps]);
+  }, [representatives]);
 
-  const memoizedRepresentatives = useMemo(() => {
-    return cachedReps?.map((reps) => {
-      const user = users?.find((user) => reps?.user === user?.id);
-      const role = representativeCategories?.find(
-        (category) => category?.id === reps?.category
-      );
+  console.log(cachedReps);
 
-      const company = companies?.[0];
-      return {
-        id: reps?.id,
-        user,
-        company,
-        status: reps?.status,
-        role: role?.type,
-        category: role?.id,
-        invited: reps?.invited,
-      };
-    });
-  }, [cachedReps, users, representativeCategories, companies]);
+  const memoizedRepresentatives = cachedReps?.map((reps) => {
+    const user = users?.find((user) => reps?.user === user?.id);
+    const role = representativeCategories?.find(
+      (category) => category?.id === reps?.category
+    );
+
+    const company = companies?.[0];
+    return {
+      id: reps?.id,
+      user,
+      company,
+      status: reps?.status,
+      role: role?.type,
+      category: role?.id,
+      invited: reps?.invited,
+    };
+  });
 
   return (
     <section>
@@ -110,7 +110,11 @@ export default function AssignRepresentative() {
           </LightParagraph>
         </div>
         <UserSearchInput username={username} setUsername={setUsername} />
-        <UserList isLoading={isLoading} filteredUsers={filteredUsers} />
+        <UserList
+          isLoading={isLoading}
+          filteredUsers={filteredUsers}
+          setCachedReps={setCachedReps}
+        />
         <RepresentativesList
           isLoading={repsLoading || companyLoading || repsCatLoading}
           representatives={memoizedRepresentatives}

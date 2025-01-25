@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { getUserById } from "../../api-services/users";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -30,21 +30,21 @@ export default function UserProfile() {
   });
 
   useEffect(() => {
-    document.title = `${paramUser?.first_name || paramUser?.email || ""} ${
-      paramUser?.last_name || ""
-    } Connectize`;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [!!userId]);
+    if (paramUser) {
+      document.title = `${paramUser.first_name || paramUser.email || ""} ${
+        paramUser.last_name || ""
+      } Connectize`;
+    }
+  }, [paramUser]);
 
-  if (isLoading) return <PageLoading hasLogo={false} />;
-
-  if (!paramUser) return <NoPage />;
-
-  const headerProps = {
+  const headerProps = useMemo(() => ({
     banner: paramUser?.banner || "",
     name: `${paramUser?.first_name || ""} ${paramUser?.last_name || ""}`,
     logo: paramUser?.avatar || "",
-  };
+  }), [paramUser]);
+
+  if (isLoading) return <PageLoading hasLogo={false} />;
+  if (!paramUser) return <NoPage />;
 
   const {
     verified,

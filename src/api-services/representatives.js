@@ -94,10 +94,18 @@ export const changeRepStatus = async (id, repData) => {
 };
 
 export const cancelOrDeclineRepRequest = async (id) => {
-  
   const results = await makeApiRequest({
     url: `api/representatives/${id}/`,
     method: "DELETE",
   });
   return results;
+};
+
+export const acceptRepRequest = async (id) => {
+  const result = await makeApiRequest({
+    url: `api/representatives/${id}/accept/`,
+    method: "POST",
+  });
+
+  return result;
 };

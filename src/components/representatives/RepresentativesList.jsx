@@ -60,7 +60,6 @@ const RepsTile = ({
   setCachedReps,
 }) => {
   const [isChecked, setIsChecked] = useState(status);
-  const { setRefreshInterval } = useCustomQuery();
 
   const handleToggle = async () => {
     setIsChecked(!isChecked);

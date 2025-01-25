@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import Reviews from "../../components/admin/feeds/reviews";
 import { SuggestionList } from "../../components/admin/feeds/TopServiceSuggestions";
 import Summary from "../../components/admin/feeds/summary";
@@ -16,9 +16,8 @@ import LightParagraph from "../../components/ParagraphText";
 import { LocationOnOutlined } from "@mui/icons-material";
 import { GlobeIcon, Link1Icon } from "@radix-ui/react-icons";
 import { MailOutlined } from "@ant-design/icons";
-import { Button } from "@chakra-ui/react";
 
-export default function CompanyProfile() {
+const CompanyProfile = React.memo(() => {
   const { company: companyName } = useParams();
 
   const { data: company, isLoading } = useQuery({
@@ -29,18 +28,20 @@ export default function CompanyProfile() {
 
   useEffect(() => {
     document.title = `${company?.company_name || ""} | Companies in Connectize`;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [!!companyName]);
+  }, [company?.company_name]);
+
+  const headerProps = useMemo(
+    () => ({
+      banner: company?.banner || "",
+      name: company?.company_name || "",
+      logo: company?.logo || "images/default-company-logo.png",
+    }),
+    [company]
+  );
 
   if (isLoading) return <PageLoading hasLogo={false} />;
 
   if (!company) return <NoPage />;
-
-  const headerProps = {
-    banner: company?.banner || "",
-    name: company?.company_name || "",
-    logo: company?.logo || "images/default-company-logo.png",
-  };
 
   return (
     <section className="rounded-md overflow-hidden w-full">
@@ -60,9 +61,19 @@ export default function CompanyProfile() {
       </section>
     </section>
   );
-}
+});
 
-function ProductSidebar({ company }) {
+const ProductSidebar = React.memo(({ company }) => {
+  const stats = useMemo(
+    () => [
+      formatNumber(company?.products?.length || 0) + "/ products",
+      formatNumber(company?.followers?.length || 0) + "/ followers",
+      formatNumber(company?.following?.length || 0) + "/ following",
+      formatNumber(company?.reviews?.length || 0) + "/ Reviews",
+    ],
+    [company]
+  );
+
   return (
     <section className="space-y-8 max-lg:mb-4 w-full lg:max-w-[350px] xl:max-w-[400px] shrink-0">
       <section className="space-y-6 max-lg:px-2">
@@ -70,18 +81,9 @@ function ProductSidebar({ company }) {
           {capitalizeFirst(company?.company_name)}
         </h1>
         <div className="flex gap-2 overflow-x-auto scrollbar-hidden">
-          <StatsText
-            text={formatNumber(company?.products?.length || 0) + "/ products"}
-          />
-          <StatsText
-            text={formatNumber(company?.followers?.length || 0) + "/ followers"}
-          />
-          <StatsText
-            text={formatNumber(company?.following?.length || 0) + "/ following"}
-          />
-          <StatsText
-            text={formatNumber(company?.reviews?.length || 0) + "/ Reviews"}
-          />
+          {stats.map((text, index) => (
+            <StatsText key={index} text={text} />
+          ))}
         </div>
       </section>
       <ProfileSection title="About">
@@ -118,13 +120,16 @@ function ProductSidebar({ company }) {
       <Reviews reviews={company?.reviews} />
     </section>
   );
-}
+});
 
-export function StatsText({ text }) {
+export const StatsText = React.memo(({ text }) => {
+  const [mainText, subText] = text.split("/");
   return (
     <div className="bg-gray-200/80 py-2 px-3 rounded-full md:text-xs text-sm shrink-0">
-      <span className="text-black font-semibold">{text.split("/")[0]}</span>
-      <span className="text-gray-500">{text.split("/")[1]}</span>
+      <span className="text-black font-semibold">{mainText}</span>
+      <span className="text-gray-500">{subText}</span>
     </div>
   );
-}
+});
+
+export default CompanyProfile;
