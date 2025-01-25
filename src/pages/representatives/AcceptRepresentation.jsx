@@ -1,12 +1,13 @@
 import React from "react";
 import { acceptRepRequest } from "../../api-services/representatives";
-import { Link, Navigate, useSearchParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import HeadingText from "../../components/HeadingText";
 import LightParagraph from "../../components/ParagraphText";
 import clsx from "clsx";
 
 export default function AcceptRepresentation() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const buttonClass =
     "hover:bg-opacity-70 transition-all duration-300 py-2 px-4 rounded-full text-xs";
 
@@ -22,7 +23,7 @@ export default function AcceptRepresentation() {
   const acceptInvite = async () => {
     const results = await acceptRepRequest(id, { token });
     if (results?.success) {
-      window.history.push("/representatives");
+      navigate("/representatives");
     }
   };
   return (

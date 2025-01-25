@@ -21,6 +21,7 @@ export default function RepresentativesPage() {
   const { data: companies, isLoading: companyLoading } = useQuery({
     queryKey: ["allCompanies"],
     queryFn: getAllCompanies,
+    // refetchInterval: 2000,
   });
 
   const { data: representatives, isLoading: repsLoading } = useQuery({
@@ -60,7 +61,7 @@ export default function RepresentativesPage() {
             )
             .map((reps) => {
               const user = users?.find((user) => reps?.user === user?.id);
-              const company = companies?.find(
+              const company = companies?.results?.find(
                 (company) => reps?.company === company?.id
               );
               const role = representativeCategories?.find(
@@ -73,7 +74,9 @@ export default function RepresentativesPage() {
                 role,
               };
 
-              return <RepresentativeCard {...formattedRepsData} />;
+              return (
+                <RepresentativeCard key={reps?.id} {...formattedRepsData} />
+              );
             })
         )}
       </section>

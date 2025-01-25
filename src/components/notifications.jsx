@@ -26,6 +26,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { motion } from "framer-motion";
+import CustomTabs from "./custom/tabs";
 
 const generalNotificationType = [
   "like",
@@ -34,6 +35,7 @@ const generalNotificationType = [
   "follow",
   "bookmark",
   "favorite",
+  "representation",
 ];
 
 const promotionsNotificationType = ["promotions", "announcement"];
@@ -105,27 +107,13 @@ export function NotificationPopOver() {
               )}
             </header>
 
-            <Tabs variant="solid-rounded" className="space-y-2">
-              <TabList className="">
-                {tabsHeader.map((headings, index) => (
-                  <Tab
-                    className={clsx("capitalize", tabsStyle)}
-                    _selected={selectedStyle}
-                    key={index}
-                  >
-                    {headings}
-                  </Tab>
-                ))}
-              </TabList>
-              <TabPanels className="!w-full">
-                <TabPanel className="!p-0 !w-full">
-                  <Notifications notifications={generalNotifications} />
-                </TabPanel>
-                <TabPanel className="!p-0 !w-full">
-                  <Notifications notifications={promotionsNotifications} />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
+            <CustomTabs
+              tabsHeading={tabsHeader}
+              tabsPanels={[
+                <Notifications notifications={generalNotifications} />,
+                <Notifications notifications={promotionsNotifications} />,
+              ]}
+            />
           </section>
         )}
       </PopoverContent>

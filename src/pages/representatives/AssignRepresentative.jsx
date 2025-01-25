@@ -76,8 +76,6 @@ export default function AssignRepresentative() {
     setCachedReps(representatives);
   }, [representatives]);
 
-  console.log(cachedReps);
-
   const memoizedRepresentatives = cachedReps?.map((reps) => {
     const user = users?.find((user) => reps?.user === user?.id);
     const role = representativeCategories?.find(
