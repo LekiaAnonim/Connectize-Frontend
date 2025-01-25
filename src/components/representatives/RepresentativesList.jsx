@@ -11,7 +11,6 @@ import {
   cancelOrDeclineRepRequest,
   changeRepStatus,
 } from "../../api-services/representatives";
-import { useCustomQuery } from "../../context/queryContext";
 
 export const RepresentativesList = ({
   representatives,
