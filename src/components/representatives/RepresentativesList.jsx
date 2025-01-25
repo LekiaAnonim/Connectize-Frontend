@@ -13,7 +13,11 @@ import {
 } from "../../api-services/representatives";
 import { useCustomQuery } from "../../context/queryContext";
 
-export const RepresentativesList = ({ representatives, isLoading }) => {
+export const RepresentativesList = ({
+  representatives,
+  isLoading,
+  setCachedReps,
+}) => {
   return (
     <section className="flex flex-col gap-4">
       <section className="border-b pb-2">
@@ -37,7 +41,7 @@ export const RepresentativesList = ({ representatives, isLoading }) => {
           </div>
         ) : (
           representatives?.map((params, index) => (
-            <RepsTile key={index} {...params} />
+            <RepsTile key={index} {...params} setCachedReps={setCachedReps} />
           ))
         )}
       </section>
@@ -45,7 +49,16 @@ export const RepresentativesList = ({ representatives, isLoading }) => {
   );
 };
 
-const RepsTile = ({ id, user, company, status, role, category, invited }) => {
+const RepsTile = ({
+  id,
+  user,
+  company,
+  status,
+  role,
+  category,
+  invited,
+  setCachedReps,
+}) => {
   const [isChecked, setIsChecked] = useState(status);
   const { setRefreshInterval } = useCustomQuery();
 
@@ -94,8 +107,9 @@ const RepsTile = ({ id, user, company, status, role, category, invited }) => {
                   className="!text-[.6rem] cursor-pointer"
                   onClick={async () => {
                     await cancelOrDeclineRepRequest(id);
-                    setRefreshInterval(1000);
-                    setTimeout(() => setRefreshInterval(false), 2000);
+                    setCachedReps((prev) =>
+                      prev.filter((rep) => rep.id !== id)
+                    );
                   }}
                 >
                   Cancel Request

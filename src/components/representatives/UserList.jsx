@@ -42,7 +42,7 @@ export const UserList = ({ isLoading, filteredUsers }) => (
                 </small>
               </div>
             </div>
-            <RepRoleInput user={user} />
+            <RepRoleInput user={user}  />
           </motion.section>
         ))
       )}

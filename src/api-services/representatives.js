@@ -41,7 +41,7 @@ export const assignRepresentative = async (rep) => {
 
   if (results?.category) {
     toast.success(
-      `${rep.user.first_name} ${rep.user.last_name} has been sent an invitation to represent your company as ${rep.role}`
+      `${rep.user.first_name} ${rep.user.last_name} has been sent an invitation to represent your company as ${rep.role} representative`
     );
   }
 
