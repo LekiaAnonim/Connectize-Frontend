@@ -101,10 +101,11 @@ export const cancelOrDeclineRepRequest = async (id) => {
   return results;
 };
 
-export const acceptRepRequest = async (id) => {
+export const acceptRepRequest = async (id, data) => {
   const result = await makeApiRequest({
-    url: `api/representatives/${id}/accept/`,
+    url: `api/representatives/${id}/accept-invitation/`,
     method: "POST",
+    data,
   });
 
   return result;
