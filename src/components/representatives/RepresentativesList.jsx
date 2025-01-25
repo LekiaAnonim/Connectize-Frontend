@@ -99,22 +99,18 @@ const RepsTile = ({
           <Username user={user} />
           <small className="text-gray-400 !-my-1 line-clamp-2">
             {capitalizeFirst(user?.role)}{" "}
-            {!invited && (
-              <>
-                &bull;{" "}
-                <Badge
-                  className="!text-[.6rem] cursor-pointer"
-                  onClick={async () => {
-                    await cancelOrDeclineRepRequest(id);
-                    setCachedReps((prev) =>
-                      prev.filter((rep) => rep.id !== id)
-                    );
-                  }}
-                >
-                  Cancel Request
-                </Badge>
-              </>
-            )}
+            <>
+              &bull;{" "}
+              <Badge
+                className="!text-[.6rem] cursor-pointer"
+                onClick={async () => {
+                  await cancelOrDeclineRepRequest(id);
+                  setCachedReps((prev) => prev.filter((rep) => rep.id !== id));
+                }}
+              >
+                {invited ? "Remove representative" : "Cancel Request"}
+              </Badge>
+            </>
           </small>
         </div>
       </div>

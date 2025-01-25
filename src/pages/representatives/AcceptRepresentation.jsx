@@ -1,5 +1,8 @@
 import React from "react";
-import { acceptRepRequest } from "../../api-services/representatives";
+import {
+  acceptRepRequest,
+  cancelOrDeclineRepRequest,
+} from "../../api-services/representatives";
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import HeadingText from "../../components/HeadingText";
 import LightParagraph from "../../components/ParagraphText";
@@ -40,7 +43,11 @@ export default function AcceptRepresentation() {
         </LightParagraph>
 
         <div className="flex justify-center gap-2 mt-4">
-          <Link to="/" className={clsx(buttonClass, "bg-gray-200")}>
+          <Link
+            to="/"
+            className={clsx(buttonClass, "bg-gray-200")}
+            onClick={() => cancelOrDeclineRepRequest(id)}
+          >
             Cancel Invitation
           </Link>
           <button
