@@ -51,9 +51,6 @@ export function NotificationPopOver() {
   const unReadNotificationLength = notifications?.filter(
     (notification) => notification.is_read == null
   )?.length;
-
-  const tabsStyle = "w-full !rounded text-xs";
-  const selectedStyle = { color: "black", bg: "gray.100" };
   const tabsHeader = ["General", "Promotions"];
 
   const generalNotifications = notifications?.filter((notification) =>
