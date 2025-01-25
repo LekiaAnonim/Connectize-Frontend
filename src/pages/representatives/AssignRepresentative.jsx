@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import HeadingText from "../../components/HeadingText";
 import LightParagraph from "../../components/ParagraphText";
 import { useQuery } from "@tanstack/react-query";
@@ -45,33 +45,53 @@ export default function AssignRepresentative() {
       queryFn: getOrCreateRepresentativeCategory,
     });
 
-  const filteredUsers = users?.filter((user) => {
-    // const alreadyHasRepStatus =
-    //   representatives?.find(
-    //     (reps) => reps?.user === user?.id && reps?.company === company_id
-    //   ) || false;
+  const filteredUsers = useMemo(() => {
+    return users?.filter((user) => {
+      const thisUsername = (user?.first_name + user?.last_name)
+        ?.toString()
+        .toLowerCase();
+      const currentUsername = (currentUser?.first_name + currentUser?.last_name)
+        ?.toString()
+        ?.toLowerCase();
+      const isCurrentUser = currentUsername === thisUsername;
+      const isUsernameValid =
+        user?.first_name !== null && user?.first_name !== undefined;
 
-    const thisUsername = (user?.first_name + user?.last_name)
-      ?.toString()
-      .toLowerCase();
-    const currentUsername = (currentUser?.first_name + currentUser?.last_name)
-      ?.toString()
-      ?.toLowerCase();
-    const isCurrentUser = currentUsername === thisUsername;
-    const isUsernameValid =
-      user?.first_name !== null && user?.first_name !== undefined;
+      if (username?.trim()) {
+        return (
+          isUsernameValid &&
+          thisUsername.includes(username.toLowerCase().trim()) &&
+          !isCurrentUser
+        );
+      }
 
-    if (username?.trim()) {
-      return (
-        isUsernameValid &&
-        thisUsername.includes(username.toLowerCase().trim()) &&
-        !isCurrentUser
-        // && !alreadyHasRepStatus
-      );
-    }
+      return isUsernameValid && !isCurrentUser;
+    });
+  }, [users, username, currentUser]);
 
-    return isUsernameValid && !isCurrentUser;
-    // && !alreadyHasRepStatus;
+  const [cachedReps, setCachedReps] = useState([]);
+
+  useEffect(() => {
+    document.title = "Manage Representatives | Connectize";
+    setCachedReps(representatives);
+  }, [representatives]);
+
+  const memoizedRepresentatives = cachedReps?.map((reps) => {
+    const user = users?.find((user) => reps?.user === user?.id);
+    const role = representativeCategories?.find(
+      (category) => category?.id === reps?.category
+    );
+
+    const company = companies?.[0];
+    return {
+      id: reps?.id,
+      user,
+      company,
+      status: reps?.status,
+      role: role?.type,
+      category: role?.id,
+      invited: reps?.invited,
+    };
   });
 
   return (
@@ -88,26 +108,15 @@ export default function AssignRepresentative() {
           </LightParagraph>
         </div>
         <UserSearchInput username={username} setUsername={setUsername} />
-        <UserList isLoading={isLoading} filteredUsers={filteredUsers} />
+        <UserList
+          isLoading={isLoading}
+          filteredUsers={filteredUsers}
+          setCachedReps={setCachedReps}
+        />
         <RepresentativesList
           isLoading={repsLoading || companyLoading || repsCatLoading}
-          representatives={representatives?.map((reps) => {
-            const user = users?.find((user) => reps?.user === user?.id);
-            const role = representativeCategories?.find(
-              (category) => category?.id === reps?.category
-            );
-
-            const company = companies?.[0];
-            return {
-              id: reps?.id,
-              user,
-              company,
-              status: reps?.status,
-              role: role?.type,
-              category: role?.id,
-              invited: reps?.invited,
-            };
-          })}
+          representatives={memoizedRepresentatives}
+          setCachedReps={setCachedReps}
         />
       </section>
     </section>

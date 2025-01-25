@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { getCurrentUser } from "../api-services/users";
-import { refreshTokenIfNeeded } from "../lib/helpers";
+import { refreshToken } from "../lib/helpers";
 
 // Create the context
 const UserContext = createContext();
@@ -19,7 +19,7 @@ export const UserProvider = ({ children }) => {
   const fetchCurrentUser = useCallback(async () => {
     setLoading(true);
     try {
-      const authorization = await refreshTokenIfNeeded();
+      const authorization = await refreshToken();
       if (authorization && !user) {
         const fetchedUser = await getCurrentUser();
         setUser(fetchedUser);

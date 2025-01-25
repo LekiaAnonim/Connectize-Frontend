@@ -8,7 +8,7 @@ import { avatarStyle } from "../ResponsiveNav";
 import Username from "../Username";
 import RepRoleInput from "../form/RepRoleInput";
 
-export const UserList = ({ isLoading, filteredUsers }) => (
+export const UserList = ({ isLoading, filteredUsers, setCachedReps }) => (
   <section className="">
     <HeadingText weight="semibold">Users</HeadingText>
     <section className="divide-y divide-gray-200/70">
@@ -42,7 +42,7 @@ export const UserList = ({ isLoading, filteredUsers }) => (
                 </small>
               </div>
             </div>
-            <RepRoleInput user={user} />
+            <RepRoleInput user={user} setCachedReps={setCachedReps} />
           </motion.section>
         ))
       )}

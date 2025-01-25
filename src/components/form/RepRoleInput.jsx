@@ -8,19 +8,16 @@ import { getCompanies } from "../../api-services/companies";
 import { assignRepresentative } from "../../api-services/representatives";
 import { toast } from "sonner";
 import { Spinner } from "@chakra-ui/react";
-import { useCustomQuery } from "../../context/queryContext";
 
-export default function RepRoleInput({ user }) {
+export default function RepRoleInput({ user, setCachedReps, cachedReps }) {
   const emptyRepsRole = "Representative role cannot be empty";
   const [representativeRole, setRepresentativeRole] = useState("");
   const [roleError, setRoleError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setRefetchInterval } = useCustomQuery();
-
   const { data: companies } = useQuery({
     queryKey: ["companies"],
-    queryFn: ()=> getCompanies(),
+    queryFn: () => getCompanies(),
   });
 
   const memoizedCompanies = useMemo(() => companies, [companies]);
@@ -46,19 +43,19 @@ export default function RepRoleInput({ user }) {
 
     try {
       const value = await assignRepresentative(repsData);
+      console.log(value);
+
       if (value?.user) {
         setRepresentativeRole("");
         setRoleError(null);
-        setRefetchInterval(1000);
-
-        setTimeout(() => setRefetchInterval(false), 1000);
+        setCachedReps(cachedReps?.push(repsData));
       }
     } catch (error) {
       console.error(`Representative error ${error}`);
     } finally {
       setIsLoading(false);
     }
-  }, [memoizedCompanies, representativeRole, user, setRefetchInterval]);
+  }, [memoizedCompanies, representativeRole, user, setCachedReps, cachedReps]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleInputChange = (e) => {

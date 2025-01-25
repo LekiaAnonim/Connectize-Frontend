@@ -41,7 +41,7 @@ export const assignRepresentative = async (rep) => {
 
   if (results?.category) {
     toast.success(
-      `${rep.user.first_name} ${rep.user.last_name} has been sent an invitation to represent your company as ${rep.role}`
+      `${rep.user.first_name} ${rep.user.last_name} has been sent an invitation to represent your company as ${rep.role} representative`
     );
   }
 
@@ -94,10 +94,19 @@ export const changeRepStatus = async (id, repData) => {
 };
 
 export const cancelOrDeclineRepRequest = async (id) => {
-  
   const results = await makeApiRequest({
     url: `api/representatives/${id}/`,
     method: "DELETE",
   });
   return results;
+};
+
+export const acceptRepRequest = async (id, data) => {
+  const result = await makeApiRequest({
+    url: `api/representatives/${id}/accept-invitation/`,
+    method: "POST",
+    data,
+  });
+
+  return result;
 };

@@ -11,9 +11,12 @@ import {
   cancelOrDeclineRepRequest,
   changeRepStatus,
 } from "../../api-services/representatives";
-import { useCustomQuery } from "../../context/queryContext";
 
-export const RepresentativesList = ({ representatives, isLoading }) => {
+export const RepresentativesList = ({
+  representatives,
+  isLoading,
+  setCachedReps,
+}) => {
   return (
     <section className="flex flex-col gap-4">
       <section className="border-b pb-2">
@@ -37,7 +40,7 @@ export const RepresentativesList = ({ representatives, isLoading }) => {
           </div>
         ) : (
           representatives?.map((params, index) => (
-            <RepsTile key={index} {...params} />
+            <RepsTile key={index} {...params} setCachedReps={setCachedReps} />
           ))
         )}
       </section>
@@ -45,9 +48,17 @@ export const RepresentativesList = ({ representatives, isLoading }) => {
   );
 };
 
-const RepsTile = ({ id, user, company, status, role, category, invited }) => {
+const RepsTile = ({
+  id,
+  user,
+  company,
+  status,
+  role,
+  category,
+  invited,
+  setCachedReps,
+}) => {
   const [isChecked, setIsChecked] = useState(status);
-  const { setRefreshInterval } = useCustomQuery();
 
   const handleToggle = async () => {
     setIsChecked(!isChecked);
@@ -87,21 +98,18 @@ const RepsTile = ({ id, user, company, status, role, category, invited }) => {
           <Username user={user} />
           <small className="text-gray-400 !-my-1 line-clamp-2">
             {capitalizeFirst(user?.role)}{" "}
-            {!invited && (
-              <>
-                &bull;{" "}
-                <Badge
-                  className="!text-[.6rem] cursor-pointer"
-                  onClick={async () => {
-                    await cancelOrDeclineRepRequest(id);
-                    setRefreshInterval(1000);
-                    setTimeout(() => setRefreshInterval(false), 2000);
-                  }}
-                >
-                  Cancel Request
-                </Badge>
-              </>
-            )}
+            <>
+              &bull;{" "}
+              <Badge
+                className="!text-[.6rem] cursor-pointer"
+                onClick={async () => {
+                  await cancelOrDeclineRepRequest(id);
+                  setCachedReps((prev) => prev.filter((rep) => rep.id !== id));
+                }}
+              >
+                {invited ? "Remove representative" : "Cancel Request"}
+              </Badge>
+            </>
           </small>
         </div>
       </div>
