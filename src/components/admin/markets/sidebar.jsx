@@ -7,7 +7,6 @@ import { avatarStyle } from "../../ResponsiveNav";
 import { CategoryIcon, VerifiedIcon } from "../../../icon";
 import { capitalizeFirst } from "../../../lib/utils";
 import { Link, useLocation } from "react-router-dom";
-import { useCustomSearchParams } from "../../../hooks/useCustomSearchParams";
 import { useQuery } from "@tanstack/react-query";
 import { getServiceCategories } from "../../../api-services/services";
 import { getProductCategories } from "../../../api-services/products";
@@ -16,7 +15,7 @@ import { CircleTitleSubtitleSkeleton } from "../feeds/TopServiceSuggestions";
 import LightParagraph from "../../ParagraphText";
 
 function Sidebar() {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, loading } = useAuth();
   const { pathname } = useLocation();
 
   // .startsWith("/market" || "/product" || "/service");
@@ -28,7 +27,11 @@ function Sidebar() {
         "max-md:hidden bg-white rounded-md py-4 px-2 shrink-0 max-w-[300px] md:w-[240px] lg:w-[260px] 2xl:w-[280px] h-screen scrollbar-hidden max-md:!py-6 max-md:shadow md:sticky md:top-2 overflow-y-auto md:max-h-screen space-y-4"
       )}
     >
-      <UserProfile currentUser={currentUser} />
+      {!loading && currentUser ? (
+        <UserProfile currentUser={currentUser} />
+      ) : (
+        <CircleTitleSubtitleSkeleton />
+      )}
       <NavigationSection />
       {isMarketPages && <ProductCategory />}
     </nav>
