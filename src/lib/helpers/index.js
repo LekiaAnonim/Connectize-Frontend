@@ -72,7 +72,7 @@ export async function refreshToken() {
 
     if (retries === 5) {
       removeSession();
-      toast.info("User session has been reset. Please login again.");
+      // toast.info("User session has been reset. Please login again.");
       goToLogin();
       return;
     }
