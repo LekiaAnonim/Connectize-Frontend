@@ -138,7 +138,7 @@ export async function makeApiRequest({
 
     if (response.status >= 200 && response.status <= 204) {
       resetForm?.();
-      console.log("Request succeeded:", response.data);
+      // console.log("Request succeeded:", response.data);
 
       if (response.data.success && responseMessage) {
         toast.success(responseMessage);
