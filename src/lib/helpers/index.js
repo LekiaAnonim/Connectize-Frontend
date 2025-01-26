@@ -18,19 +18,19 @@ export function goToLogin() {
 }
 
 // Configure Axios Defaults
-export const baseURL =
-  process.env.NODE_ENV === "development"
-    ? "http://127.0.0.1:8000"
-    : "https://connectize.co"; // https://connectize.co/
+export const baseURL = "https://connectize.co";
+// process.env.NODE_ENV === "development"
+//   ? "http://127.0.0.1:8000"
+//   : "https://connectize.co";
 axios.defaults.withCredentials = true;
 
 // Mutex for Refresh Token
 let isRefreshing = false;
 let refreshPromise = null;
+let accessToken = null;
+let accessTokenExpiry = null;
 
 let retries = 0;
-
-// let retries = 0;
 
 export async function refreshToken() {
   const session = getSession();
@@ -61,6 +61,9 @@ export async function refreshToken() {
         tokens: newTokens,
       });
 
+      accessToken = newTokens.access;
+      accessTokenExpiry = Date.now() + 15 * 60 * 1000; // Assuming access token is valid for 15 minutes
+
       return "Bearer " + newTokens.access;
     })();
 
@@ -68,11 +71,10 @@ export async function refreshToken() {
     return { Authorization: authorizationHeader };
   } catch (error) {
     retries++;
-    console.log(`Refresh token attempt #${retries}`);
+    console.info(`Refresh token attempt #${retries}`);
 
     if (retries === 5) {
       removeSession();
-      // toast.info("User session has been reset. Please login again.");
       goToLogin();
       return;
     }
@@ -82,6 +84,13 @@ export async function refreshToken() {
     isRefreshing = false;
     refreshPromise = null;
   }
+}
+
+export async function getAuthorizationHeader() {
+  if (accessToken && Date.now() < accessTokenExpiry) {
+    return { Authorization: "Bearer " + accessToken };
+  }
+  return await refreshToken();
 }
 
 export async function makeApiRequest({
@@ -94,7 +103,7 @@ export async function makeApiRequest({
   params,
 }) {
   try {
-    const authorization = await refreshToken();
+    const authorization = await getAuthorizationHeader();
 
     if (!authorization && !type.startsWith("auth")) {
       goToLogin();
