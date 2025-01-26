@@ -4,6 +4,7 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "sonner";
 import MyProvider from "./context/provider";
+import { Analytics } from "@vercel/analytics/react";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -23,6 +24,7 @@ root.render(
         duration={5000}
         pauseWhenPageIsHidden
       />
+      <Analytics />
     </React.StrictMode>
   </BrowserRouter>
 );
