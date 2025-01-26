@@ -61,8 +61,9 @@ export default function UserProfile() {
     region,
     phone_number,
     country,
-    companies,
   } = paramUser;
+
+  console.log(currentUser);
 
   return (
     <section className="rounded-md overflow-hidden">
@@ -71,7 +72,7 @@ export default function UserProfile() {
       <section className="mt-8 container !px-0 space-y-6">
         <UserProfileHeadings {...paramUser} />
 
-        {companies?.length < 1 && (
+        {currentUser?.companies?.length < 1 && (
           <CreateNewLink text="Create company" url="/create-company" />
         )}
 
