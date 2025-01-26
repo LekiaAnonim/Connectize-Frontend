@@ -18,72 +18,19 @@ export function goToLogin() {
 }
 
 // Configure Axios Defaults
-export const baseURL = "https://connectize.co";
-  // process.env.NODE_ENV === "development"
-  //   ? "http://127.0.0.1:8000"
-  //   : "https://connectize.co";
+export const baseURL =
+  process.env.NODE_ENV === "development"
+    ? "http://127.0.0.1:8000"
+    : "https://connectize.co"; // https://connectize.co/
 axios.defaults.withCredentials = true;
 
-// Create Axios instance
-const apiClient = axios.create({
-  baseURL,
-  withCredentials: true,
-});
-
+// Mutex for Refresh Token
 let isRefreshing = false;
 let refreshPromise = null;
 
-apiClient.interceptors.request.use(async (config) => {
-  const session = getSession();
+let retries = 0;
 
-  if (session?.tokens?.access) {
-    config.headers.Authorization = `Bearer ${session.tokens.access}`;
-  }
-
-  return config;
-});
-
-apiClient.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-    const errorCode = error?.response?.data?.code;
-
-    if (errorCode === "token_not_valid" && !originalRequest._retry) {
-      if (!isRefreshing) {
-        isRefreshing = true;
-        refreshPromise = refreshToken();
-      }
-
-      try {
-        const newAccessToken = await refreshPromise;
-        isRefreshing = false;
-        refreshPromise = null;
-
-        if (newAccessToken) {
-          originalRequest._retry = true;
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-          return apiClient(originalRequest);
-        }
-      } catch (refreshError) {
-        isRefreshing = false;
-        refreshPromise = null;
-        removeSession();
-        toast.info("User session has been reset. Please login again.");
-        goToLogin();
-        return Promise.reject(refreshError);
-      }
-    }
-
-    const errorMsg = extractErrorMessage(error?.response?.data);
-    if (errorMsg) {
-      toast.error(errorMsg);
-      console.error("API request failed:", error);
-    }
-
-    return Promise.reject(error);
-  }
-);
+// let retries = 0;
 
 export async function refreshToken() {
   const session = getSession();
@@ -92,24 +39,48 @@ export async function refreshToken() {
     return undefined;
   }
 
+  if (isRefreshing) {
+    return refreshPromise; // Prevent re-running refresh if already in progress
+  }
+
+  isRefreshing = true;
+
   try {
-    const { data } = await axios.post(`${baseURL}/api/auth/refresh-token/`, {
-      refresh: session.tokens.refresh,
-    });
+    refreshPromise = (async () => {
+      const { data } = await axios.post(`${baseURL}/api/auth/refresh-token/`, {
+        refresh: session.tokens.refresh,
+      });
 
-    const newTokens = {
-      access: data.access,
-      refresh: data.refresh,
-    };
+      const newTokens = {
+        access: data.access,
+        refresh: data.refresh,
+      };
 
-    setSession({
-      ...session,
-      tokens: newTokens,
-    });
+      setSession({
+        ...session,
+        tokens: newTokens,
+      });
 
-    return newTokens.access;
+      return "Bearer " + newTokens.access;
+    })();
+
+    const authorizationHeader = await refreshPromise;
+    return { Authorization: authorizationHeader };
   } catch (error) {
+    retries++;
+    console.log(`Refresh token attempt #${retries}`);
+
+    if (retries === 5) {
+      removeSession();
+      // toast.info("User session has been reset. Please login again.");
+      goToLogin();
+      return;
+    }
+
     throw error;
+  } finally {
+    isRefreshing = false;
+    refreshPromise = null;
   }
 }
 
@@ -123,11 +94,19 @@ export async function makeApiRequest({
   params,
 }) {
   try {
-    const response = await apiClient({
-      url,
+    const authorization = await refreshToken();
+
+    if (!authorization && !type.startsWith("auth")) {
+      goToLogin();
+      return;
+    }
+
+    const response = await axios({
+      url: `${baseURL}/${url}`,
       method,
       data,
       headers: {
+        ...authorization,
         "Content-Type": contentType,
       },
       params,
@@ -145,7 +124,45 @@ export async function makeApiRequest({
       return response.data;
     }
   } catch (error) {
-    console.error("API request failed:", error);
+    const errorCode = error?.response?.data?.code;
+
+    if (errorCode === "token_not_valid") {
+      // Retry after refreshing token
+      try {
+        const authorization = await refreshToken();
+        if (authorization) {
+          // Retry the original request
+          const response = await axios({
+            url: `${baseURL}/${url}`,
+            method,
+            data,
+            headers: {
+              ...authorization,
+              "Content-Type": contentType,
+            },
+            params,
+          });
+
+          if (response.status >= 200 && response.status < 300) {
+            resetForm?.();
+            console.log("Request succeeded after retry:", response.data);
+            toast.success(response.data.message);
+            return response.data;
+          }
+        }
+      } catch (retryError) {
+        console.error("Token refresh failed:", retryError);
+      }
+    }
+
+    // Handle general errors
+    const errorResponse = error?.response?.data;
+
+    const errorMsg = extractErrorMessage(errorResponse);
+    if (errorMsg) {
+      toast.error(errorMsg);
+      console.error("API request failed:", error);
+    }
   }
 }
 
