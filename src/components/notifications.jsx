@@ -45,7 +45,7 @@ export function NotificationPopOver() {
   const { data: notifications, isLoading } = useQuery({
     queryKey: ["notifications"],
     queryFn: getNotificationsForUser,
-    refetchInterval: 60000,
+    refetchInterval: 20000,
   });
 
   const unReadNotificationLength = notifications?.filter(
