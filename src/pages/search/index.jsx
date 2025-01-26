@@ -8,12 +8,12 @@ import { useQuery } from "@tanstack/react-query";
 import { getSearchResults } from "../../api-services/search";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { getAllCompanies } from "../../api-services/companies";
 import { Avatar } from "@chakra-ui/react";
 import Username from "../../components/Username";
 import ConnectButton from "../../components/ConnectButton";
 import { avatarStyle } from "../../components/ResponsiveNav";
 import LightParagraph from "../../components/ParagraphText";
+import useRedirect from "../../hooks/useRedirect";
 
 export default function Search() {
   return (
@@ -26,7 +26,9 @@ export default function Search() {
 export const SearchTab = () => {
   const [searchParams] = useSearchParams();
 
-  const searchQuery = searchParams.get("search_query") || "";
+  const searchQuery = searchParams.get("search_query");
+
+  useRedirect(!searchQuery, "/");
 
   const { data, isLoading } = useQuery({
     queryKey: ["search", searchQuery],
@@ -86,30 +88,38 @@ export const SearchTab = () => {
       )}
     </section>,
     <div className="grid gap-x-3 gap-y-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-      {data?.products?.map((product, index) => (
-        <ProductListCard
-          key={index}
-          chatUrl={`/products/${product?.id}`}
-          image={product?.images?.[0]?.image}
-          subtitle={product?.sub_title}
-          title={product?.title}
-        />
-      ))}
+      {data?.products?.length < 1 ? (
+        <LightParagraph>No product found in search</LightParagraph>
+      ) : (
+        data?.products?.map((product, index) => (
+          <ProductListCard
+            key={index}
+            chatUrl={`/products/${product?.id}`}
+            image={product?.images?.[0]?.image}
+            subtitle={product?.sub_title}
+            title={product?.title}
+          />
+        ))
+      )}
     </div>,
     <div className="grid gap-x-3 gap-y-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-      {data?.services?.map((service, index) => (
-        <PostCard
-          key={index}
-          companyName={service?.company}
-          verified={service?.companyInfo?.verified}
-          logo={service?.companyInfo?.logo}
-          title={service?.title}
-          summary={service?.sub_title}
-          url={`/services/${service?.id}`}
-          whole={service}
-          isService
-        />
-      ))}
+      {data?.services?.length < 1 ? (
+        <LightParagraph>No service found in search</LightParagraph>
+      ) : (
+        data?.services?.map((service, index) => (
+          <PostCard
+            key={index}
+            companyName={service?.company}
+            verified={service?.companyInfo?.verified}
+            logo={service?.companyInfo?.logo}
+            title={service?.title}
+            summary={service?.sub_title}
+            url={`/services/${service?.id}`}
+            whole={service}
+            isService
+          />
+        ))
+      )}
     </div>,
   ];
 

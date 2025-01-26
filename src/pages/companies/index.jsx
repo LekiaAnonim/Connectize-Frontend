@@ -63,7 +63,9 @@ export const CompaniesArray = ({
     }
   });
   return searchLoading ? (
-    <PageLoading />
+    <PageLoading hasLogo={false} text="Getting companies" />
+  ) : companyArray?.length < 1 ? (
+    <LightParagraph>No company found in search</LightParagraph>
   ) : (
     <section className="space-y-4">
       {companyArray && hasFilter && (
