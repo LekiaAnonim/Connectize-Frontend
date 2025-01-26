@@ -79,8 +79,9 @@ apiClient.interceptors.response.use(
     if (errorMsg) {
       toast.error(errorMsg);
       console.error("API request failed:", error);
+    } else if (errorMsg === "Authentication credentials were not provided.") {
+      goToLogin();
     }
-
     return Promise.reject(error);
   }
 );
