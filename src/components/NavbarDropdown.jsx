@@ -9,7 +9,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/userContext";
 import { StarOutlined } from "@ant-design/icons";
-import { BriefCaseIcon, CompanyIcon, UserGroup } from "../icon";
+import { Bookmark, BriefCaseIcon, CompanyIcon, UserGroup } from "../icon";
 
 export default function NavbarDropdown() {
   const { user: currentUser } = useAuth();
@@ -46,6 +46,11 @@ export default function NavbarDropdown() {
             IconName={UserGroup}
             to="/representatives/manage"
             text="Add Representatives"
+          />
+          <DropDownOption
+            IconName={Bookmark}
+            to="/co/bookmark"
+            text="My Bookmarks"
           />
         </section>
       </PopoverContent>
