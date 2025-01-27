@@ -15,12 +15,9 @@ import { bookmarkProduct } from "../../../api-services/products";
 import { Bookmark } from "../../../icon";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import {
-  getCompanies,
-  getSingleCompany,
-} from "../../../api-services/companies";
+import { getSingleCompany } from "../../../api-services/companies";
 
-const NAVIGATION_BUTTONS = [
+export const NAVIGATION_BUTTONS = [
   {
     id: 1,
     text: "Back",

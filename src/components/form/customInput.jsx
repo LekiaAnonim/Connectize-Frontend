@@ -44,7 +44,7 @@ export default function CustomInput({
     <div className="relative w-full">
       <Input
         autoComplete="true"
-        className={clsx(className, inputClassNames, {
+        className={clsx(className, inputClassNames, "focus:!outline-none", {
           "!border-green-800 !bg-green-50/50": validate && !error,
           "!border-[#9e3818] !bg-[#9e3818]/5": error,
         })}
