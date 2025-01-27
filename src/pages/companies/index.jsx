@@ -15,7 +15,7 @@ import { baseURL } from "../../lib/helpers";
 
 import { motion } from "framer-motion";
 
-const sortOptions = ["name", "companies", "products", "location"];
+const sortOptions = ["company name", "company type", "products", "country"];
 
 export default function CompaniesPage() {
   const { data: companiesList, isLoading } = useQuery({
@@ -28,7 +28,12 @@ export default function CompaniesPage() {
 
   return (
     <section className="space-y-6">
-      <Heading companyLength={companiesList?.count} />
+      <section className="flex items-center justify-between">
+        <Heading companyLength={companiesList?.count} />
+        <Button className="!text-xs !rounded-full hover:!bg-gold transition-colors duration-300">
+          Create Company
+        </Button>
+      </section>
       <CompaniesArray />
     </section>
   );
@@ -46,7 +51,7 @@ export const CompaniesArray = ({
   });
   const { updateSearchParams, searchParams } = useCustomSearchParams();
 
-  const selectedSortOption = searchParams.get("sort_by") || "name";
+  const selectedSortOption = searchParams.get("sort_by") || "company name";
 
   const companyArray = isSearch ? array : companiesList?.results;
 
@@ -72,7 +77,7 @@ export const CompaniesArray = ({
         <section className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-semibold">Sort By</h2>
 
-          <div className="flex overflow-x-auto">
+          <div className="flex overflow-x-auto scrollbar-hidden scroll-smooth">
             {sortOptions?.map((option, index) => {
               const currentOption = selectedSortOption.toLowerCase() === option;
               return (

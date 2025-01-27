@@ -171,6 +171,8 @@ export const getOrCreateProductCategories = async (name) => {
 export const bookmarkProduct = async (productId, data) => {
   const allProducts = await getProducts();
 
+  console.log(data);
+
   const currentUser = await getCurrentUser();
 
   const currentProduct = allProducts.find(
@@ -183,7 +185,7 @@ export const bookmarkProduct = async (productId, data) => {
     await makeApiRequest({
       url: `api/products/${productId}/unlike/`,
       method: "POST",
-      data: { ...data, company_id: data.company.id },
+      // data: { ...data, company_id: data.company },
     });
     toast.success(data.title + " has been removed from bookmark");
     return;
@@ -191,7 +193,7 @@ export const bookmarkProduct = async (productId, data) => {
   await makeApiRequest({
     url: `api/products/${productId}/like/`,
     method: "POST",
-    data: { ...data, company_id: data.company.id },
+    // data: { ...data, company_id: data.company.id },
   });
   toast.success(data.title + " has been added to bookmark");
 };

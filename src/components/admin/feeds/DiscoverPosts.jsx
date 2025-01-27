@@ -29,7 +29,6 @@ import {
 } from "@chakra-ui/react";
 import MoreOptions from "../../MoreOptions";
 import FormatPostText from "../../FormatPostText";
-import { ChangeCircleOutlined } from "@mui/icons-material";
 import { useCustomQuery } from "../../../context/queryContext";
 import jsPDF from "jspdf";
 import { toast } from "sonner";
@@ -45,7 +44,7 @@ import LightParagraph from "../../ParagraphText";
 import ReusableModal from "../../custom/ResusableModal";
 import { SwiperSlide, Swiper } from "swiper/react";
 import { Pagination } from "swiper/modules";
-import { NAVIGATION_BUTTONS } from "../products/productdetails";
+import { NAVIGATION_BUTTONS } from "../../../lib/slide_button";
 
 function DiscoverPosts({ searchArray, isSearch, searchLoading }) {
   const { refetchInterval } = useCustomQuery();
