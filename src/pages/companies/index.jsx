@@ -14,6 +14,7 @@ import ConnectButton from "../../components/ConnectButton";
 import { baseURL } from "../../lib/helpers";
 
 import { motion } from "framer-motion";
+import { useAuth } from "../../context/userContext";
 
 const sortOptions = ["company name", "company type", "products", "country"];
 
@@ -23,6 +24,8 @@ export default function CompaniesPage() {
     queryFn: getAllCompanies,
   });
 
+  const { user: currentUser } = useAuth();
+
   if (isLoading)
     return <PageLoading hasLogo={false} text="Getting companies" />;
 
@@ -30,9 +33,15 @@ export default function CompaniesPage() {
     <section className="space-y-6">
       <section className="flex items-center justify-between">
         <Heading companyLength={companiesList?.count} />
-        <Button className="!text-xs !rounded-full hover:!bg-gold transition-colors duration-300">
-          Create Company
-        </Button>
+        {currentUser && currentUser?.companies.length < 1 && (
+          <Button
+            as="a"
+            href="/create-company"
+            className="!text-xs !rounded-full hover:!bg-gold transition-colors duration-300"
+          >
+            Create Company
+          </Button>
+        )}
       </section>
       <CompaniesArray />
     </section>
@@ -57,11 +66,11 @@ export const CompaniesArray = ({
 
   const sortedCompanies = companyArray?.sort((a, b) => {
     switch (selectedSortOption) {
-      case "companies":
+      case "company type":
         return a.organization_type.localeCompare(b.organization_type);
       case "products":
         return a.products.length - b?.products.length;
-      case "location":
+      case "country":
         return a?.country.localeCompare(b?.country);
       default:
         return a.company_name.localeCompare(b?.company_name);
