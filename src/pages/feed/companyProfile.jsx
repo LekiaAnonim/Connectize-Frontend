@@ -47,7 +47,7 @@ const CompanyProfile = React.memo(() => {
     <section className="rounded-md overflow-hidden w-full">
       <Header {...headerProps} />
 
-      <section className="mt-11 md:mt-14 max-md:container flex max-lg:flex-col items-start gap-2 relative">
+      <section className="mt-11 md:mt-14 flex max-lg:flex-col items-start gap-2 relative">
         <Link
           to="/representatives/manage"
           className="bg-gold hover:bg-opacity-70 text-sm xs:text-xs lg:text-sm font-semibold absolute right-0 -top-9 md:-top-12 py-1.5 px-2 rounded-full"
@@ -76,7 +76,7 @@ const ProductSidebar = React.memo(({ company }) => {
 
   return (
     <section className="space-y-8 max-lg:mb-4 w-full lg:max-w-[350px] xl:max-w-[400px] shrink-0">
-      <section className="space-y-6 max-lg:px-2">
+      <section className="space-y-6">
         <h1 className="text-3xl md:text-2xl font-bold">
           {capitalizeFirst(company?.company_name)}
         </h1>
