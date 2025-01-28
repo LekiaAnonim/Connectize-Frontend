@@ -5,8 +5,6 @@ import { useFormik } from "formik";
 import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { createService } from "../../../api-services/services";
 import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getCompanies } from "../../../api-services/companies";
 import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
@@ -43,11 +41,6 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function ServiceAdminMain() {
-  const { data: companies } = useQuery({
-    queryKey: ["companies"],
-    queryFn: ()=> getCompanies(),
-  });
-
   const navigate = useNavigate();
 
   const initialValues = {
@@ -180,26 +173,26 @@ export default function ServiceAdminMain() {
           label: "Short description",
           placeholder: "Should not be more than 1450 characters",
         },
-        {
-          name: "company",
-          type: "select",
-          label: "Select company",
-          placeholder: "Select company to attach service to",
-          options: companies?.map((company) => company?.company_name),
-        },
+        // {
+        //   name: "company",
+        //   type: "select",
+        //   label: "Select company",
+        //   placeholder: "Select company to attach service to",
+        //   options: companies?.map((company) => company?.company_name),
+        // },
       ],
     },
   ];
 
   useEffect(() => {
-    document.title = "Add a new service | Connectize";
+    document.title = "Add a New Service in Connectize";
     formik.setValues(initialValues);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <section>
-      <div className="bg-white p-3 rounded-md space-y-4">
+      <div className="bg-white p-3 rounded-md space-y-4 mb-8">
         <HeadingText>List new Services</HeadingText>
 
         <Form
@@ -211,7 +204,7 @@ export default function ServiceAdminMain() {
             text: "Add service  | ",
             icon: <ChevronRightIcon />,
             submitText: "Adding service...",
-            style: "!w-fit mt-20 text-sm",
+            style: "!w-fit mt-10 text-sm",
           }}
         />
       </div>

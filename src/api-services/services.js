@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
 import { capitalizeFirst } from "../lib/utils";
 import { getCurrentUser } from "./users";
+import { getCompanies } from "./companies";
 
 // {
 //     "title": "",
@@ -19,23 +20,22 @@ export const getServices = async () => {
     method: "GET",
   });
 
-    let mergedServicesWIthImage = [];
+  let mergedServicesWIthImage = [];
 
-    const serviceImages = await getServiceImages();
-    console.log(serviceImages);
+  const serviceImages = await getServiceImages();
 
-    services?.forEach((service) => {
-      const serviceImage = serviceImages?.filter(
-        (image) => service.id === image.product
-      );
+  services?.forEach((service) => {
+    const serviceImage = serviceImages?.filter(
+      (image) => service.id === image.product
+    );
 
-      mergedServicesWIthImage.push({
-        ...service,
-        images: serviceImage,
-      });
+    mergedServicesWIthImage.push({
+      ...service,
+      images: serviceImage,
     });
+  });
 
-    return mergedServicesWIthImage;
+  return mergedServicesWIthImage;
 };
 
 export const getSingleService = async (id) => {
@@ -53,6 +53,8 @@ export const createService = async (data, resetForm) => {
   );
 
   const user = await getCurrentUser();
+
+  const company = await getCompanies();
 
   const toastId = toast.info("Creating service...");
 
@@ -73,7 +75,7 @@ export const createService = async (data, resetForm) => {
       sub_title: data.service_subtitle,
       category: serviceCategory,
       description: data.service_description,
-      company: data?.company || "",
+      company: company?.[0]?.company_name || "",
     },
     resetForm,
   });

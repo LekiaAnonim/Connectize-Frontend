@@ -112,16 +112,18 @@ export const logOutCurrentUser = () => goToLogin();
 export const connectWithUser = async (id) => {
   // const currentUser = await getCurrentUser();
 
-  //  const allUsers = await getAllUsers();
+  // const allUsers = await getAllUsers();
 
-  //  if (allUsers.likes.find((user) => user.user.id === currentUser.id)) {
-  //    await makeApiRequest({
-  //      url: `api/users/${id}/unfollow/`,
-  //      method: "POST",
-  //    });
+  // console.log(allUsers);
 
-  //    return;
-  //  }
+  // if (allUsers.find((user) => user.user.id === currentUser.id)) {
+  //   await makeApiRequest({
+  //     url: `api/users/${id}/unfollow/`,
+  //     method: "POST",
+  //   });
+
+  //   return;
+  // }
   return await makeApiRequest({
     url: `api/users/${id}/follow/`,
     method: "POST",

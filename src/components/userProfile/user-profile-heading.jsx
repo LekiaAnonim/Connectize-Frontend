@@ -7,6 +7,7 @@ import { avatarStyle } from "../ResponsiveNav";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/userContext";
 import ConnectButton from "../ConnectButton";
+import { useState } from "react";
 
 export default function UserProfileHeadings({
   first_name,
@@ -19,6 +20,7 @@ export default function UserProfileHeadings({
   following_count,
 }) {
   const { user: currentUser } = useAuth();
+  const [cachedConnections, setCachedConnections] = useState(followers_count);
   return (
     <section className="flex max-md:flex-col md:items-center gap-4 md:justify-between">
       <section className="space-y-1">
@@ -30,7 +32,7 @@ export default function UserProfileHeadings({
         </div>
         <div className="flex flex-wrap gap-2">
           <StatsText text={`${formatNumber(following_count)} /following`} />
-          <StatsText text={`${formatNumber(followers_count)} /connections`} />
+          <StatsText text={`${formatNumber(cachedConnections)} /connections`} />
           {company && (
             <div className="flex items-center gap-1.5 text-sm">
               <Avatar size="xs" name={company} className={clsx(avatarStyle)} />
@@ -48,7 +50,7 @@ export default function UserProfileHeadings({
           {is_first_time_user ? "Complete your profile" : "Edit profile"}
         </Link>
       ) : (
-        <ConnectButton />
+        <ConnectButton id={id} setCachedConnections={setCachedConnections} />
       )}
     </section>
   );

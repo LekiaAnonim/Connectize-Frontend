@@ -8,8 +8,6 @@ import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { Divider } from "@chakra-ui/react";
 import { createProduct } from "../../../api-services/products";
 import { ImageSelect } from "../../form/customInput";
-import { getCompanies } from "../../../api-services/companies";
-import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 const FILE_SIZE = 4 * 1024 * 1024; // 4MB
@@ -71,11 +69,6 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function NewListing() {
-  const { data: companies } = useQuery({
-    queryKey: ["companies"],
-    queryFn: ()=> getCompanies(),
-  });
-
   const formValues = {
     image_1: "",
     image_2: "",
@@ -161,13 +154,13 @@ export default function NewListing() {
           label: "Description",
           placeholder: "Should not be more than 1450 characters",
         },
-        {
-          name: "company",
-          type: "select",
-          label: "Select company",
-          placeholder: "Select company to attach product to",
-          options: companies?.map((company) => company?.company_name),
-        },
+        // {
+        //   name: "company",
+        //   type: "select",
+        //   label: "Select company",
+        //   placeholder: "Select company to attach product to",
+        //   options: companies?.map((company) => company?.company_name),
+        // },
       ],
     },
   ];
@@ -179,7 +172,7 @@ export default function NewListing() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <section className="bg-white p-4 rounded-md w-full shrink-0">
+    <section className="bg-white p-4 mb-8 rounded-md w-full shrink-0">
       <div className="mb-4">
         <HeadingText>List new products</HeadingText>
         <LightParagraph>Upload at least 1 image</LightParagraph>
@@ -216,7 +209,7 @@ export default function NewListing() {
           text: "List product  | ",
           icon: <ChevronRightIcon />,
           submitText: "Creating product...",
-          style: "!w-fit mt-20 text-sm",
+          style: "!w-fit mt-10 text-sm",
         }}
       />
     </section>

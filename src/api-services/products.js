@@ -3,6 +3,8 @@ import { makeApiRequest } from "../lib/helpers";
 import { capitalizeFirst } from "../lib/utils";
 import { getSession } from "../lib/session";
 import { getCurrentUser } from "./users";
+import { getCompanies } from "./companies";
+import { redirect } from "react-router-dom";
 
 // {
 //     "title": "",
@@ -56,6 +58,13 @@ export const createProduct = async (data, resetForm) => {
 
   const { user } = getSession();
 
+  const company = await getCompanies();
+
+  if (!company) {
+    toast.error("Please create a company first before you add a product");
+    return;
+  }
+
   const toastId = toast.info("Enlisting product...");
 
   if (!user && (!data || !productCategoryData)) {
@@ -76,7 +85,7 @@ export const createProduct = async (data, resetForm) => {
       category: productCategoryData,
       description: data.description,
       featured: false,
-      company: data.company || "",
+      company: company?.[0].company_name || "",
     },
     resetForm,
   });
@@ -120,10 +129,13 @@ export const createProduct = async (data, resetForm) => {
     );
   }
 
-  if (product && image1)
+  if (product && image1) {
     toast.success(`${product.title} has been created successfully!`, {
       id: toastId,
     });
+
+    redirect("/market");
+  }
 };
 
 export const getOrCreateProductImages = async (data, type) => {
@@ -187,7 +199,7 @@ export const bookmarkProduct = async (productId, data) => {
       method: "POST",
       // data: { ...data, company_id: data.company },
     });
-    toast.success(data.title + " has been removed from bookmark");
+    toast.success(data?.title + " has been removed from bookmark");
     return;
   }
   await makeApiRequest({
@@ -195,5 +207,5 @@ export const bookmarkProduct = async (productId, data) => {
     method: "POST",
     // data: { ...data, company_id: data.company.id },
   });
-  toast.success(data.title + " has been added to bookmark");
+  toast.success(data?.title + " has been added to bookmark");
 };

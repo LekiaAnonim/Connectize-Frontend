@@ -279,7 +279,7 @@ export const BookMarkButton = ({ service, product }) => {
     if (!service && !product) return;
     setLoading(true);
     if (product) {
-      await bookmarkProduct(product?.id);
+      await bookmarkProduct(product?.id, product);
     } else if (service) {
       await bookmarkService(service.id, service);
     }
