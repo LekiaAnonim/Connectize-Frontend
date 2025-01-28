@@ -2,12 +2,16 @@ import { Button } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { connectWithUser } from "../api-services/users";
 import { toast } from "sonner";
+import { useAuth } from "../context/userContext";
 
 export default function ConnectButton({
   id,
   type = "user",
   setCachedConnections,
 }) {
+  const { user } = useAuth();
+  console.log(user);
+
   const [hasConnected, setHasConnected] = useState(false);
   return (
     <Button
