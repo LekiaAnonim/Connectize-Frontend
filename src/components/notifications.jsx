@@ -8,10 +8,6 @@ import {
   Badge,
   ButtonSpinner,
   Tabs,
-  TabList,
-  Tab,
-  TabPanel,
-  TabPanels,
 } from "@chakra-ui/react";
 import { Notification } from "../icon";
 import { avatarStyle } from "./ResponsiveNav";
@@ -22,7 +18,7 @@ import {
 } from "../api-services/notifications";
 import { useQuery } from "@tanstack/react-query";
 import TimeAgo from "./TimeAgo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { motion } from "framer-motion";
@@ -42,16 +38,24 @@ const generalNotificationType = [
 const promotionsNotificationType = ["promotions", "announcement"];
 
 export function NotificationPopOver() {
-  const [allLoading, setAllLoading] = useState(false);
   const { data: notifications, isLoading } = useQuery({
     queryKey: ["notifications"],
     queryFn: getNotificationsForUser,
     refetchInterval: 20000,
   });
 
-  const unReadNotificationLength = notifications?.filter(
-    (notification) => notification.is_read == null
-  )?.length;
+  const notificationLengthNotRead =
+    notifications?.filter((notification) => notification?.is_read === null)
+      ?.length || 0;
+
+  const [unReadNotificationLength, setUnReadNotificationLength] = useState(
+    notificationLengthNotRead
+  );
+
+  useEffect(() => {
+    setUnReadNotificationLength(notificationLengthNotRead);
+  }, [notificationLengthNotRead]);
+
   const tabsHeader = ["General", "Promotions"];
 
   const generalNotifications = notifications?.filter((notification) =>
@@ -69,7 +73,7 @@ export function NotificationPopOver() {
             <Badge className="absolute -top-1.5 -right-1 size-4 !text-[.6rem] !bg-gold !rounded-full grid place-items-center">
               <span>{unReadNotificationLength}</span>
             </Badge>
-          )}
+          )}  
           <Notification />
         </button>
       </PopoverTrigger>
@@ -88,19 +92,13 @@ export function NotificationPopOver() {
               <h4 className="text-lg font-semibold">Notifications</h4>
               {unReadNotificationLength > 0 && (
                 <button
-                  disabled={allLoading}
                   className="text-gray-500 hover:text-black transition-colors duration-300 hover:underline !text-xs disabled:cursor-not-allowed disabled:no-underline"
                   onClick={async () => {
-                    setAllLoading(true);
+                    setUnReadNotificationLength(0);
                     await markAllNotificationsAsRead();
-                    setAllLoading(false);
                   }}
                 >
-                  {allLoading ? (
-                    <ButtonSpinner className="text-gold" />
-                  ) : (
-                    "Mark all as read"
-                  )}
+                  Mark all as read
                 </button>
               )}
             </header>
@@ -108,8 +106,14 @@ export function NotificationPopOver() {
             <CustomTabs
               tabsHeading={tabsHeader}
               tabsPanels={[
-                <Notifications notifications={generalNotifications} />,
-                <Notifications notifications={promotionsNotifications} />,
+                <Notifications
+                  notifications={generalNotifications}
+                  setUnReadNotificationLength={setUnReadNotificationLength}
+                />,
+                <Notifications
+                  notifications={promotionsNotifications}
+                  setUnReadNotificationLength={setUnReadNotificationLength}
+                />,
               ]}
             />
           </section>
@@ -119,86 +123,92 @@ export function NotificationPopOver() {
   );
 }
 
-export function Notifications({ notifications = [] }) {
-  const [loading, setLoading] = useState(false);
-
+export function Notifications({
+  notifications = [],
+  setUnReadNotificationLength,
+}) {
   return (
-    <section className="space-y-4 py-2 overflow-y-auto overflow-x-hidden max-h-[70vh]">
+    <section className="space-y-4 py-2 overflow-y-auto max-h-[70vh]">
       {notifications.length <= 0 ? (
         <p className="text-sm text-gray-400 text-center my-5">
           No notification yet...
         </p>
       ) : (
-        notifications?.map(
-          (
-            { id, company, src, message, timestamp, is_read, sender, link },
-            index
-          ) => {
-            const handleMarkAsRead = async () => {
-              if (is_read) return;
-
-              setLoading(true);
-              await markNotificationAsRead(id);
-              setLoading(false);
-            };
-
-            return (
-              <motion.div
-                key={index}
-                initial={{ x: 20, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                transition={{ delay: index * 0.15 }}
-                className="flex items-start gap-2"
-              >
-                <Avatar
-                  src={src}
-                  alt={company}
-                  size="sm"
-                  name={company}
-                  className={avatarStyle}
-                />
-                <div className="space-y-0">
-                  <h3 className="leading-[1.125] font-bold m-0 line-clamp-1">
-                    {company}
-                  </h3>
-                  <Link
-                    to={link}
-                    onClick={handleMarkAsRead}
-                    className="text-[.825rem] text-gray-700 line-clamp-2 leading-none"
-                  >
-                    {message}{" "}
-                    <Badge className="!text-[.6rem]">
-                      {is_read ? "" : "Unread"}
-                    </Badge>
-                  </Link>
-                  <div className="flex items-center gap-2">
-                    <small className="text-gray-400 text-[.69rem]">
-                      <TimeAgo time={timestamp} />
-                    </small>
-
-                    {!is_read && (
-                      <button
-                        onClick={handleMarkAsRead}
-                        disabled={loading}
-                        className="text-xs disabled:cursor-not-allowed"
-                      >
-                        {loading ? (
-                          <ButtonSpinner className="text-gold" />
-                        ) : (
-                          "Mark as read"
-                        )}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            );
-          }
-        )
+        notifications?.map((notification, index) => {
+          return (
+            <NotificationTile
+              key={notification?.id || index}
+              index={index}
+              notification={notification}
+              setUnReadNotificationLength={setUnReadNotificationLength}
+            />
+          );
+        })
       )}
     </section>
   );
 }
+
+export const NotificationTile = ({
+  notification,
+  index,
+  setUnReadNotificationLength,
+}) => {
+  // console.log(notification);
+
+  const [read, setRead] = useState(notification?.is_read ? true : false);
+  const handleMarkAsRead = async () => {
+    if (read) return;
+    setUnReadNotificationLength((prev) => prev - 1);
+    setRead(true);
+    await markNotificationAsRead(notification?.id);
+  };
+
+  return (
+    <motion.div
+      initial={{ x: 10, opacity: 0 }}
+      whileInView={{ x: 0, opacity: 1 }}
+      transition={{ delay: index * 0.05 }}
+      viewport={{ once: true }}
+      className="flex items-start gap-2"
+    >
+      <Avatar
+        src={notification?.src}
+        alt={notification?.company}
+        size="sm"
+        name={notification?.company}
+        className={avatarStyle}
+      />
+      <div className="space-y-0">
+        <h3 className="leading-[1.125] font-bold m-0 line-clamp-1">
+          {notification?.company}
+        </h3>
+        <Link
+          to={notification?.link}
+          onClick={handleMarkAsRead}
+          className="text-[.825rem] text-gray-700 line-clamp-2 leading-none block"
+        >
+          {notification?.message}{" "}
+          <Badge className="!text-[.6rem]">{read ? "" : "Unread"}</Badge>
+        </Link>
+        <div className="flex items-center gap-2">
+          <small className="text-gray-400 text-[.69rem]">
+            <TimeAgo time={notification?.timestamp} />
+          </small>
+
+          {!read && (
+            <button
+              onClick={handleMarkAsRead}
+              className="text-xs disabled:cursor-not-allowed"
+            >
+              Mark as read
+            </button>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 export function NotificationsSkeleton() {
   return (
