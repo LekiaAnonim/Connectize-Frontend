@@ -183,8 +183,6 @@ export const getOrCreateProductCategories = async (name) => {
 export const bookmarkProduct = async (productId, data) => {
   const allProducts = await getProducts();
 
-  console.log(data);
-
   const currentUser = await getCurrentUser();
 
   const currentProduct = allProducts.find(
