@@ -1,16 +1,34 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { Heart } from "../../../icon";
 import { avatarStyle, ConJoinedImages } from "../../ResponsiveNav";
-import { DownloadIcon, HeartIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import {
+  DownloadIcon,
+  HeartIcon,
+  Pencil1Icon,
+  Pencil2Icon,
+  TrashIcon,
+} from "@radix-ui/react-icons";
 import { MessageOutlined, ShareAltOutlined } from "@ant-design/icons";
 import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
-import { commentOnPost, getPosts, likePost } from "../../../api-services/posts";
+import {
+  commentOnPost,
+  deletePost,
+  editPost,
+  getPosts,
+  likePost,
+} from "../../../api-services/posts";
 import { formatNumber, shareThis } from "../../../lib/utils";
-import { Avatar, CloseButton, Spinner, Tooltip } from "@chakra-ui/react";
+import {
+  Avatar,
+  Button,
+  CloseButton,
+  Spinner,
+  Textarea,
+  Tooltip,
+} from "@chakra-ui/react";
 import MoreOptions from "../../MoreOptions";
 import FormatPostText from "../../FormatPostText";
-import { ChangeCircleOutlined } from "@mui/icons-material";
 import { useCustomQuery } from "../../../context/queryContext";
 import jsPDF from "jspdf";
 import { toast } from "sonner";
@@ -23,6 +41,10 @@ import { Link } from "react-router-dom";
 import TimeAgo from "../../TimeAgo";
 import CompanyName from "../../company/CompanyName";
 import LightParagraph from "../../ParagraphText";
+import ReusableModal from "../../custom/ResusableModal";
+import { SwiperSlide, Swiper } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import { NAVIGATION_BUTTONS } from "../../../lib/slide_button";
 
 function DiscoverPosts({ searchArray, isSearch, searchLoading }) {
   const { refetchInterval } = useCustomQuery();
@@ -64,7 +86,6 @@ export const DiscoverPostItem = ({
   isSinglePost = false,
 }) => {
   const [showCommentSection, setShowCommentSection] = useState(false);
-  const [liking, setLiking] = useState(false);
   const { setRefetchInterval } = useCustomQuery();
   const { user: currentUser } = useAuth();
 
@@ -76,12 +97,13 @@ export const DiscoverPostItem = ({
     ? true
     : false;
 
+  const [liked, setLiked] = useState(userHasLikedPost);
+
   const handleLikePost = async () => {
-    setLiking(true);
+    setLiked((prev) => !prev);
     await likePost(postItem.id, postItem);
     setRefetchInterval(1000);
     setTimeout(() => setRefetchInterval(false), 2000);
-    setLiking(false);
   };
   const shareUrlString = window.location.href + "posts/" + postItem.id;
   const shareData = {
@@ -110,6 +132,22 @@ export const DiscoverPostItem = ({
     // Save the PDF
     doc.save(`Connectize_post_${postItem.id}.pdf`);
   };
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editMessage, setEditMessage] = useState(postItem?.body);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const swiperRef = useRef(null);
+
+  // Memoized navigation handler
+  const handleNavigation = useCallback((action) => {
+    const swiperInstance = swiperRef.current;
+    if (swiperInstance) {
+      action === "prev"
+        ? swiperInstance.slidePrev()
+        : swiperInstance.slideNext();
+    }
+  }, []);
 
   return (
     <motion.article
@@ -144,20 +182,85 @@ export const DiscoverPostItem = ({
         </section>
 
         {postItem?.user?.id === currentUser?.id && (
-          <MoreOptions className="shrink-0">
+          <MoreOptions className="shrink-0 !max-w-[120px]">
             <div className="flex flex-col gap-2">
-              <ButtonWithTooltipIcon text="Edit post" IconName={Pencil2Icon} />
               <ButtonWithTooltipIcon
+                text="Edit post"
+                IconName={Pencil1Icon}
+                onClick={() => setIsEditing(true)}
+              />
+              {/* <ButtonWithTooltipIcon
                 text="Convert to draft"
                 IconName={ChangeCircleOutlined}
-              />
+              /> */}
               <ButtonWithTooltipIcon
                 text="Delete post"
-                className="!text-white !bg-red-700 hover:!bg-red-500"
+                IconName={TrashIcon}
+                onClick={async () => {
+                  await deletePost(postItem?.id);
+                  setRefetchInterval(1000);
+                  setTimeout(() => setRefetchInterval(false), 2000);
+                }}
+                className="!text-red-700 hover:!text-red-500"
               />
             </div>
           </MoreOptions>
         )}
+
+        <ReusableModal
+          isOpen={isEditing}
+          onClose={() => setIsEditing(false)}
+          title={`Edit Post`}
+          footerContent={<></>}
+        >
+          <Textarea
+            value={editMessage}
+            placeholder="Please enter at least 10 character length of text"
+            className="max-h-40 !text-sm placeholder:!text-sm"
+            onChange={(e) => {
+              setEditMessage(e.target.value);
+
+              if (editMessage.trim().length < 10) {
+                setErrorMessage(
+                  "Please enter at least 10 character length of text"
+                );
+              } else if (editMessage.trim().length >= 10) {
+                setErrorMessage(null);
+              }
+            }}
+          />
+          {errorMessage && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-[#9e3818] text-xs mx-0.5"
+            >
+              {errorMessage}
+            </motion.div>
+          )}
+
+          <Button
+            className="!bg-gold block mt-4 float-right !text-sm"
+            onClick={async () => {
+              setErrorMessage(null);
+              if (editMessage.length < 10) {
+                setErrorMessage("Please at least 10 character length of text");
+                return;
+              }
+              const { id } = await editPost(
+                postItem?.id,
+                editMessage,
+                postItem
+              );
+              setRefetchInterval(1000);
+              setTimeout(() => setRefetchInterval(false), 2000);
+              setIsEditing(false);
+              if (id) toast.success("Post updated successfully");
+            }}
+          >
+            Edit post
+          </Button>
+        </ReusableModal>
       </header>
 
       <FormatPostText
@@ -167,25 +270,46 @@ export const DiscoverPostItem = ({
       />
 
       {hasImage && (
-        <section className="grid grid-cols-3 gap-2 gap-5 mt-2">
-          {(isSinglePost ? images : images?.slice(0, 3)).map((src, index) => {
-            return (
-              <img
+        <section className="space-y-2 md:space-y-5 mt-4">
+          <Swiper
+            onSwiper={(swiper) => (swiperRef.current = swiper)}
+            modules={[Pagination]}
+            pagination={{ clickable: true }}
+            slidesPerView={3}
+            spaceBetween={10}
+            className="!z-0"
+          >
+            {images.map((src, index) => (
+              <SwiperSlide
                 key={index}
-                src={baseURL + src}
-                className="size-full rounded-lg"
-                alt="some images for post"
-              />
-            );
-          })}
+                className="h-[180px] md:h-[250px] rounded-md overflow-hidden"
+              >
+                <PostImage src={src} key={index} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
 
-          {images?.length > 3 && !isSinglePost && (
-            <Link
-              to={`/posts/${postItem?.id}`}
-              className="text-sm !text-gray-500 hover:!underline hover:!text-black"
-            >
-              +{formatNumber(images?.length - 3 || 0)} images{" "}
-            </Link>
+          {images?.length > 3 && (
+            <div className="flex gap-4 items-center justify-between">
+              <div className="flex text-xs gap-1 items-center">
+                <strong>
+                  {images?.length} image{images?.length > 1 ? "s" : ""}
+                </strong>
+              </div>
+              <div className="flex items-center">
+                {NAVIGATION_BUTTONS.map((button) => (
+                  <Button
+                    key={button.id}
+                    onClick={() => handleNavigation(button.action)}
+                    disabled={images?.length === 1}
+                    className="!bg-transparent hover:!text-custom_blue !text-gray-600 first:flex-row-reverse active:scale-95 !text-sm xs:!text-xs"
+                  >
+                    <span>{button.text}</span>
+                    {button.icon}
+                  </Button>
+                ))}
+              </div>
+            </div>
           )}
         </section>
       )}
@@ -209,10 +333,9 @@ export const DiscoverPostItem = ({
             onClick={() => setShowCommentSection(!showCommentSection)}
           />
           <ButtonWithTooltipIcon
-            IconName={userHasLikedPost ? Heart : HeartIcon}
-            tip={userHasLikedPost ? "Unlike post" : "Like post"}
+            IconName={liked ? Heart : HeartIcon}
+            tip={liked ? "Unlike post" : "Like post"}
             onClick={handleLikePost}
-            loading={liking}
             textClassName="!text-[.6rem]"
             text={formatNumber(postItem.likes.length)}
           />
@@ -236,6 +359,34 @@ export const DiscoverPostItem = ({
         postItem={postItem}
       />
     </motion.article>
+  );
+};
+
+const PostImage = ({ src }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <img
+        src={baseURL + src}
+        className="!size-full block cursor-pointer"
+        alt="some images for post"
+        onClick={() => setOpen(true)}
+      />
+
+      <ReusableModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        size="xl"
+        footerContent={<></>}
+        title="Image"
+      >
+        <img
+          src={baseURL + src}
+          className="size-full rounded-lg"
+          alt="some images for post"
+        />
+      </ReusableModal>
+    </>
   );
 };
 
@@ -317,15 +468,20 @@ const CommentBlock = ({ comment, postUserId }) => {
   return (
     <div className="mb-4">
       <div className="flex gap-2">
-        <Avatar
-          name={`${comment.user.first_name} ${comment.user.last_name}`}
-          className="!size-8"
-          src={`${baseURL}${comment.user.avatar}`}
-        />
+        <Link to={`/co/${comment?.user?.id}`}>
+          <Avatar
+            name={`${comment.user.first_name} ${comment.user.last_name}`}
+            className={clsx(avatarStyle)}
+            src={`${baseURL}${comment.user.avatar}`}
+            size="sm"
+          />
+        </Link>
         <div className="flex flex-col">
           <div className="flex items-center gap-1">
             <h5 className="font-bold text-sm">
-              {comment.user.first_name} {comment.user.last_name}
+              <Link to={`/co/${comment?.user?.id}`}>
+                {comment.user.first_name} {comment.user.last_name}
+              </Link>
               {comment.user.id === postUserId && (
                 <span className="text-[.65rem] text-gray-400 font-medium">
                   (author)

@@ -269,28 +269,33 @@ export const PostCardSkeleton = React.memo(() => (
 
 export const BookMarkButton = ({ service, product }) => {
   const { user: currentUser } = useAuth();
-  const userHasLikedProduct = service?.likes?.find(
-    (product) => product?.user?.id === currentUser?.id
-  );
+  const userHasLikedProduct = service
+    ? service?.likes?.find(
+        (serviceProp) => serviceProp?.user?.id === currentUser?.id
+      )
+    : product
+    ? product?.likes?.find(
+        (productProp) => productProp?.user?.id === currentUser?.id
+      )
+    : false;
   const [bookmarked, setBookmarked] = useState(userHasLikedProduct);
-  const [loading, setLoading] = useState(false);
 
   const handleBookmark = async () => {
     if (!service && !product) return;
-    setLoading(true);
+
+    setBookmarked((prev) => !prev);
     if (product) {
-      await bookmarkProduct(product?.id);
+      await bookmarkProduct(product?.id, product);
     } else if (service) {
       await bookmarkService(service.id, service);
     }
-    setLoading(false);
-    setBookmarked((prev) => !prev);
   };
 
   return (
     <ButtonWithTooltipIcon
-      tip={`Bookmark ${service ? service?.title : "this"}`}
-      loading={loading}
+      tip={`Bookmark ${
+        service ? service?.title : product ? product?.title : "this"
+      }`}
       onClick={handleBookmark}
       IconName={bookmarked ? BookmarkFilledIcon : Bookmark}
       iconClassName="!size-8 xs:!size-7"

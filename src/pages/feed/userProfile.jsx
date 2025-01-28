@@ -29,22 +29,26 @@ export default function UserProfile() {
   const { data: paramUser, isLoading } = useQuery({
     queryKey: ["users", userId],
     queryFn: () => getUserById(userId),
-    enabled: !!userId,
+    enabled: !!userId && !!currentUser,
   });
 
   useEffect(() => {
     if (paramUser) {
       document.title = `${paramUser.first_name || paramUser.email || ""} ${
         paramUser.last_name || ""
-      } Connectize`;
+      } on Connectize`;
     }
-  }, [paramUser]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [!!paramUser, !!currentUser]);
 
-  const headerProps = useMemo(() => ({
-    banner: paramUser?.banner || "",
-    name: `${paramUser?.first_name || ""} ${paramUser?.last_name || ""}`,
-    logo: paramUser?.avatar || "",
-  }), [paramUser]);
+  const headerProps = useMemo(
+    () => ({
+      banner: paramUser?.banner || "",
+      name: `${paramUser?.first_name || ""} ${paramUser?.last_name || ""}`,
+      logo: paramUser?.avatar || "",
+    }),
+    [paramUser]
+  );
 
   if (isLoading) return <PageLoading hasLogo={false} />;
   if (!paramUser) return <NoPage />;
@@ -63,8 +67,6 @@ export default function UserProfile() {
     country,
   } = paramUser;
 
-  console.log(currentUser);
-
   return (
     <section className="rounded-md overflow-hidden">
       <Header {...headerProps} />
@@ -72,7 +74,7 @@ export default function UserProfile() {
       <section className="mt-8 container !px-0 space-y-6">
         <UserProfileHeadings {...paramUser} />
 
-        {currentUser?.companies?.length < 1 && (
+        {currentUser && currentUser?.companies?.length < 1 && (
           <CreateNewLink text="Create company" url="/create-company" />
         )}
 

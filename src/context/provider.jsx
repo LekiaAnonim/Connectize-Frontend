@@ -6,7 +6,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { QueryProvider } from "./queryContext";
 
 // Create a new QueryClient instance
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { refetchInterval: 600000 },
+  },
+});
 
 const MyProvider = ({ children }) => {
   const [pageLoaded, setPageLoaded] = useState(false);

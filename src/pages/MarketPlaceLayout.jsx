@@ -10,9 +10,9 @@ const MarketPlaceLayout = () => {
       <Navbar />
       <section className="max-md:container flex flex-col items-start md:flex-row p-3 gap-4 xl:!gap-5">
         <Sidebar />
-        <div className="grid grid-cols-1 md:px-0 gap-2 w-full">
+        <section className="grid grid-cols-1 md:px-0 gap-2 w-full">
           <Outlet />
-        </div>
+        </section>
       </section>
     </main>
   );

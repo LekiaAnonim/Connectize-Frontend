@@ -1,11 +1,7 @@
 import React, { useRef, useState, useCallback } from "react";
 import { ChatSellerLink } from "../markets/newlyListed";
 import HeadingText from "../../HeadingText";
-import {
-  BookmarkFilledIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "@radix-ui/react-icons";
+import { BookmarkFilledIcon } from "@radix-ui/react-icons";
 import { Button, Divider } from "@chakra-ui/react";
 import { MarkdownComponent } from "../../MarkDownComponent";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -15,25 +11,10 @@ import { bookmarkProduct } from "../../../api-services/products";
 import { Bookmark } from "../../../icon";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import {
-  getCompanies,
-  getSingleCompany,
-} from "../../../api-services/companies";
+import { getSingleCompany } from "../../../api-services/companies";
+import { NAVIGATION_BUTTONS } from "../../../lib/slide_button";
 
-const NAVIGATION_BUTTONS = [
-  {
-    id: 1,
-    text: "Back",
-    icon: <ChevronLeftIcon direction="left" className="!w-5" />,
-    action: "prev",
-  },
-  {
-    id: 2,
-    text: "Next",
-    icon: <ChevronRightIcon direction="right" className="!w-5" />,
-    action: "next",
-  },
-];
+
 
 function Productdetails({ product }) {
   const swiperRef = useRef(null);

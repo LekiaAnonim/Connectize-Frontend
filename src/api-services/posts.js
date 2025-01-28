@@ -11,13 +11,35 @@ export const getPosts = async () => {
 };
 
 export const createPost = async (formData) => {
-  console.log(formData);
-
   const post = await makeApiRequest({
     url: `api/posts/`,
     method: "POST",
     data: formData,
     contentType: "multipart/form-data",
+  });
+
+  return post;
+};
+
+export const editPost = async (id, body, postItem) => {
+  console.log(body);
+
+  const post = await makeApiRequest({
+    url: `api/posts/${id}/`,
+    method: "PUT",
+    data: {
+      body,
+      ...postItem,
+    },
+  });
+
+  return post;
+};
+
+export const deletePost = async (id) => {
+  const post = await makeApiRequest({
+    url: `api/posts/${id}/`,
+    method: "DELETE",
   });
 
   return post;
@@ -31,6 +53,8 @@ export const getLikes = async () => {
 
   return results;
 };
+
+
 
 export const likePost = async (id, data) => {
   const allPosts = await getPosts();

@@ -14,8 +14,9 @@ import ConnectButton from "../../components/ConnectButton";
 import { baseURL } from "../../lib/helpers";
 
 import { motion } from "framer-motion";
+import { useAuth } from "../../context/userContext";
 
-const sortOptions = ["name", "companies", "products", "location"];
+const sortOptions = ["company name", "company type", "products", "country"];
 
 export default function CompaniesPage() {
   const { data: companiesList, isLoading } = useQuery({
@@ -23,12 +24,25 @@ export default function CompaniesPage() {
     queryFn: getAllCompanies,
   });
 
+  const { user: currentUser } = useAuth();
+
   if (isLoading)
     return <PageLoading hasLogo={false} text="Getting companies" />;
 
   return (
     <section className="space-y-6">
-      <Heading companyLength={companiesList?.count} />
+      <section className="flex items-center justify-between">
+        <Heading companyLength={companiesList?.count} />
+        {currentUser && currentUser?.companies.length < 1 && (
+          <Button
+            as="a"
+            href="/create-company"
+            className="!text-xs !rounded-full hover:!bg-gold transition-colors duration-300"
+          >
+            Create Company
+          </Button>
+        )}
+      </section>
       <CompaniesArray />
     </section>
   );
@@ -46,31 +60,33 @@ export const CompaniesArray = ({
   });
   const { updateSearchParams, searchParams } = useCustomSearchParams();
 
-  const selectedSortOption = searchParams.get("sort_by") || "name";
+  const selectedSortOption = searchParams.get("sort_by") || "company name";
 
   const companyArray = isSearch ? array : companiesList?.results;
 
   const sortedCompanies = companyArray?.sort((a, b) => {
     switch (selectedSortOption) {
-      case "companies":
+      case "company type":
         return a.organization_type.localeCompare(b.organization_type);
       case "products":
         return a.products.length - b?.products.length;
-      case "location":
+      case "country":
         return a?.country.localeCompare(b?.country);
       default:
         return a.company_name.localeCompare(b?.company_name);
     }
   });
   return searchLoading ? (
-    <PageLoading />
+    <PageLoading hasLogo={false} text="Getting companies" />
+  ) : companyArray?.length < 1 ? (
+    <LightParagraph>No company found in search</LightParagraph>
   ) : (
     <section className="space-y-4">
       {companyArray && hasFilter && (
         <section className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-semibold">Sort By</h2>
 
-          <div className="flex overflow-x-auto">
+          <div className="flex overflow-x-auto scrollbar-hidden scroll-smooth">
             {sortOptions?.map((option, index) => {
               const currentOption = selectedSortOption.toLowerCase() === option;
               return (
