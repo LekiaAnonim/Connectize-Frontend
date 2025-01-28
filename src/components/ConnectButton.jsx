@@ -6,24 +6,39 @@ import { useAuth } from "../context/userContext";
 
 export default function ConnectButton({
   id,
-  type = "user",
+  type = "users",
   setCachedConnections,
+  first_name,
 }) {
-  const { user } = useAuth();
-  console.log(user);
+  const { user: currentUser } = useAuth();
 
-  const [hasConnected, setHasConnected] = useState(false);
+  const [hasConnected, setHasConnected] = useState(
+    currentUser?.followings.includes(id)
+  );
+  console.log(currentUser?.followings.includes(id));
+
+  const handleConnect = async () => {
+    if (hasConnected) {
+      setCachedConnections((prev) => prev - 1);
+      setHasConnected(false);
+    } else {
+      setHasConnected(true);
+      setCachedConnections((prev) => prev + 1);
+    }
+    if (type === "users") {
+      const connect = await connectWithUser(id, hasConnected);
+      toast.success(
+        connect
+          ? `Connection sent to ${first_name}`
+          : `Disconnected from ${first_name} on connectize`
+      );
+    }
+  };
+
   return (
     <Button
       className="!bg-gold w-fit !px-10 !py-1.5 !h-fit !rounded-full transition-all duration-300 active:scale-95 !text-sm"
-      onClick={async () => {
-        const connect = await connectWithUser(id);
-        setHasConnected((prev) => !prev);
-        if (connect) {
-          setCachedConnections((prev) => prev + 1);
-          toast.success("Connect invitation sent");
-        }
-      }}
+      onClick={handleConnect}
     >
       {hasConnected ? "Disconnect" : "Connect"}
     </Button>

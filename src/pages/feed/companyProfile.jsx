@@ -16,14 +16,16 @@ import LightParagraph from "../../components/ParagraphText";
 import { LocationOnOutlined } from "@mui/icons-material";
 import { GlobeIcon, Link1Icon } from "@radix-ui/react-icons";
 import { MailOutlined } from "@ant-design/icons";
+import { useAuth } from "../../context/userContext";
 
 const CompanyProfile = React.memo(() => {
   const { company: companyName } = useParams();
+  const { user: currentUser } = useAuth();
 
   const { data: company, isLoading } = useQuery({
     queryKey: ["companies", companyName],
     queryFn: () => getSingleCompany(companyName),
-    enabled: !!companyName,
+    enabled: !!companyName && !!currentUser,
   });
 
   useEffect(() => {

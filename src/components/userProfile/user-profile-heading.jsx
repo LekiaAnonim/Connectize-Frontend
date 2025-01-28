@@ -1,4 +1,4 @@
-import { Avatar, Button } from "@chakra-ui/react";
+import { Avatar } from "@chakra-ui/react";
 import { VerifiedIcon } from "../../icon";
 import { formatNumber } from "../../lib/utils";
 import { StatsText } from "../../pages/feed/companyProfile";
@@ -50,7 +50,11 @@ export default function UserProfileHeadings({
           {is_first_time_user ? "Complete your profile" : "Edit profile"}
         </Link>
       ) : (
-        <ConnectButton id={id} setCachedConnections={setCachedConnections} />
+        <ConnectButton
+          id={id}
+          setCachedConnections={setCachedConnections}
+          first_name={first_name}
+        />
       )}
     </section>
   );

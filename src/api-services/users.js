@@ -109,21 +109,13 @@ export const getOrCreateGender = async (gender) => {
 
 export const logOutCurrentUser = () => goToLogin();
 
-export const connectWithUser = async (id) => {
-  // const currentUser = await getCurrentUser();
-
-  // const allUsers = await getAllUsers();
-
-  // console.log(allUsers);
-
-  // if (allUsers.find((user) => user.user.id === currentUser.id)) {
-  //   await makeApiRequest({
-  //     url: `api/users/${id}/unfollow/`,
-  //     method: "POST",
-  //   });
-
-  //   return;
-  // }
+export const connectWithUser = async (id, hasConnected) => {
+  if (hasConnected) {
+    return await makeApiRequest({
+      url: `api/users/${id}/unfollow/`,
+      method: "POST",
+    });
+  }
   return await makeApiRequest({
     url: `api/users/${id}/follow/`,
     method: "POST",

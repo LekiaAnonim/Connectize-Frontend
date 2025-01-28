@@ -29,8 +29,7 @@ export default function UserProfile() {
   const { data: paramUser, isLoading } = useQuery({
     queryKey: ["users", userId],
     queryFn: () => getUserById(userId),
-    enabled: !!userId,
-    retry: 3,
+    enabled: !!userId && !!currentUser,
   });
 
   useEffect(() => {
@@ -40,7 +39,7 @@ export default function UserProfile() {
       } on Connectize`;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [!!paramUser]);
+  }, [!!paramUser, !!currentUser]);
 
   const headerProps = useMemo(
     () => ({
