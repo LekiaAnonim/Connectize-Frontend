@@ -17,6 +17,7 @@ import { LocationOnOutlined } from "@mui/icons-material";
 import { GlobeIcon, Link1Icon } from "@radix-ui/react-icons";
 import { MailOutlined } from "@ant-design/icons";
 import { useAuth } from "../../context/userContext";
+import clsx from "clsx";
 
 const CompanyProfile = React.memo(() => {
   const { company: companyName } = useParams();
@@ -50,12 +51,7 @@ const CompanyProfile = React.memo(() => {
       <Header {...headerProps} />
 
       <section className="mt-11 md:mt-14 flex max-lg:flex-col items-start gap-2 relative">
-        <Link
-          to="/representatives/manage"
-          className="bg-gold hover:bg-opacity-70 text-sm xs:text-xs lg:text-sm font-semibold absolute right-0 -top-9 md:-top-12 py-1.5 px-2 rounded-full"
-        >
-          Manage Representatives
-        </Link>
+        <ManageRepresentativesLink main />
         <ProductSidebar company={company} />
         <section className="grid grid-cols-1 gap-2 max-lg:py-2">
           <Summary company={company} />
@@ -64,6 +60,22 @@ const CompanyProfile = React.memo(() => {
     </section>
   );
 });
+
+export const ManageRepresentativesLink = ({ main = false }) => {
+  return (
+    <Link
+      to="/representatives/manage"
+      className={clsx(
+        "bg-gold hover:bg-opacity-70 text-sm xs:text-xs lg:text-sm font-semibold py-1.5 px-4 rounded-full",
+        {
+          "absolute right-0 -top-9 md:-top-12": main,
+        }
+      )}
+    >
+      Manage Representatives
+    </Link>
+  );
+};
 
 const ProductSidebar = React.memo(({ company }) => {
   const stats = useMemo(

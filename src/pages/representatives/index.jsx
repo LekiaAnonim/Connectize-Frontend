@@ -11,6 +11,7 @@ import RepresentativeCard from "../../components/representatives/RepresentativeC
 import PageLoading from "../../components/PageLoading";
 import LightParagraph from "../../components/ParagraphText";
 import { useEffect } from "react";
+import { ManageRepresentativesLink } from "../feed/companyProfile";
 
 export default function RepresentativesPage() {
   const { data: users, isLoading } = useQuery({
@@ -44,7 +45,11 @@ export default function RepresentativesPage() {
 
   return (
     <section className="space-y-4">
-      <HeadingText>Representatives</HeadingText>
+      <section className="flex justify-between gap-4">
+        <HeadingText>Representatives</HeadingText>
+
+        <ManageRepresentativesLink />
+      </section>
 
       <section className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {representatives?.length < 1 ? (

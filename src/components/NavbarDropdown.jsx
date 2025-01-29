@@ -47,11 +47,6 @@ export default function NavbarDropdown() {
             to="/representatives/manage"
             text="Add Representatives"
           />
-          <DropDownOption
-            IconName={Bookmark}
-            to="/co/bookmark"
-            text="My Bookmarks"
-          />
         </section>
       </PopoverContent>
     </Popover>

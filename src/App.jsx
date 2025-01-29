@@ -54,7 +54,7 @@ function App() {
               <Route path="/posts/:id" element={<SinglePostPage />} />
             </Route>
             {/* Bookmark */}
-            <Route path="co/bookmark" element={<BookMark />} />
+            <Route path="co/bookmarks" element={<BookMark />} />
             {/* User Profile */}
             <Route path="co/:userId" element={<UserProfile />} />
             {/* Company Profile */}

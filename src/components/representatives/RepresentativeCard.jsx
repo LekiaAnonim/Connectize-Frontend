@@ -5,8 +5,10 @@ import { motion } from "framer-motion";
 import { capitalizeFirst } from "../../lib/utils";
 import { Link } from "react-router-dom";
 import ConnectButton from "../ConnectButton";
+import { useAuth } from "../../context/userContext";
 
 export default function RepresentativeCard({ user, company, role }) {
+  const { user: currentUser } = useAuth();
   return (
     <motion.div
       key={user?.id}
@@ -47,7 +49,9 @@ export default function RepresentativeCard({ user, company, role }) {
       </div>
 
       <div className="">
-        <ConnectButton />
+        {currentUser?.id !== user?.id && (
+          <ConnectButton first_name={user?.first_name} id={user?.id} />
+        )}
       </div>
     </motion.div>
   );
