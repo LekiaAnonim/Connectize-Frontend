@@ -98,9 +98,15 @@ export const DiscoverPostItem = ({
     : false;
 
   const [liked, setLiked] = useState(userHasLikedPost);
+  const [likes, setLikes] = useState(postItem?.likes?.length);
+
+  useEffect(() => {
+    setLikes(postItem?.likes?.length);
+  }, [postItem?.likes?.length]);
 
   const handleLikePost = async () => {
     setLiked((prev) => !prev);
+    setLikes((prev) => (!liked ? prev + 1 : prev - 1));
     await likePost(postItem.id, postItem);
     setRefetchInterval(1000);
     setTimeout(() => setRefetchInterval(false), 2000);
@@ -117,17 +123,17 @@ export const DiscoverPostItem = ({
     const doc = new jsPDF();
 
     // Add title and content to the PDF
-    doc.setFont("Helvetica", "bold");
+    doc.setFont("Segoe UI", "bold");
     doc.setFontSize(16);
     doc.text(
-      "Connectize Post " + postItem.id + " - " + postItem.company.company_name,
+      `Connectize Post by ${postItem?.user?.first_name} | ${postItem?.company?.company_name}`,
       10,
       10
     );
 
-    doc.setFont("Helvetica", "normal");
+    doc.setFont("Segoe UI", "normal");
     doc.setFontSize(12);
-    doc.text(postItem.body, 10, 20, { maxWidth: 180 }); // Wraps text within 180mm
+    doc.text(postItem?.body, 10, 20, { maxWidth: 180 }); // Wraps text within 180mm
 
     // Save the PDF
     doc.save(`Connectize_post_${postItem.id}.pdf`);
@@ -153,10 +159,9 @@ export const DiscoverPostItem = ({
     <motion.article
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className={clsx("py-3 px-1 xs:px-3", {
-        "bg-white !border-0 rounded-md": hasImage || isSinglePost,
-        "border-t border-gray-300": !isSinglePost,
-      })}
+      className={clsx(
+        "py-3 px-1 xs:px-3 bg-white xs:hover:bg-transparent rounded-md transition-colors duration-300"
+      )}
     >
       <header className="flex justify-between mb-2 gap-4 xs:gap-6 w-full overflow-hidden">
         <section className="flex xs:items-center gap-2">
@@ -337,7 +342,7 @@ export const DiscoverPostItem = ({
             tip={liked ? "Unlike post" : "Like post"}
             onClick={handleLikePost}
             textClassName="!text-[.6rem]"
-            text={formatNumber(postItem.likes.length)}
+            text={formatNumber(likes)}
           />
           <ButtonWithTooltipIcon
             IconName={DownloadIcon}
