@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connectWithUser } from "../api-services/users";
 import { toast } from "sonner";
 import { useAuth } from "../context/userContext";
@@ -12,18 +12,21 @@ export default function ConnectButton({
 }) {
   const { user: currentUser } = useAuth();
 
-  const [hasConnected, setHasConnected] = useState(
-    currentUser?.followings.includes(id)
-  );
-  console.log(currentUser?.followings.includes(id));
+  const isConnected = currentUser?.followings.includes(id);
+
+  const [hasConnected, setHasConnected] = useState(isConnected);
+
+  useEffect(() => {
+    setHasConnected(isConnected);
+  }, [isConnected]);
 
   const handleConnect = async () => {
     if (hasConnected) {
-      setCachedConnections((prev) => prev - 1);
+      setCachedConnections?.((prev) => prev - 1);
       setHasConnected(false);
     } else {
       setHasConnected(true);
-      setCachedConnections((prev) => prev + 1);
+      setCachedConnections?.((prev) => prev + 1);
     }
     if (type === "users") {
       const connect = await connectWithUser(id, hasConnected);

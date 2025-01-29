@@ -1,4 +1,4 @@
-import { DesignServices } from "@mui/icons-material";
+import { BookmarkFilledIcon } from "@radix-ui/react-icons";
 import {
   ChartBar,
   CompanyIcon,
@@ -41,6 +41,8 @@ export const feedNavItems = [
   { name: "Companies", to: "/companies", icon: CompanyIcon },
   // { name: "Services", to: "/services", icon: DesignServices },
   { name: "Market", to: "/market", icon: StoreIcon },
+  { name: "Bookmarks", to: "/co/bookmark", icon: BookmarkFilledIcon },
+
   { name: "Analysis", to: "/analysis", icon: ChartBar },
 ];
 
