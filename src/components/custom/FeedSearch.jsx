@@ -47,7 +47,10 @@ function FeedSearch({ className }) {
         title={
           <div className="flex items-baseline gap-1">
             <span>Search Results for</span>{" "}
-            <Link to={`/search?search_query=${searchQuery}`}>
+            <Link
+              to={`/search?search_query=${searchQuery}`}
+              className="!underline"
+            >
               {searchQuery}
             </Link>
           </div>
