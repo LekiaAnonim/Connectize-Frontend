@@ -5,7 +5,6 @@ import {
   DownloadIcon,
   HeartIcon,
   Pencil1Icon,
-  Pencil2Icon,
   TrashIcon,
 } from "@radix-ui/react-icons";
 import { MessageOutlined, ShareAltOutlined } from "@ant-design/icons";
