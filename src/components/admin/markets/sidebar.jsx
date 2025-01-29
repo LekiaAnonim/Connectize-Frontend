@@ -18,7 +18,6 @@ function Sidebar() {
   const { user: currentUser, loading } = useAuth();
   const { pathname } = useLocation();
 
-  // .startsWith("/market" || "/product" || "/service");
   const isMarketPages = /^\/(market|product|service)/.test(pathname);
 
   return (
