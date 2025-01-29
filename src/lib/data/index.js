@@ -41,7 +41,7 @@ export const feedNavItems = [
   { name: "Companies", to: "/companies", icon: CompanyIcon },
   // { name: "Services", to: "/services", icon: DesignServices },
   { name: "Market", to: "/market", icon: StoreIcon },
-  { name: "Bookmarks", to: "/co/bookmark", icon: BookmarkFilledIcon },
+  { name: "Bookmarks", to: "/co/bookmarks", icon: BookmarkFilledIcon },
 
   { name: "Analysis", to: "/analysis", icon: ChartBar },
 ];

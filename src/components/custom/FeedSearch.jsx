@@ -48,8 +48,8 @@ function FeedSearch({ className }) {
           <div className="flex items-baseline gap-1">
             <span>Search Results for</span>{" "}
             <Link to={`/search?search_query=${searchQuery}`}>
-              <LightParagraph> {searchQuery}</LightParagraph>
-            </Link>{" "}
+              {searchQuery}
+            </Link>
           </div>
         }
         size="2xl"
