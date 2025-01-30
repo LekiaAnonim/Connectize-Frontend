@@ -65,13 +65,17 @@ export function TopServices() {
   );
 }
 
-export function Suggestions({ fn, heading, isSuggested, className }) {
+export function Suggestions({
+  heading = "Suggested",
+  hasSeeMore = false,
+  className,
+}) {
   return (
     <div
       className={clsx("bg-white rounded p-4 space-y-4 w-full h-fit", className)}
     >
-      <h2 className="text-xl font-bold">Suggested</h2>
-      <SuggestionList />
+      <h2 className="text-xl font-bold">{heading}</h2>
+      <SuggestionList hasSeeMore={hasSeeMore} />
     </div>
   );
 }

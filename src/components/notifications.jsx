@@ -98,16 +98,12 @@ const NotificationPopOver = () => {
         </button>
       </PopoverTrigger>
 
-      <PopoverContent className="mx-2">
+      <PopoverContent className="mx-2 xs:!w-[350px] lg:!w-[400px]">
         <PopoverArrow />
         {isLoading || companiesLoading || usersLoading ? (
           <NotificationsSkeleton />
         ) : (
-          <section
-            className={clsx(
-              "bg-white rounded p-3 space-y-2 w-full min-w-[300px]"
-            )}
-          >
+          <section className={clsx("bg-white rounded p-3 space-y-2 w-full")}>
             <header className="flex justify-between items-center gap-2 border-b border-gray-100 pb-1">
               <h4 className="text-lg font-semibold">Notifications</h4>
               {unReadNotificationLength > 0 && (
@@ -157,7 +153,7 @@ const NotificationsArray = memo(
     users,
   }) => {
     return (
-      <section className="space-y-4 py-2 overflow-y-auto overflow-x-hidden max-h-[60vh] scrollbar-hidden">
+      <section className="space-y-2 py-2 overflow-y-auto overflow-x-hidden max-h-[60vh] scrollbar-hidden divide-y divide-gray-100">
         {notifications.length <= 0 ? (
           <p className="text-sm text-gray-400 text-center my-5">
             No {fallback} notifications yet...
@@ -204,7 +200,7 @@ const NotificationTile = memo(
         whileInView={{ x: 0, opacity: 1 }}
         transition={{ delay: index * 0.05 }}
         viewport={{ once: true }}
-        className="flex items-start gap-2"
+        className="flex items-start gap-2 pt-2"
       >
         <Avatar
           src={company?.logo || "/images/default-company-logo.png"}
