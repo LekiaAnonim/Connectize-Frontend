@@ -50,12 +50,17 @@ const Sidebar = () => {
 export default Sidebar;
 
 export function CompaniesList({ queryFn = getAllCompanies }) {
+  const { user: currentUser } = useAuth();
   const { data: companiesList, isLoading } = useQuery({
     queryKey: ["allConnectizeCompanies"],
     queryFn: queryFn,
   });
 
-  const companies = companiesList?.results;
+  const companies = companiesList?.results?.filter(
+    (company) => company?.id !== currentUser?.companies?.[0]
+  );
+
+  
 
   return (
     <div className="space-y-3 mb-4 bg-white rounded-md p-4 w-full">
