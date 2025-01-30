@@ -7,7 +7,7 @@ export default function CompanyName({ name, verified }) {
     <div className="flex items-center">
       <Link
         to={"/" + name}
-        className="text-lg xs:text-base md:text-sm lg:text-base font-semibold break-all line-clamp-1"
+        className="text-lg xs:text-sm md:text-sm font-bold break-all line-clamp-1"
       >
         {name}
       </Link>
