@@ -1,7 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import MessagesAside from "../../components/messages/Aside";
-import TopServiceSuggestions from "../../components/admin/feeds/TopServiceSuggestions";
 
 export default function MessagesLayout() {
   return (

@@ -6,7 +6,7 @@ import { CompaniesArray } from "../companies";
 import CustomTabs from "../../components/custom/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { getSearchResults } from "../../api-services/search";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Avatar } from "@chakra-ui/react";
 import Username from "../../components/Username";
@@ -14,6 +14,8 @@ import ConnectButton from "../../components/ConnectButton";
 import { avatarStyle } from "../../components/ResponsiveNav";
 import LightParagraph from "../../components/ParagraphText";
 import useRedirect from "../../hooks/useRedirect";
+import { useAuth } from "../../context/userContext";
+import clsx from "clsx";
 
 export default function Search() {
   return (
@@ -25,15 +27,18 @@ export default function Search() {
 
 export const SearchTab = () => {
   const [searchParams] = useSearchParams();
+  const { user: currentUser } = useAuth();
 
   const searchQuery = searchParams.get("search_query");
+
+  const { pathname } = useLocation();
 
   useRedirect(!searchQuery, "/");
 
   const { data, isLoading } = useQuery({
     queryKey: ["search", searchQuery],
     queryFn: () => getSearchResults(searchQuery),
-    enabled: !!searchQuery,
+    enabled: !!searchQuery && !!currentUser,
   });
 
   const tabsHeading = ["Posts", "Companies", "People", "Products", "Services"];
@@ -59,7 +64,13 @@ export const SearchTab = () => {
               key={user?.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex items-center justify-center flex-col gap-6 bg-white rounded-md px-4 py-8"
+              className={clsx(
+                "flex items-center justify-center flex-col gap-6 rounded-md px-4 py-8",
+                {
+                  "bg-white": pathname === "/search",
+                  "bg-background": pathname !== "/search",
+                }
+              )}
             >
               <Link to={`/co/${user?.id}`}>
                 <Avatar
@@ -80,7 +91,7 @@ export const SearchTab = () => {
               </div>
 
               <div className="">
-                <ConnectButton />
+                <ConnectButton first_name={user?.first_name} id={user?.id} />
               </div>
             </motion.div>
           );
