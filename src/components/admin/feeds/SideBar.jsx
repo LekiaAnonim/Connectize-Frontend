@@ -13,6 +13,8 @@ import { Avatar } from "@chakra-ui/react";
 import { avatarStyle } from "../../ResponsiveNav";
 import FeedSearch from "../../custom/FeedSearch";
 import { useAuth } from "../../../context/userContext";
+import { capitalizeFirst } from "../../../lib/utils";
+import CompanyName from "../../company/CompanyName";
 
 const Sidebar = () => {
   const { navOpen, toggleNav } = useNav();
@@ -60,8 +62,6 @@ export function CompaniesList({ queryFn = getAllCompanies }) {
     (company) => company?.id !== currentUser?.companies?.[0]
   );
 
-  
-
   return (
     <div className="space-y-3 mb-4 bg-white rounded-md p-4 w-full">
       <h3 className="font-semibold text-xl">Companies</h3>
@@ -84,26 +84,24 @@ export function CompaniesList({ queryFn = getAllCompanies }) {
 }
 
 function CompanyListItem({ company }) {
-  const { company_name, logo, tag_line } = company;
+  const { company_name, logo, tag_line, verify } = company;
 
   return (
-    <li>
-      <Link to={`/${company_name}`} className="flex items-center gap-2 pt-2">
+    <li className="flex items-center gap-2 pt-2">
+      <Link to={`/${company_name}`}>
         <Avatar
           src={logo}
           name={company_name}
           size="sm"
           className={avatarStyle}
         />
-        <div>
-          <h1 className="text-base font-semibold leading-normal m-0 capitalize line-clamp-2">
-            {company_name}
-          </h1>
-          <span className="text-gray-400 text-xs line-clamp-1">
-            {tag_line || "Tag line goes here"}
-          </span>
-        </div>
       </Link>
+      <div>
+        <CompanyName name={company_name} verified={verify} size="md" />
+        <small className="text-gray-400 text-xs line-clamp-1">
+          {capitalizeFirst(tag_line) || "Tag line goes here"}
+        </small>
+      </div>
     </li>
   );
 }
