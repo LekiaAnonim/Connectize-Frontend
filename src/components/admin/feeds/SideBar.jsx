@@ -4,14 +4,14 @@ import Logo from "../../logo";
 import clsx from "clsx";
 import { useNav } from "../../../context/navContext";
 import { useMediaQuery } from "react-responsive";
-import FeedSearch from "./FeedSearch";
 import { useQuery } from "@tanstack/react-query";
-import { getCompanies } from "../../../api-services/companies";
+import { getAllCompanies, getCompanies } from "../../../api-services/companies";
 import LightParagraph from "../../ParagraphText";
 import CloseOverlay from "../../CloseOverlay";
 import { CircleTitleSubtitleSkeleton } from "../feeds/TopServiceSuggestions";
 import { Avatar } from "@chakra-ui/react";
 import { avatarStyle } from "../../ResponsiveNav";
+import FeedSearch from "../../custom/FeedSearch";
 
 const Sidebar = () => {
   const { navOpen, toggleNav } = useNav();
@@ -40,7 +40,7 @@ const Sidebar = () => {
 
         {/* <NavigationSection /> */}
 
-        <Companies toggleNav={toggleNav} />
+        <CompaniesList />
       </div>
     </>
   );
@@ -48,36 +48,28 @@ const Sidebar = () => {
 
 export default Sidebar;
 
-function Companies({ toggleNav }) {
-  const { data: companies, isLoading } = useQuery({
-    queryKey: ["companies"],
-    queryFn: () => getCompanies(),
+export function CompaniesList({ queryFn = getAllCompanies }) {
+  const { data: companiesList, isLoading } = useQuery({
+    queryKey: ["allConnectizeCompanies"],
+    queryFn: queryFn,
   });
 
+  const companies = companiesList?.result;
+
   return (
-    <div className="space-y-3 mb-4">
-      <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-xl">Companies</h3>
-        {companies?.length <= 4 && (
-          <Link
-            to="/create-company"
-            className="!text-gray-400 hover:!text-custom_blue text-sm xl:text-xs"
-            onClick={() => toggleNav(false)}
-          >
-            Create company
-          </Link>
-        )}
-      </div>
+    <div className="space-y-3 mb-4 bg-white rounded-md p-4 w-full">
+      <h3 className="font-semibold text-xl">Companies</h3>
+
       <ul className="space-y-2 divide-y divide-gray-100/80 xs:text-sm p-0">
         {isLoading ? (
           Array.from({ length: 4 }).map((_, index) => (
             <CircleTitleSubtitleSkeleton key={index} />
           ))
-        ) : companies?.length === 0 ? (
+        ) : companies?.length >= 0 ? (
           <LightParagraph>No company yet...</LightParagraph>
         ) : (
           companies?.map((company) => (
-            <CompanyListItem key={company.id} company={company} />
+            <CompanyListItem key={company?.id} company={company} />
           ))
         )}
       </ul>

@@ -55,7 +55,7 @@ export const CompaniesArray = ({
   searchLoading,
 }) => {
   const { data: companiesList } = useQuery({
-    queryKey: ["companiesList"],
+    queryKey: ["allConnectizeCompanies"],
     queryFn: getAllCompanies,
   });
   const { updateSearchParams, searchParams } = useCustomSearchParams();

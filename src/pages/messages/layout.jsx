@@ -1,14 +1,16 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import MessagesAside from "../../components/messages/Aside";
+import TopServiceSuggestions from "../../components/admin/feeds/TopServiceSuggestions";
 
 export default function MessagesLayout() {
   return (
-    <section>
-      <section className="space-y-6">
+    <section className="w-full grid grid-cols-1 xl:grid-cols-3 gap-3">
+      <section className="md:w-full xl:col-span-2 space-y-6 xs:space-y-6">
         <Outlet />
       </section>
       <MessagesAside />
     </section>
+
   );
 }
