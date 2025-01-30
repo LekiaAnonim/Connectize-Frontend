@@ -62,7 +62,7 @@ body {
     sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #eeeeee;
+  background: #F7F7F7 !important;
 }
 
 code {
