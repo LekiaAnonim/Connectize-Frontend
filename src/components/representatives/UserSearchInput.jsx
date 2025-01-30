@@ -6,12 +6,12 @@ export const UserSearchInput = ({ username, setUsername }) => (
   <div className="flex flex-col gap-1 w-full">
     <label
       htmlFor="username"
-      className="text-base leading-none px-1 font-semibold w-fit"
+      className="text-sm leading-none px-1 font-semibold w-fit"
     >
-      Username
+      User's Name
     </label>
     <div className="relative">
-      <SearchOutlined className="size-4 text-gray-400 absolute left-4 z-30 top-1/2 -translate-y-1/2" />
+      <SearchOutlined className="!size-3.5 text-gray-400 absolute left-4 z-30 top-1/2 -translate-y-1/2" />
       <input
         id="username"
         value={username}

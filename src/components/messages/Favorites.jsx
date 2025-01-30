@@ -38,7 +38,7 @@ export default function Favorites() {
 
       <section className="flex overflow-x-auto gap-2 scrollbar-hidden scroll-smooth">
         {companiesLoading || usersLoading ? (
-          <>Loading favorites...</>
+          <CardSkeletonList />
         ) : filteredUsers?.length <= 0 ? (
           <LightParagraph>No favorites yet</LightParagraph>
         ) : (
@@ -51,7 +51,7 @@ export default function Favorites() {
                 key={user?.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-2 bg-white rounded-md text-center space-y-3 !w-[200px] flex flex-col"
+                className="p-2 py-4 bg-white rounded-md text-center space-y-3 !w-[150px] flex flex-col shrink-0"
               >
                 <Link to={`/${company?.company_name || ""}`}>
                   <Avatar
@@ -70,3 +70,18 @@ export default function Favorites() {
     </section>
   );
 }
+
+const CardSkeletonList = () => {
+  return Array.from({ length: 5 }, (_, index) => (
+    <div
+      key={index}
+      className="p-2 py-4 bg-white rounded-md text-center space-y-3 w-[100px] flex flex-col shrink-0"
+    >
+      {/* Avatar Skeleton */}
+      <div className="size-14 mx-auto rounded-full skeleton" />
+
+      {/* Company Name Skeleton */}
+      <div className="h-3.5 w-3/4 mx-auto skeleton rounded" />
+    </div>
+  ));
+};

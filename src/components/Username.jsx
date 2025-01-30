@@ -9,7 +9,7 @@ export default function Username({ user }) {
         to={`/co/${user?.id}`}
         className="font-semibold line-clamp-1 break-all"
       >
-        {user?.first_name} {user?.last_name}
+        {user?.first_name || "No"} {user?.last_name || "Name"}
       </Link>
 
       {user?.verified && <VerifiedIcon color="black" />}

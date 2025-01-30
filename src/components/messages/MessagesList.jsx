@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import HeadingText from "../HeadingText";
 import { useQuery } from "@tanstack/react-query";
 import { getMessagesForUser } from "../../api-services/messaging";
@@ -17,6 +17,7 @@ export default function MessagesList() {
   const { data: messages, isLoading } = useQuery({
     queryKey: ["messages"],
     queryFn: getMessagesForUser,
+    enabled: !!currentUser,
   });
 
   const { data: users, isLoading: usersLoading } = useQuery({
@@ -25,17 +26,20 @@ export default function MessagesList() {
     enabled: !!currentUser,
   });
 
-  const messagesList = Array.from(
-    new Set(
-      messages
-        ?.filter((msg) => msg.recipient !== currentUser?.id)
-        .map((msg) => msg?.recipient)
-    ),
-    (recipient) => messages?.find((message) => message?.recipient === recipient)
-  );
+  const messagesList = useMemo(() => {
+    return Array.from(
+      new Set(
+        messages
+          ?.filter((msg) => msg.recipient !== currentUser?.id)
+          .map((msg) => msg?.recipient)
+      ),
+      (recipient) =>
+        messages?.find((message) => message?.recipient === recipient)
+    );
+  }, [messages, currentUser]);
 
   return (
-    <section className="mb-8">
+    <section>
       <HeadingText heading="sub-heading" weight="semibold">
         Recent Chats
       </HeadingText>
@@ -64,7 +68,7 @@ export default function MessagesList() {
   );
 }
 
-const MessagesListTile = ({ message, user }) => {
+const MessagesListTile = React.memo(({ message, user }) => {
   const name = `${user?.first_name} ${user?.last_name}`;
   return (
     <motion.section
@@ -82,7 +86,7 @@ const MessagesListTile = ({ message, user }) => {
         className="flex-1"
       >
         <Username user={user} />
-        <div className="line-clamp-2 break-all ">
+        <div className="line-clamp-2">
           <LightParagraph>{message?.content} </LightParagraph>
         </div>
       </Link>
@@ -91,12 +95,12 @@ const MessagesListTile = ({ message, user }) => {
       </div>
     </motion.section>
   );
-};
+});
 
 const MessagesListSkeleton = () => {
-  return Array.from({ length: 5 }, (item) => {
+  return Array.from({ length: 5 }, (_, index) => {
     return (
-      <section key={item} className="flex gap-2 pt-2">
+      <section key={index} className="flex gap-2 pt-2">
         {/* Avatar Skeleton */}
         <div className="size-10 rounded-full skeleton" />
 
