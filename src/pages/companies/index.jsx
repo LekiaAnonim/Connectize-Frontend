@@ -54,9 +54,11 @@ export const CompaniesArray = ({
   array,
   searchLoading,
 }) => {
+  const { user: currentUser } = useAuth();
   const { data: companiesList } = useQuery({
     queryKey: ["allConnectizeCompanies"],
     queryFn: getAllCompanies,
+    enabled: !!currentUser,
   });
   const { updateSearchParams, searchParams } = useCustomSearchParams();
 

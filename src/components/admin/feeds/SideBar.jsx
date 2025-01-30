@@ -12,6 +12,7 @@ import { CircleTitleSubtitleSkeleton } from "../feeds/TopServiceSuggestions";
 import { Avatar } from "@chakra-ui/react";
 import { avatarStyle } from "../../ResponsiveNav";
 import FeedSearch from "../../custom/FeedSearch";
+import { useAuth } from "../../../context/userContext";
 
 const Sidebar = () => {
   const { navOpen, toggleNav } = useNav();
@@ -54,7 +55,7 @@ export function CompaniesList({ queryFn = getAllCompanies }) {
     queryFn: queryFn,
   });
 
-  const companies = companiesList?.result;
+  const companies = companiesList?.results;
 
   return (
     <div className="space-y-3 mb-4 bg-white rounded-md p-4 w-full">
@@ -65,7 +66,7 @@ export function CompaniesList({ queryFn = getAllCompanies }) {
           Array.from({ length: 4 }).map((_, index) => (
             <CircleTitleSubtitleSkeleton key={index} />
           ))
-        ) : companies?.length >= 0 ? (
+        ) : companies?.length <= 0 ? (
           <LightParagraph>No company yet...</LightParagraph>
         ) : (
           companies?.map((company) => (
