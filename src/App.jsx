@@ -39,6 +39,7 @@ import Search from "./pages/search";
 import AssignRepresentative from "./pages/representatives/AssignRepresentative";
 import BookMark from "./pages/bookmark";
 import AcceptRepresentation from "./pages/representatives/AcceptRepresentation";
+import MessagesLayout from "./pages/messages/layout";
 
 function App() {
   return (
@@ -61,7 +62,6 @@ function App() {
             <Route path="search" element={<Search />} />
             <Route path=":company" element={<CompanyProfile />} />
             <Route path="analysis" element={<Analysis />} />
-            <Route path="messages" element={<MessagesPage />} />
             <Route path="representatives" element={<RepresentativesPage />} />
             <Route
               path="representatives/manage"
@@ -71,6 +71,9 @@ function App() {
               path="representatives/accept"
               element={<AcceptRepresentation />}
             />
+            <Route element={<MessagesLayout />}>
+              <Route path="messages" element={<MessagesPage />} />
+            </Route>
             <Route path="companies" element={<CompaniesPage />} />
             <Route path="market" element={<Market />} />
             <Route path="products/:id" element={<Product />} />
