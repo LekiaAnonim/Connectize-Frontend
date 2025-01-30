@@ -5,7 +5,7 @@ import MessagesAside from "../../components/messages/Aside";
 export default function MessagesLayout() {
   return (
     <section>
-      <section>
+      <section className="space-y-6">
         <Outlet />
       </section>
       <MessagesAside />
