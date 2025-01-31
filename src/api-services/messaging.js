@@ -10,16 +10,19 @@ export const getMessagesForUser = async (params) => {
   return notifications;
 };
 
-export const messageUser = async (data) => {
+export const messageUser = async (formData) => {
   // {
   //     "sender": null,
   //     "recipient": null,
   //     "content": "",
   // }
+  console.log(formData);
+
   const message = await makeApiRequest({
     url: "api/messages/",
     method: "POST",
-    data,
+    data: formData,
+    contentType: "multipart/form-data",
   });
 
   return message;
