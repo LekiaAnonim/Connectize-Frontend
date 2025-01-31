@@ -73,7 +73,7 @@ function CreatePost() {
 
   const onEmojiClick = useCallback((emojiObject) => {
     setMessage((prevText) => prevText + emojiObject.emoji);
-    setShowEmojiPicker(false);
+    // setShowEmojiPicker(false);
   }, []);
 
   const onGifSelect = useCallback((gifUrl) => {

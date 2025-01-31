@@ -74,7 +74,7 @@ function App() {
             />
             <Route element={<MessagesLayout />}>
               <Route path="messages" element={<MessagesPage />} />
-              <Route path="messages" element={<MessagingPage />} />
+              <Route path="messages/:room" element={<MessagingPage />} />
             </Route>
             <Route path="companies" element={<CompaniesPage />} />
             <Route path="market" element={<Market />} />

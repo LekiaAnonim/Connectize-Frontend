@@ -12,6 +12,7 @@ import { getServices } from "../../../api-services/services";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
+import Username from "../../Username";
 
 const TopServiceSuggestions = () => {
   return (
@@ -104,14 +105,7 @@ export function SuggestionList({ hasSeeMore }) {
           <LightParagraph>No suggested users...</LightParagraph>
         ) : (
           suggestedUsers?.map((user) => {
-            const {
-              first_name,
-              last_name,
-              avatar,
-              email: hashtag,
-              verified,
-              id,
-            } = user;
+            const { first_name, last_name, avatar, email: hashtag, id } = user;
             return (
               <li className="flex items-center gap-2.5 pt-2" key={id}>
                 <Avatar
@@ -121,17 +115,7 @@ export function SuggestionList({ hasSeeMore }) {
                   className={avatarStyle}
                 />
                 <div>
-                  <div className="flex items-center gap-x-0.5">
-                    <Link
-                      to={`/co/${id}`}
-                      className="text-base xs:leading-tight text-gray-700 font-bold capitalize"
-                    >
-                      {first_name} {last_name}
-                    </Link>
-                    {verified && (
-                      <VerifiedIcon color="black" height="18" width="18" />
-                    )}
-                  </div>
+                  <Username user={user} />
                   <p className="text-sm text-gray-400 m-0">{hashtag}</p>
                 </div>
               </li>
@@ -155,13 +139,13 @@ export function SuggestionList({ hasSeeMore }) {
 
 export const CircleTitleSubtitleSkeleton = () => (
   <li className="flex items-center gap-3 pt-3 mb-3">
-    <div className="size-8 rounded-full skeleton"></div>
+    <div className="size-8 rounded-full skeleton" />
     <div className="flex-1">
       <div className="flex items-center gap-x-0.5">
-        <div className="h-2 w-24 skeleton rounded"></div>
-        <div className="size-3 skeleton rounded-full"></div>
+        <div className="h-2 w-24 skeleton rounded" />
+        <div className="size-3 skeleton rounded-full" />
       </div>
-      <div className="h-2 w-36 skeleton rounded mt-1"></div>
+      <div className="h-2 w-36 skeleton rounded mt-1" />
     </div>
   </li>
 );
