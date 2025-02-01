@@ -180,18 +180,8 @@ export const getOrCreateProductCategories = async (name) => {
   return newCategory;
 };
 
-export const bookmarkProduct = async (productId, data) => {
-  const allProducts = await getProducts();
-
-  const currentUser = await getCurrentUser();
-
-  const currentProduct = allProducts.find(
-    (product) => product.id === productId
-  );
-
-  if (
-    currentProduct.likes.find((product) => product.user.id === currentUser.id)
-  ) {
+export const bookmarkProduct = async (productId, data, hasBookmarked) => {
+  if (hasBookmarked) {
     await makeApiRequest({
       url: `api/products/${productId}/unlike/`,
       method: "POST",

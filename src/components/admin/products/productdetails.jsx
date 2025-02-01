@@ -39,7 +39,7 @@ function Productdetails({ product }) {
   }, []);
 
   // Determine if the current user has liked the product
-  const userHasLikedProduct = product?.likes?.some(
+  const hasBookmarked = product?.likes?.some(
     (like) => like.user.id === currentUser?.id
   );
 
@@ -120,10 +120,7 @@ function Productdetails({ product }) {
           </div>
           <div className="flex gap-4 items-center">
             <ChatSellerLink to="/messages" />
-            <FavoriteButton
-              userHasLikedProduct={userHasLikedProduct}
-              product={product}
-            />
+            <FavoriteButton hasBookmarked={hasBookmarked} product={product} />
           </div>
         </div>
       </section>
@@ -166,24 +163,20 @@ function Productdetails({ product }) {
   );
 }
 
-function FavoriteButton({ userHasLikedProduct, product }) {
-  const [favorited, setFavorited] = useState(userHasLikedProduct);
-  const [loading, setLoading] = useState(false);
+function FavoriteButton({ hasBookmarked, product }) {
+  const [bookmarked, setBookmarked] = useState(hasBookmarked);
 
   const handleBookmark = async () => {
-    setLoading(true);
-    await bookmarkProduct(product.id, product);
-    setFavorited((prev) => !prev); // Optimistic UI update
-    setLoading(false);
+    setBookmarked((prev) => !prev); // Optimistic UI update
+    await bookmarkProduct(product.id, product, bookmarked);
   };
 
   return (
     <button
       className="rounded-full px-4 py-1.5 border !border-black/40 flex items-center justify-center gap-1 text-sm font-semibold disabled:cursor-not-allowed"
       onClick={handleBookmark}
-      disabled={loading}
     >
-      {favorited ? <BookmarkFilledIcon className="size-6" /> : <Bookmark />}
+      {bookmarked ? <BookmarkFilledIcon className="size-5" /> : <Bookmark />}
       <span>Bookmark Product</span>
     </button>
   );

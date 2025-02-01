@@ -25,6 +25,7 @@ import { getAllCompanies } from "../api-services/companies";
 import { getAllUsers } from "../api-services/users";
 import CompanyName from "./company/CompanyName";
 import { useAuth } from "../context/userContext";
+import useWebSocket from "../hooks/useWebSocket";
 
 const generalNotificationType = [
   "like",
@@ -40,11 +41,12 @@ const generalNotificationType = [
 const promotionsNotificationType = ["promotions", "announcement"];
 
 const NotificationPopOver = () => {
+  const { messages } = useWebSocket("notifications");
   const { user: currentUser } = useAuth();
-  const { data: notifications, isLoading } = useQuery({
+  const { data: notificationsData, isLoading } = useQuery({
     queryKey: ["notifications"],
     queryFn: getNotificationsForUser,
-    refetchInterval: 20000,
+    // refetchInterval: 20000,
   });
 
   const { data: companies, isLoading: companiesLoading } = useQuery({
@@ -58,6 +60,8 @@ const NotificationPopOver = () => {
     queryFn: getAllUsers,
     enabled: !!currentUser,
   });
+
+  const notifications = [...messages, ...notificationsData];
 
   const notificationLengthNotRead =
     notifications?.filter((notification) => notification?.is_read === null)

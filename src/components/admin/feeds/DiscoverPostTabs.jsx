@@ -269,7 +269,7 @@ export const PostCardSkeleton = React.memo(() => (
 
 export const BookMarkButton = ({ service, product }) => {
   const { user: currentUser } = useAuth();
-  const userHasLikedProduct = service
+  const userHasBookmarked = service
     ? service?.likes?.find(
         (serviceProp) => serviceProp?.user?.id === currentUser?.id
       )
@@ -278,16 +278,16 @@ export const BookMarkButton = ({ service, product }) => {
         (productProp) => productProp?.user?.id === currentUser?.id
       )
     : false;
-  const [bookmarked, setBookmarked] = useState(userHasLikedProduct);
+  const [bookmarked, setBookmarked] = useState(userHasBookmarked);
 
   const handleBookmark = async () => {
     if (!service && !product) return;
 
     setBookmarked((prev) => !prev);
     if (product) {
-      await bookmarkProduct(product?.id, product);
+      await bookmarkProduct(product?.id, product, userHasBookmarked);
     } else if (service) {
-      await bookmarkService(service.id, service);
+      await bookmarkService(service.id, service, userHasBookmarked);
     }
   };
 

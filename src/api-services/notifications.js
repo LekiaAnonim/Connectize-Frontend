@@ -6,7 +6,7 @@ export const getNotificationsForUser = async () => {
     method: "GET",
   });
 
-  return notifications;
+  return notifications || [];
 };
 
 export const markNotificationAsRead = async (notificationId) => {
