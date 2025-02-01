@@ -18,6 +18,7 @@ export const BookmarkedServices = () => {
   const { data: services, isLoading } = useQuery({
     queryKey: ["services"],
     queryFn: getServices,
+    enabled: !!currentUser,
   });
 
   const bookmarkedServices = services?.filter((service) =>
