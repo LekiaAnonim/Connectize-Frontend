@@ -17,6 +17,7 @@ export const BookmarkedProducts = () => {
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
+    enabled: !!currentUser,
   });
 
   const bookmarkedProducts = products?.filter((product) =>
@@ -37,7 +38,7 @@ export const BookmarkedProducts = () => {
 
   return (
     <section className="space-y-4">
-      {cachedProducts?.length <= 0 ? (
+      {cachedProducts?.length >= 0 ? (
         <div className="p-4 text-center">
           <LightParagraph>No bookmarked product yet</LightParagraph>
         </div>
@@ -60,12 +61,12 @@ const BookmarkedProductsCard = ({
   setCachedProducts,
   cachedProducts,
 }) => {
-  const [loading, setLoading] = useState(false);
-
+  const { user: currentUser } = useAuth();
+  const hasBookmarked = product?.likes?.some(
+    (like) => like.user.id === currentUser?.id
+  );
   const handleBookmark = async () => {
-    setLoading(true);
-    await bookmarkProduct(product.id, product);
-    setLoading(false);
+    await bookmarkProduct(product.id, product, hasBookmarked);
 
     setCachedProducts(
       cachedProducts?.filter((cacheProduct) => cacheProduct.id !== product?.id)
@@ -105,7 +106,6 @@ const BookmarkedProductsCard = ({
           tip={`Remove ${product?.title} from bookmark`}
           IconName={TrashIcon}
           onClick={handleBookmark}
-          loading={loading}
         />
         <LinkWithTooltipIcon
           IconName={Link1Icon}

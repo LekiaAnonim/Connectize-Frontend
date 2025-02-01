@@ -24,7 +24,7 @@ function Productdetails({ product }) {
   const { data: company } = useQuery({
     queryKey: ["companies", product?.company],
     queryFn: () => getSingleCompany(product?.company),
-    enabled: !!product?.company,
+    enabled: !!product?.company && !!currentUser,
   });
 
   // Memoized navigation handler
@@ -133,7 +133,7 @@ function Productdetails({ product }) {
             className="!w-full min-h-[300px]"
             loading="lazy"
             title="Lagos"
-            referrerpolicy="no-referrer-when-downgrade"
+            referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </section>
 
@@ -173,10 +173,14 @@ function FavoriteButton({ hasBookmarked, product }) {
 
   return (
     <button
-      className="rounded-full px-4 py-1.5 border !border-black/40 flex items-center justify-center gap-1 text-sm font-semibold disabled:cursor-not-allowed"
+      className="rounded-full px-4 py-1.5 border !border-gray-200/50 flex items-center justify-center gap-1 text-sm font-semibold disabled:cursor-not-allowed"
       onClick={handleBookmark}
     >
-      {bookmarked ? <BookmarkFilledIcon className="size-5" /> : <Bookmark />}
+      {bookmarked ? (
+        <BookmarkFilledIcon className="size-5" />
+      ) : (
+        <Bookmark className="!size-5" />
+      )}
       <span>Bookmark Product</span>
     </button>
   );

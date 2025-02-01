@@ -23,7 +23,9 @@ const useWebSocket = (url) => {
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      setMessages((prevMessages) => [...prevMessages, data.message]);
+      console.log("Message:", data);
+
+      setMessages((prevMessages) => [...prevMessages, data]);
     };
 
     socket.onerror = (error) => {
@@ -39,7 +41,7 @@ const useWebSocket = (url) => {
     return () => {
       socket.close();
     };
-  }, [url]);
+  }, [session?.tokens?.access, url]);
 
   const sendMessage = (message) => {
     if (ws && ws.readyState === WebSocket.OPEN) {

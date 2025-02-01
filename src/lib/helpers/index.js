@@ -73,7 +73,7 @@ export async function refreshToken() {
     retries++;
     console.info(`Refresh token attempt #${retries}`);
 
-    if (retries === 3) {
+    if (retries === 1) {
       removeSession();
       goToLogin();
       return;

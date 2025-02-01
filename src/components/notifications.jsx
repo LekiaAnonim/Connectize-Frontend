@@ -16,7 +16,7 @@ import {
 } from "../api-services/notifications";
 import { useQuery } from "@tanstack/react-query";
 import TimeAgo from "./TimeAgo";
-import { useEffect, useState, useCallback, memo } from "react";
+import { useEffect, useState, useCallback, memo, useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import { motion } from "framer-motion";
@@ -43,10 +43,11 @@ const promotionsNotificationType = ["promotions", "announcement"];
 const NotificationPopOver = () => {
   const { messages } = useWebSocket("notifications");
   const { user: currentUser } = useAuth();
+
   const { data: notificationsData, isLoading } = useQuery({
     queryKey: ["notifications"],
     queryFn: getNotificationsForUser,
-    // refetchInterval: 20000,
+    enabled: !!currentUser,
   });
 
   const { data: companies, isLoading: companiesLoading } = useQuery({
@@ -61,27 +62,52 @@ const NotificationPopOver = () => {
     enabled: !!currentUser,
   });
 
-  const notifications = [...messages, ...notificationsData];
+  const notifications = useMemo(() => {
+    const allNotifications = [...messages, ...(notificationsData || [])];
+    const uniqueNotifications = allNotifications.reduce((acc, notification) => {
+      if (!acc.some((n) => n.message === notification.message)) {
+        acc.push(notification);
+      }
+      return acc;
+    }, []);
+    return uniqueNotifications;
+  }, [messages, notificationsData]);
 
-  const notificationLengthNotRead =
-    notifications?.filter((notification) => notification?.is_read === null)
-      ?.length || 0;
+  console.log(notifications);
+
+  const notificationLengthNotRead = useMemo(
+    () =>
+      notifications?.filter((notification) => notification?.is_read === null)
+        ?.length || 0,
+    [notifications]
+  );
 
   const [unReadNotificationLength, setUnReadNotificationLength] = useState(
     notificationLengthNotRead
   );
 
   useEffect(() => {
-    setUnReadNotificationLength(notificationLengthNotRead);
-  }, [notificationLengthNotRead]);
+    if (unReadNotificationLength !== notificationLengthNotRead) {
+      setUnReadNotificationLength(notificationLengthNotRead);
+    }
+  }, [notificationLengthNotRead, unReadNotificationLength]);
 
   const tabsHeader = ["General", "Promotions"];
 
-  const generalNotifications = notifications?.filter((notification) =>
-    generalNotificationType.includes(notification.notification_type)
+  const generalNotifications = useMemo(
+    () =>
+      notifications?.filter((notification) =>
+        generalNotificationType.includes(notification.notification_type)
+      ),
+    [notifications]
   );
-  const promotionsNotifications = notifications?.filter((notification) =>
-    promotionsNotificationType.includes(notification.notification_type)
+
+  const promotionsNotifications = useMemo(
+    () =>
+      notifications?.filter((notification) =>
+        promotionsNotificationType.includes(notification.notification_type)
+      ),
+    [notifications]
   );
 
   const handleMarkAllAsRead = useCallback(async () => {
@@ -167,7 +193,6 @@ const NotificationsArray = memo(
             const user = users?.find(
               (user) => user?.id === notification?.sender
             );
-
             const company = companies?.results?.find(
               (company) => company?.profile === user?.email
             );
@@ -258,9 +283,7 @@ const NotificationsSkeleton = () => {
       <div className="space-y-4 overflow-y-auto max-h-[70vh]">
         {Array.from({ length: 4 }).map((_, index) => (
           <div key={index} className="flex items-start gap-2">
-            {/* Avatar Skeleton */}
             <div className="rounded-full size-8 shrink-0 skeleton" />
-            {/* Content Skeleton */}
             <div className="space-y-1 w-full">
               <div className="h-3 w-3/5 rounded skeleton" />
               <div className="h-2.5 w-full rounded skeleton" />
