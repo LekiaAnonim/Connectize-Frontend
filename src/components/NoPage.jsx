@@ -16,7 +16,7 @@ function NoPage() {
           Go back
         </button>
         <Link
-          to="/home"
+          to="/"
           className="bg-gold py-1.5 xs:text-sm px-6 xs:px-10 rounded-full"
         >
           Go Home

@@ -518,6 +518,7 @@ export function ButtonWithTooltipIcon({
   iconClassName,
   textClassName,
   loading = false,
+  disabled = false,
 }) {
   return (
     <Tooltip
@@ -531,7 +532,7 @@ export function ButtonWithTooltipIcon({
     >
       <button
         onClick={onClick}
-        disabled={loading}
+        disabled={loading || disabled}
         className={clsx(
           "flex items-center text-sm gap-1 bg-transparent text-gray-600 hover:text-custom_blue active:scale-95 transition-all duration-300 overflow-hidden disabled:cursor-not-allowed",
           className

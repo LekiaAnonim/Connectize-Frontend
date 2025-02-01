@@ -38,7 +38,7 @@ export const BookmarkedProducts = () => {
 
   return (
     <section className="space-y-4">
-      {cachedProducts?.length >= 0 ? (
+      {cachedProducts?.length <= 0 ? (
         <div className="p-4 text-center">
           <LightParagraph>No bookmarked product yet</LightParagraph>
         </div>
@@ -65,6 +65,7 @@ const BookmarkedProductsCard = ({
   const hasBookmarked = product?.likes?.some(
     (like) => like.user.id === currentUser?.id
   );
+
   const handleBookmark = async () => {
     await bookmarkProduct(product.id, product, hasBookmarked);
 
@@ -97,7 +98,7 @@ const BookmarkedProductsCard = ({
               {product?.category}
             </small>
           </div>
-          <ChatSellerLink text="Chat seller" to={`/messages?${product?.id}`} />
+          <ChatSellerLink text="Chat seller" to={`/messages/${product?.id}`} />
         </div>
       </div>
 

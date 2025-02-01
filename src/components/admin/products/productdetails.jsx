@@ -2,7 +2,7 @@ import React, { useRef, useState, useCallback } from "react";
 import { ChatSellerLink } from "../markets/newlyListed";
 import HeadingText from "../../HeadingText";
 import { BookmarkFilledIcon } from "@radix-ui/react-icons";
-import { Button, Divider } from "@chakra-ui/react";
+import { Avatar, Button, Divider } from "@chakra-ui/react";
 import { MarkdownComponent } from "../../MarkDownComponent";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
@@ -13,18 +13,18 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getSingleCompany } from "../../../api-services/companies";
 import { NAVIGATION_BUTTONS } from "../../../lib/slide_button";
-
-
+import { avatarStyle } from "../../ResponsiveNav";
+import { ProductDetailSkeleton } from "../../../pages/market/product";
 
 function Productdetails({ product }) {
   const swiperRef = useRef(null);
   const { user: currentUser } = useAuth();
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
-  const { data: company } = useQuery({
+  const { data: company, isLoading } = useQuery({
     queryKey: ["companies", product?.company],
     queryFn: () => getSingleCompany(product?.company),
-    enabled: !!product?.company && !!currentUser,
+    enabled: !!product?.company,
   });
 
   // Memoized navigation handler
@@ -43,6 +43,8 @@ function Productdetails({ product }) {
     (like) => like.user.id === currentUser?.id
   );
 
+  if (isLoading) return <ProductDetailSkeleton />;
+
   return (
     <>
       <section className="flex max-lg:flex-col items-start justify-center gap-4">
@@ -59,7 +61,7 @@ function Productdetails({ product }) {
               {product.images.map((image) => (
                 <SwiperSlide
                   key={image.id}
-                  className="max-h-[300px] md:max-h-[350px] rounded-md overflow-hidden relative group"
+                  className="h-[300px] md:h-[350px] rounded-md overflow-hidden relative group"
                 >
                   <img
                     src={image?.image}
@@ -119,7 +121,7 @@ function Productdetails({ product }) {
             />
           </div>
           <div className="flex gap-4 items-center">
-            <ChatSellerLink to="/messages" />
+            <ChatSellerLink recipientId={company?.user?.id} />
             <FavoriteButton hasBookmarked={hasBookmarked} product={product} />
           </div>
         </div>
@@ -130,20 +132,31 @@ function Productdetails({ product }) {
           <HeadingText>Location</HeadingText>
           <iframe
             src="https://www.google.com/maps/embed?pb=..."
-            className="!w-full min-h-[300px]"
+            className="!w-full !min-h-[300px]"
             loading="lazy"
-            title="Lagos"
+            title={company?.city || company?.state || company?.country}
             referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
+          {/* <HeadingText>Current Location</HeadingText>
+        <iframe
+          src={`https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(
+            `${company?.address || ""} ${company?.city || ""} ${company?.state || ""} ${company?.country || ""}`
+          )}`}
+          className="!w-full !min-h-[300px]"
+          loading="lazy"
+          title="Current Location"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe> */}
         </section>
 
         <section className="space-y-4 lg:w-1/2 shrink-0">
           <HeadingText>Seller's information</HeadingText>
           <div className="flex items-center gap-3">
-            <img
+            <Avatar
               src={company?.logo || "/images/default-company-logo.png"}
-              className="size-16"
-              alt={product?.company}
+              className={avatarStyle}
+              size="lg"
+              name={product?.company}
             />
             <div className="flex flex-col">
               <Link
@@ -153,7 +166,15 @@ function Productdetails({ product }) {
                 {product?.company || ""}
               </Link>
               <span className="text-gray-400 text-sm">
-                since {company?.registration_date}
+                since{" "}
+                {new Date(company?.registration_date).toLocaleDateString(
+                  "en-GB",
+                  {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  }
+                )}
               </span>
             </div>
           </div>
@@ -165,16 +186,20 @@ function Productdetails({ product }) {
 
 function FavoriteButton({ hasBookmarked, product }) {
   const [bookmarked, setBookmarked] = useState(hasBookmarked);
+  const [disabled, setDisabled] = useState(false);
 
   const handleBookmark = async () => {
     setBookmarked((prev) => !prev); // Optimistic UI update
+    setDisabled(true);
     await bookmarkProduct(product.id, product, bookmarked);
+    setDisabled(false);
   };
 
   return (
     <button
       className="rounded-full px-4 py-1.5 border !border-gray-200/50 flex items-center justify-center gap-1 text-sm font-semibold disabled:cursor-not-allowed"
       onClick={handleBookmark}
+      disabled={disabled}
     >
       {bookmarked ? (
         <BookmarkFilledIcon className="size-5" />

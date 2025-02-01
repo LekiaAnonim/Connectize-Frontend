@@ -2,7 +2,6 @@ import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
 import { capitalizeFirst } from "../lib/utils";
 import { getSession } from "../lib/session";
-import { getCurrentUser } from "./users";
 import { getCompanies } from "./companies";
 import { redirect } from "react-router-dom";
 

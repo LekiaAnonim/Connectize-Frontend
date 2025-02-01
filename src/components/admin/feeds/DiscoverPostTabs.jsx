@@ -160,7 +160,7 @@ export const PostCard = ({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="p-4 lg:!px-3 bg-white rounded-md flex flex-col h-80"
+      className="p-4 lg:!px-3 bg-white rounded-md flex flex-col h-72"
     >
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-bold capitalize text-lg line-clamp-1">
@@ -172,14 +172,14 @@ export const PostCard = ({
         />
       </div>
 
-      <div className="flex mt-2">
+      {/* <div className="flex mt-2">
         {[1, 2, 3].map((_, index) => (
           <StarFilledIcon key={index} />
         ))}
         {[1, 2].map((_, index) => (
           <StarOutlinedIcon key={index} />
         ))}
-      </div>
+      </div> */}
 
       <div className="my-4 line-clamp-3 shrink-0">
         <MarkdownComponent
@@ -196,6 +196,7 @@ export const PostCard = ({
         <ConJoinedImages
           size={30}
           sizeVariant="sm"
+          animate={whole?.likes?.length > 1}
           array={whole?.likes.slice(0, 5).map((post) => ({
             name: `${post?.user?.first_name} ${post?.user?.last_name}`,
             src: baseURL + post?.user?.avatar,
@@ -279,16 +280,19 @@ export const BookMarkButton = ({ service, product }) => {
       )
     : false;
   const [bookmarked, setBookmarked] = useState(userHasBookmarked);
+  const [disabled, setDisabled] = useState(false);
 
   const handleBookmark = async () => {
     if (!service && !product) return;
 
-    setBookmarked((prev) => !prev);
+    setBookmarked(!bookmarked);
+    setDisabled(true);
     if (product) {
       await bookmarkProduct(product?.id, product, userHasBookmarked);
     } else if (service) {
       await bookmarkService(service.id, service, userHasBookmarked);
     }
+    setDisabled(false);
   };
 
   return (
@@ -299,6 +303,7 @@ export const BookMarkButton = ({ service, product }) => {
       onClick={handleBookmark}
       IconName={bookmarked ? BookmarkFilledIcon : Bookmark}
       iconClassName="!size-8 xs:!size-7"
+      disabled={disabled}
     />
   );
 };
