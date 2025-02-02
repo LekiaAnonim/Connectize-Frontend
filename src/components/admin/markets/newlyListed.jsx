@@ -87,7 +87,7 @@ export const ProductListCard = ({
     enabled: !!currentUser,
   });
   const company = companies?.results?.find(
-    (comp) => comp?.company_name?.toLowerCase() === companyName.toLowerCase()
+    (comp) => comp?.company_name?.toLowerCase() === companyName?.toLowerCase()
   );
 
   return (

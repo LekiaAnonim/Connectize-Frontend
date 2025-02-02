@@ -98,6 +98,7 @@ export const DiscoverPostItem = ({
 
   const [liked, setLiked] = useState(userHasLikedPost);
   const [likes, setLikes] = useState(postItem?.likes?.length);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     setLikes(postItem?.likes?.length);
@@ -106,7 +107,9 @@ export const DiscoverPostItem = ({
   const handleLikePost = async () => {
     setLiked((prev) => !prev);
     setLikes((prev) => (!liked ? prev + 1 : prev - 1));
-    await likePost(postItem.id, postItem);
+    setDisabled(true);
+    await likePost(postItem?.id, postItem, userHasLikedPost);
+    setDisabled(false);
     setRefetchInterval(1000);
     setTimeout(() => setRefetchInterval(false), 2000);
   };
@@ -341,6 +344,7 @@ export const DiscoverPostItem = ({
             tip={liked ? "Unlike post" : "Like post"}
             onClick={handleLikePost}
             textClassName="!text-[.6rem]"
+            disabled={disabled}
             text={formatNumber(likes)}
           />
           <ButtonWithTooltipIcon
