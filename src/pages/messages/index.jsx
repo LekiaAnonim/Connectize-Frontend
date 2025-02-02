@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Favorites from "../../components/messages/Favorites";
 import MessagesList from "../../components/messages/MessagesList";
 import { CreateNewLink } from "../../components/admin/markets/carousel";
@@ -13,7 +13,7 @@ import Username from "../../components/Username";
 import { CircleTitleSubtitleSkeleton } from "../../components/admin/feeds/TopServiceSuggestions";
 import { ChatSellerLink } from "../../components/admin/markets/newlyListed";
 import { UserSearchInput } from "../../components/representatives/UserSearchInput";
-import { debounce } from "lodash";
+import { motion } from "framer-motion";
 
 export default function MessagesPage() {
   const { user: currentUser } = useAuth();
@@ -26,15 +26,6 @@ export default function MessagesPage() {
     queryFn: getAllUsers,
     enabled: !!currentUser,
   });
-
-  const debouncedSetUsername = useCallback(
-    () => debounce((value) => setUsername(value), 300),
-    []
-  );
-
-  const handleUsernameChange = (value) => {
-    debouncedSetUsername(value);
-  };
 
   const filteredUsers = useMemo(() => {
     return (
@@ -76,10 +67,7 @@ export default function MessagesPage() {
         footerContent={<></>}
         title="Start New Chat"
       >
-        <UserSearchInput
-          username={username}
-          setUsername={handleUsernameChange}
-        />
+        <UserSearchInput username={username} setUsername={setUsername} />
         {usersLoading ? (
           Array.from({ length: 5 }, (_, index) => (
             <div key={index}>
@@ -91,10 +79,15 @@ export default function MessagesPage() {
             <LightParagraph>No user found</LightParagraph>
           </div>
         ) : (
-          filteredUsers.map((user) => {
-            const { first_name, last_name, avatar, email: hashtag, id } = user;
+          filteredUsers.map((user, index) => {
+            const { first_name, last_name, avatar, email: hashtag } = user;
             return (
-              <li className="flex items-center gap-2.5 pt-2" key={id}>
+              <motion.li
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2.5 pt-2"
+                key={index}
+              >
                 <Avatar
                   src={avatar}
                   name={`${first_name} ${last_name}`}
@@ -106,11 +99,8 @@ export default function MessagesPage() {
                   <p className="text-sm text-gray-400 m-0">{hashtag}</p>
                 </div>
 
-                <ChatSellerLink
-                  text="Chat"
-                  to={`/messages/room_${currentUser?.id}_${user?.id}`}
-                />
-              </li>
+                <ChatSellerLink text="Chat" recipientId={user?.id} />
+              </motion.li>
             );
           })
         )}

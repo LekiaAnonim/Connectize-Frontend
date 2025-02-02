@@ -1,13 +1,13 @@
 import { makeApiRequest } from "../lib/helpers";
 
 export const getMessagesForUser = async (params) => {
-  const { results: notifications } = await makeApiRequest({
+  const { results: messages } = await makeApiRequest({
     url: "api/messages/",
     method: "GET",
     params,
   });
 
-  return notifications;
+  return messages;
 };
 
 export const messageUser = async (formData) => {

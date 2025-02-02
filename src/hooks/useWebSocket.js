@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { baseURL } from "../lib/helpers";
 import { getSession } from "../lib/session";
 
-const useWebSocket = (url) => {
+const useWebSocket = (url, params) => {
   const [messages, setMessages] = useState([]);
   const [ws, setWs] = useState(null);
   const session = getSession();
@@ -10,11 +10,13 @@ const useWebSocket = (url) => {
   useEffect(() => {
     const wsBaseUrl =
       process.env.NODE_ENV === "development"
-        ? baseURL.replace("http://", "")
-        : baseURL.replace("https://", "");
+        ? baseURL.replace("http", "")
+        : baseURL.replace("https", "");
 
     const socket = new WebSocket(
-      `ws://${wsBaseUrl}/ws/${url}/?token=${session?.tokens?.access}`
+      `ws${wsBaseUrl}/ws/${url}/${params ? params : "?"}token=${
+        session?.tokens?.access
+      }`
     );
 
     socket.onopen = () => {

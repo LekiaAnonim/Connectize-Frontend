@@ -16,8 +16,6 @@ import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { Mic, MicExternalOn } from "@mui/icons-material";
 import EmojiPicker from "emoji-picker-react";
 import { CloseButton } from "@chakra-ui/react";
-import { useAuth } from "../../context/userContext";
-import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { largeFileText, unSupportedText } from "../admin/listing/newListing";
 import { motion } from "framer-motion";
@@ -25,18 +23,18 @@ import clsx from "clsx";
 import { useCustomQuery } from "../../context/queryContext";
 import { messageUser } from "../../api-services/messaging";
 
-const isImageFile = (files) => {
-  const imageTypes = [
-    "image/jpeg",
-    "image/jpg",
-    "image/png",
-    "image/webp",
-    "image/avif",
-  ];
-  return Array.isArray(files)
-    ? files.every((file) => imageTypes.includes(file.type.toLowerCase()))
-    : imageTypes.includes(files.type.toLowerCase());
-};
+// const isImageFile = (files) => {
+//   const imageTypes = [
+//     "image/jpeg",
+//     "image/jpg",
+//     "image/png",
+//     "image/webp",
+//     "image/avif",
+//   ];
+//   return Array.isArray(files)
+//     ? files.every((file) => imageTypes.includes(file.type.toLowerCase()))
+//     : imageTypes.includes(files.type.toLowerCase());
+// };
 
 const isImageSize = (files) => {
   const imageSize = 4 * 1024 * 1024; // 4MB
@@ -47,11 +45,9 @@ const isImageSize = (files) => {
 
 const emptyMessageValue = "Message field does not have any text";
 
-export default function MessageControl() {
-  const params = useParams();
-  const room = params?.room;
-  const recipientId = room.split("_")[2];
-  const { user: currentUser } = useAuth();
+export default function MessageControl({ loading, room_name }) {
+  const recipientId = room_name.split("_")[2];
+  // const { user: currentUser } = useAuth();
   const { setRefetchInterval } = useCustomQuery();
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -61,9 +57,7 @@ export default function MessageControl() {
 
   const handleFileChange = useCallback((event) => {
     const selectedFiles = Array.from(event.target.files);
-    const validImageFiles = selectedFiles
-      .filter(isImageFile)
-      .filter(isImageSize);
+    const validImageFiles = selectedFiles.filter(isImageSize);
 
     setValidImages(validImageFiles);
 
@@ -113,7 +107,7 @@ export default function MessageControl() {
       formData.append(
         "audio_file",
         audioBlob,
-        `voice-note-in-${room}-${new Date().getTime()}.webm`
+        `voice-note-in-${room_name}-${new Date().getTime()}.webm`
       );
     if (validImages)
       validImages.forEach((image) => {
@@ -124,7 +118,14 @@ export default function MessageControl() {
     await messageUser(formData);
     setRefetchInterval(1000);
     setTimeout(() => setRefetchInterval(false), 2000);
-  }, [audioBlob, message, recipientId, room, setRefetchInterval, validImages]);
+  }, [
+    audioBlob,
+    message,
+    recipientId,
+    room_name,
+    setRefetchInterval,
+    validImages,
+  ]);
 
   const handleInputChange = useCallback((e) => {
     const trimmedMessage = e.target.value.trim();
@@ -137,49 +138,64 @@ export default function MessageControl() {
   }, []);
 
   return (
-    <section className="bg-white p-2 px-4 rounded-md flex gap-2">
-      {showEmojiPicker && renderEmojiGifPickers}
-      <input
-        type="file"
-        name="attachment"
-        id="attachment"
-        hidden
-        onChange={handleFileChange}
-      />
-      <ButtonWithTooltipIcon
-        IconName={PaperClipOutlined}
-        tip="Attachment"
-        className="hover:!bg-gray-100 !text-black p-2 rounded-full"
-        onClick={() => document.getElementById("attachment").click()}
-      />
-      <input
-        type="text"
-        value={message}
-        onChange={handleInputChange}
-        className="flex-1 text-sm border-0 outline-none placeholder:text-gray-400"
-        placeholder="Type a message here..."
-      />
-      <div className="flex items-center">
+    <section className="bg-white p-2 px-4 rounded-md flex flex-col gap-2 transition-all duration-300">
+      <section className="flex items-center gap-2">
+        {showEmojiPicker && renderEmojiGifPickers}
+        <input
+          type="file"
+          name="attachment"
+          id="attachment"
+          hidden
+          onChange={handleFileChange}
+        />
         <ButtonWithTooltipIcon
-          IconName={SmileFilled}
-          onClick={() => setShowEmojiPicker(true)}
-          tip="Emoji"
+          IconName={PaperClipOutlined}
+          tip="Attachment"
           className="hover:!bg-gray-100 !text-black p-2 rounded-full"
+          onClick={() => document.getElementById("attachment").click()}
+          disabled={loading}
         />
-        <VoiceRecorder onSave={handleSendMessage} setAudioBlob={setAudioBlob} />
-        <ButtonWithTooltipIcon
-          IconName={PaperPlaneIcon}
-          className="!bg-black !text-gray-300 p-1.5 rounded-full"
-          iconClassName="size-3.5"
-          tip="Send"
-          onClick={handleSendMessage}
+        <input
+          type="text"
+          value={message}
+          onChange={handleInputChange}
+          className="flex-1 text-sm border-0 outline-none placeholder:text-gray-400 disabled:cursor-not-allowed"
+          placeholder="Type a message here..."
+          disabled={loading}
         />
-      </div>
+        <div className="flex items-center">
+          <ButtonWithTooltipIcon
+            IconName={SmileFilled}
+            onClick={() => setShowEmojiPicker(true)}
+            tip="Emoji"
+            className="hover:!bg-gray-100 !text-black p-2 rounded-full"
+            disabled={loading}
+          />
+          <VoiceRecorder setAudioBlob={setAudioBlob} />
+          <ButtonWithTooltipIcon
+            IconName={PaperPlaneIcon}
+            className="!bg-black !text-gray-300 p-1.5 rounded-full"
+            iconClassName="size-3.5"
+            tip="Send"
+            onClick={handleSendMessage}
+            disabled={loading}
+          />
+        </div>
+      </section>
+      {errorMessage && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-[#9e3818] text-xs mx-0.5"
+        >
+          {errorMessage}
+        </motion.div>
+      )}
     </section>
   );
 }
 
-const VoiceRecorder = ({ onSave, setAudioBlob }) => {
+const VoiceRecorder = ({ setAudioBlob }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioURL, setAudioURL] = useState(null);
   const mediaRecorderRef = useRef(null);
@@ -200,7 +216,6 @@ const VoiceRecorder = ({ onSave, setAudioBlob }) => {
         const audioBlob = new Blob(audioChunks.current, { type: "audio/webm" });
         const url = URL.createObjectURL(audioBlob);
         setAudioURL(url);
-        onSave(audioBlob);
         setAudioBlob(audioBlob);
       };
 
@@ -210,7 +225,7 @@ const VoiceRecorder = ({ onSave, setAudioBlob }) => {
     } catch (error) {
       console.error("Error accessing microphone:", error);
     }
-  }, [onSave]);
+  }, [setAudioBlob]);
 
   const stopRecording = useCallback(() => {
     mediaRecorderRef.current?.stop();
