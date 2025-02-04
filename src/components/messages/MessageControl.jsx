@@ -23,19 +23,6 @@ import clsx from "clsx";
 import { useCustomQuery } from "../../context/queryContext";
 import { messageUser } from "../../api-services/messaging";
 
-// const isImageFile = (files) => {
-//   const imageTypes = [
-//     "image/jpeg",
-//     "image/jpg",
-//     "image/png",
-//     "image/webp",
-//     "image/avif",
-//   ];
-//   return Array.isArray(files)
-//     ? files.every((file) => imageTypes.includes(file.type.toLowerCase()))
-//     : imageTypes.includes(files.type.toLowerCase());
-// };
-
 const isImageSize = (files) => {
   const imageSize = 4 * 1024 * 1024; // 4MB
   return Array.isArray(files)
@@ -47,13 +34,14 @@ const emptyMessageValue = "Message field does not have any text";
 
 export default function MessageControl({ loading, room_name }) {
   const recipientId = room_name.split("_")[2];
-  // const { user: currentUser } = useAuth();
   const { setRefetchInterval } = useCustomQuery();
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
-  const [audioBlob, setAudioBlob] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [validImages, setValidImages] = useState([]);
+
+  const [audioBlob, setAudioBlob] = useState(null);
+  const [audioURL, setAudioURL] = useState(null);
 
   const handleFileChange = useCallback((event) => {
     const selectedFiles = Array.from(event.target.files);
@@ -98,7 +86,6 @@ export default function MessageControl({ loading, room_name }) {
       setErrorMessage(emptyMessageValue);
       return;
     }
-    console.log(audioBlob, recipientId, message);
 
     const formData = new FormData();
     formData.append("recipient", recipientId);
@@ -113,7 +100,6 @@ export default function MessageControl({ loading, room_name }) {
       validImages.forEach((image) => {
         formData.append("images", image);
       });
-    console.log(formData);
 
     await messageUser(formData);
     setRefetchInterval(1000);
@@ -155,14 +141,18 @@ export default function MessageControl({ loading, room_name }) {
           onClick={() => document.getElementById("attachment").click()}
           disabled={loading}
         />
-        <input
-          type="text"
-          value={message}
-          onChange={handleInputChange}
-          className="flex-1 text-sm border-0 outline-none placeholder:text-gray-400 disabled:cursor-not-allowed"
-          placeholder="Type a message here..."
-          disabled={loading}
-        />
+        {audioURL ? (
+          <VoiceNotePlayer audioURL={audioURL} />
+        ) : (
+          <input
+            type="text"
+            value={message}
+            onChange={handleInputChange}
+            className="flex-1 text-sm border-0 outline-none placeholder:text-gray-400 disabled:cursor-not-allowed"
+            placeholder="Type a message here..."
+            disabled={loading}
+          />
+        )}
         <div className="flex items-center">
           <ButtonWithTooltipIcon
             IconName={SmileFilled}
@@ -171,7 +161,10 @@ export default function MessageControl({ loading, room_name }) {
             className="hover:!bg-gray-100 !text-black p-2 rounded-full"
             disabled={loading}
           />
-          <VoiceRecorder setAudioBlob={setAudioBlob} />
+          <VoiceNoteRecorderIcon
+            setAudioURL={setAudioURL}
+            setAudioBlob={setAudioBlob}
+          />
           <ButtonWithTooltipIcon
             IconName={PaperPlaneIcon}
             className="!bg-black !text-gray-300 p-1.5 rounded-full"
@@ -195,13 +188,25 @@ export default function MessageControl({ loading, room_name }) {
   );
 }
 
-const VoiceRecorder = ({ setAudioBlob }) => {
+const VoiceNoteRecorderIcon = ({ setAudioBlob, setAudioURL }) => {
+  const [recordingDuration, setRecordingDuration] = useState(0);
+  const [intervalId, setIntervalId] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [audioURL, setAudioURL] = useState(null);
   const mediaRecorderRef = useRef(null);
   const audioChunks = useRef([]);
 
+  const formatTime = (time) => {
+    if (!time) return "00:00";
+    console.log(time);
+
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
   const startRecording = useCallback(async () => {
+    setAudioURL(null);
+    setAudioBlob(null);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorderRef.current = new MediaRecorder(stream);
@@ -222,87 +227,132 @@ const VoiceRecorder = ({ setAudioBlob }) => {
       audioChunks.current = [];
       mediaRecorderRef.current.start();
       setIsRecording(true);
+      const id = setInterval(() => {
+        setRecordingDuration((prevDuration) => prevDuration + 1);
+      }, 1000);
+      setIntervalId(id);
     } catch (error) {
       console.error("Error accessing microphone:", error);
     }
-  }, [setAudioBlob]);
+  }, [setAudioBlob, setAudioURL]);
 
   const stopRecording = useCallback(() => {
     mediaRecorderRef.current?.stop();
     setIsRecording(false);
-  }, []);
+    setIsRecording(false);
+    clearInterval(intervalId);
+    setRecordingDuration(0);
+  }, [intervalId]);
 
   return (
-    <div className="relative">
-      <ButtonWithTooltipIcon
-        IconName={isRecording ? MicExternalOn : Mic}
-        tip={isRecording ? "Recording" : "Voice note"}
-        onClick={isRecording ? stopRecording : startRecording}
-        className="hover:!bg-gray-100 !text-black p-2 rounded-full mr-1.5"
-      />
-      {audioURL && <VoiceNotePlayer audioURL={audioURL} />}
-    </div>
+    <ButtonWithTooltipIcon
+      IconName={isRecording ? MicExternalOn : Mic}
+      text={isRecording ? formatTime(recordingDuration) : ""}
+      tip={isRecording ? "Recording" : "Voice note"}
+      onClick={isRecording ? stopRecording : startRecording}
+      className="hover:!bg-gray-100 !text-black p-2 rounded-full mr-1.5"
+      thisKey="recorder"
+    />
   );
 };
 
-const VoiceNotePlayer = ({ audioURL }) => {
+export const VoiceNotePlayer = ({ audioURL, className }) => {
   const audioRef = useRef(null);
+  const analyserRef = useRef(null);
+  const dataArrayRef = useRef(null);
+  const sourceRef = useRef(null);
+  const animationFrameRef = useRef(null);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
-  const [speed, setSpeed] = useState(1);
   const [duration, setDuration] = useState(0);
-  const [waveHeights, setWaveHeights] = useState([5, 15, 10, 2, 5, 4, 1, 7, 3]);
+  const [speed, setSpeed] = useState(1);
+  const [waveData, setWaveData] = useState(new Array(30).fill(5));
 
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.onloadedmetadata = () => {
-        setDuration(audioRef.current.duration);
+        setDuration(audioRef.current.duration || 0);
       };
     }
   }, [audioURL]);
 
   const togglePlay = useCallback(() => {
+    if (!audioRef.current) return;
+
     if (isPlaying) {
       audioRef.current.pause();
+      cancelAnimationFrame(animationFrameRef.current);
     } else {
       audioRef.current.play();
+      startAudioAnalysis();
     }
     setIsPlaying(!isPlaying);
   }, [isPlaying]);
 
   const updateProgress = useCallback(() => {
-    if (audioRef.current) {
-      const percent =
-        (audioRef.current.currentTime / audioRef.current.duration) * 100;
-      setProgress(percent);
+    if (!audioRef.current) return;
 
-      setDuration(audioRef.current.duration);
-      setCurrentTime(audioRef.current.currentTime);
-
-      // Create a dynamic wave pattern based on progress
-      setWaveHeights(waveHeights.map(() => Math.random() * 25));
-    }
-  }, [waveHeights]);
+    const newProgress =
+      (audioRef.current.currentTime / (audioRef.current.duration || 1)) * 100;
+    setProgress(newProgress);
+    setCurrentTime(audioRef.current.currentTime);
+    setDuration(audioRef.current.duration || 0);
+  }, []);
 
   const changeSpeed = useCallback(() => {
     const newSpeed = speed === 1 ? 1.5 : speed === 1.5 ? 2 : 1;
     setSpeed(newSpeed);
-    audioRef.current.playbackRate = newSpeed;
+    if (audioRef.current) {
+      audioRef.current.playbackRate = newSpeed;
+    }
   }, [speed]);
 
-  const formatTime = useCallback((time) => {
-    if (!time) return "0:00";
+  const formatTime = (time) => {
+    if (!time || isNaN(time)) return "0:00";
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60)
       .toString()
       .padStart(2, "0");
     return `${minutes}:${seconds}`;
-  }, []);
+  };
+
+  const audioContextRef = useRef(null);
+  
+  const startAudioAnalysis = () => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  
+    if (!sourceRef.current) {
+      sourceRef.current = audioContextRef.current.createMediaElementSource(audioRef.current);
+    }
+  
+    analyserRef.current = audioContextRef.current.createAnalyser();
+    analyserRef.current.fftSize = 64; // Lower values create smoother waves
+    const bufferLength = analyserRef.current.frequencyBinCount;
+    dataArrayRef.current = new Uint8Array(bufferLength);
+  
+    sourceRef.current.connect(analyserRef.current);
+    analyserRef.current.connect(audioContextRef.current.destination);
+  
+    const analyzeAudio = () => {
+      analyserRef.current.getByteFrequencyData(dataArrayRef.current);
+      const newWaveData = Array.from(dataArrayRef.current)
+        .slice(0, 30) // Limit the number of bars
+        .map((val) => (val / 255) * 25 + 5); // Normalize values
+  
+      setWaveData(newWaveData);
+      animationFrameRef.current = requestAnimationFrame(analyzeAudio);
+    };
+  
+    analyzeAudio();
+  };
 
   return (
-    <div className="absolute right-0 -top-16 flex flex-col gap-1 bg-white rounded-lg w-60 shadow overflow-hidden p-2">
-      <div className=" flex items-center overflow-hidden space-x-3">
+    <div className={clsx(className, "flex flex-col gap-1 p-2 overflow-hidden")}>
+      <div className="flex items-center space-x-3 overflow-hidden">
         {/* Play/Pause Button */}
         <button
           onClick={togglePlay}
@@ -315,25 +365,18 @@ const VoiceNotePlayer = ({ audioURL }) => {
           )}
         </button>
 
-        <div className="flex-1 flex items-center gap-x-1 h-6 ">
-          {Array.from({ length: progress }).map((height, index) => (
-            <motion.div
+        {/* Waveform Visualization */}
+        <div className="flex-1 flex items-center gap-x-1 h-5">
+          {waveData.map((height, index) => (
+            <div
               key={index}
-              className={clsx("w-1  rounded", {
-                "bg-gold": Math.floor(duration % 60) > index,
-                "bg-gray-200": duration < index,
+              className={clsx("w-1 rounded transition-all duration-300", {
+                "bg-gold":
+                  index < Math.floor((progress / 100) * waveData.length),
+                "bg-gray-200":
+                  index >= Math.floor((progress / 100) * waveData.length),
               })}
-              initial={{ height: Math.floor(Math.random() * 20) }}
-              animate={{
-                height: isPlaying ? height : Math.floor(Math.random() * 25),
-              }}
-              transition={{
-                duration: 0.4,
-                //   repeat: Infinity,
-                repeatType: "mirror",
-                ease: "easeInOut",
-                delay: index * 0.1,
-              }}
+              style={{ height: `${(height / 30) * 100}%` }}
             />
           ))}
         </div>
@@ -343,18 +386,23 @@ const VoiceNotePlayer = ({ audioURL }) => {
           ref={audioRef}
           src={audioURL}
           onTimeUpdate={updateProgress}
-          onEnded={() => setIsPlaying(false)}
+          onEnded={() => {
+            setIsPlaying(false);
+            cancelAnimationFrame(animationFrameRef.current);
+          }}
         />
       </div>
+
+      {/* Timer & Speed Control */}
       <div className="flex items-center justify-between">
-        <span className="text-xs text-gray-600">
+        <span className="text-[.6rem] text-gray-600">
           {formatTime(currentTime)} / {formatTime(duration)}
         </span>
 
         {/* Speed Control Button */}
         <button
           onClick={changeSpeed}
-          className="text-black text-xs bg-gold rounded-full p-1 hover:bg-opacity-70 transition-all duration-300"
+          className="text-black !text-[.55rem] bg-gold rounded-full size-5 hover:bg-opacity-70 transition-all duration-300"
         >
           {speed}x
         </button>

@@ -42,7 +42,7 @@ const useWebSocket = (url, params) => {
     return () => {
       socket.close();
     };
-  }, [session?.tokens?.access, url]);
+  }, [params, session?.tokens?.access, url]);
 
   const sendMessage = (message) => {
     if (ws && ws.readyState === WebSocket.OPEN) {

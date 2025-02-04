@@ -523,6 +523,7 @@ export function ButtonWithTooltipIcon({
   textClassName,
   loading = false,
   disabled = false,
+  thisKey,
 }) {
   return (
     <Tooltip
@@ -555,7 +556,7 @@ export function ButtonWithTooltipIcon({
             initial={{ y: 30, opacity: 0.25 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -30, opacity: 0.25 }}
-            key={text}
+            key={thisKey || text}
             className={`${textClassName} overflow-hidden`}
           >
             {text}
