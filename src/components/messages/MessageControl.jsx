@@ -18,12 +18,12 @@ import { Mic, MicExternalOn } from "@mui/icons-material";
 import EmojiPicker from "emoji-picker-react";
 import { CloseButton } from "@chakra-ui/react";
 import { toast } from "sonner";
-import { largeFileText, unSupportedText } from "../admin/listing/newListing";
+import { largeFileText } from "../admin/listing/newListing";
 import { motion } from "framer-motion";
 import clsx from "clsx";
-import { useCustomQuery } from "../../context/queryContext";
 import { messageUser } from "../../api-services/messaging";
 import ValidImages from "../ValidImages";
+import { useAuth } from "../../context/userContext";
 
 const isImageSize = (files) => {
   const imageSize = 4 * 1024 * 1024; // 4MB
@@ -35,8 +35,8 @@ const isImageSize = (files) => {
 const emptyMessageValue = "Message field does not have any text";
 
 export default function MessageControl({ loading, room_name }) {
+  const { user: currentUser } = useAuth();
   const recipientId = room_name.split("_")[2];
-  const { setRefetchInterval } = useCustomQuery();
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -53,7 +53,7 @@ export default function MessageControl({ loading, room_name }) {
     setValidImages(validImageFiles);
 
     if (validImageFiles.length < selectedFiles.length) {
-      toast.info(`${unSupportedText} or ${largeFileText}`);
+      toast.info(`${largeFileText}`);
     }
   }, []);
 
@@ -90,29 +90,37 @@ export default function MessageControl({ loading, room_name }) {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("recipient", recipientId);
-    formData.append("content", message);
-    if (audioBlob)
-      formData.append(
-        "audio_file",
-        audioBlob,
-        `voice-note-in-${room_name}-${new Date().getTime()}.webm`
-      );
-    if (validImages)
-      validImages.forEach((image) => {
-        formData.append("images", image);
-      });
+    try {
+      console.log(recipientId, message);
 
-    await messageUser(formData);
-    setRefetchInterval(1000);
-    setTimeout(() => setRefetchInterval(false), 2000);
+      const formData = new FormData();
+      formData.append("recipient", recipientId);
+      formData.append("content", message);
+      formData.append("sender", currentUser?.id);
+      if (audioBlob)
+        formData.append(
+          "audio_file",
+          audioBlob,
+          `voice-note-in-${room_name}-${new Date().getTime()}.webm`
+        );
+      if (validImages)
+        validImages.forEach((image) => {
+          formData.append("images", image);
+        });
+
+      await messageUser(formData);
+      setMessage("");
+      setErrorMessage(null);
+    } catch (error) {
+      console.error(error);
+      toast.info("An error occurred while sending message");
+    }
   }, [
     audioBlob,
+    currentUser?.id,
     message,
     recipientId,
     room_name,
-    setRefetchInterval,
     validImages,
   ]);
 

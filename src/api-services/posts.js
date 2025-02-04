@@ -1,5 +1,4 @@
 import { makeApiRequest } from "../lib/helpers";
-import { getCurrentUser } from "./users";
 
 export const getPosts = async () => {
   const { results: posts } = await makeApiRequest({

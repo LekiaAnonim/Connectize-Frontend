@@ -16,8 +16,6 @@ import { VoiceNotePlayer } from "./MessageControl";
 export default function MessageArea({ messages, messagesLoading }) {
   const { user: currentUser } = useAuth();
 
-  const [scrollHeight, setScrollHeight] = useState(0);
-
   const { data: users, isLoading: usersLoading } = useQuery({
     queryKey: ["users"],
     queryFn: getAllUsers,
@@ -33,7 +31,6 @@ export default function MessageArea({ messages, messagesLoading }) {
 
     if (chatContainer) {
       chatContainer.scrollTop = chatContainer.scrollHeight;
-      setScrollHeight(chatContainer.scrollHeight);
     }
   };
 
@@ -42,10 +39,7 @@ export default function MessageArea({ messages, messagesLoading }) {
   }, []);
 
   return (
-    <section
-      className="chat-container flex-1 overflow-y-auto scrollbar-hidden flex flex-col gap-y-2 pb-4 relative scroll-smooth"
-      onScroll={(e) => console.log(e.target.getBoundingClientRect())}
-    >
+    <section className="chat-container flex-1 overflow-y-auto scrollbar-hidden flex flex-col gap-y-2 pb-4 relative scroll-smooth">
       {messagesLoading || usersLoading ? (
         <SkeletonChatMessages />
       ) : messages?.length <= 0 ? (
