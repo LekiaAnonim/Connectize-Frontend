@@ -23,6 +23,7 @@ import { motion } from "framer-motion";
 import clsx from "clsx";
 import { useCustomQuery } from "../../context/queryContext";
 import { messageUser } from "../../api-services/messaging";
+import ValidImages from "../ValidImages";
 
 const isImageSize = (files) => {
   const imageSize = 4 * 1024 * 1024; // 4MB
@@ -150,12 +151,21 @@ export default function MessageControl({ loading, room_name }) {
 
   return (
     <section className="bg-white p-2 px-4 rounded-md flex flex-col gap-2 transition-all duration-300">
+      {/* valid images */}
+      {validImages && (
+        <ValidImages
+          setValidImages={setValidImages}
+          validImages={validImages}
+          header="Attachment"
+        />
+      )}
       <section className="flex items-center gap-2">
         {showEmojiPicker && renderEmojiGifPickers}
         <input
           type="file"
           name="attachment"
           id="attachment"
+          multiple
           hidden
           onChange={handleFileChange}
         />
