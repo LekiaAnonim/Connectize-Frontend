@@ -16,7 +16,6 @@ export const messageUser = async (formData) => {
   //     "recipient": null,
   //     "content": "",
   // }
-  console.log(formData);
 
   const message = await makeApiRequest({
     url: "api/messages/",

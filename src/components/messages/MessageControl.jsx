@@ -85,14 +85,12 @@ export default function MessageControl({ loading, room_name }) {
   );
 
   const handleSendMessage = useCallback(async () => {
-    if (message.trim().length < 1 && !audioBlob) {
+    if (message.trim().length < 1 && !audioBlob && !validImages) {
       setErrorMessage(emptyMessageValue);
       return;
     }
 
     try {
-      console.log(recipientId, message);
-
       const formData = new FormData();
       formData.append("recipient", recipientId);
       formData.append("content", message);
@@ -103,13 +101,19 @@ export default function MessageControl({ loading, room_name }) {
           audioBlob,
           `voice-note-in-${room_name}-${new Date().getTime()}.webm`
         );
-      if (validImages)
+      if (validImages) {
+        if (message.trim().length < 1)
+          formData.append("content", "Sent with attachment");
         validImages.forEach((image) => {
           formData.append("images", image);
         });
+      }
 
       await messageUser(formData);
       setMessage("");
+      setValidImages([]);
+      setAudioBlob(null);
+      setAudioURL(null);
       setErrorMessage(null);
     } catch (error) {
       console.error(error);
