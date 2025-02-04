@@ -11,8 +11,9 @@ import {
   PauseCircleFilled,
   PlayCircleFilled,
   SmileFilled,
+  DownOutlined,
 } from "@ant-design/icons";
-import { PaperPlaneIcon } from "@radix-ui/react-icons";
+import { PaperPlaneIcon, TrashIcon } from "@radix-ui/react-icons";
 import { Mic, MicExternalOn } from "@mui/icons-material";
 import EmojiPicker from "emoji-picker-react";
 import { CloseButton } from "@chakra-ui/react";
@@ -39,9 +40,10 @@ export default function MessageControl({ loading, room_name }) {
   const [errorMessage, setErrorMessage] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [validImages, setValidImages] = useState([]);
-
   const [audioBlob, setAudioBlob] = useState(null);
   const [audioURL, setAudioURL] = useState(null);
+  const [showScrollDown, setShowScrollDown] = useState(false);
+  const chatContainerRef = useRef(null);
 
   const handleFileChange = useCallback((event) => {
     const selectedFiles = Array.from(event.target.files);
@@ -123,6 +125,29 @@ export default function MessageControl({ loading, room_name }) {
     setMessage(e.target.value);
   }, []);
 
+  const handleScroll = useCallback(() => {
+    if (chatContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } =
+        chatContainerRef.current;
+      setShowScrollDown(scrollTop + clientHeight < scrollHeight - 10);
+    }
+  }, []);
+
+  const scrollToBottom = useCallback(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, []);
+
+  useEffect(() => {
+    const chatContainer = chatContainerRef.current;
+    if (chatContainer) {
+      chatContainer.addEventListener("scroll", handleScroll);
+      return () => chatContainer.removeEventListener("scroll", handleScroll);
+    }
+  }, [handleScroll]);
+
   return (
     <section className="bg-white p-2 px-4 rounded-md flex flex-col gap-2 transition-all duration-300">
       <section className="flex items-center gap-2">
@@ -142,7 +167,13 @@ export default function MessageControl({ loading, room_name }) {
           disabled={loading}
         />
         {audioURL ? (
-          <VoiceNotePlayer audioURL={audioURL} />
+          <VoiceNotePlayer
+            audioURL={audioURL}
+            trashOnClick={() => {
+              setAudioURL(null);
+              setAudioBlob(null);
+            }}
+          />
         ) : (
           <input
             type="text"
@@ -184,6 +215,14 @@ export default function MessageControl({ loading, room_name }) {
           {errorMessage}
         </motion.div>
       )}
+      {showScrollDown && (
+        <button
+          onClick={scrollToBottom}
+          className="fixed bottom-4 right-4 p-2 bg-black text-white rounded-full"
+        >
+          <DownOutlined />
+        </button>
+      )}
     </section>
   );
 }
@@ -197,8 +236,6 @@ const VoiceNoteRecorderIcon = ({ setAudioBlob, setAudioURL }) => {
 
   const formatTime = (time) => {
     if (!time) return "00:00";
-    console.log(time);
-
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
@@ -239,7 +276,6 @@ const VoiceNoteRecorderIcon = ({ setAudioBlob, setAudioURL }) => {
   const stopRecording = useCallback(() => {
     mediaRecorderRef.current?.stop();
     setIsRecording(false);
-    setIsRecording(false);
     clearInterval(intervalId);
     setRecordingDuration(0);
   }, [intervalId]);
@@ -256,7 +292,7 @@ const VoiceNoteRecorderIcon = ({ setAudioBlob, setAudioURL }) => {
   );
 };
 
-export const VoiceNotePlayer = ({ audioURL, className }) => {
+export const VoiceNotePlayer = ({ audioURL, className, trashOnClick }) => {
   const audioRef = useRef(null);
   const analyserRef = useRef(null);
   const dataArrayRef = useRef(null);
@@ -319,34 +355,37 @@ export const VoiceNotePlayer = ({ audioURL, className }) => {
   };
 
   const audioContextRef = useRef(null);
-  
+
   const startAudioAnalysis = () => {
     if (!audioContextRef.current) {
-      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      audioContextRef.current = new (window.AudioContext ||
+        window.webkitAudioContext)();
     }
-  
+
     if (!sourceRef.current) {
-      sourceRef.current = audioContextRef.current.createMediaElementSource(audioRef.current);
+      sourceRef.current = audioContextRef.current.createMediaElementSource(
+        audioRef.current
+      );
     }
-  
+
     analyserRef.current = audioContextRef.current.createAnalyser();
     analyserRef.current.fftSize = 64; // Lower values create smoother waves
     const bufferLength = analyserRef.current.frequencyBinCount;
     dataArrayRef.current = new Uint8Array(bufferLength);
-  
+
     sourceRef.current.connect(analyserRef.current);
     analyserRef.current.connect(audioContextRef.current.destination);
-  
+
     const analyzeAudio = () => {
       analyserRef.current.getByteFrequencyData(dataArrayRef.current);
       const newWaveData = Array.from(dataArrayRef.current)
         .slice(0, 30) // Limit the number of bars
         .map((val) => (val / 255) * 25 + 5); // Normalize values
-  
+
       setWaveData(newWaveData);
       animationFrameRef.current = requestAnimationFrame(analyzeAudio);
     };
-  
+
     analyzeAudio();
   };
 
@@ -354,10 +393,7 @@ export const VoiceNotePlayer = ({ audioURL, className }) => {
     <div className={clsx(className, "flex flex-col gap-1 p-2 overflow-hidden")}>
       <div className="flex items-center space-x-3 overflow-hidden">
         {/* Play/Pause Button */}
-        <button
-          onClick={togglePlay}
-          className="p-1 bg-gold rounded-full text-white"
-        >
+        <button onClick={togglePlay} className="text-gold">
           {isPlaying ? (
             <PauseCircleFilled size={20} />
           ) : (
@@ -399,13 +435,22 @@ export const VoiceNotePlayer = ({ audioURL, className }) => {
           {formatTime(currentTime)} / {formatTime(duration)}
         </span>
 
-        {/* Speed Control Button */}
-        <button
-          onClick={changeSpeed}
-          className="text-black !text-[.55rem] bg-gold rounded-full size-5 hover:bg-opacity-70 transition-all duration-300"
-        >
-          {speed}x
-        </button>
+        <div className="flex gap-2">
+          {/* Speed Control Button */}
+          <button
+            onClick={changeSpeed}
+            className="text-black !text-[.55rem] bg-gold rounded-full size-5 hover:bg-opacity-70 transition-all duration-300"
+          >
+            {speed}x
+          </button>
+          {trashOnClick && (
+            <ButtonWithTooltipIcon
+              IconName={TrashIcon}
+              tip="Delete note"
+              onClick={trashOnClick}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

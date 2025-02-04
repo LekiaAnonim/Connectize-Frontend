@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 import TimeAgo from "../TimeAgo";
 import { Avatar } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ArrowDownIcon } from "@radix-ui/react-icons";
 import { avatarStyle } from "../ResponsiveNav";
 import { ButtonWithTooltipIcon } from "../admin/feeds/DiscoverPosts";
@@ -15,6 +15,8 @@ import { VoiceNotePlayer } from "./MessageControl";
 
 export default function MessageArea({ messages, messagesLoading }) {
   const { user: currentUser } = useAuth();
+
+  const [scrollHeight, setScrollHeight] = useState(0);
 
   const { data: users, isLoading: usersLoading } = useQuery({
     queryKey: ["users"],
@@ -28,17 +30,22 @@ export default function MessageArea({ messages, messagesLoading }) {
 
   const scrollToBottom = () => {
     const chatContainer = document.querySelector(".chat-container");
+
     if (chatContainer) {
       chatContainer.scrollTop = chatContainer.scrollHeight;
+      setScrollHeight(chatContainer.scrollHeight);
     }
   };
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, []);
 
   return (
-    <section className="chat-container flex-1 overflow-y-auto scrollbar-hidden flex flex-col gap-y-2 pb-4 relative scroll-smooth">
+    <section
+      className="chat-container flex-1 overflow-y-auto scrollbar-hidden flex flex-col gap-y-2 pb-4 relative scroll-smooth"
+      onScroll={(e) => console.log(e.target.getBoundingClientRect())}
+    >
       {messagesLoading || usersLoading ? (
         <SkeletonChatMessages />
       ) : messages?.length <= 0 ? (
