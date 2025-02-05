@@ -41,7 +41,11 @@ export default function MessagingPage() {
   return (
     <section className="h-[79vh] lg:h-[85vh] flex flex-col">
       <MessageArea messages={cachedMessages} messagesLoading={isLoading} />
-      <MessageControl loading={isLoading} recipientId={recipientId} />
+      <MessageControl
+        loading={isLoading}
+        recipientId={recipientId}
+        setCachedMessages={setCachedMessages}
+      />
     </section>
   );
 }

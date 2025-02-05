@@ -97,10 +97,11 @@ export default function MessageArea({ messages, messagesLoading }) {
 
                   {message.images.length > 0 && (
                     <div className="grid grid-cols-2 gap-2 mt-1">
-                      {message.images?.map((image) => {
+                      {message.images?.map((image, index) => {
                         const src = baseURL + image;
                         return (
                           <img
+                            key={index}
                             src={src}
                             alt="Messaging"
                             className="rounded-md size-full"
