@@ -20,10 +20,11 @@ import { CloseButton } from "@chakra-ui/react";
 import { toast } from "sonner";
 import { largeFileText } from "../admin/listing/newListing";
 import { motion } from "framer-motion";
-import clsx from "clsx";
 import { messageUser } from "../../api-services/messaging";
 import ValidImages from "../ValidImages";
 import { useAuth } from "../../context/userContext";
+import useRedirect from "../../hooks/useRedirect";
+import { useNavigate } from "react-router-dom";
 
 const isImageSize = (files) => {
   const imageSize = 4 * 1024 * 1024; // 4MB
@@ -34,9 +35,9 @@ const isImageSize = (files) => {
 
 const emptyMessageValue = "Message field does not have any text";
 
-export default function MessageControl({ loading, room_name }) {
+export default function MessageControl({ loading, recipientId }) {
   const { user: currentUser } = useAuth();
-  const recipientId = room_name.split("_")[2];
+
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -99,7 +100,9 @@ export default function MessageControl({ loading, room_name }) {
         formData.append(
           "audio_file",
           audioBlob,
-          `voice-note-in-${room_name}-${new Date().getTime()}.webm`
+          `voice-note-in-room_${
+            currentUser?.id
+          }_${recipientId}-${new Date().getTime()}.webm`
         );
       if (validImages) {
         if (message.trim().length < 1)
@@ -119,14 +122,7 @@ export default function MessageControl({ loading, room_name }) {
       console.error(error);
       toast.info("An error occurred while sending message");
     }
-  }, [
-    audioBlob,
-    currentUser?.id,
-    message,
-    recipientId,
-    room_name,
-    validImages,
-  ]);
+  }, [audioBlob, currentUser?.id, message, recipientId, validImages]);
 
   const handleInputChange = useCallback((e) => {
     const trimmedMessage = e.target.value.trim();
