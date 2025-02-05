@@ -96,7 +96,7 @@ export default function MessageArea({ messages, messagesLoading }) {
                   )}
 
                   {message.images.length > 0 && (
-                    <div className="grid grid-cols-2 gap-2 mt-1">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 mt-1">
                       {message.images?.map((image, index) => {
                         const src = baseURL + image;
                         return (
