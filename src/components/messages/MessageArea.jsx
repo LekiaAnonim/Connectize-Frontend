@@ -96,9 +96,17 @@ export default function MessageArea({ messages, messagesLoading }) {
                   )}
 
                   {message.images.length > 0 && (
-                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 mt-1">
+                    <div
+                      className={clsx("grid gap-2 mt-1", {
+                        "!grid-cols-1": message.images.length === 1,
+                        "!grid-cols-2": message.images.length === 2,
+                        "!grid-cols-3": message.images.length >= 3,
+                      })}
+                    >
                       {message.images?.map((image, index) => {
-                        const src = baseURL + image;
+                        const src = image.startsWith("http")
+                          ? image
+                          : baseURL + image;
                         return (
                           <img
                             key={index}
