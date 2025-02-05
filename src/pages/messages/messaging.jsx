@@ -12,7 +12,7 @@ export default function MessagingPage() {
   const { room_name } = useParams();
 
   const navigate = useNavigate();
-  const [room, userId, recipientId] = room_name.split("_");
+  const [, userId, recipientId] = room_name.split("_");
 
   const { data: messages = [], isLoading } = useQuery({
     queryKey: ["messages", room_name],
