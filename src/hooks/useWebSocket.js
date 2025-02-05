@@ -10,11 +10,11 @@ const useWebSocket = (url, params) => {
   useEffect(() => {
     const wsBaseUrl =
       process.env.NODE_ENV === "development"
-        ? baseURL.replace("http", "")
-        : baseURL.replace("https", "");
+        ? baseURL.replace("http", "ws")
+        : baseURL.replace("https", "wss");
 
     const socket = new WebSocket(
-      `ws${wsBaseUrl}/ws/${url}/${params ? params : "?"}token=${
+      `${wsBaseUrl}/ws/${url}/${params ? params : "?"}token=${
         session?.tokens?.access
       }`
     );
