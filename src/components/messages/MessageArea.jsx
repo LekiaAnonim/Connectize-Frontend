@@ -12,6 +12,7 @@ import { ArrowDownIcon } from "@radix-ui/react-icons";
 import { avatarStyle } from "../ResponsiveNav";
 import { ButtonWithTooltipIcon } from "../admin/feeds/DiscoverPosts";
 import { VoiceNotePlayer } from "./MessageControl";
+import { baseURL } from "../../lib/helpers";
 
 export default function MessageArea({ messages, messagesLoading }) {
   const { user: currentUser } = useAuth();
@@ -92,6 +93,21 @@ export default function MessageArea({ messages, messagesLoading }) {
 
                   {message.audio_file && (
                     <VoiceNotePlayer audioURL={message.audio_file} />
+                  )}
+
+                  {message.images.length > 0 && (
+                    <div className="grid grid-cols-2 gap-2 mt-1">
+                      {message.images?.map((image) => {
+                        const src = baseURL + image;
+                        return (
+                          <img
+                            src={src}
+                            alt="Messaging"
+                            className="rounded-md size-full"
+                          />
+                        );
+                      })}
+                    </div>
                   )}
                   <div className="text-gray-400 text-[.7rem] flex gap-1 items-center shrink-0">
                     <small className="shrink-0">
