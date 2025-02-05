@@ -80,6 +80,9 @@ export default function MessageArea({ messages, messagesLoading }) {
                   const sender = users?.find(
                     (user) => user?.id === message?.sender
                   );
+                  const recipient = users?.find(
+                    (user) => user?.id === message?.recipient
+                  );
 
                   const isCurrentUser = currentUser?.id === message.sender;
                   return (
@@ -100,7 +103,9 @@ export default function MessageArea({ messages, messagesLoading }) {
                               : `${sender?.first_name} ${sender?.last_name}`
                           }
                           src={
-                            isCurrentUser ? currentUser?.avatar : sender?.avatar
+                            isCurrentUser
+                              ? currentUser?.avatar
+                              : recipient?.avatar
                           }
                           size="sm"
                           className={avatarStyle}

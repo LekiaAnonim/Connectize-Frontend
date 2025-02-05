@@ -92,8 +92,8 @@ export default function MessageControl({ loading, recipientId, senderId }) {
     try {
       const formData = new FormData();
       formData.append("recipient", recipientId);
-      formData.append("content", message);
       formData.append("sender", senderId);
+      formData.append("content", message);
       if (audioBlob) {
         if (message.trim().length < 1)
           formData.append("content", "Audio conversation");
