@@ -11,7 +11,6 @@ import { avatarStyle } from "../ResponsiveNav";
 import { Link } from "react-router-dom";
 import Username from "../Username";
 import TimeAgo from "../TimeAgo";
-import useWebSocket from "../../hooks/useWebSocket.js";
 
 export default function MessagesList() {
   const { user: currentUser } = useAuth();
@@ -27,12 +26,9 @@ export default function MessagesList() {
     enabled: !!currentUser,
   });
 
-  const { messages: ws_messages } = useWebSocket("chat");
+  // const { messages: ws_messages } = useWebSocket("chat");
 
-  const allMessages = useMemo(
-    () => [...ws_messages, ...messages],
-    [messages, ws_messages]
-  );
+  const allMessages = useMemo(() => [...messages], [messages]);
 
   const messagesList = useMemo(() => {
     return Array.from(

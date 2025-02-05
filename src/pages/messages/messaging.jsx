@@ -18,8 +18,8 @@ export default function MessagingPage() {
   });
 
   const { messages: ws_messages } = useWebSocket(
-    `chat`,
-    `?room_name=${room_name}&`
+    `chat/${room_name}`,
+    `?room_name=&`
   );
 
   const allMessages = useMemo(
