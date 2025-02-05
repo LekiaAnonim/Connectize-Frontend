@@ -8,7 +8,7 @@ import clsx from "clsx";
 import TimeAgo from "../TimeAgo";
 import { Avatar } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { ArrowDownIcon } from "@radix-ui/react-icons";
+import { ArrowDownIcon, CheckIcon } from "@radix-ui/react-icons";
 import { avatarStyle } from "../ResponsiveNav";
 import { ButtonWithTooltipIcon } from "../admin/feeds/DiscoverPosts";
 import { VoiceNotePlayer } from "./MessageControl";
@@ -83,7 +83,7 @@ export default function MessageArea({ messages, messagesLoading }) {
                 </Link>
                 <div
                   className={clsx(
-                    "!shrink-0 !w-fit !max-w-[75%] xs:text-sm bg-white rounded-md p-3 flex flex-col",
+                    "!shrink-0 !w-fit !max-w-[80%] xs:text-sm bg-white rounded-md p-3 flex flex-col",
                     {
                       "items-end": isCurrentUser,
                     }
@@ -123,9 +123,19 @@ export default function MessageArea({ messages, messagesLoading }) {
                       <TimeAgo time={message.timestamp} />
                     </small>
                     <small>&bull;</small>
-                    <small className="shrink-0">
+                    {/* <small className="shrink-0">
                       {sender?.first_name} {sender?.last_name}
-                    </small>
+                    </small> */}
+
+                    {
+                      <div
+                        className={clsx("flex items-center size-", {
+                          "text-gold": message.read_at,
+                        })}
+                      >
+                        <CheckIcon />
+                      </div>
+                    }
                   </div>
                 </div>
               </motion.div>
@@ -146,7 +156,7 @@ export default function MessageArea({ messages, messagesLoading }) {
 }
 
 const SkeletonChatMessages = () => {
-  return Array.from({ length: 10 }, (_, index) => {
+  return Array.from({ length: 5 }, (_, index) => {
     const isEven = index % 2;
     return (
       <motion.div

@@ -27,14 +27,14 @@ export default function MessagingPage() {
     [messages, ws_messages]
   );
 
-  console.log(ws_messages);
+
 
   const [cachedMessages, setCachedMessages] = useState(allMessages);
 
   useEffect(() => {
     document.title = "Room messaging in connectize";
     setCachedMessages(allMessages);
-  }, [messages, currentUser, allMessages]);
+  }, [messages, currentUser, allMessages, ws_messages]);
 
   if (String(userId) !== String(currentUser?.id)) navigate("/messages");
 
