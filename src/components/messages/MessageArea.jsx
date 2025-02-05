@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 import TimeAgo from "../TimeAgo";
 import { Avatar } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ArrowDownIcon } from "@radix-ui/react-icons";
 import { avatarStyle } from "../ResponsiveNav";
 import { ButtonWithTooltipIcon } from "../admin/feeds/DiscoverPosts";
@@ -37,7 +37,7 @@ export default function MessageArea({ messages, messagesLoading }) {
 
   useEffect(() => {
     scrollToBottom();
-  }, []);
+  }, [messages]);
 
   return (
     <section className="chat-container flex-1 overflow-y-auto scrollbar-hidden flex flex-col gap-y-2 pb-4 relative scroll-smooth">

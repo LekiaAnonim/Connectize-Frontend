@@ -25,7 +25,11 @@ export default function MessagingPage() {
   const allMessages = useMemo(
     () => [...ws_messages, ...messages],
     [messages, ws_messages]
+
   );
+
+  console.log(ws_messages);
+  
 
   const [cachedMessages, setCachedMessages] = useState(allMessages);
 

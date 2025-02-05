@@ -317,9 +317,10 @@ const VoiceNoteRecorderIcon = ({ setAudioBlob, setAudioURL }) => {
 export const VoiceNotePlayer = ({ audioURL, className, trashOnClick }) => {
   const audioRef = useRef(null);
   const analyserRef = useRef(null);
-  const dataArrayRef = useRef(null);
   const sourceRef = useRef(null);
   const animationFrameRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const dataArrayRef = useRef(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -330,8 +331,9 @@ export const VoiceNotePlayer = ({ audioURL, className, trashOnClick }) => {
 
   useEffect(() => {
     if (audioRef.current) {
+      audioRef.current.crossOrigin = "anonymous"; // Ensure CORS
       audioRef.current.onloadedmetadata = () => {
-        setDuration(audioRef.current.duration || 0);
+        setDuration(audioRef.current?.duration || 0);
       };
     }
   }, [audioURL]);
@@ -341,7 +343,7 @@ export const VoiceNotePlayer = ({ audioURL, className, trashOnClick }) => {
 
     if (isPlaying) {
       audioRef.current.pause();
-      cancelAnimationFrame(animationFrameRef.current);
+      cancelAnimationFrame(animationFrameRef?.current);
     } else {
       audioRef.current.play();
       startAudioAnalysis();
@@ -376,9 +378,9 @@ export const VoiceNotePlayer = ({ audioURL, className, trashOnClick }) => {
     return `${minutes}:${seconds}`;
   };
 
-  const audioContextRef = useRef(null);
-
   const startAudioAnalysis = () => {
+    if (!audioRef.current) return;
+
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext ||
         window.webkitAudioContext)();
@@ -391,7 +393,7 @@ export const VoiceNotePlayer = ({ audioURL, className, trashOnClick }) => {
     }
 
     analyserRef.current = audioContextRef.current.createAnalyser();
-    analyserRef.current.fftSize = 64; // Lower values create smoother waves
+    analyserRef.current.fftSize = 64;
     const bufferLength = analyserRef.current.frequencyBinCount;
     dataArrayRef.current = new Uint8Array(bufferLength);
 
@@ -399,10 +401,11 @@ export const VoiceNotePlayer = ({ audioURL, className, trashOnClick }) => {
     analyserRef.current.connect(audioContextRef.current.destination);
 
     const analyzeAudio = () => {
+      if (!analyserRef.current || !dataArrayRef.current) return;
       analyserRef.current.getByteFrequencyData(dataArrayRef.current);
       const newWaveData = Array.from(dataArrayRef.current)
-        .slice(0, 30) // Limit the number of bars
-        .map((val) => (val / 255) * 25 + 5); // Normalize values
+        .slice(0, 30)
+        .map((val) => (val / 255) * 25 + 5);
 
       setWaveData(newWaveData);
       animationFrameRef.current = requestAnimationFrame(analyzeAudio);
@@ -412,15 +415,17 @@ export const VoiceNotePlayer = ({ audioURL, className, trashOnClick }) => {
   };
 
   return (
-    <div className={clsx(className, "flex flex-col gap-1 p-2 overflow-hidden")}>
+    <div className={`${className} flex flex-col gap-1 p-2 overflow-hidden`}>
       <div className="flex items-center space-x-3 overflow-hidden">
         {/* Play/Pause Button */}
-        <button onClick={togglePlay} className="text-gold">
-          {isPlaying ? (
-            <PauseCircleFilled size={20} />
-          ) : (
-            <PlayCircleFilled size={20} />
-          )}
+        <button
+          onClick={togglePlay}
+          className="text-gold flex items-center gap-1"
+        >
+          <span className="sr-only text-xs">
+            {isPlaying ? "Pause" : "Play"}
+          </span>
+          {isPlaying ? <PauseCircleFilled /> : <PlayCircleFilled />}
         </button>
 
         {/* Waveform Visualization */}
@@ -428,12 +433,11 @@ export const VoiceNotePlayer = ({ audioURL, className, trashOnClick }) => {
           {waveData.map((height, index) => (
             <div
               key={index}
-              className={clsx("w-1 rounded transition-all duration-300", {
-                "bg-gold":
-                  index < Math.floor((progress / 100) * waveData.length),
-                "bg-gray-200":
-                  index >= Math.floor((progress / 100) * waveData.length),
-              })}
+              className={`w-1 rounded transition-all duration-300 ${
+                index < Math.floor((progress / 100) * waveData.length)
+                  ? "bg-gold"
+                  : "bg-gray-200"
+              }`}
               style={{ height: `${(height / 30) * 100}%` }}
             />
           ))}
@@ -446,8 +450,9 @@ export const VoiceNotePlayer = ({ audioURL, className, trashOnClick }) => {
           onTimeUpdate={updateProgress}
           onEnded={() => {
             setIsPlaying(false);
-            cancelAnimationFrame(animationFrameRef.current);
+            cancelAnimationFrame(animationFrameRef?.current);
           }}
+          crossOrigin="anonymous" // Ensures CORS
         />
       </div>
 
@@ -467,9 +472,9 @@ export const VoiceNotePlayer = ({ audioURL, className, trashOnClick }) => {
           </button>
           {trashOnClick && (
             <ButtonWithTooltipIcon
-              IconName={TrashIcon}
-              tip="Delete note"
               onClick={trashOnClick}
+              IconName={TrashIcon}
+              tip="Delete voice note"
             />
           )}
         </div>
