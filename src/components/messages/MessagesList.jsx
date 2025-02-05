@@ -35,10 +35,13 @@ export default function MessagesList() {
       new Set(
         allMessages
           ?.filter((msg) => msg.recipient !== currentUser?.id)
-          .map((msg) => msg?.recipient)
+          .map((msg) => msg?.recipient || msg?.sender)
       ),
       (recipient) =>
-        allMessages?.find((message) => message?.recipient === recipient)
+        allMessages?.find(
+          (message) =>
+            message?.recipient === recipient || message?.sender === recipient
+        )
     );
   }, [allMessages, currentUser]);
 
@@ -85,10 +88,7 @@ const MessagesListTile = React.memo(({ message, user }) => {
         <Avatar name={name} src={`${user?.avatar}`} className={avatarStyle} />
       </Link>
 
-      <Link
-        to={`/messages/room_${message?.sender}_${message?.recipient}`}
-        className="flex-1"
-      >
+      <Link to={`/messages/${message?.room_name}`} className="flex-1">
         <Username user={user} />
         <div className="line-clamp-2">
           <LightParagraph>{message?.content} </LightParagraph>

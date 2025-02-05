@@ -33,11 +33,7 @@ const isImageSize = (files) => {
 
 const emptyMessageValue = "Message field does not have any text";
 
-export default function MessageControl({
-  loading,
-  recipientId,
-  setCachedMessages,
-}) {
+export default function MessageControl({ loading, recipientId, senderId }) {
   const { user: currentUser } = useAuth();
 
   const [message, setMessage] = useState("");
@@ -97,16 +93,14 @@ export default function MessageControl({
       const formData = new FormData();
       formData.append("recipient", recipientId);
       formData.append("content", message);
-      formData.append("sender", currentUser?.id);
+      formData.append("sender", senderId);
       if (audioBlob) {
         if (message.trim().length < 1)
           formData.append("content", "Audio conversation");
         formData.append(
           "audio_file",
           audioBlob,
-          `voice-note-in-room_${
-            currentUser?.id
-          }_${recipientId}-${new Date().getTime()}.webm`
+          `voice-note-in-room_${senderId}_${recipientId}-${new Date().getTime()}.webm`
         );
       }
       if (validImages) {
@@ -117,8 +111,8 @@ export default function MessageControl({
         });
       }
 
-      const newMessage = await messageUser(formData);
-      setCachedMessages((prev) => [newMessage, ...prev]);
+      await messageUser(formData);
+      // setCachedMessages((prev) => [newMessage, ...prev]);
       setMessage("");
       setValidImages([]);
       setAudioBlob(null);
@@ -128,14 +122,7 @@ export default function MessageControl({
       console.error(error);
       toast.info("An error occurred while sending message");
     }
-  }, [
-    audioBlob,
-    currentUser?.id,
-    message,
-    recipientId,
-    setCachedMessages,
-    validImages,
-  ]);
+  }, [audioBlob, message, recipientId, senderId, validImages]);
 
   const handleInputChange = useCallback((e) => {
     const trimmedMessage = e.target.value.trim();

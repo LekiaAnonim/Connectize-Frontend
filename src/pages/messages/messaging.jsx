@@ -20,31 +20,40 @@ export default function MessagingPage() {
     enabled: !!room_name && !!currentUser,
   });
 
-  const { messages: ws_messages } = useWebSocket(`chat/${room_name}`);
+  const { messages: ws_messages, sendCommand } = useWebSocket(
+    `chat/${room_name}`
+  );
 
   const allMessages = useMemo(
     () => [...ws_messages, ...messages],
     [messages, ws_messages]
   );
 
-
-
-  const [cachedMessages, setCachedMessages] = useState(allMessages);
-
   useEffect(() => {
     document.title = "Room messaging in connectize";
-    setCachedMessages(allMessages);
-  }, [messages, currentUser, allMessages, ws_messages]);
+    if (allMessages) {
+      allMessages.forEach((message) => {
+        if (message.read_at === null) {
+          sendCommand({ command: "mark_as_read", message_id: message?.id });
+        }
+      });
+    }
+    console.log(allMessages);
+  }, [messages, currentUser, allMessages, ws_messages, sendCommand]);
 
-  if (String(userId) !== String(currentUser?.id)) navigate("/messages");
+  if (
+    String(userId) !== String(currentUser?.id) &&
+    String(recipientId) !== String(currentUser?.id)
+  )
+    navigate("/messages");
 
   return (
     <section className="h-[79vh] lg:h-[85vh] flex flex-col">
-      <MessageArea messages={cachedMessages} messagesLoading={isLoading} />
+      <MessageArea messages={allMessages} messagesLoading={isLoading} />
       <MessageControl
         loading={isLoading}
         recipientId={recipientId}
-        setCachedMessages={setCachedMessages}
+        senderId={userId}
       />
     </section>
   );
