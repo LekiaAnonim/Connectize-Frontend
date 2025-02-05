@@ -16,6 +16,7 @@ import LightParagraph from "../../components/ParagraphText";
 import useRedirect from "../../hooks/useRedirect";
 import { useAuth } from "../../context/userContext";
 import clsx from "clsx";
+import { getAllCompanies } from "../../api-services/companies";
 
 export default function Search() {
   return (
@@ -28,6 +29,12 @@ export default function Search() {
 export const SearchTab = () => {
   const [searchParams] = useSearchParams();
   const { user: currentUser } = useAuth();
+
+  const { data: companies } = useQuery({
+    queryKey: ["allConnectizeCompanies"],
+    queryFn: getAllCompanies,
+    enabled: !!currentUser,
+  });
 
   const searchQuery = searchParams.get("search_query");
 
@@ -102,15 +109,19 @@ export const SearchTab = () => {
       {data?.products?.length < 1 ? (
         <LightParagraph>No product found in search</LightParagraph>
       ) : (
-        data?.products?.map((product, index) => (
-          <ProductListCard
-            key={index}
-            chatUrl={`/products/${product?.id}`}
-            image={product?.images?.[0]?.image}
-            subtitle={product?.sub_title}
-            title={product?.title}
-          />
-        ))
+        data?.products?.map((product, index) => {
+          return (
+            <ProductListCard
+              key={index}
+              id={product?.id}
+              image={product?.images?.[0]?.image}
+              subtitle={product?.sub_title}
+              title={product?.title}
+              companies={companies}
+              companyName={product?.company}
+            />
+          );
+        })
       )}
     </div>,
     <div className="grid gap-x-3 gap-y-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">

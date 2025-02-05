@@ -20,9 +20,9 @@ const ReusableModal = ({
   size = "md",
 }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={size}>
+    <Modal isOpen={isOpen} onClose={onClose} size={size} >
       <ModalOverlay />
-      <ModalContent className="rounded-lg shadow-lg !mx-2 max-h-[75vh]">
+      <ModalContent className="rounded-lg shadow-lg !mx-2 max-h-[77vh]">
         {title && (
           <>
             <ModalHeader className="!text-lg !font-semibold text-gray-800">

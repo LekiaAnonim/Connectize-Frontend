@@ -15,6 +15,7 @@ import { useCustomQuery } from "../../../context/queryContext";
 import { useAuth } from "../../../context/userContext";
 
 import { motion } from "framer-motion";
+import ValidImages from "../../ValidImages";
 
 const isImageFile = (files) => {
   const imageTypes = [
@@ -189,35 +190,8 @@ function CreatePost() {
         )}
       </div>
 
-      {validImages.length > 0 && (
-        <div className="mt-2">
-          <h5 className="font-bold mb-2">
-            Image Preview{validImages.length > 1 ? "s" : ""}
-          </h5>
-          <div className="flex gap-4 overflow-x-auto">
-            {validImages.map((image, index) => (
-              <div key={index} className="relative shrink-0 group">
-                <CloseButton
-                  onClick={() =>
-                    setValidImages((prevItems) =>
-                      prevItems.filter((_, i) => i !== index)
-                    )
-                  }
-                  className="absolute -right-1 -top-1 bg-white !text-[.5rem] !size-6 xs:opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                />
-                <img
-                  src={URL.createObjectURL(image)}
-                  alt={image.name}
-                  className="w-full h-20 object-cover rounded-lg shadow-md"
-                />
-                <p className="text-center mt-2 text-sm font-semibold">
-                  {image.name}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* valid images */}
+      <ValidImages setValidImages={setValidImages} validImages={validImages} />
 
       {selectedGif && (
         <div className="mt-4 relative w-fit">

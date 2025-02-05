@@ -62,19 +62,19 @@ const BookmarkedServicesCard = ({
   setCachedServices,
   cachedServices,
 }) => {
-  const [loading, setLoading] = useState(false);
+
+  const { user: currentUser } = useAuth();
+
+  const hasBookmarkedService = service?.likes?.find(
+    (serviceProp) => serviceProp?.user?.id === currentUser?.id
+  );
 
   const handleBookmark = async () => {
-    setLoading(true);
-    await bookmarkService(service.id, service);
-    setLoading(false);
-
     setCachedServices(
       cachedServices?.filter((cacheservice) => cacheservice?.id !== service?.id)
     );
+    await bookmarkService(service.id, service, hasBookmarkedService);
   };
-
-  console.log(cachedServices);
 
   return (
     <motion.section
@@ -118,7 +118,6 @@ const BookmarkedServicesCard = ({
           tip={`Remove ${service?.title} from bookmark`}
           IconName={TrashIcon}
           onClick={handleBookmark}
-          loading={loading}
         />
         <LinkWithTooltipIcon
           IconName={Link1Icon}

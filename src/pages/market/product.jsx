@@ -47,13 +47,13 @@ export const ProductDetailSkeleton = () => {
       <section className="flex max-lg:flex-col items-start justify-center gap-4">
         {/* Image Skeleton */}
         <div className="w-full lg:w-1/2">
-          <div className="w-full h-[350px] skeleton rounded-md"></div>
+          <div className="w-full h-[350px] skeleton rounded-md" />
           {/* Navigation Buttons Skeleton */}
           <div className="flex gap-4 items-center justify-between mt-4 w-full">
             <div className="flex text-xs gap-1 items-center">
-              <div className="h-6 w-12 skeleton rounded"></div>
+              <div className="h-6 w-12 skeleton rounded" />
               <div className="text-gray-300">/</div>
-              <div className="h-6 w-12 skeleton rounded"></div>
+              <div className="h-6 w-12 skeleton rounded" />
             </div>
             <div className="flex items-center gap-2">
               {Array.from({ length: 2 }).map((_, index) => (
@@ -62,7 +62,7 @@ export const ProductDetailSkeleton = () => {
                   disabled
                   className="!bg-transparent hover:!text-custom_blue !text-gray-600 first:flex-row-reverse active:scale-95 !text-sm"
                 >
-                  <div className="h-6 w-16 skeleton rounded"></div>
+                  <div className="h-6 w-16 skeleton rounded" />
                 </button>
               ))}
             </div>
@@ -72,34 +72,34 @@ export const ProductDetailSkeleton = () => {
         {/* Product Details Skeleton */}
         <div className="space-y-4 lg:w-1/2 shrink-0">
           <div className="space-y-2 w-full">
-            <div className="h-8 w-1/2 skeleton rounded"></div>
-            <div className="h-6 w-1/3 skeleton rounded"></div>
+            <div className="h-8 w-1/2 skeleton rounded" />
+            <div className="h-6 w-1/3 skeleton rounded" />
           </div>
-          <div className="h-[1px] bg-gray-300 my-4"></div>
+          <div className="h-[1px] bg-gray-300 my-4" />
           <div className="space-y-2">
-            <div className="text-xl font-bold h-6 w-1/3 skeleton rounded"></div>
-            <div className="h-36 w-full skeleton rounded"></div>
+            <div className="text-xl font-bold h-6 w-1/3 skeleton rounded" />
+            <div className="h-36 w-full skeleton rounded" />
           </div>
           <div className="flex gap-4 items-center">
-            <div className="w-32 h-10 skeleton rounded-full"></div>
-            <div className="w-16 h-10 skeleton rounded-full"></div>
+            <div className="w-32 h-10 skeleton rounded-full" />
+            <div className="w-16 h-10 skeleton rounded-full" />
           </div>
         </div>
       </section>
 
       <section className="gap-4 flex max-lg:flex-col">
         <section className="space-y-4 lg:w-1/2 shrink-0">
-          <div className="h-6 w-1/3 skeleton rounded"></div>
-          <div className="w-full h-[300px] skeleton rounded"></div>
+          <div className="h-6 w-1/3 skeleton rounded" />
+          <div className="w-full h-[300px] skeleton rounded" />
         </section>
 
         <section className="space-y-4 lg:w-1/2 shrink-0">
-          <div className="h-6 w-1/3 skeleton rounded"></div>
+          <div className="h-6 w-1/3 skeleton rounded" />
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 skeleton rounded-full"></div>
+            <div className="w-12 h-12 skeleton rounded-full" />
             <div>
-              <div className="h-6 w-24 skeleton rounded"></div>
-              <div className="h-4 w-16 skeleton rounded mt-2"></div>
+              <div className="h-6 w-24 skeleton rounded" />
+              <div className="h-4 w-16 skeleton rounded mt-2" />
             </div>
           </div>
         </section>

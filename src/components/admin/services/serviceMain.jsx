@@ -19,7 +19,7 @@ function ServiceMain({ isOverview }) {
 
 export default ServiceMain;
 
-export const PostCardWrapper = ({ postArray, isOverview = false }) => {
+export const PostCardWrapper = ({ isOverview = false }) => {
   const { data: services, isLoading } = useQuery({
     queryKey: ["services"],
     queryFn: getServices,

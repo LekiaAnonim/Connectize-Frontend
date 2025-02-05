@@ -14,7 +14,7 @@ import TimeAgo from "../TimeAgo";
 
 export default function MessagesList() {
   const { user: currentUser } = useAuth();
-  const { data: messages, isLoading } = useQuery({
+  const { data: messages = [], isLoading } = useQuery({
     queryKey: ["messages"],
     queryFn: getMessagesForUser,
     enabled: !!currentUser,
@@ -26,17 +26,21 @@ export default function MessagesList() {
     enabled: !!currentUser,
   });
 
+  // const { messages: ws_messages } = useWebSocket("chat");
+
+  const allMessages = useMemo(() => [...messages], [messages]);
+
   const messagesList = useMemo(() => {
     return Array.from(
       new Set(
-        messages
+        allMessages
           ?.filter((msg) => msg.recipient !== currentUser?.id)
           .map((msg) => msg?.recipient)
       ),
       (recipient) =>
-        messages?.find((message) => message?.recipient === recipient)
+        allMessages?.find((message) => message?.recipient === recipient)
     );
-  }, [messages, currentUser]);
+  }, [allMessages, currentUser]);
 
   return (
     <section>

@@ -73,8 +73,6 @@ const NotificationPopOver = () => {
     return uniqueNotifications;
   }, [messages, notificationsData]);
 
-  console.log(notifications);
-
   const notificationLengthNotRead = useMemo(
     () =>
       notifications?.filter((notification) => notification?.is_read === null)
@@ -87,10 +85,8 @@ const NotificationPopOver = () => {
   );
 
   useEffect(() => {
-    if (unReadNotificationLength !== notificationLengthNotRead) {
-      setUnReadNotificationLength(notificationLengthNotRead);
-    }
-  }, [notificationLengthNotRead, unReadNotificationLength]);
+    setUnReadNotificationLength(notificationLengthNotRead);
+  }, [notificationLengthNotRead]);
 
   const tabsHeader = ["General", "Promotions"];
 
@@ -154,6 +150,7 @@ const NotificationPopOver = () => {
                   fallback="general"
                   notifications={generalNotifications}
                   setUnReadNotificationLength={setUnReadNotificationLength}
+                  unReadNotificationLength={unReadNotificationLength}
                   companies={companies}
                   users={users}
                 />,
@@ -161,6 +158,7 @@ const NotificationPopOver = () => {
                   key="promotions"
                   notifications={promotionsNotifications}
                   setUnReadNotificationLength={setUnReadNotificationLength}
+                  unReadNotificationLength={unReadNotificationLength}
                   fallback="promotion"
                   companies={companies}
                   users={users}
@@ -178,6 +176,7 @@ const NotificationsArray = memo(
   ({
     notifications = [],
     setUnReadNotificationLength,
+    unReadNotificationLength,
     fallback,
     companies,
     users,
@@ -202,6 +201,7 @@ const NotificationsArray = memo(
                 index={index}
                 company={company}
                 notification={notification}
+                unReadNotificationLength={unReadNotificationLength}
                 setUnReadNotificationLength={setUnReadNotificationLength}
               />
             );
@@ -213,7 +213,13 @@ const NotificationsArray = memo(
 );
 
 const NotificationTile = memo(
-  ({ notification, index, setUnReadNotificationLength, company }) => {
+  ({
+    notification,
+    index,
+    setUnReadNotificationLength,
+    company,
+    unReadNotificationLength,
+  }) => {
     const [read, setRead] = useState(notification?.is_read ? true : false);
 
     const handleMarkAsRead = useCallback(async () => {
@@ -249,14 +255,16 @@ const NotificationTile = memo(
             className="text-[.825rem] !text-gray-600 leading-none block"
           >
             {notification?.message}{" "}
-            <Badge className="!text-[.6rem]">{read ? "" : "Unread"}</Badge>
+            <Badge className="!text-[.6rem]">
+              {read || unReadNotificationLength === 0 ? "" : "Unread"}
+            </Badge>
           </Link>
           <div className="flex items-center gap-2">
             <small className="text-gray-400 text-[.69rem]">
               <TimeAgo time={notification?.timestamp} />
             </small>
 
-            {!read && (
+            {!read && unReadNotificationLength > 0 && (
               <button
                 onClick={handleMarkAsRead}
                 className="text-xs disabled:cursor-not-allowed"

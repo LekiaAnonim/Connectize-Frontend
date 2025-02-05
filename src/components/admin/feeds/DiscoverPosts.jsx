@@ -98,6 +98,7 @@ export const DiscoverPostItem = ({
 
   const [liked, setLiked] = useState(userHasLikedPost);
   const [likes, setLikes] = useState(postItem?.likes?.length);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     setLikes(postItem?.likes?.length);
@@ -106,7 +107,9 @@ export const DiscoverPostItem = ({
   const handleLikePost = async () => {
     setLiked((prev) => !prev);
     setLikes((prev) => (!liked ? prev + 1 : prev - 1));
-    await likePost(postItem.id, postItem);
+    setDisabled(true);
+    await likePost(postItem?.id, postItem, userHasLikedPost);
+    setDisabled(false);
     setRefetchInterval(1000);
     setTimeout(() => setRefetchInterval(false), 2000);
   };
@@ -341,6 +344,7 @@ export const DiscoverPostItem = ({
             tip={liked ? "Unlike post" : "Like post"}
             onClick={handleLikePost}
             textClassName="!text-[.6rem]"
+            disabled={disabled}
             text={formatNumber(likes)}
           />
           <ButtonWithTooltipIcon
@@ -518,6 +522,8 @@ export function ButtonWithTooltipIcon({
   iconClassName,
   textClassName,
   loading = false,
+  disabled = false,
+  thisKey,
 }) {
   return (
     <Tooltip
@@ -531,7 +537,7 @@ export function ButtonWithTooltipIcon({
     >
       <button
         onClick={onClick}
-        disabled={loading}
+        disabled={loading || disabled}
         className={clsx(
           "flex items-center text-sm gap-1 bg-transparent text-gray-600 hover:text-custom_blue active:scale-95 transition-all duration-300 overflow-hidden disabled:cursor-not-allowed",
           className
@@ -550,7 +556,7 @@ export function ButtonWithTooltipIcon({
             initial={{ y: 30, opacity: 0.25 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -30, opacity: 0.25 }}
-            key={text}
+            key={thisKey || text}
             className={`${textClassName} overflow-hidden`}
           >
             {text}

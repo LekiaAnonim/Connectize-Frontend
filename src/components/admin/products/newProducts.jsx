@@ -27,15 +27,19 @@ export default function NewProducts() {
             isDesktopScreen ? 4 : isLaptopScreen ? 3 : isBigMobile ? 2 : 1
           }
         >
-          {products?.slice(0, 4).map((product, index) => (
-            <SwiperSlide key={product.id}>
-              <ProductListCard
-                image={product.images[index]?.image}
-                title={product.title}
-                subtitle={product.category}
-              />
-            </SwiperSlide>
-          ))}
+          {products?.slice(0, 4).map((product, index) => {
+            return (
+              <SwiperSlide key={product?.id}>
+                <ProductListCard
+                  image={product?.images[index]?.image}
+                  title={product?.title}
+                  subtitle={product?.category}
+                  companyName={product?.company}
+                  id={product?.id}
+                />
+              </SwiperSlide>
+            );
+          })}
         </PostSlider>
       </section>
     </section>

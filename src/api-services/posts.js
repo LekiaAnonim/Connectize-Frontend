@@ -1,5 +1,4 @@
 import { makeApiRequest } from "../lib/helpers";
-import { getCurrentUser } from "./users";
 
 export const getPosts = async () => {
   const { results: posts } = await makeApiRequest({
@@ -22,8 +21,6 @@ export const createPost = async (formData) => {
 };
 
 export const editPost = async (id, body, postItem) => {
-  console.log(body);
-
   const post = await makeApiRequest({
     url: `api/posts/${id}/`,
     method: "PUT",
@@ -45,29 +42,11 @@ export const deletePost = async (id) => {
   return post;
 };
 
-export const getLikes = async () => {
-  const { results } = await makeApiRequest({
-    url: `api/likes/`,
-    method: "GET",
-  });
-
-  return results;
-};
-
-
-
-export const likePost = async (id, data) => {
-  const allPosts = await getPosts();
-
-  const currentUser = await getCurrentUser();
-
-  const currentPost = allPosts.find((post) => post.id === id);
-
-  if (currentPost.likes.find((post) => post.user.id === currentUser.id)) {
+export const likePost = async (id, data, hasLikedPost) => {
+  if (hasLikedPost) {
     await makeApiRequest({
       url: `api/posts/${id}/unlike/`,
       method: "POST",
-      // data: { ...data, company_id: data.company.id },
     });
 
     return;
@@ -75,7 +54,6 @@ export const likePost = async (id, data) => {
   await makeApiRequest({
     url: `api/posts/${id}/like/`,
     method: "POST",
-    // data: { ...data, company_id: data.company.id },
   });
 };
 
