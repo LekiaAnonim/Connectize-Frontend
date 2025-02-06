@@ -27,6 +27,8 @@ export default function MessagesPage() {
     enabled: !!currentUser,
   });
 
+
+
   const filteredUsers = useMemo(() => {
     return (
       users?.filter((user) => {

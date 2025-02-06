@@ -11,6 +11,7 @@ import { avatarStyle } from "../ResponsiveNav";
 import { Link } from "react-router-dom";
 import Username from "../Username";
 import TimeAgo from "../TimeAgo";
+import useWebSocket from "../../hooks/useWebSocket";
 
 export default function MessagesList() {
   const { user: currentUser } = useAuth();
@@ -26,27 +27,26 @@ export default function MessagesList() {
     enabled: !!currentUser,
   });
 
-  // const { messages: ws_messages } = useWebSocket("chat");
+  const { messages: ws_messages } = useWebSocket(`chat`);
 
-  const allMessages = useMemo(() => [...messages], [messages]);
+  const allMessages = useMemo(
+    () => [...ws_messages, ...messages],
+    [messages, ws_messages]
+  );
 
   const messagesList = useMemo(() => {
     return Array.from(
-      new Set(
-        allMessages
-          ?.filter((msg) => msg.recipient !== currentUser?.id)
-          .map((msg) => msg?.recipient || msg?.sender)
-      ),
+      new Set(allMessages?.map((msg) => msg?.recipient || msg?.sender)),
       (recipient) =>
         allMessages?.find(
           (message) =>
             message?.recipient === recipient || message?.sender === recipient
         )
     );
-  }, [allMessages, currentUser]);
+  }, [allMessages]);
 
   return (
-    <section>
+    <section className="space-y-4">
       <HeadingText heading="sub-heading" weight="semibold">
         Recent Chats
       </HeadingText>
@@ -55,9 +55,9 @@ export default function MessagesList() {
         {isLoading || usersLoading ? (
           <MessagesListSkeleton />
         ) : messagesList?.length <= 0 ? (
-          <section className="mb-8">
-            <LightParagraph>No messages yet</LightParagraph>
-          </section>
+          <LightParagraph>
+            No messages yet, click on the plus icon to start new chat
+          </LightParagraph>
         ) : (
           messagesList?.map((message) => {
             const user = users?.find((user) => user?.id === message?.recipient);
