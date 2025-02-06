@@ -6,7 +6,7 @@ import { getAllUsers } from "../../api-services/users";
 import { useAuth } from "../../context/userContext";
 import LightParagraph from "../ParagraphText";
 import { motion } from "framer-motion";
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, Badge } from "@chakra-ui/react";
 import { avatarStyle } from "../ResponsiveNav";
 import { Link } from "react-router-dom";
 import Username from "../Username";
@@ -60,7 +60,11 @@ export default function MessagesList() {
           </LightParagraph>
         ) : (
           messagesList?.map((message) => {
-            const user = users?.find((user) => user?.id === message?.recipient);
+            const currentUserId =
+              currentUser?.id === message?.recipient
+                ? message?.sender
+                : message?.recipient;
+            const user = users?.find((user) => user?.id === currentUserId);
             return (
               <MessagesListTile
                 key={message?.id}
@@ -77,6 +81,7 @@ export default function MessagesList() {
 
 const MessagesListTile = React.memo(({ message, user }) => {
   const name = `${user?.first_name} ${user?.last_name}`;
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 10 }}
@@ -95,6 +100,7 @@ const MessagesListTile = React.memo(({ message, user }) => {
         </div>
       </Link>
       <div className="flex justify-end items-end text-[.7rem] text-gray-400">
+        {message.read_at && <Badge className="text-xs">Unread</Badge>}
         <TimeAgo time={message?.timestamp} />
       </div>
     </motion.section>

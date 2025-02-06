@@ -77,14 +77,21 @@ export default function MessageArea({ messages, messagesLoading }) {
               {groupedMessages[date]
                 .sort((a, b) => a.timestamp.localeCompare(b.timestamp))
                 .map((message, index) => {
-                  const sender = users?.find(
-                    (user) => user?.id === message?.sender
-                  );
+                  const currentUserId =
+                    currentUser?.id === message?.recipient
+                      ? message?.recipient
+                      : message?.sender;
+
                   const recipient = users?.find(
-                    (user) => user?.id === message?.recipient
+                    (user) => user?.id !== currentUserId
                   );
 
-                  const isCurrentUser = currentUser?.id === message.sender;
+                  const isCurrentUser = currentUser?.id === currentUserId;
+
+                  console.log(currentUser?.id, currentUserId);
+
+                  const user = isCurrentUser ? currentUser : recipient;
+
                   return (
                     <motion.div
                       key={index}
@@ -95,18 +102,10 @@ export default function MessageArea({ messages, messagesLoading }) {
                         "items-end": !isCurrentUser,
                       })}
                     >
-                      <Link to={`/co/${sender?.id}`}>
+                      <Link to={`/co/${user?.id}`}>
                         <Avatar
-                          name={
-                            isCurrentUser
-                              ? `${currentUser?.first_name} ${currentUser?.last_name}`
-                              : `${sender?.first_name} ${sender?.last_name}`
-                          }
-                          src={
-                            isCurrentUser
-                              ? currentUser?.avatar
-                              : recipient?.avatar
-                          }
+                          name={`${user?.first_name} ${user?.last_name}`}
+                          src={user?.avatar}
                           size="sm"
                           className={avatarStyle}
                         />
