@@ -30,7 +30,6 @@ export default function MessageArea({ messages, messagesLoading }) {
         acc[date] = [];
       }
       acc[date].push(message);
-      console.log(acc);
 
       return acc;
     }, {});
