@@ -55,6 +55,20 @@ function App() {
               <Route path="/" element={<NewsFeed />} />
               <Route path="/posts/:id" element={<SinglePostPage />} />
             </Route>
+
+            {/* Create Company */}
+            <Route element={<CompanyLayout />}>
+              <Route path="create-company" element={<CreateCompany />} />
+              <Route path="company-documents" element={<CompanyDocuments />} />
+              <Route
+                path="company-information"
+                element={<CompanyInformation />}
+              />
+              <Route
+                path="company-additional-information"
+                element={<CompanyAdditionalInformation />}
+              />
+            </Route>
             {/* Bookmark */}
             <Route path="co/bookmarks" element={<BookMark />} />
             {/* User Profile */}
@@ -109,20 +123,6 @@ function App() {
             <Route path="address" element={<Address />} />
             <Route path="bio" element={<Bio />} />
             <Route path="overview" element={<Overview />} />
-          </Route>
-
-          {/* Create Company */}
-          <Route element={<CompanyLayout />}>
-            <Route path="create-company" element={<CreateCompany />} />
-            <Route path="company-documents" element={<CompanyDocuments />} />
-            <Route
-              path="company-information"
-              element={<CompanyInformation />}
-            />
-            <Route
-              path="company-additional-information"
-              element={<CompanyAdditionalInformation />}
-            />
           </Route>
         </Route>
       </Routes>
