@@ -86,9 +86,7 @@ export default function MessageArea({ messages, messagesLoading }) {
                     (user) => user?.id !== currentUserId
                   );
 
-                  const isCurrentUser = currentUser?.id === currentUserId;
-
-                  console.log(currentUser?.id, currentUserId);
+                  const isCurrentUser = currentUser?.id === message?.user;
 
                   const user = isCurrentUser ? currentUser : recipient;
 
@@ -102,7 +100,7 @@ export default function MessageArea({ messages, messagesLoading }) {
                         "items-end": !isCurrentUser,
                       })}
                     >
-                      <Link to={`/co/${user?.id}`}>
+                      <Link to={`/co/${user?.id}`} className="h-fit">
                         <Avatar
                           name={`${user?.first_name} ${user?.last_name}`}
                           src={user?.avatar}
