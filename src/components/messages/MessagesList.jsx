@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import HeadingText from "../HeadingText";
 import { useQuery } from "@tanstack/react-query";
 import { getMessagesForUser } from "../../api-services/messaging";
@@ -27,23 +27,28 @@ export default function MessagesList() {
     enabled: !!currentUser,
   });
 
-  const { messages: ws_messages } = useWebSocket(`chat`);
+  // const { messages: ws_messages } = useWebSocket(`chat`);
 
-  const allMessages = useMemo(
-    () => [...ws_messages, ...messages],
-    [messages, ws_messages]
-  );
+  const allMessages = useMemo(() => [...messages], [messages]);
+
+  const [cachedMessages, setCachedMessages] = useState([]);
+
+  useEffect(() => {
+    setCachedMessages(allMessages);
+  }, [allMessages]);
 
   const messagesList = useMemo(() => {
-    return Array.from(
-      new Set(allMessages?.map((msg) => msg?.recipient || msg?.sender)),
-      (recipient) =>
-        allMessages?.find(
-          (message) =>
-            message?.recipient === recipient || message?.sender === recipient
-        )
-    );
-  }, [allMessages]);
+    const uniqueRecipients = new Set();
+    return cachedMessages.filter((msg) => {
+      const recipient = msg?.recipient || msg?.sender;
+      if (uniqueRecipients.has(recipient)) {
+        return false;
+      } else {
+        uniqueRecipients.add(recipient);
+        return true;
+      }
+    });
+  }, [cachedMessages]);
 
   return (
     <section className="space-y-4">
@@ -54,12 +59,12 @@ export default function MessagesList() {
       <section className="flex flex-col gap-2 divide-y mb-4 divide-gray-200/70">
         {isLoading || usersLoading ? (
           <MessagesListSkeleton />
-        ) : messagesList?.length <= 0 ? (
+        ) : messagesList.length === 0 ? (
           <LightParagraph>
             No messages yet, click on the plus icon to start new chat
           </LightParagraph>
         ) : (
-          messagesList?.map((message) => {
+          messagesList.map((message) => {
             const currentUserId =
               currentUser?.id === message?.recipient
                 ? message?.sender
@@ -99,8 +104,8 @@ const MessagesListTile = React.memo(({ message, user }) => {
           <LightParagraph>{message?.content} </LightParagraph>
         </div>
       </Link>
-      <div className="flex justify-end items-end text-[.7rem] text-gray-400">
-        {message.read_at && <Badge className="text-xs">Unread</Badge>}
+      <div className="flex flex-col justify-end items-end text-[.7rem] text-gray-400 gap-2">
+        {!message.read_at && <Badge className="!text-[.6rem]">Unread</Badge>}
         <TimeAgo time={message?.timestamp} />
       </div>
     </motion.section>
@@ -108,22 +113,20 @@ const MessagesListTile = React.memo(({ message, user }) => {
 });
 
 const MessagesListSkeleton = () => {
-  return Array.from({ length: 5 }, (_, index) => {
-    return (
-      <section key={index} className="flex gap-2 pt-2">
-        {/* Avatar Skeleton */}
-        <div className="size-10 rounded-full skeleton" />
+  return Array.from({ length: 5 }, (_, index) => (
+    <section key={index} className="flex gap-2 pt-2">
+      {/* Avatar Skeleton */}
+      <div className="size-10 rounded-full skeleton" />
 
-        {/* Message Content Skeleton */}
-        <div className="flex-1 space-y-2">
-          <div className="h-3 w-1/3 rounded skeleton" />
-          <div className="h-2.5 w-full rounded skeleton" />
-          <div className="h-2.5 w-2/3 rounded skeleton" />
-        </div>
+      {/* Message Content Skeleton */}
+      <div className="flex-1 space-y-2">
+        <div className="h-3 w-1/3 rounded skeleton" />
+        <div className="h-2.5 w-full rounded skeleton" />
+        <div className="h-2.5 w-2/3 rounded skeleton" />
+      </div>
 
-        {/* Timestamp Skeleton */}
-        <div className="h-2 w-10 rounded skeleton" />
-      </section>
-    );
-  });
+      {/* Timestamp Skeleton */}
+      <div className="h-2 w-10 rounded skeleton" />
+    </section>
+  ));
 };

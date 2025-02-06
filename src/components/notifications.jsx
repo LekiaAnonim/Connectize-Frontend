@@ -36,6 +36,7 @@ const generalNotificationType = [
   "favorite",
   "connection",
   "representation",
+  "messaging",
 ];
 
 const promotionsNotificationType = ["promotions", "announcement"];

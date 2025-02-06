@@ -31,23 +31,20 @@ export default function MessagingPage() {
 
   useEffect(() => {
     document.title = "Room messaging in connectize";
-    if (allMessages) {
-      allMessages.forEach((message) => {
-        if (message?.read_at === null) {
-          sendCommand({ command: "mark_as_read", message_id: message?.id });
-        }
-      });
-    }
-    console.log(allMessages);
-  }, [messages, currentUser, allMessages, ws_messages, sendCommand]);
 
-  useEffect(() => {
+    allMessages.forEach((message) => {
+      if (message?.read_at === null) {
+        sendCommand({ command: "mark_as_read", message_id: message?.id });
+      }
+    });
+
     if (
       String(userId) !== String(currentUser?.id) &&
       String(recipientId) !== String(currentUser?.id)
-    )
+    ) {
       navigate("/messages");
-  }, [currentUser?.id, navigate, recipientId, userId]);
+    }
+  }, [allMessages, currentUser?.id, navigate, recipientId, sendCommand, userId]);
 
   return (
     <section className="h-[79vh] lg:h-[85vh] flex flex-col">

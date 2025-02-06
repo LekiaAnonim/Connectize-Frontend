@@ -94,6 +94,7 @@ export default function MessageControl({ loading, recipientId, senderId }) {
       formData.append("recipient", recipientId);
       formData.append("sender", senderId);
       formData.append("content", message);
+      formData.append("user", currentUser?.id);
       if (audioBlob) {
         if (message.trim().length < 1)
           formData.append("content", "Audio conversation");
@@ -122,7 +123,7 @@ export default function MessageControl({ loading, recipientId, senderId }) {
       console.error(error);
       toast.info("An error occurred while sending message");
     }
-  }, [audioBlob, message, recipientId, senderId, validImages]);
+  }, [audioBlob, currentUser?.id, message, recipientId, senderId, validImages]);
 
   const handleInputChange = useCallback((e) => {
     const trimmedMessage = e.target.value.trim();
