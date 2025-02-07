@@ -50,7 +50,14 @@ const useWebSocket = (url, params) => {
     }
   };
 
-  return { messages, sendMessage };
+  // Function to send a command (e.g., mark as read)
+  const sendCommand = (commandObject) => {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify(commandObject));
+    }
+  };
+
+  return { messages, sendMessage, sendCommand };
 };
 
 export default useWebSocket;

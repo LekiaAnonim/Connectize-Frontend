@@ -40,6 +40,8 @@ function Overview() {
     "/bio"
   );
 
+  const [newUserId, setNewUserId] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   // Initialize full name dynamically from localStorage
@@ -91,6 +93,7 @@ function Overview() {
     const response = await updateCurrentUserInfo(formik.values);
 
     if (response && response.id) {
+      setNewUserId(response?.id);
       Object.keys(formik.values).forEach((key) => localStorage.removeItem(key));
       toast.success("User profile has been updated successfully", {
         id: toastId,
@@ -157,7 +160,6 @@ function Overview() {
           status="none"
           inputArray={overviewFields}
           hasButton={false}
-
         />
       </div>
 
@@ -165,7 +167,7 @@ function Overview() {
         <StepButton nextStep="bio" stepDirection="back" stepText="Back" />
         <StepButton
           doStepChange={doStepChange}
-          nextStep=""
+          nextStep={`/co/${newUserId}`}
           disabled={loading}
           stepText={loading ? "Updating..." : "Submit"}
         />

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import HeadingText from "../../components/HeadingText";
 import LightParagraph from "../../components/ParagraphText";
 import Form from "../../components/form";
@@ -45,7 +45,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const CompanyDocuments = () => {
-  let newCompanyName;
+  const [newCompanyName, setNewCompanyName] = useState("");
   const initialValues = {
     // create company
     company_name: localStorage.getItem("company_name") || "",
@@ -93,7 +93,7 @@ const CompanyDocuments = () => {
       toast.success(formik.values["company_name"] + " onboarded successfully", {
         id: toastId,
       });
-      newCompanyName = newCompany.company_name.replaceAll(" ", "_");
+      setNewCompanyName(newCompany.company_name);
       return true;
     }
     toast.dismiss(toastId);

@@ -8,7 +8,7 @@ import clsx from "clsx";
 import TimeAgo from "../TimeAgo";
 import { Avatar } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { ArrowDownIcon } from "@radix-ui/react-icons";
+import { ArrowDownIcon, CheckIcon } from "@radix-ui/react-icons";
 import { avatarStyle } from "../ResponsiveNav";
 import { ButtonWithTooltipIcon } from "../admin/feeds/DiscoverPosts";
 import { VoiceNotePlayer } from "./MessageControl";
@@ -23,9 +23,19 @@ export default function MessageArea({ messages, messagesLoading }) {
     enabled: !!currentUser,
   });
 
-  const reversedMessages = messages?.sort((a, b) =>
-    a.timestamp.localeCompare(b.timestamp)
-  );
+  const groupMessagesByDate = (messages) => {
+    return messages.reduce((acc, message) => {
+      const date = new Date(message.timestamp).toLocaleDateString();
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(message);
+
+      return acc;
+    }, {});
+  };
+
+  const groupedMessages = groupMessagesByDate(messages);
 
   const scrollToBottom = () => {
     const chatContainer = document.querySelector(".chat-container");
@@ -54,84 +64,104 @@ export default function MessageArea({ messages, messagesLoading }) {
           </Link>
         </div>
       ) : (
-        <>
-          {reversedMessages.map((message, index) => {
-            const sender = users?.find((user) => user?.id === message?.sender);
+        Object.keys(groupedMessages)
+          .sort((a, b) => a.localeCompare(b))
+          .map((date) => (
+            <section key={date}>
+              <div className="text-center my-2 sticky top-0 flex justify-center">
+                <p className="bg-white/50 rounded-md p-1 text-gray-500 text-sm hover:shadow">
+                  {date}
+                </p>
+              </div>
+              {groupedMessages[date]
+                .sort((a, b) => a.timestamp.localeCompare(b.timestamp))
+                .map((message, index) => {
+                  const currentUserId =
+                    currentUser?.id === message?.recipient
+                      ? message?.recipient
+                      : message?.sender;
 
-            const isCurrentUser = currentUser?.id === message.sender;
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={clsx("w-full p-3 flex gap-2.5", {
-                  "self-end flex-row-reverse": isCurrentUser,
-                  "items-end": !isCurrentUser,
-                })}
-              >
-                <Link to={`/co/${sender?.id}`}>
-                  <Avatar
-                    name={
-                      isCurrentUser
-                        ? `${currentUser?.first_name} ${currentUser?.last_name}`
-                        : `${sender?.first_name} ${sender?.last_name}`
-                    }
-                    src={isCurrentUser ? currentUser?.avatar : sender?.avatar}
-                    size="sm"
-                    className={avatarStyle}
-                  />
-                </Link>
-                <div
-                  className={clsx(
-                    "!shrink-0 !w-fit !max-w-[75%] xs:text-sm bg-white rounded-md p-3 flex flex-col",
-                    {
-                      "items-end": isCurrentUser,
-                    }
-                  )}
-                >
-                  <p>{message?.content}</p>
+                  const recipient = users?.find(
+                    (user) => user?.id !== currentUserId
+                  );
 
-                  {message.audio_file && (
-                    <VoiceNotePlayer audioURL={message.audio_file} />
-                  )}
+                  const isCurrentUser = currentUser?.id === message?.user;
 
-                  {message.images.length > 0 && (
-                    <div
-                      className={clsx("grid gap-2 mt-1", {
-                        "!grid-cols-1": message.images.length === 1,
-                        "!grid-cols-2": message.images.length === 2,
-                        "!grid-cols-3": message.images.length >= 3,
+                  const user = isCurrentUser ? currentUser : recipient;
+
+                  return (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={clsx("w-full p-3 flex gap-2.5", {
+                        "self-end flex-row-reverse": isCurrentUser,
+                        "items-end": !isCurrentUser,
                       })}
                     >
-                      {message.images?.map((image, index) => {
-                        const src = image.startsWith("http")
-                          ? image
-                          : baseURL + image;
-                        return (
-                          <img
-                            key={index}
-                            src={src}
-                            alt="Messaging"
-                            className="rounded-md size-full"
-                          />
-                        );
-                      })}
-                    </div>
-                  )}
-                  <div className="text-gray-400 text-[.7rem] flex gap-1 items-center shrink-0">
-                    <small className="shrink-0">
-                      <TimeAgo time={message.timestamp} />
-                    </small>
-                    <small>&bull;</small>
-                    <small className="shrink-0">
-                      {sender?.first_name} {sender?.last_name}
-                    </small>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </>
+                      <Link to={`/co/${user?.id}`} className="h-fit">
+                        <Avatar
+                          name={`${user?.first_name} ${user?.last_name}`}
+                          src={user?.avatar}
+                          size="sm"
+                          className={avatarStyle}
+                        />
+                      </Link>
+                      <div
+                        className={clsx(
+                          "!shrink-0 !w-fit !max-w-[80%] xs:text-sm bg-white rounded-md p-3 flex flex-col",
+                          {
+                            "items-end": isCurrentUser,
+                          }
+                        )}
+                      >
+                        <p>{message?.content}</p>
+
+                        {message.audio_file && (
+                          <VoiceNotePlayer audioURL={message.audio_file} />
+                        )}
+
+                        {message.images.length > 0 && (
+                          <div
+                            className={clsx("grid gap-2 mt-1", {
+                              "!grid-cols-1": message.images.length === 1,
+                              "!grid-cols-2": message.images.length === 2,
+                              "!grid-cols-3": message.images.length >= 3,
+                            })}
+                          >
+                            {message.images?.map((image, index) => {
+                              const src = image.startsWith("http")
+                                ? image
+                                : baseURL + image;
+                              return (
+                                <img
+                                  key={index}
+                                  src={src}
+                                  alt="Messaging"
+                                  className="rounded-md size-full"
+                                />
+                              );
+                            })}
+                          </div>
+                        )}
+                        <div className="text-gray-400 text-[.7rem] flex gap-1 items-center shrink-0">
+                          <small className="shrink-0">
+                            <TimeAgo time={message.timestamp} />
+                          </small>
+                          <div
+                            className={clsx("flex items-center", {
+                              "text-gold": message.read_at,
+                            })}
+                          >
+                            <CheckIcon />
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+            </section>
+          ))
       )}
       {
         <ButtonWithTooltipIcon
@@ -146,7 +176,7 @@ export default function MessageArea({ messages, messagesLoading }) {
 }
 
 const SkeletonChatMessages = () => {
-  return Array.from({ length: 10 }, (_, index) => {
+  return Array.from({ length: 5 }, (_, index) => {
     const isEven = index % 2;
     return (
       <motion.div

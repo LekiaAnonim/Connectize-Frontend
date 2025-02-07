@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import HeadingText from "../HeadingText";
 import { useQuery } from "@tanstack/react-query";
 import { getMessagesForUser } from "../../api-services/messaging";
@@ -6,11 +6,12 @@ import { getAllUsers } from "../../api-services/users";
 import { useAuth } from "../../context/userContext";
 import LightParagraph from "../ParagraphText";
 import { motion } from "framer-motion";
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, Badge } from "@chakra-ui/react";
 import { avatarStyle } from "../ResponsiveNav";
 import { Link } from "react-router-dom";
 import Username from "../Username";
 import TimeAgo from "../TimeAgo";
+import useWebSocket from "../../hooks/useWebSocket";
 
 export default function MessagesList() {
   const { user: currentUser } = useAuth();
@@ -26,24 +27,31 @@ export default function MessagesList() {
     enabled: !!currentUser,
   });
 
-  // const { messages: ws_messages } = useWebSocket("chat");
+  // const { messages: ws_messages } = useWebSocket(`chat`);
 
   const allMessages = useMemo(() => [...messages], [messages]);
 
+  const [cachedMessages, setCachedMessages] = useState([]);
+
+  useEffect(() => {
+    setCachedMessages(allMessages);
+  }, [allMessages]);
+
   const messagesList = useMemo(() => {
-    return Array.from(
-      new Set(
-        allMessages
-          ?.filter((msg) => msg.recipient !== currentUser?.id)
-          .map((msg) => msg?.recipient)
-      ),
-      (recipient) =>
-        allMessages?.find((message) => message?.recipient === recipient)
-    );
-  }, [allMessages, currentUser]);
+    const uniqueRecipients = new Set();
+    return cachedMessages.filter((msg) => {
+      const recipient = msg?.recipient || msg?.sender;
+      if (uniqueRecipients.has(recipient)) {
+        return false;
+      } else {
+        uniqueRecipients.add(recipient);
+        return true;
+      }
+    });
+  }, [cachedMessages]);
 
   return (
-    <section>
+    <section className="space-y-4">
       <HeadingText heading="sub-heading" weight="semibold">
         Recent Chats
       </HeadingText>
@@ -51,13 +59,17 @@ export default function MessagesList() {
       <section className="flex flex-col gap-2 divide-y mb-4 divide-gray-200/70">
         {isLoading || usersLoading ? (
           <MessagesListSkeleton />
-        ) : messagesList?.length <= 0 ? (
-          <section className="mb-8">
-            <LightParagraph>No messages yet</LightParagraph>
-          </section>
+        ) : messagesList.length === 0 ? (
+          <LightParagraph>
+            No messages yet, click on the plus icon to start new chat
+          </LightParagraph>
         ) : (
-          messagesList?.map((message) => {
-            const user = users?.find((user) => user?.id === message?.recipient);
+          messagesList.map((message) => {
+            const currentUserId =
+              currentUser?.id === message?.recipient
+                ? message?.sender
+                : message?.recipient;
+            const user = users?.find((user) => user?.id === currentUserId);
             return (
               <MessagesListTile
                 key={message?.id}
@@ -74,6 +86,7 @@ export default function MessagesList() {
 
 const MessagesListTile = React.memo(({ message, user }) => {
   const name = `${user?.first_name} ${user?.last_name}`;
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 10 }}
@@ -85,16 +98,14 @@ const MessagesListTile = React.memo(({ message, user }) => {
         <Avatar name={name} src={`${user?.avatar}`} className={avatarStyle} />
       </Link>
 
-      <Link
-        to={`/messages/room_${message?.sender}_${message?.recipient}`}
-        className="flex-1"
-      >
+      <Link to={`/messages/${message?.room_name}`} className="flex-1">
         <Username user={user} />
         <div className="line-clamp-2">
           <LightParagraph>{message?.content} </LightParagraph>
         </div>
       </Link>
-      <div className="flex justify-end items-end text-[.7rem] text-gray-400">
+      <div className="flex flex-col justify-end items-end text-[.7rem] text-gray-400 gap-2">
+        {!message.read_at && <Badge className="!text-[.6rem]">Unread</Badge>}
         <TimeAgo time={message?.timestamp} />
       </div>
     </motion.section>
@@ -102,22 +113,20 @@ const MessagesListTile = React.memo(({ message, user }) => {
 });
 
 const MessagesListSkeleton = () => {
-  return Array.from({ length: 5 }, (_, index) => {
-    return (
-      <section key={index} className="flex gap-2 pt-2">
-        {/* Avatar Skeleton */}
-        <div className="size-10 rounded-full skeleton" />
+  return Array.from({ length: 5 }, (_, index) => (
+    <section key={index} className="flex gap-2 pt-2">
+      {/* Avatar Skeleton */}
+      <div className="size-10 rounded-full skeleton" />
 
-        {/* Message Content Skeleton */}
-        <div className="flex-1 space-y-2">
-          <div className="h-3 w-1/3 rounded skeleton" />
-          <div className="h-2.5 w-full rounded skeleton" />
-          <div className="h-2.5 w-2/3 rounded skeleton" />
-        </div>
+      {/* Message Content Skeleton */}
+      <div className="flex-1 space-y-2">
+        <div className="h-3 w-1/3 rounded skeleton" />
+        <div className="h-2.5 w-full rounded skeleton" />
+        <div className="h-2.5 w-2/3 rounded skeleton" />
+      </div>
 
-        {/* Timestamp Skeleton */}
-        <div className="h-2 w-10 rounded skeleton" />
-      </section>
-    );
-  });
+      {/* Timestamp Skeleton */}
+      <div className="h-2 w-10 rounded skeleton" />
+    </section>
+  ));
 };

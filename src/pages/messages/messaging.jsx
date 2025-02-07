@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import MessageControl from "../../components/messages/MessageControl";
 import MessageArea from "../../components/messages/MessageArea";
 import { useQuery } from "@tanstack/react-query";
@@ -20,31 +20,39 @@ export default function MessagingPage() {
     enabled: !!room_name && !!currentUser,
   });
 
-  const { messages: ws_messages } = useWebSocket(`chat/${room_name}`);
+  const { messages: ws_messages, sendCommand } = useWebSocket(
+    `chat/${room_name}`
+  );
 
   const allMessages = useMemo(
     () => [...ws_messages, ...messages],
     [messages, ws_messages]
   );
 
-  console.log(ws_messages);
-
-  const [cachedMessages, setCachedMessages] = useState(allMessages);
-
   useEffect(() => {
     document.title = "Room messaging in connectize";
-    setCachedMessages(allMessages);
-  }, [messages, currentUser, allMessages]);
 
-  if (String(userId) !== String(currentUser?.id)) navigate("/messages");
+    allMessages.forEach((message) => {
+      if (message?.read_at === null) {
+        sendCommand({ command: "mark_as_read", message_id: message?.id });
+      }
+    });
+
+    if (
+      String(userId) !== String(currentUser?.id) &&
+      String(recipientId) !== String(currentUser?.id)
+    ) {
+      navigate("/messages");
+    }
+  }, [allMessages, currentUser?.id, navigate, recipientId, sendCommand, userId]);
 
   return (
     <section className="h-[79vh] lg:h-[85vh] flex flex-col">
-      <MessageArea messages={cachedMessages} messagesLoading={isLoading} />
+      <MessageArea messages={allMessages} messagesLoading={isLoading} />
       <MessageControl
         loading={isLoading}
         recipientId={recipientId}
-        setCachedMessages={setCachedMessages}
+        senderId={userId}
       />
     </section>
   );

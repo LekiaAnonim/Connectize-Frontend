@@ -23,8 +23,6 @@ import { motion } from "framer-motion";
 import { messageUser } from "../../api-services/messaging";
 import ValidImages from "../ValidImages";
 import { useAuth } from "../../context/userContext";
-import useRedirect from "../../hooks/useRedirect";
-import { useNavigate } from "react-router-dom";
 
 const isImageSize = (files) => {
   const imageSize = 4 * 1024 * 1024; // 4MB
@@ -35,7 +33,7 @@ const isImageSize = (files) => {
 
 const emptyMessageValue = "Message field does not have any text";
 
-export default function MessageControl({ loading, recipientId }) {
+export default function MessageControl({ loading, recipientId, senderId }) {
   const { user: currentUser } = useAuth();
 
   const [message, setMessage] = useState("");
@@ -86,7 +84,7 @@ export default function MessageControl({ loading, recipientId }) {
   );
 
   const handleSendMessage = useCallback(async () => {
-    if (message.trim().length < 1 && !audioBlob && !validImages) {
+    if (message.trim().length < 1 && !audioBlob && validImages.length < 1) {
       setErrorMessage(emptyMessageValue);
       return;
     }
@@ -94,16 +92,18 @@ export default function MessageControl({ loading, recipientId }) {
     try {
       const formData = new FormData();
       formData.append("recipient", recipientId);
+      formData.append("sender", senderId);
       formData.append("content", message);
-      formData.append("sender", currentUser?.id);
-      if (audioBlob)
+      formData.append("user", currentUser?.id);
+      if (audioBlob) {
+        if (message.trim().length < 1)
+          formData.append("content", "Audio conversation");
         formData.append(
           "audio_file",
           audioBlob,
-          `voice-note-in-room_${
-            currentUser?.id
-          }_${recipientId}-${new Date().getTime()}.webm`
+          `voice-note-in-room_${senderId}_${recipientId}-${new Date().getTime()}.webm`
         );
+      }
       if (validImages) {
         if (message.trim().length < 1)
           formData.append("content", "Sent with attachment");
@@ -113,6 +113,7 @@ export default function MessageControl({ loading, recipientId }) {
       }
 
       await messageUser(formData);
+      // setCachedMessages((prev) => [newMessage, ...prev]);
       setMessage("");
       setValidImages([]);
       setAudioBlob(null);
@@ -122,7 +123,7 @@ export default function MessageControl({ loading, recipientId }) {
       console.error(error);
       toast.info("An error occurred while sending message");
     }
-  }, [audioBlob, currentUser?.id, message, recipientId, validImages]);
+  }, [audioBlob, currentUser?.id, message, recipientId, senderId, validImages]);
 
   const handleInputChange = useCallback((e) => {
     const trimmedMessage = e.target.value.trim();
@@ -411,7 +412,9 @@ export const VoiceNotePlayer = ({ audioURL, className, trashOnClick }) => {
   };
 
   return (
-    <div className={`${className} flex flex-col gap-1 p-2 overflow-hidden`}>
+    <div
+      className={`${className} flex-1 flex flex-col gap-1 p-2 overflow-hidden`}
+    >
       <div className="flex items-center space-x-3 overflow-hidden">
         {/* Play/Pause Button */}
         <button

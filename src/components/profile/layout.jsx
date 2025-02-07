@@ -1,5 +1,4 @@
 import React from "react";
-import ProfileNavBar from "./ProfileNavBar";
 import { getSession } from "../../lib/session";
 import useRedirect from "../../hooks/useRedirect";
 import { Outlet } from "react-router-dom";
@@ -13,7 +12,6 @@ function ProfileLayout() {
 
   return (
     <>
-      <ProfileNavBar />
       <main className="container max-w-screen-lg mx-auto">
         <Outlet />
       </main>
