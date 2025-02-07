@@ -29,7 +29,7 @@ export default function MessagesList() {
 
   // const { messages: ws_messages } = useWebSocket(`chat`);
 
-  const allMessages = useMemo(() => [...messages], [messages]);
+  const allMessages = useMemo(() => [...(messages || [])], [messages]);
 
   const [cachedMessages, setCachedMessages] = useState([]);
 

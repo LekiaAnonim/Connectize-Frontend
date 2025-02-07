@@ -130,13 +130,10 @@ export default function MessageArea({ messages, messagesLoading }) {
                             })}
                           >
                             {message.images?.map((image, index) => {
-                              const src = image.startsWith("http")
-                                ? image
-                                : baseURL + image;
                               return (
                                 <img
                                   key={index}
-                                  src={src}
+                                  src={image}
                                   alt="Messaging"
                                   className="rounded-md size-full"
                                 />
