@@ -12,7 +12,6 @@ import { ArrowDownIcon, CheckIcon } from "@radix-ui/react-icons";
 import { avatarStyle } from "../ResponsiveNav";
 import { ButtonWithTooltipIcon } from "../admin/feeds/DiscoverPosts";
 import { VoiceNotePlayer } from "./MessageControl";
-import { baseURL } from "../../lib/helpers";
 
 export default function MessageArea({ messages, messagesLoading }) {
   const { user: currentUser } = useAuth();

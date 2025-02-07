@@ -35,7 +35,6 @@ import { useAuth } from "../../../context/userContext";
 import { motion } from "framer-motion";
 import ReactQuill from "react-quill";
 import { MarkdownComponent } from "../../MarkDownComponent";
-import { baseURL } from "../../../lib/helpers";
 import { Link } from "react-router-dom";
 import TimeAgo from "../../TimeAgo";
 import CompanyName from "../../company/CompanyName";
@@ -325,7 +324,7 @@ export const DiscoverPostItem = ({
           size={30}
           array={postItem?.likes.slice(0, 5).map((post) => ({
             name: `${post?.user?.first_name} ${post?.user?.last_name}`,
-            src: baseURL + post?.user?.avatar,
+            src: post?.user?.avatar,
             href: `/co/${post?.user?.id}`,
           }))}
           sizeVariant="sm"
@@ -375,7 +374,7 @@ const PostImage = ({ src }) => {
   return (
     <>
       <img
-        src={baseURL + src}
+        src={src}
         className="!size-full block cursor-pointer"
         alt="some images for post"
         onClick={() => setOpen(true)}
@@ -389,7 +388,7 @@ const PostImage = ({ src }) => {
         title="Image"
       >
         <img
-          src={baseURL + src}
+          src={src}
           className="size-full rounded-lg"
           alt="some images for post"
         />
@@ -480,7 +479,7 @@ const CommentBlock = ({ comment, postUserId }) => {
           <Avatar
             name={`${comment.user.first_name} ${comment.user.last_name}`}
             className={clsx(avatarStyle)}
-            src={`${baseURL}${comment.user.avatar}`}
+            src={comment.user.avatar}
             size="sm"
           />
         </Link>
