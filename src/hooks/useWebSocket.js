@@ -25,7 +25,8 @@ const useWebSocket = (url, params) => {
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-
+      console.log("New message: ", data);
+      
       setMessages((prevMessages) => [...prevMessages, data]);
     };
 

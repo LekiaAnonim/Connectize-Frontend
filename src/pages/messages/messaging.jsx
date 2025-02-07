@@ -33,8 +33,14 @@ export default function MessagingPage() {
     document.title = "Room messaging in connectize";
 
     allMessages.forEach((message) => {
-      if (message?.read_at === null) {
-        sendCommand({ command: "mark_as_read", message_id: message?.id });
+      console.log(message?.read_at);
+
+      if (!message?.read_at) {
+        sendCommand({
+          command: "mark_as_read",
+          message_id: message?.id,
+          recipient_id: recipientId,
+        });
       }
     });
 

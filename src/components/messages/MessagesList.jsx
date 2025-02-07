@@ -27,19 +27,16 @@ export default function MessagesList() {
     enabled: !!currentUser,
   });
 
-  // const { messages: ws_messages } = useWebSocket(`chat`);
+  const { messages: ws_messages } = useWebSocket(`chat`);
 
-  const allMessages = useMemo(() => [...(messages || [])], [messages]);
-
-  const [cachedMessages, setCachedMessages] = useState([]);
-
-  useEffect(() => {
-    setCachedMessages(allMessages);
-  }, [allMessages]);
+  const allMessages = useMemo(
+    () => [...ws_messages, ...(messages || [])],
+    [messages, ws_messages]
+  );
 
   const messagesList = useMemo(() => {
     const uniqueRecipients = new Set();
-    return cachedMessages.filter((msg) => {
+    return allMessages?.filter((msg) => {
       const recipient = msg?.recipient || msg?.sender;
       if (uniqueRecipients.has(recipient)) {
         return false;
@@ -48,7 +45,7 @@ export default function MessagesList() {
         return true;
       }
     });
-  }, [cachedMessages]);
+  }, [allMessages]);
 
   return (
     <section className="space-y-4">
