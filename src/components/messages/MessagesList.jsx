@@ -53,7 +53,7 @@ export default function MessagesList() {
         Recent Chats
       </HeadingText>
 
-      <section className="flex flex-col gap-2 divide-y mb-4 divide-gray-200/70">
+      <section className="flex flex-col gap-2 divide-y divide-gray-200/70">
         {isLoading || usersLoading ? (
           <MessagesListSkeleton />
         ) : messagesList.length === 0 ? (
@@ -89,7 +89,7 @@ const MessagesListTile = React.memo(({ message, user }) => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       key={message?.id}
-      className="flex gap-2 pt-2"
+      className="flex gap-2 pt-2 px-2"
     >
       <Link to={`/co/${user?.id}`}>
         <Avatar name={name} src={`${user?.avatar}`} className={avatarStyle} />

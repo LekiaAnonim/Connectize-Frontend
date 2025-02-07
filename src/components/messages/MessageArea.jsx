@@ -24,7 +24,9 @@ export default function MessageArea({ messages, messagesLoading }) {
 
   const groupMessagesByDate = (messages) => {
     return messages.reduce((acc, message) => {
-      const date = new Date(message.timestamp).toLocaleDateString();
+      const formattedDate = new Date(message.timestamp);
+
+      const date = formattedDate.toLocaleDateString();
       if (!acc[date]) {
         acc[date] = [];
       }
@@ -73,7 +75,13 @@ export default function MessageArea({ messages, messagesLoading }) {
                 </p>
               </div>
               {groupedMessages[date]
-                .sort((a, b) => a.timestamp.localeCompare(b.timestamp))
+                .sort((a, b) => {
+                  const formattedDate = (date) =>
+                    date.replace("+00:00", "Z").replace(" ", "T");
+                  return formattedDate(a.timestamp).localeCompare(
+                    formattedDate(b.timestamp)
+                  );
+                })
                 .map((message, index) => {
                   const currentUserId =
                     currentUser?.id === message?.recipient

@@ -25,7 +25,7 @@ export default function MessagingPage() {
   );
 
   const allMessages = useMemo(
-    () => [...ws_messages, ...messages],
+    () => [...messages, ...ws_messages],
     [messages, ws_messages]
   );
 
@@ -33,14 +33,14 @@ export default function MessagingPage() {
     document.title = "Room messaging in connectize";
 
     allMessages.forEach((message) => {
-      console.log(message?.read_at);
-
       if (!message?.read_at) {
         sendCommand({
           command: "mark_as_read",
           message_id: message?.id,
-          recipient_id: recipientId,
+          user_id: currentUser?.id,
         });
+      } else {
+        console.log("Messages read: ", message?.read_at);
       }
     });
 
@@ -50,7 +50,14 @@ export default function MessagingPage() {
     ) {
       navigate("/messages");
     }
-  }, [allMessages, currentUser?.id, navigate, recipientId, sendCommand, userId]);
+  }, [
+    allMessages,
+    currentUser?.id,
+    navigate,
+    recipientId,
+    sendCommand,
+    userId,
+  ]);
 
   return (
     <section className="h-[79vh] lg:h-[85vh] flex flex-col">
