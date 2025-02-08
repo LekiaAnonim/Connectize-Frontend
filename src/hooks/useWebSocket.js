@@ -19,9 +19,9 @@ const useWebSocket = (url, params) => {
       }`
     );
 
-    socket.onopen = () => {
-      console.log("WebSocket Connected");
-    };
+    // socket.onopen = () => {
+    //   console.log("WebSocket Connected");
+    // };
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -29,18 +29,19 @@ const useWebSocket = (url, params) => {
       setMessages((prevMessages) => [...prevMessages, data]);
     };
 
-    socket.onerror = (error) => {
-      console.error("WebSocket Error:", error);
-    };
+    // socket.onerror = (error) => {
+    //   console.error("WebSocket Error:", error);
+    // };
 
-    socket.onclose = () => {
-      console.log("WebSocket Disconnected");
-    };
+    // socket.onclose = () => {
+    //   console.log("WebSocket Disconnected");
+    // };
 
     setWs(socket);
 
     return () => {
       socket.close();
+      setWs(null);
     };
   }, [params, session?.tokens?.access, url]);
 

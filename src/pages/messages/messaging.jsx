@@ -3,7 +3,10 @@ import MessageControl from "../../components/messages/MessageControl";
 import MessageArea from "../../components/messages/MessageArea";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { getMessagesForUser } from "../../api-services/messaging";
+import {
+  getMessagesForUser,
+  markMessageAsRead,
+} from "../../api-services/messaging";
 import { useAuth } from "../../context/userContext";
 import useWebSocket from "../../hooks/useWebSocket";
 
@@ -20,12 +23,22 @@ export default function MessagingPage() {
     enabled: !!room_name && !!currentUser,
   });
 
+  useQuery({
+    queryKey: ["mark-messages-as-read", room_name],
+    queryFn: () =>
+      markMessageAsRead(
+        room_name,
+        currentUser?.id !== userId ? Number(recipientId) : Number(userId)
+      ),
+    enabled: !!room_name && !!currentUser && !!messages,
+  });
+
   const { messages: ws_messages, sendCommand } = useWebSocket(
     `chat/${room_name}`
   );
 
   const allMessages = useMemo(
-    () => [...ws_messages, ...messages],
+    () => [...messages, ...ws_messages],
     [messages, ws_messages]
   );
 
@@ -33,18 +46,32 @@ export default function MessagingPage() {
     document.title = "Room messaging in connectize";
 
     allMessages.forEach((message) => {
-      if (message?.read_at === null) {
-        sendCommand({ command: "mark_as_read", message_id: message?.id });
+      if (!message?.read_at) {
+        sendCommand({
+          command: "mark_as_read",
+          message_id: message?.id,
+          user_id:
+            currentUser?.id !== userId ? Number(recipientId) : Number(userId),
+        });
       }
     });
 
     if (
-      String(userId) !== String(currentUser?.id) &&
-      String(recipientId) !== String(currentUser?.id)
+      (String(userId) !== String(currentUser?.id) &&
+        String(recipientId) !== String(currentUser?.id)) ||
+      !currentUser
     ) {
       navigate("/messages");
     }
-  }, [allMessages, currentUser?.id, navigate, recipientId, sendCommand, userId]);
+  }, [
+    allMessages,
+    currentUser,
+    currentUser?.id,
+    navigate,
+    recipientId,
+    sendCommand,
+    userId,
+  ]);
 
   return (
     <section className="h-[79vh] lg:h-[85vh] flex flex-col">

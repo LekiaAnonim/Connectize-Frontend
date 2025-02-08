@@ -25,7 +25,9 @@ export default function MessageArea({ messages, messagesLoading }) {
 
   const groupMessagesByDate = (messages) => {
     return messages.reduce((acc, message) => {
-      const date = new Date(message.timestamp).toLocaleDateString();
+      const formattedDate = new Date(message.timestamp);
+
+      const date = formattedDate.toLocaleDateString();
       if (!acc[date]) {
         acc[date] = [];
       }
@@ -67,14 +69,28 @@ export default function MessageArea({ messages, messagesLoading }) {
         Object.keys(groupedMessages)
           .sort((a, b) => a.localeCompare(b))
           .map((date) => (
-            <section key={date}>
+            <section key={date} id={date}>
               <div className="text-center my-2 sticky top-0 flex justify-center">
-                <p className="bg-white/50 rounded-md p-1 text-gray-500 text-sm hover:shadow">
+                <button
+                  className="bg-white/50 rounded-md p-1 text-gray-500 text-sm hover:shadow"
+                  onClick={() => {
+                    const dateEl = document.getElementById(date);
+                    if (dateEl) {
+                      dateEl.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }}
+                >
                   {date}
-                </p>
+                </button>
               </div>
               {groupedMessages[date]
-                .sort((a, b) => a.timestamp.localeCompare(b.timestamp))
+                .sort((a, b) => {
+                  const formattedDate = (date) =>
+                    date.replace("+00:00", "Z").replace(" ", "T");
+                  return formattedDate(a.timestamp).localeCompare(
+                    formattedDate(b.timestamp)
+                  );
+                })
                 .map((message, index) => {
                   const currentUserId =
                     currentUser?.id === message?.recipient
@@ -130,9 +146,13 @@ export default function MessageArea({ messages, messagesLoading }) {
                             })}
                           >
                             {message.images?.map((image, index) => {
-                              const src = image.startsWith("http")
+                              const src = image
+                                .toString()
+                                .trim()
+                                .startsWith("http")
                                 ? image
                                 : baseURL + image;
+
                               return (
                                 <img
                                   key={index}

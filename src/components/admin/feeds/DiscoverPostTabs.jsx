@@ -1,10 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import {
-  Bookmark,
-  StarFilledIcon,
-  StarOutlinedIcon,
-  VerifiedIcon,
-} from "../../../icon";
+import { Bookmark, VerifiedIcon } from "../../../icon";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import { useMediaQuery } from "react-responsive";
@@ -21,7 +16,6 @@ import {
   ButtonWithTooltipIcon,
   ConjoinedAvatarSkeleton,
 } from "./DiscoverPosts";
-import { baseURL } from "../../../lib/helpers";
 import CustomTabs from "../../custom/tabs";
 import { Avatar } from "@chakra-ui/react";
 
@@ -199,7 +193,7 @@ export const PostCard = ({
           animate={whole?.likes?.length > 1}
           array={whole?.likes.slice(0, 5).map((post) => ({
             name: `${post?.user?.first_name} ${post?.user?.last_name}`,
-            src: baseURL + post?.user?.avatar,
+            src: post?.user?.avatar,
             href: `/co/${post?.user?.id}`,
           }))}
         />

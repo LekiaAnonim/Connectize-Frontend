@@ -11,7 +11,6 @@ import { LocationOnOutlined } from "@mui/icons-material";
 import LightParagraph from "../../components/ParagraphText";
 import { useCustomSearchParams } from "../../hooks/useCustomSearchParams";
 import ConnectButton from "../../components/ConnectButton";
-import { baseURL } from "../../lib/helpers";
 
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/userContext";
@@ -166,7 +165,7 @@ export const CompaniesArray = ({
                     sizeVariant="sm"
                     array={company?.reviews.slice(0, 5).map((post) => ({
                       name: `${post?.user?.first_name} ${post?.user?.last_name}`,
-                      src: baseURL + post?.user?.avatar,
+                      src: post?.user?.avatar,
                       href: `/co/${post?.user?.id}`,
                     }))}
                   />
