@@ -26,7 +26,7 @@ const useWebSocket = (url, params) => {
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       console.log("New message: ", data);
-      
+
       setMessages((prevMessages) => [...prevMessages, data]);
     };
 
@@ -54,6 +54,7 @@ const useWebSocket = (url, params) => {
   // Function to send a command (e.g., mark as read)
   const sendCommand = (commandObject) => {
     if (ws && ws.readyState === WebSocket.OPEN) {
+      console.log("commandObject: ", commandObject);
       ws.send(JSON.stringify(commandObject));
     }
   };

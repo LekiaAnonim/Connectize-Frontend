@@ -37,7 +37,7 @@ export default function MessagingPage() {
         sendCommand({
           command: "mark_as_read",
           message_id: message?.id,
-          user_id: currentUser?.id,
+          user_id: currentUser?.id === userId ? recipientId : userId,
         });
       } else {
         console.log("Messages read: ", message?.read_at);
