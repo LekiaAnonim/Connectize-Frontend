@@ -24,7 +24,7 @@ export default function MessagingPage() {
   });
 
   useQuery({
-    queryKey: ["mark_messages-as-read", room_name],
+    queryKey: ["mark-messages-as-read", room_name],
     queryFn: () =>
       markMessageAsRead(
         room_name,
@@ -53,8 +53,6 @@ export default function MessagingPage() {
           user_id:
             currentUser?.id !== userId ? Number(recipientId) : Number(userId),
         });
-      } else {
-        console.log("Messages read: ", message?.read_at);
       }
     });
 
