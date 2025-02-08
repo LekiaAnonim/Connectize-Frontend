@@ -19,24 +19,23 @@ const useWebSocket = (url, params) => {
       }`
     );
 
-    socket.onopen = () => {
-      console.log("WebSocket Connected");
-    };
+    // socket.onopen = () => {
+    //   console.log("WebSocket Connected");
+    // };
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log("New message: ", data);
 
       setMessages((prevMessages) => [...prevMessages, data]);
     };
 
-    socket.onerror = (error) => {
-      console.error("WebSocket Error:", error);
-    };
+    // socket.onerror = (error) => {
+    //   console.error("WebSocket Error:", error);
+    // };
 
-    socket.onclose = () => {
-      console.log("WebSocket Disconnected");
-    };
+    // socket.onclose = () => {
+    //   console.log("WebSocket Disconnected");
+    // };
 
     setWs(socket);
 

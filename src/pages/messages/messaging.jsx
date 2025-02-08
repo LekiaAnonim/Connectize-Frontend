@@ -37,7 +37,8 @@ export default function MessagingPage() {
         sendCommand({
           command: "mark_as_read",
           message_id: message?.id,
-          user_id: currentUser?.id === userId ? recipientId : userId,
+          user_id:
+            currentUser?.id !== userId ? Number(recipientId) : Number(userId),
         });
       } else {
         console.log("Messages read: ", message?.read_at);
@@ -45,13 +46,15 @@ export default function MessagingPage() {
     });
 
     if (
-      String(userId) !== String(currentUser?.id) &&
-      String(recipientId) !== String(currentUser?.id)
+      (String(userId) !== String(currentUser?.id) &&
+        String(recipientId) !== String(currentUser?.id)) ||
+      !currentUser
     ) {
       navigate("/messages");
     }
   }, [
     allMessages,
+    currentUser,
     currentUser?.id,
     navigate,
     recipientId,
