@@ -41,6 +41,7 @@ const useWebSocket = (url, params) => {
 
     return () => {
       socket.close();
+      setWs(null);
     };
   }, [params, session?.tokens?.access, url]);
 
@@ -53,7 +54,7 @@ const useWebSocket = (url, params) => {
   // Function to send a command (e.g., mark as read)
   const sendCommand = (commandObject) => {
     if (ws && ws.readyState === WebSocket.OPEN) {
-      console.log("commandObject: ", commandObject);
+      console.log("commandObject: ", commandObject, ws);
       ws.send(JSON.stringify(commandObject));
     }
   };

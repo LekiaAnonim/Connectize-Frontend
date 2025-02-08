@@ -3,7 +3,10 @@ import MessageControl from "../../components/messages/MessageControl";
 import MessageArea from "../../components/messages/MessageArea";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { getMessagesForUser } from "../../api-services/messaging";
+import {
+  getMessagesForUser,
+  markMessageAsRead,
+} from "../../api-services/messaging";
 import { useAuth } from "../../context/userContext";
 import useWebSocket from "../../hooks/useWebSocket";
 
@@ -17,6 +20,16 @@ export default function MessagingPage() {
   const { data: messages = [], isLoading } = useQuery({
     queryKey: ["messages", room_name],
     queryFn: () => getMessagesForUser({ room_name }),
+    enabled: !!room_name && !!currentUser,
+  });
+
+  useQuery({
+    queryKey: ["mark_messages-as-read", room_name],
+    queryFn: () =>
+      markMessageAsRead(
+        room_name,
+        currentUser?.id !== userId ? Number(recipientId) : Number(userId)
+      ),
     enabled: !!room_name && !!currentUser,
   });
 
