@@ -28,10 +28,12 @@ export const messageUser = async (formData) => {
 };
 
 export const markMessageAsRead = async (room_name, user_id) => {
+  console.log(room_name, user_id);
+
   const message = await makeApiRequest({
     url: "api/messages/mark-all-as-read/",
-    body: { room_name, user_id },
     method: "POST",
+    data: { room_name, user_id },
   });
 
   return message;

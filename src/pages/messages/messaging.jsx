@@ -33,6 +33,9 @@ export default function MessagingPage() {
     enabled: !!room_name && !!currentUser,
   });
 
+  console.log(room_name, currentUser);
+  
+
   const { messages: ws_messages, sendCommand } = useWebSocket(
     `chat/${room_name}`
   );
