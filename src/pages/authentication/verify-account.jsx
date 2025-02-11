@@ -10,7 +10,6 @@ import {
 } from "../../lib/data/authentication";
 import HeadingText from "../../components/HeadingText";
 import LightParagraph from "../../components/ParagraphText";
-import { toast } from "sonner";
 import PageLoading from "../../components/PageLoading";
 
 const validationSchema = Yup.object().shape({

@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import Username from "../../Username";
+import SeeMoreLink from "../../SeeMoreLink";
 
 const TopServiceSuggestions = () => {
   return (
@@ -124,14 +125,7 @@ export function SuggestionList({ hasSeeMore }) {
         )}
       </ul>
       {hasSeeMore && suggestedUsers?.length > 10 && (
-        <div className="p-3 pb-0 mt-3 border-t flex justify-center items-center text-center w-full">
-          <Link
-            to=""
-            className="transition-colors duration-300 !text-gray-400 hover:!text-black"
-          >
-            See more
-          </Link>
-        </div>
+        <SeeMoreLink url="/representatives" />
       )}
     </div>
   );

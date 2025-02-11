@@ -41,6 +41,7 @@ import BookMark from "./pages/bookmark";
 import AcceptRepresentation from "./pages/representatives/AcceptRepresentation";
 import MessagesLayout from "./pages/messages/layout";
 import MessagingPage from "./pages/messages/messaging";
+import { NotificationItem } from "./components/notifications";
 
 function App() {
   return (
@@ -70,6 +71,8 @@ function App() {
               />
             </Route>
             {/* Bookmark */}
+            <Route path="co/notifications" element={<NotificationItem />} />
+            {/* Bookmark */}
             <Route path="co/bookmarks" element={<BookMark />} />
             {/* User Profile */}
             <Route path="co/:userId" element={<UserProfile />} />
@@ -77,13 +80,13 @@ function App() {
             <Route path="search" element={<Search />} />
             <Route path=":company" element={<CompanyProfile />} />
             <Route path="analysis" element={<Analysis />} />
-            <Route path="representatives" element={<RepresentativesPage />} />
+            <Route path="/co/representatives" element={<RepresentativesPage />} />
             <Route
-              path="representatives/manage"
+              path="/co/representatives/manage"
               element={<AssignRepresentative />}
             />
             <Route
-              path="representatives/accept"
+              path="/co/representatives/accept"
               element={<AcceptRepresentation />}
             />
             <Route element={<MessagesLayout />}>

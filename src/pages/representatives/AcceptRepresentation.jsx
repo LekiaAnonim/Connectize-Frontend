@@ -26,7 +26,7 @@ export default function AcceptRepresentation() {
   const acceptInvite = async () => {
     const results = await acceptRepRequest(id, { token });
     if (results?.success) {
-      navigate("/representatives");
+      navigate("/co/representatives");
     }
   };
   return (

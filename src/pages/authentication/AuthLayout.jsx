@@ -16,7 +16,7 @@ function AuthLayout({ redirectUrl = "/" }) {
   return (
     <main className="flex justify-center h-screen p-4">
       <section className="size-full max-h-screen overflow-y-auto flex flex-col items-center justify-center py-4 lg:!w-1/2 shrink-0 scrollbar-hidden">
-        <section className="w-full max-w-sm lg:max-w-md">
+        <section className="w-full max-xs:h-full max-w-sm lg:max-w-md">
           <Logo />
           <section className="size-full mt-4">
             <Outlet />
@@ -29,8 +29,10 @@ function AuthLayout({ redirectUrl = "/" }) {
           src={`/images/${
             pathname === "/login" ? "signin-image" : "signup-image"
           }.png`}
-          alt="connectize"
-          className="size-full aspect-square "
+          alt={
+            pathname === "/login" ? " sign in connectize" : "sign up connectize"
+          }
+          className="size-full aspect-square"
         />
       </picture>
     </main>

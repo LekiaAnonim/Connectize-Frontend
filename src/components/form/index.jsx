@@ -6,6 +6,8 @@ import CustomInput, {
 } from "./customInput";
 import FormikErrorResponse from "./formError";
 import clsx from "clsx";
+import { ButtonWithTooltipIcon } from "../admin/feeds/DiscoverPosts";
+import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 
 export default function Form({
   formik,
@@ -25,11 +27,18 @@ export default function Form({
     options,
     disabled,
     validate,
+    helpText,
   }) => {
     return (
       <div className="w-full my-2.5" key={name}>
-        <label htmlFor={name} className="font-medium">
-          {label}
+        <label htmlFor={name} className="font-medium flex gap-1">
+          <span>{label}</span>
+          {helpText && (
+            <ButtonWithTooltipIcon
+              tip={helpText}
+              IconName={QuestionMarkCircledIcon}
+            />
+          )}
         </label>
         {type === "textarea" ? (
           <Textarea

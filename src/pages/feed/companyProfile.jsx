@@ -64,7 +64,7 @@ const CompanyProfile = React.memo(() => {
 export const ManageRepresentativesLink = ({ main = false }) => {
   return (
     <Link
-      to="/representatives/manage"
+      to="/co/representatives/manage"
       className={clsx(
         "bg-gold hover:bg-opacity-70 text-sm xs:text-xs lg:text-sm font-semibold py-1.5 px-4 rounded-full",
         {
