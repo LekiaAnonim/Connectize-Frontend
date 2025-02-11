@@ -115,8 +115,8 @@ function Overview() {
 
   return (
     <div className="container">
-      <div className="my-4">
-        <HeadingText>Overview</HeadingText>
+      <div className="mb-6">
+        <HeadingText weight="semibold">Overview</HeadingText>
         <LightParagraph>
           Please confirm that your details are correct
         </LightParagraph>

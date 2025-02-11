@@ -57,6 +57,17 @@ function App() {
               <Route path="/posts/:id" element={<SinglePostPage />} />
             </Route>
 
+            <Route path="/profile" element={<Profile />} />
+
+            {/* Complete profile */}
+            <Route path="/" element={<ProfileLayout />}>
+              <Route path="complete-profile" element={<Home />} />
+              <Route path="contact" element={<Contact />} />
+              <Route path="address" element={<Address />} />
+              <Route path="bio" element={<Bio />} />
+              <Route path="overview" element={<Overview />} />
+            </Route>
+
             {/* Create Company */}
             <Route element={<CompanyLayout />}>
               <Route path="create-company" element={<CreateCompany />} />
@@ -80,7 +91,10 @@ function App() {
             <Route path="search" element={<Search />} />
             <Route path=":company" element={<CompanyProfile />} />
             <Route path="analysis" element={<Analysis />} />
-            <Route path="/co/representatives" element={<RepresentativesPage />} />
+            <Route
+              path="/co/representatives"
+              element={<RepresentativesPage />}
+            />
             <Route
               path="/co/representatives/manage"
               element={<AssignRepresentative />}
@@ -117,16 +131,6 @@ function App() {
           </Route>
 
           <Route path="/success" element={<SuccessPage />} />
-          <Route path="/profile" element={<Profile />} />
-
-          {/* Complete profile */}
-          <Route path="/" element={<ProfileLayout />}>
-            <Route path="home" element={<Home />} />
-            <Route path="contact" element={<Contact />} />
-            <Route path="address" element={<Address />} />
-            <Route path="bio" element={<Bio />} />
-            <Route path="overview" element={<Overview />} />
-          </Route>
         </Route>
       </Routes>
     </>

@@ -130,20 +130,30 @@ function ProductCategory() {
         ) : !categories?.length ? (
           <LightParagraph>No categories available</LightParagraph>
         ) : (
-          categories?.map((item, index) => (
+          <>
             <Link
-              to={
-                (pathname.startsWith("/services") ? "/services" : "/market") +
-                "?category=" +
-                item.name.toLowerCase()
-              }
-              key={index}
+              to={pathname.startsWith("/services") ? "/services" : "/market"}
+              key={"all"}
               className="flex items-center gap-2 p-2"
             >
               <span className="size-5 bg-dark rounded-full shrink-0" />
-              <span className="line-clamp-2">{item.name}</span>
+              <span className="line-clamp-2">All Categories</span>
             </Link>
-          ))
+            {categories?.map((item, index) => (
+              <Link
+                to={
+                  (pathname.startsWith("/services") ? "/services" : "/market") +
+                  "?category=" +
+                  item.name.toLowerCase()
+                }
+                key={index}
+                className="flex items-center gap-2 p-2"
+              >
+                <span className="size-5 bg-dark rounded-full shrink-0" />
+                <span className="line-clamp-2">{item.name}</span>
+              </Link>
+            ))}
+          </>
         )}
       </div>
     </section>

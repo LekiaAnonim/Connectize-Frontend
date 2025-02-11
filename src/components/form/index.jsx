@@ -31,7 +31,7 @@ export default function Form({
   }) => {
     return (
       <div className="w-full my-2.5" key={name}>
-        <label htmlFor={name} className="font-medium flex gap-1">
+        <label htmlFor={name} className="font-medium flex gap-1 items-center">
           <span>{label}</span>
           {helpText && (
             <ButtonWithTooltipIcon

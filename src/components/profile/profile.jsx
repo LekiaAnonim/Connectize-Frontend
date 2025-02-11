@@ -21,26 +21,27 @@ function Profile() {
   }, []);
 
   return (
-    <main>
-      <div className="container py-4">
-        <Logo />
-        <div className="mx-auto flex flex-col justify-center items-center text-center space-y-6 min-h-[80vh]">
-          <HeadingText>
-            Would you like to set up <br />
-            your profile now?
-          </HeadingText>
-          <img src="/images/passportOne.png" alt="passport" width="140px" />
-          <div className="flex max-md:flex-col gap-3 font-semibold text-sm">
-            <Link to="/home" className="bg-gold rounded-full w-[250px] p-2">
-              Let's Go
-            </Link>
-            <Link to="/" className="bg-gray-300 rounded-full w-[250px] p-2">
-              Not Now
-            </Link>
-          </div>
-        </div>
+    <section className="mx-auto flex flex-col justify-center items-center text-center space-y-6 min-h-[80vh]">
+      <HeadingText>
+        Would you like to set up <br />
+        your profile now?
+      </HeadingText>
+      <img src="/images/passportOne.png" alt="passport" width="140px" />
+      <div className="flex max-md:flex-col gap-3 font-semibold text-sm">
+        <Link
+          to="/complete-profile"
+          className="bg-gold hover:bg-opacity-60 rounded-full w-[250px] p-2"
+        >
+          Let's Go
+        </Link>
+        <Link
+          to="/"
+          className="bg-gray-300 hover:bg-opacity-60 rounded-full w-[250px] p-2"
+        >
+          Not Now
+        </Link>
       </div>
-    </main>
+    </section>
   );
 }
 

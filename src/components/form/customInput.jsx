@@ -149,7 +149,7 @@ export function AvatarUpload({ formik, name, label, className }) {
               : "/images/passportTwo.png"
           }
           alt="upload"
-          className={clsx("size-24 mx-auto transition-all duration-300", {
+          className={clsx("size-20 mx-auto transition-all duration-300", {
             "rounded-full p-0.5 bg-gold": imageValue !== "",
           })}
         />
@@ -163,7 +163,7 @@ export function AvatarUpload({ formik, name, label, className }) {
           className="hidden"
         />
         {label && (
-          <small className="font-semibold !leading-none">{label}</small>
+          <small className="font-semibold !leading-none text-xs">{label}</small>
         )}
       </label>
       <FormikErrorResponse formik={formik} name={name} />
