@@ -18,6 +18,7 @@ import { GlobeIcon, Link1Icon } from "@radix-ui/react-icons";
 import { MailOutlined } from "@ant-design/icons";
 import { useAuth } from "../../context/userContext";
 import clsx from "clsx";
+import { CompanyUserType } from "../../lib/helpers/types";
 
 const CompanyProfile = React.memo(() => {
   const { company: companyName } = useParams();
@@ -51,7 +52,10 @@ const CompanyProfile = React.memo(() => {
       <Header {...headerProps} />
 
       <section className="mt-11 md:mt-14 flex max-lg:flex-col items-start gap-2 relative">
-        <ManageRepresentativesLink main />
+        {currentUser?.email === company?.profile &&
+          currentUser?.user_type === CompanyUserType && (
+            <ManageRepresentativesLink main />
+          )}
         <ProductSidebar company={company} />
         <section className="grid grid-cols-1 gap-2 max-lg:py-2">
           <Summary company={company} />

@@ -23,6 +23,7 @@ import { AvatarUpload } from "../form/customInput";
 import { toast } from "sonner";
 import useRedirect from "../../hooks/useRedirect";
 import { customFormikFieldValidator } from "../../lib/utils";
+import { useAuth } from "../../context/userContext";
 
 const FILE_SIZE = 2 * 1024 * 1024; // 2MB
 const SUPPORTED_FORMATS = [
@@ -34,13 +35,14 @@ const SUPPORTED_FORMATS = [
 ];
 
 function Overview() {
+  const { user: currentUser } = useAuth();
   // Redirect if condition fails
   useRedirect(
     !(Number(localStorage.getItem(currentProfileIndexKey)) >= 4),
     "/bio"
   );
 
-  const [newUserId, setNewUserId] = useState("");
+  useRedirect(!getLocalData(first_nameKey), `/co/${currentUser?.id}`);
 
   const [loading, setLoading] = useState(false);
 
@@ -93,7 +95,7 @@ function Overview() {
     const response = await updateCurrentUserInfo(formik.values);
 
     if (response && response.id) {
-      setNewUserId(response?.id);
+      // setNewUserId(response?.id);
       Object.keys(formik.values).forEach((key) => localStorage.removeItem(key));
       toast.success("User profile has been updated successfully", {
         id: toastId,
@@ -167,7 +169,7 @@ function Overview() {
         <StepButton nextStep="bio" stepDirection="back" stepText="Back" />
         <StepButton
           doStepChange={doStepChange}
-          nextStep={`/co/${newUserId}`}
+          nextStep={`co/${currentUser?.id}`}
           disabled={loading}
           stepText={loading ? "Updating..." : "Submit"}
         />

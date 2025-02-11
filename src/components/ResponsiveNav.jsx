@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNav } from "../context/navContext";
 import { ChevronLeft, Menu } from "@mui/icons-material";
 import clsx from "clsx";
@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getCompanies } from "../api-services/companies";
 import { ConjoinedAvatarSkeleton } from "./admin/feeds/DiscoverPosts";
+import { CompanyUserType } from "../lib/helpers/types";
 
 function ResponsiveNav() {
   const { toggleNav } = useNav();
@@ -43,12 +44,29 @@ export default ResponsiveNav;
 export const avatarStyle = "!bg-gold !text-black border-2 border-white";
 
 export const JoinedUserCompanyImages = () => {
-  const { user } = useAuth();
+  const { user: currentUser } = useAuth();
 
   const { data: companies, isLoading } = useQuery({
     queryKey: ["companies"],
     queryFn: () => getCompanies(),
   });
+
+  const [headingImages, setHeadingImages] = useState([]);
+
+  useEffect(() => {
+    if (currentUser?.user_type === CompanyUserType) {
+      setHeadingImages((prev) => [
+        {
+          src: companies?.[0]?.logo || "/images/default-company-logo.png",
+          name: companies?.[0]?.company_name || "",
+          href:
+            companies?.length > 0
+              ? `/${companies[0].company_name}`
+              : "/create-company",
+        },
+      ]);
+    }
+  }, [currentUser?.user_type, companies]);
 
   return isLoading ? (
     <ConjoinedAvatarSkeleton length={2} />
@@ -60,18 +78,14 @@ export const JoinedUserCompanyImages = () => {
         size={35}
         array={[
           {
-            src: user?.avatar || "",
-            name: `${user?.first_name || ""} ${user?.last_name || ""}`,
-            href: `/co/${user?.id}`,
+            src: currentUser?.avatar || "",
+            name: `${currentUser?.first_name || ""} ${
+              currentUser?.last_name || "" || currentUser?.email
+            }`,
+            href: `/co/${currentUser?.id}`,
           },
-          {
-            src: companies?.[0]?.logo || "/images/default-company-logo.png",
-            name: companies?.[0]?.company_name || "",
-            href:
-              companies?.length > 0
-                ? `/${companies[0].company_name}`
-                : "/create-company",
-          },
+
+          ...headingImages,
         ]}
       />
     </div>

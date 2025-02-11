@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CreatePost from "./CreatePost";
 import DiscoverPostTabs from "./DiscoverPostTabs";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../context/userContext";
 import DiscoverPosts from "./DiscoverPosts";
+import { CompanyUserType } from "../../../lib/helpers/types";
 
 const DiscoverFeed = () => {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, setUser } = useAuth();
+
+  useEffect(() => {
+    setUser(currentUser);
+  }, [currentUser, setUser]);
   return (
     <section className="space-y-4">
       <div className="flex items-baseline gap-2">
@@ -20,7 +25,7 @@ const DiscoverFeed = () => {
           </Link>
         )}
       </div>
-      <CreatePost />
+      {currentUser?.user_type === CompanyUserType && <CreatePost />}
       <DiscoverPostTabs />
       <DiscoverPosts />
     </section>

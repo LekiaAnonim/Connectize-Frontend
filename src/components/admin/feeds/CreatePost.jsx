@@ -49,7 +49,7 @@ function CreatePost() {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [validImages, setValidImages] = useState([]);
-  const [companyId, setCompanyId] = useState(-1);
+  const [companyId, setCompanyId] = useState(null);
   const [needsFocus, setNeedsFocus] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showGifPicker, setShowGifPicker] = useState(false);
@@ -104,11 +104,11 @@ function CreatePost() {
       return;
     }
 
-    if (companyId < 1) {
-      setNeedsFocus(true);
-      toast.info("Please attach a company to your post");
-      return;
-    }
+    // if (companyId < 1) {
+    //   setNeedsFocus(true);
+    //   toast.info("Please attach a company to your post");
+    //   return;
+    // }
 
     try {
       setIsLoading(true);
@@ -118,13 +118,16 @@ function CreatePost() {
       validImages.forEach((image) => {
         formData.append("images", image);
       });
-      await createPost(formData);
-      setMessage("");
-      setSelectedGif("");
-      toast.success("Your post has been created");
-      setRefetchInterval(1000);
-      setTimeout(() => setRefetchInterval(false), 2000);
-      setValidImages([]);
+      const newPost = await createPost(formData);
+
+      if (newPost.id) {
+        setMessage("");
+        setSelectedGif("");
+        toast.success("Your post has been created");
+        setRefetchInterval(1000);
+        setTimeout(() => setRefetchInterval(false), 2000);
+        setValidImages([]);
+      }
     } catch (error) {
       console.error("Post error: ", error);
     } finally {
@@ -207,43 +210,6 @@ function CreatePost() {
         </div>
       )}
 
-      <div className="absolute right-1 top-0">
-        <MoreOptions
-          triggerStyle={`${
-            needsFocus ? "!border-2 !border-red-600 " : ""
-          } !bg-white`}
-        >
-          <div className="space-y-1">
-            {companies?.length < 1 ? (
-              <h1 className="text-custom_blue">
-                <InfoCircledIcon className="inline" /> You have no company
-                attributed with your profile, please{" "}
-                <Link
-                  to="/create-company"
-                  className="!text-gray-400 hover:!text-custom_blue transition-all duration-300 underline"
-                >
-                  create one
-                </Link>
-              </h1>
-            ) : (
-              <>
-                <h1 className="text-lg font-semibold">Create post as</h1>
-                <Select
-                  placeholder="Select company"
-                  onChange={(e) => setCompanyId(Number(e.currentTarget.value))}
-                  className="!text-sm"
-                >
-                  {companies?.map((company) => (
-                    <option value={company?.id} key={company?.id}>
-                      {company?.company_name}
-                    </option>
-                  ))}
-                </Select>
-              </>
-            )}
-          </div>
-        </MoreOptions>
-      </div>
 
       <div className="mt-4 flex max-sm:flex-col sm:items-center justify-between max-sm:gap-4 md:gap-4 lg:gap-1">
         <div className="flex items-center gap-2 relative">
