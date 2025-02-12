@@ -27,8 +27,6 @@ export function NavigationSection({ hasHeader, isSmallNavigation = false }) {
     ? feedNavItems.slice(0, 5)
     : feedNavItems;
 
-  console.log(feedNavItems, navigators, isSmallNavigation);
-
   return (
     <ul
       className={clsx("xs:text-sm", {
