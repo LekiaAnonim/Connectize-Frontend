@@ -16,14 +16,20 @@ const DiscoverFeed = () => {
     <section className="space-y-4">
       <div className="flex items-baseline gap-2">
         <h1 className="text-3xl font-semibold">Discover</h1>
-        {currentUser && currentUser?.is_first_time_user && (
-          <Link
-            to="/home"
-            className="hover:!no-underline !underline !text-gray-400 hover:!text-black font-semibold text-sm"
-          >
-            Complete your profile
-          </Link>
-        )}
+        {currentUser &&
+          (currentUser?.is_first_time_user ||
+            currentUser?.user_type === CompanyUserType) && (
+            <Link
+              to={"/update-profile"}
+              className="hover:!no-underline !underline !text-gray-400 hover:!text-black font-semibold text-sm"
+            >
+              {currentUser && currentUser?.is_first_time_user
+                ? "Complete your profile"
+                : currentUser?.user_type === CompanyUserType
+                ? "Create Company"
+                : ""}
+            </Link>
+          )}
       </div>
       {currentUser?.user_type === CompanyUserType && <CreatePost />}
       <DiscoverPostTabs />

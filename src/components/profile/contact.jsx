@@ -25,7 +25,7 @@ function Contact() {
   const { user: currentUser } = useAuth();
   useRedirect(
     !(Number(localStorage.getItem(currentProfileIndexKey)) >= 1),
-    "/complete-profile"
+    "/update-profile"
   );
   const initialValues = {
     personal_email:

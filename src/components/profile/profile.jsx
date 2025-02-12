@@ -29,7 +29,7 @@ function Profile() {
       <img src="/images/passportOne.png" alt="passport" width="140px" />
       <div className="flex max-md:flex-col gap-3 font-semibold text-sm">
         <Link
-          to="/complete-profile"
+          to="/update-profile"
           className="bg-gold hover:bg-opacity-60 rounded-full w-[250px] p-2"
         >
           Let's Go

@@ -88,7 +88,7 @@ function CreatePost() {
         <div className="grid gap-1">
           <strong>Please complete your profile to create a post</strong>
           <Link
-            to="/home"
+            to="/update-profile"
             className="!underline !text-gray-400 hover:!text-black font-semibold"
           >
             Complete your profile

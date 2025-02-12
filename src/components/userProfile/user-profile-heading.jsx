@@ -52,7 +52,7 @@ export default function UserProfileHeadings({
 
       {currentUser?.id === id ? (
         <Link
-          to="/home"
+          to="/update-profile"
           className="block font-bold py-1.5 px-10 !bg-gold w-fit !rounded-full transition-all duration-300 active:scale-95 text-sm"
         >
           {is_first_time_user ? "Complete your profile" : "Edit profile"}

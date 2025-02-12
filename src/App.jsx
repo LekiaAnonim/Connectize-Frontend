@@ -61,7 +61,7 @@ function App() {
 
             {/* Complete profile */}
             <Route path="/" element={<ProfileLayout />}>
-              <Route path="complete-profile" element={<Home />} />
+              <Route path="update-profile" element={<Home />} />
               <Route path="contact" element={<Contact />} />
               <Route path="address" element={<Address />} />
               <Route path="bio" element={<Bio />} />
