@@ -32,13 +32,13 @@ export function TopServices() {
     queryFn: getServices,
   });
 
-  const getRandomNumber = () => {
-    const num = Math.floor(Math.random() * services?.length);
+  // const getRandomNumber = () => {
+  //   const num = Math.floor(Math.random() * services?.length);
 
-    return num || 0;
-  };
+  //   return num || 0;
+  // };
 
-  const service = services?.[getRandomNumber()];
+  const service = services?.[0];
 
   return isLoading ? (
     <section className="w-full">
@@ -50,7 +50,7 @@ export function TopServices() {
   ) : service ? (
     <section className="">
       <div className="p-3 sm:p-4 lg:!px-2">
-        <HeadingText>Top Services</HeadingText>
+        <HeadingText>Recent Service</HeadingText>
       </div>
 
       <PostCard
