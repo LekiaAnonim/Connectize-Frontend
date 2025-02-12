@@ -35,15 +35,28 @@ export const days = [
 // const session = getSession();
 
 export const feedNavItems = [
-  { name: "Home", to: "/", icon: HomeIcon },
-  { name: "Messages", to: "/messages", icon: Message },
-  { name: "Representatives", to: "/representatives", icon: UserGroup },
-  { name: "Companies", to: "/companies", icon: CompanyIcon },
-  // { name: "Services", to: "/services", icon: DesignServices },
-  { name: "Market", to: "/market", icon: StoreIcon },
-  { name: "Bookmarks", to: "/co/bookmarks", icon: BookmarkFilledIcon },
-
-  { name: "Analysis", to: "/analysis", icon: ChartBar },
+  { name: "Home", to: "/", icon: HomeIcon, smallNavigation: true },
+  { name: "Messages", to: "/messages", icon: Message, smallNavigation: true },
+  {
+    name: "Representatives",
+    to: "/co/representatives",
+    icon: UserGroup,
+    smallNavigation: true,
+  },
+  {
+    name: "Companies",
+    to: "/companies",
+    icon: CompanyIcon,
+    smallNavigation: true,
+  },
+  { name: "Market", to: "/market", icon: StoreIcon, smallNavigation: true },
+  {
+    name: "Bookmarks",
+    to: "/co/bookmarks",
+    icon: BookmarkFilledIcon,
+    smallNavigation: false,
+  },
+  { name: "Analysis", to: "/analysis", icon: ChartBar, smallNavigation: false },
 ];
 
 // index key for complete profile
