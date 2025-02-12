@@ -76,10 +76,6 @@ function App() {
                 path="company-information"
                 element={<CompanyInformation />}
               />
-              <Route
-                path="company-additional-information"
-                element={<CompanyAdditionalInformation />}
-              />
             </Route>
             {/* Bookmark */}
             <Route path="co/notifications" element={<NotificationItem />} />
