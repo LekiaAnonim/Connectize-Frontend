@@ -2,7 +2,10 @@ import React from "react";
 import { VerifiedIcon } from "../../../icon";
 
 import { useQuery } from "@tanstack/react-query";
-import { getSuggestedUsersForCurrentUser } from "../../../api-services/users";
+import {
+  getPeopleAssociatedForCurrentUser,
+  getSuggestedUsersForCurrentUser,
+} from "../../../api-services/users";
 import { PostCard, PostCardSkeleton } from "./DiscoverPostTabs";
 import HeadingText from "../../HeadingText";
 import LightParagraph from "../../ParagraphText";
@@ -13,6 +16,7 @@ import { motion } from "framer-motion";
 import clsx from "clsx";
 import Username from "../../Username";
 import SeeMoreLink from "../../SeeMoreLink";
+import { useAuth } from "../../../context/userContext";
 
 const TopServiceSuggestions = () => {
   return (
@@ -83,28 +87,29 @@ export function Suggestions({
   );
 }
 
-export function SuggestionList({ hasSeeMore }) {
-  const { data: suggestedUsers, isLoading } = useQuery({
-    queryKey: ["suggestedUsers"],
-    queryFn: getSuggestedUsersForCurrentUser,
+export function SuggestionList({ hasSeeMore, associated = false, thisUser }) {
+  const { user: currentUser } = useAuth();
+  const { data: suggestedUsers = [], isLoading } = useQuery({
+    queryKey: [associated ? "associatedUsers" : "suggestedUsers"],
+    queryFn: associated
+      ? () => getPeopleAssociatedForCurrentUser(thisUser)
+      : getSuggestedUsersForCurrentUser,
+    enabled: !!currentUser,
   });
 
+  console.log(suggestedUsers);
+
   return (
-    <div className="">
+    <section className="">
       <ul className="space-y-2 divide-y divide-gray-100 p-0">
         {isLoading ? (
-          Array.from({ length: 8 }, (_, index) => (
-            <motion.div
-              // initial={{ y: 10 }}
-              // animate={{ y: 0 }}
-              // transition={{ repeat: Infinity, delay: index * 0.2, duration: 2 }}
-              key={index}
-            >
-              <CircleTitleSubtitleSkeleton />
-            </motion.div>
+          Array.from({ length: 6 }, (_, index) => (
+            <CircleTitleSubtitleSkeleton key={index} />
           ))
-        ) : suggestedUsers?.length === 0 ? (
-          <LightParagraph>No suggested users...</LightParagraph>
+        ) : suggestedUsers?.length <= 0 ? (
+          <LightParagraph>
+            {associated ? "No users associated yet" : "No suggested users"}
+          </LightParagraph>
         ) : (
           suggestedUsers?.map((user) => {
             const { first_name, last_name, avatar, email: hashtag, id } = user;
@@ -128,7 +133,7 @@ export function SuggestionList({ hasSeeMore }) {
       {hasSeeMore && suggestedUsers?.length > 10 && (
         <SeeMoreLink url="/representatives" />
       )}
-    </div>
+    </section>
   );
 }
 

@@ -21,6 +21,7 @@ import { SuggestionList } from "../../components/admin/feeds/TopServiceSuggestio
 import { CreateNewLink } from "../../components/admin/markets/carousel";
 import { useAuth } from "../../context/userContext";
 import { CompanyUserType } from "../../lib/helpers/types";
+import { capitalizeFirst } from "../../lib/utils";
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -126,14 +127,16 @@ export default function UserProfile() {
                 <ProfileAboutList
                   Icon={TagOutlined}
                   title="Role"
-                  value={role}
+                  value={capitalizeFirst(role)}
                 />
                 <ProfileAboutList
                   Icon={LocationOnOutlined}
                   title="Location"
                   value={
                     address || city || region || country
-                      ? `${address}, ${city}. ${region}. ${country}`
+                      ? `${address || ""} ${city || ""} ${region || ""} ${
+                          country || ""
+                        }`
                       : "N/A"
                   }
                 />
@@ -161,7 +164,7 @@ export default function UserProfile() {
           </section>
 
           <ProfileSection title="People Associated" className="h-fit lg:w-1/3">
-            <SuggestionList hasSeeMore />
+            <SuggestionList hasSeeMore associated thisUser={paramUser} />
           </ProfileSection>
         </section>
       </section>

@@ -35,7 +35,9 @@ export default function Form({
           <span>{label}</span>
           {helpText && (
             <ButtonWithTooltipIcon
+              hasArrow
               tip={helpText}
+              iconClassName="size-4 !text-gray-400 hover:!text-black"
               IconName={QuestionMarkCircledIcon}
             />
           )}

@@ -71,7 +71,6 @@ export async function refreshToken() {
     return { Authorization: authorizationHeader };
   } catch (error) {
     retries++;
-    console.info(`Refresh token attempt #${retries}`);
 
     if (retries === 1) {
       removeSession();
@@ -121,11 +120,9 @@ export async function makeApiRequest({
       params,
     });
 
-    const responseMessage = response.data.message;
-
     if (response.status >= 200 && response.status <= 204) {
       resetForm?.();
-      console.log("Request succeeded:", response.data);
+      const responseMessage = response.data.message;
 
       if (response.data.success && responseMessage) {
         toast.success(responseMessage);
@@ -154,7 +151,6 @@ export async function makeApiRequest({
 
           if (response.status >= 200 && response.status < 300) {
             resetForm?.();
-            console.log("Request succeeded after retry:", response.data);
             toast.success(response.data.message);
             return response.data;
           }
