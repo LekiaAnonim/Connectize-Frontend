@@ -14,6 +14,7 @@ import ConnectButton from "../../components/ConnectButton";
 
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/userContext";
+import { CompanyUserType } from "../../lib/helpers/types";
 
 const sortOptions = ["company name", "company type", "products", "country"];
 
@@ -32,15 +33,17 @@ export default function CompaniesPage() {
     <section className="space-y-6">
       <section className="flex items-center justify-between">
         <Heading companyLength={companiesList?.count} />
-        {currentUser && currentUser?.companies.length < 1 && (
-          <Button
-            as="a"
-            href="/create-company"
-            className="!text-xs !rounded-full hover:!bg-gold transition-colors duration-300"
-          >
-            Create Company
-          </Button>
-        )}
+        {currentUser &&
+          currentUser?.companies.length < 1 &&
+          currentUser?.user_type === CompanyUserType && (
+            <Button
+              as="a"
+              href="/create-company"
+              className="!text-xs !rounded-full hover:!bg-gold transition-colors duration-300"
+            >
+              Create Company
+            </Button>
+          )}
       </section>
       <CompaniesArray />
     </section>
@@ -134,6 +137,7 @@ export const CompaniesArray = ({
                   <CompanyName
                     name={company?.company_name}
                     verified={company?.verify}
+                    size="md"
                   />
                   {company?.organization_type && (
                     <div className="flex mb-1">
@@ -172,7 +176,13 @@ export const CompaniesArray = ({
                 ) : (
                   <div />
                 )}
-                <ConnectButton />
+                {currentUser?.email !== company?.profile && (
+                  <ConnectButton
+                    first_name={company?.company_name}
+                    id={company?.id}
+                    type="company"
+                  />
+                )}
               </div>
             </motion.div>
           );

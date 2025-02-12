@@ -9,7 +9,7 @@ import { feedNavItems } from "../lib/data";
 import { LogoutOutlined } from "@ant-design/icons";
 import { ButtonWithTooltipIcon } from "./admin/feeds/DiscoverPosts";
 
-export function NavigationSection({ hasHeader }) {
+export function NavigationSection({ hasHeader, isSmallNavigation = false }) {
   const { pathname } = useLocation();
   const { toggleNav } = useNav();
   const { user: currentUser } = useAuth();
@@ -23,6 +23,10 @@ export function NavigationSection({ hasHeader }) {
     setLoading(false);
   };
 
+  const navigators = isSmallNavigation
+    ? feedNavItems.slice(0, 5)
+    : feedNavItems;
+
   return (
     <ul
       className={clsx("xs:text-sm", {
@@ -30,13 +34,13 @@ export function NavigationSection({ hasHeader }) {
         "bg-background rounded p-2 mb-6 space-y-1": !hasHeader,
       })}
     >
-      {feedNavItems.map((item, index) => (
+      {navigators.map((item, index) => (
         <li key={index}>
           <Link
             to={item.to}
             onClick={() => toggleNav(false)}
             className={clsx(
-              "flex gap-2 items-center transition-all active:scale-90 duration-300 p-2 py-2.5  hover:!text-mid_grey",
+              "flex gap-2 items-center transition-all active:scale-90 duration-300 p-2 py-2.5  xs:hover:!text-mid_grey",
               {
                 "bg-mid_grey pointer-events-none": item.to === pathname,
                 "!text-gold rounded": item.to === pathname && !hasHeader,

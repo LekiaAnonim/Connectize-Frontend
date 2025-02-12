@@ -41,6 +41,7 @@ import BookMark from "./pages/bookmark";
 import AcceptRepresentation from "./pages/representatives/AcceptRepresentation";
 import MessagesLayout from "./pages/messages/layout";
 import MessagingPage from "./pages/messages/messaging";
+import { NotificationItem } from "./components/notifications";
 
 function App() {
   return (
@@ -56,6 +57,17 @@ function App() {
               <Route path="/posts/:id" element={<SinglePostPage />} />
             </Route>
 
+            <Route path="/profile" element={<Profile />} />
+
+            {/* Complete profile */}
+            <Route path="/" element={<ProfileLayout />}>
+              <Route path="update-profile" element={<Home />} />
+              <Route path="contact" element={<Contact />} />
+              <Route path="address" element={<Address />} />
+              <Route path="bio" element={<Bio />} />
+              <Route path="overview" element={<Overview />} />
+            </Route>
+
             {/* Create Company */}
             <Route element={<CompanyLayout />}>
               <Route path="create-company" element={<CreateCompany />} />
@@ -64,11 +76,9 @@ function App() {
                 path="company-information"
                 element={<CompanyInformation />}
               />
-              <Route
-                path="company-additional-information"
-                element={<CompanyAdditionalInformation />}
-              />
             </Route>
+            {/* Bookmark */}
+            <Route path="co/notifications" element={<NotificationItem />} />
             {/* Bookmark */}
             <Route path="co/bookmarks" element={<BookMark />} />
             {/* User Profile */}
@@ -77,13 +87,16 @@ function App() {
             <Route path="search" element={<Search />} />
             <Route path=":company" element={<CompanyProfile />} />
             <Route path="analysis" element={<Analysis />} />
-            <Route path="representatives" element={<RepresentativesPage />} />
             <Route
-              path="representatives/manage"
+              path="/co/representatives"
+              element={<RepresentativesPage />}
+            />
+            <Route
+              path="/co/representatives/manage"
               element={<AssignRepresentative />}
             />
             <Route
-              path="representatives/accept"
+              path="/co/representatives/accept"
               element={<AcceptRepresentation />}
             />
             <Route element={<MessagesLayout />}>
@@ -114,16 +127,6 @@ function App() {
           </Route>
 
           <Route path="/success" element={<SuccessPage />} />
-          <Route path="/profile" element={<Profile />} />
-
-          {/* Complete profile */}
-          <Route path="/" element={<ProfileLayout />}>
-            <Route path="home" element={<Home />} />
-            <Route path="contact" element={<Contact />} />
-            <Route path="address" element={<Address />} />
-            <Route path="bio" element={<Bio />} />
-            <Route path="overview" element={<Overview />} />
-          </Route>
         </Route>
       </Routes>
     </>

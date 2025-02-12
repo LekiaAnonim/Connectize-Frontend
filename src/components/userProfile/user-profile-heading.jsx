@@ -18,6 +18,7 @@ export default function UserProfileHeadings({
   is_first_time_user,
   followers_count,
   following_count,
+  email,
 }) {
   const { user: currentUser } = useAuth();
   const [cachedConnections, setCachedConnections] = useState(followers_count);
@@ -25,8 +26,15 @@ export default function UserProfileHeadings({
     <section className="flex max-md:flex-col md:items-center gap-4 md:justify-between">
       <section className="space-y-1">
         <div className="flex items-center gap-x-0.5">
-          <h2 className="text-2xl xs:leading-tight text-gray-700 font-bold capitalize">
-            {first_name} {last_name}
+          <h2
+            className={clsx(
+              "text-2xl xs:leading-tight text-gray-700 font-bold",
+              {
+                capitalize: first_name,
+              }
+            )}
+          >
+            {`${first_name || email} ${last_name || ""}`}
           </h2>
           {verified && <VerifiedIcon />}
         </div>
@@ -44,7 +52,7 @@ export default function UserProfileHeadings({
 
       {currentUser?.id === id ? (
         <Link
-          to="/home"
+          to="/update-profile"
           className="block font-bold py-1.5 px-10 !bg-gold w-fit !rounded-full transition-all duration-300 active:scale-95 text-sm"
         >
           {is_first_time_user ? "Complete your profile" : "Edit profile"}

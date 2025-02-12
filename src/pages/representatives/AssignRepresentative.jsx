@@ -13,6 +13,8 @@ import {
 } from "../../api-services/representatives";
 import { getCompanies } from "../../api-services/companies";
 import { useCustomQuery } from "../../context/queryContext";
+import { UserType } from "../../lib/helpers/types";
+import Restricted from "../../components/Restricted";
 
 export default function AssignRepresentative() {
   const [username, setUsername] = useState("");
@@ -94,7 +96,9 @@ export default function AssignRepresentative() {
     };
   });
 
-  return (
+  return currentUser?.user_type === UserType ? (
+    <Restricted fallback="assigning new representatives" />
+  ) : (
     <section>
       <section className="space-y-6">
         <div className="">

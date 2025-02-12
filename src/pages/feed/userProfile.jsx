@@ -20,11 +20,12 @@ import { Badge } from "@chakra-ui/react";
 import { SuggestionList } from "../../components/admin/feeds/TopServiceSuggestions";
 import { CreateNewLink } from "../../components/admin/markets/carousel";
 import { useAuth } from "../../context/userContext";
+import { CompanyUserType } from "../../lib/helpers/types";
+import { capitalizeFirst } from "../../lib/utils";
 
 export default function UserProfile() {
   const { userId } = useParams();
-  const {user:currentUser} = useAuth()
-
+  const { user: currentUser } = useAuth();
 
   const { data: paramUser, isLoading } = useQuery({
     queryKey: ["users", userId],
@@ -74,9 +75,11 @@ export default function UserProfile() {
       <section className="mt-8 container !px-0 space-y-6">
         <UserProfileHeadings {...paramUser} />
 
-        {currentUser && currentUser?.companies?.length < 1 && (
-          <CreateNewLink text="Create company" url="/create-company" />
-        )}
+        {currentUser &&
+          currentUser?.companies?.length < 1 &&
+          currentUser?.user_type === CompanyUserType && (
+            <CreateNewLink text="Create company" url="/create-company" />
+          )}
 
         <section className="flex max-lg:flex-col gap-y-6 gap-x-3 w-full">
           <section className="space-y-6 lg:w-[65.5%] shrink-0">
@@ -85,25 +88,57 @@ export default function UserProfile() {
             </ProfileSection>
             <ProfileSection title="about">
               <ul className="space-y-4 divide-y">
-                <ProfileAboutList
-                  Icon={PersonOutline}
-                  title="Gender"
-                  value={gender}
-                />
-                <ProfileAboutList
-                  Icon={CalendarOutlined}
-                  title="Date of Birth"
-                  value={date_of_birth}
-                />
+                {currentUser?.id === Number(userId) && (
+                  <ProfileAboutList
+                    Icon={PersonOutline}
+                    title="Gender"
+                    value={
+                      gender ? (
+                        <>
+                          {gender}{" "}
+                          <Badge className="!text-[.55rem]">
+                            only visible to you
+                          </Badge>
+                        </>
+                      ) : (
+                        "N/A"
+                      )
+                    }
+                  />
+                )}
+                {currentUser?.id === Number(userId) && (
+                  <ProfileAboutList
+                    Icon={CalendarOutlined}
+                    title="Date of Birth"
+                    value={
+                      date_of_birth ? (
+                        <>
+                          {date_of_birth}{" "}
+                          <Badge className="!text-[.55rem]">
+                            only visible to you
+                          </Badge>
+                        </>
+                      ) : (
+                        "N/A"
+                      )
+                    }
+                  />
+                )}
                 <ProfileAboutList
                   Icon={TagOutlined}
                   title="Role"
-                  value={role}
+                  value={capitalizeFirst(role)}
                 />
                 <ProfileAboutList
                   Icon={LocationOnOutlined}
                   title="Location"
-                  value={`${address}, ${city}. ${region}. ${country}`}
+                  value={
+                    address || city || region || country
+                      ? `${address || ""} ${city || ""} ${region || ""} ${
+                          country || ""
+                        }`
+                      : "N/A"
+                  }
                 />
                 <ProfileAboutList
                   Icon={PhoneOutlined}
@@ -129,7 +164,7 @@ export default function UserProfile() {
           </section>
 
           <ProfileSection title="People Associated" className="h-fit lg:w-1/3">
-            <SuggestionList hasSeeMore />
+            <SuggestionList hasSeeMore associated thisUser={paramUser} />
           </ProfileSection>
         </section>
       </section>
@@ -143,7 +178,7 @@ export const ProfileAboutList = ({ title, value, Icon }) => {
       <Icon className="!size-6 xs:!size-5" />
       <div className="flex gap-x-1 items-baseline max-xs:flex-col">
         <strong className="leading-none">{title}:</strong>
-        <LightParagraph>{value} </LightParagraph>
+        <LightParagraph>{value || "N/A"} </LightParagraph>
       </div>
     </li>
   );

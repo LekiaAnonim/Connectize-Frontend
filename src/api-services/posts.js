@@ -1,4 +1,7 @@
+import { toast } from "sonner";
 import { makeApiRequest } from "../lib/helpers";
+import { getCompanies } from "./companies";
+import { Link } from "react-router-dom";
 
 export const getPosts = async () => {
   const { results: posts } = await makeApiRequest({
@@ -10,10 +13,20 @@ export const getPosts = async () => {
 };
 
 export const createPost = async (formData) => {
+  const companies = await getCompanies();
+  const company = companies?.[0];
+
+  if (!company) {
+    toast.info(
+      "You have no company attributed with your profile, please create one"
+    );
+    return;
+  }
+
   const post = await makeApiRequest({
     url: `api/posts/`,
     method: "POST",
-    data: formData,
+    data: { ...formData, company: company?.id },
     contentType: "multipart/form-data",
   });
 

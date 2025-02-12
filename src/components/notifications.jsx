@@ -26,6 +26,7 @@ import { getAllUsers } from "../api-services/users";
 import CompanyName from "./company/CompanyName";
 import { useAuth } from "../context/userContext";
 import useWebSocket from "../hooks/useWebSocket";
+import SeeMoreLink from "./SeeMoreLink";
 
 const generalNotificationType = [
   "like",
@@ -45,21 +46,9 @@ const NotificationPopOver = () => {
   const { messages } = useWebSocket("notifications");
   const { user: currentUser } = useAuth();
 
-  const { data: notificationsData, isLoading } = useQuery({
+  const { data: notificationsData } = useQuery({
     queryKey: ["notifications"],
     queryFn: getNotificationsForUser,
-    enabled: !!currentUser,
-  });
-
-  const { data: companies, isLoading: companiesLoading } = useQuery({
-    queryKey: ["allConnectizeCompanies"],
-    queryFn: getAllCompanies,
-    enabled: !!currentUser,
-  });
-
-  const { data: users, isLoading: usersLoading } = useQuery({
-    queryKey: ["users"],
-    queryFn: getAllUsers,
     enabled: !!currentUser,
   });
 
@@ -89,29 +78,6 @@ const NotificationPopOver = () => {
     setUnReadNotificationLength(notificationLengthNotRead);
   }, [notificationLengthNotRead]);
 
-  const tabsHeader = ["General", "Promotions"];
-
-  const generalNotifications = useMemo(
-    () =>
-      notifications?.filter((notification) =>
-        generalNotificationType.includes(notification.notification_type)
-      ),
-    [notifications]
-  );
-
-  const promotionsNotifications = useMemo(
-    () =>
-      notifications?.filter((notification) =>
-        promotionsNotificationType.includes(notification.notification_type)
-      ),
-    [notifications]
-  );
-
-  const handleMarkAllAsRead = useCallback(async () => {
-    setUnReadNotificationLength(0);
-    await markAllNotificationsAsRead();
-  }, []);
-
   return (
     <Popover>
       <PopoverTrigger>
@@ -127,49 +93,136 @@ const NotificationPopOver = () => {
 
       <PopoverContent className="mx-2 xs:!w-[350px] lg:!w-[400px]">
         <PopoverArrow />
-        {isLoading || companiesLoading || usersLoading ? (
-          <NotificationsSkeleton />
-        ) : (
-          <section className={clsx("bg-white rounded p-3 space-y-2 w-full")}>
-            <header className="flex justify-between items-center gap-2 border-b border-gray-100 pb-1">
-              <h4 className="text-lg font-semibold">Notifications</h4>
-              {unReadNotificationLength > 0 && (
-                <button
-                  className="text-gray-500 hover:text-black transition-colors duration-300 hover:underline !text-xs disabled:cursor-not-allowed disabled:no-underline"
-                  onClick={handleMarkAllAsRead}
-                >
-                  Mark all as read
-                </button>
-              )}
-            </header>
-
-            <CustomTabs
-              tabsHeading={tabsHeader}
-              tabsPanels={[
-                <NotificationsArray
-                  key="general"
-                  fallback="general"
-                  notifications={generalNotifications}
-                  setUnReadNotificationLength={setUnReadNotificationLength}
-                  unReadNotificationLength={unReadNotificationLength}
-                  companies={companies}
-                  users={users}
-                />,
-                <NotificationsArray
-                  key="promotions"
-                  notifications={promotionsNotifications}
-                  setUnReadNotificationLength={setUnReadNotificationLength}
-                  unReadNotificationLength={unReadNotificationLength}
-                  fallback="promotion"
-                  companies={companies}
-                  users={users}
-                />,
-              ]}
-            />
-          </section>
-        )}
+        <NotificationItem isPopover />
       </PopoverContent>
     </Popover>
+  );
+};
+
+export const NotificationItem = ({ isPopover = false }) => {
+  const { messages } = useWebSocket("notifications");
+  const { user: currentUser } = useAuth();
+
+  const { data: notificationsData, isLoading } = useQuery({
+    queryKey: ["notifications"],
+    queryFn: getNotificationsForUser,
+    enabled: !!currentUser,
+  });
+
+  const notifications = useMemo(() => {
+    const allNotifications = [...messages, ...(notificationsData || [])];
+    const uniqueNotifications = allNotifications.reduce((acc, notification) => {
+      if (!acc.some((n) => n.message === notification.message)) {
+        acc.push(notification);
+      }
+      return acc;
+    }, []);
+    return uniqueNotifications;
+  }, [messages, notificationsData]);
+
+  const notificationLengthNotRead = useMemo(
+    () =>
+      notifications?.filter((notification) => notification?.is_read === null)
+        ?.length || 0,
+    [notifications]
+  );
+
+  const [unReadNotificationLength, setUnReadNotificationLength] = useState(
+    notificationLengthNotRead
+  );
+
+  useEffect(() => {
+    setUnReadNotificationLength(notificationLengthNotRead);
+  }, [notificationLengthNotRead]);
+
+  const { data: companies, isLoading: companiesLoading } = useQuery({
+    queryKey: ["allConnectizeCompanies"],
+    queryFn: getAllCompanies,
+    enabled: !!currentUser,
+  });
+
+  const { data: users, isLoading: usersLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: getAllUsers,
+    enabled: !!currentUser,
+  });
+
+  const tabsHeader = ["General", "Promotions"];
+
+  const diffNotifications = isPopover
+    ? notifications.slice(0, 10)
+    : notificationsData;
+
+  const generalNotifications = useMemo(
+    () =>
+      diffNotifications?.filter((notification) =>
+        generalNotificationType.includes(notification.notification_type)
+      ),
+    [diffNotifications]
+  );
+
+  const promotionsNotifications = useMemo(
+    () =>
+      diffNotifications?.filter((notification) =>
+        promotionsNotificationType.includes(notification.notification_type)
+      ),
+    [diffNotifications]
+  );
+
+  const handleMarkAllAsRead = useCallback(async () => {
+    setUnReadNotificationLength(0);
+    await markAllNotificationsAsRead();
+  }, []);
+  return (
+    <>
+      {isLoading || companiesLoading || usersLoading ? (
+        <NotificationsSkeleton />
+      ) : (
+        <section className={clsx("bg-white rounded-md p-3 space-y-2 w-full")}>
+          <header className="flex justify-between items-center gap-2 border-b border-gray-100 pb-1">
+            <h4 className="text-lg font-semibold">Notifications</h4>
+            {unReadNotificationLength > 0 && (
+              <button
+                className="text-black/90 bg-gold rounded-md hover:bg-opacity-60 transition-all duration-300 !text-xs disabled:cursor-not-allowed disabled:no-underline px-5 py-1"
+                onClick={handleMarkAllAsRead}
+              >
+                Mark all as read
+              </button>
+            )}
+          </header>
+
+          <CustomTabs
+            tabsHeading={tabsHeader}
+            tabsPanels={[
+              <NotificationsArray
+                key="general"
+                fallback="general"
+                notifications={generalNotifications}
+                setUnReadNotificationLength={setUnReadNotificationLength}
+                unReadNotificationLength={unReadNotificationLength}
+                companies={companies}
+                users={users}
+                isPopover={isPopover}
+              />,
+              <NotificationsArray
+                key="promotions"
+                notifications={promotionsNotifications}
+                setUnReadNotificationLength={setUnReadNotificationLength}
+                unReadNotificationLength={unReadNotificationLength}
+                fallback="promotion"
+                companies={companies}
+                users={users}
+                isPopover={isPopover}
+              />,
+            ]}
+          />
+
+          {isPopover && notificationsData?.length > 10 && (
+            <SeeMoreLink url="/co/notifications" />
+          )}
+        </section>
+      )}
+    </>
   );
 };
 
@@ -181,9 +234,15 @@ const NotificationsArray = memo(
     fallback,
     companies,
     users,
+    isPopover,
   }) => {
     return (
-      <section className="space-y-2 py-2 overflow-y-auto overflow-x-hidden max-h-[60vh] scrollbar-hidden divide-y divide-gray-100">
+      <section
+        className={clsx("space-y-2 divide-y divide-gray-100", {
+          "overflow-y-auto overflow-x-hidden max-h-[55vh] scrollbar-hidden":
+            isPopover,
+        })}
+      >
         {notifications.length <= 0 ? (
           <p className="text-sm text-gray-400 text-center my-5">
             No {fallback} notifications yet...

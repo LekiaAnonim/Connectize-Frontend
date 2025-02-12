@@ -10,7 +10,7 @@ export default function CompanyName({ name, verified, size = "sm" }) {
         to={"/" + name}
         className={clsx("text-lg font-bold break-all line-clamp-1", {
           "xs:text-sm": size === "sm",
-          "xs:text-base": size === "md",
+          "xs:text-lg": size === "md",
         })}
       >
         {name}

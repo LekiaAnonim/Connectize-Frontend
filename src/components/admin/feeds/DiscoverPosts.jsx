@@ -62,7 +62,9 @@ function DiscoverPosts({ searchArray, isSearch, searchLoading }) {
           <DiscoverPostSkeleton key={index} />
         ))
       ) : finalArray?.length < 1 ? (
-        <LightParagraph>No post found..</LightParagraph>
+        <LightParagraph>
+          {isSearch ? "No post found in search" : ""}
+        </LightParagraph>
       ) : (
         finalArray?.map((post, index) => (
           <DiscoverPostItem
@@ -523,6 +525,7 @@ export function ButtonWithTooltipIcon({
   loading = false,
   disabled = false,
   thisKey,
+  hasArrow = false,
 }) {
   return (
     <Tooltip
@@ -530,9 +533,11 @@ export function ButtonWithTooltipIcon({
       fontSize="12"
       placement="auto"
       className={clsx(
-        "!rounded-md !bg-white !text-custom_blue border",
+        "!rounded-md !bg-white !text-custom_blue border mx-3 max-xs:!text-[.925rem] max-xs:!p-4",
         tooltipClassName
       )}
+      hasArrow={hasArrow}
+      colorScheme="whiteAlpha"
     >
       <button
         onClick={onClick}

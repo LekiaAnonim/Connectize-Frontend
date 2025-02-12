@@ -10,7 +10,7 @@ function ProfileNavBar() {
   const navItems = [
     {
       name: pathname !== "/bio" ? "Personal Information" : "...",
-      to: "/home",
+      to: "/update-profile",
       isLast: false,
     },
     { name: "Contact", to: "/contact", isLast: false },

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { connectWithUser } from "../api-services/users";
 import { toast } from "sonner";
 import { useAuth } from "../context/userContext";
+import { connectWithCompany } from "../api-services/companies";
 
 export default function ConnectButton({
   id,
@@ -21,6 +22,7 @@ export default function ConnectButton({
   }, [isConnected]);
 
   const handleConnect = async () => {
+    if (!id) return;
     if (hasConnected) {
       setCachedConnections?.((prev) => prev - 1);
       setHasConnected(false);
@@ -29,12 +31,14 @@ export default function ConnectButton({
       setCachedConnections?.((prev) => prev + 1);
     }
     if (type === "users") {
-      const connect = await connectWithUser(id, hasConnected);
-      toast.success(
-        connect
-          ? `Connection sent to ${first_name}`
-          : `Disconnected from ${first_name} on connectize`
-      );
+      await connectWithUser(id, hasConnected);
+      // toast.success(
+      //   connect
+      //     ? `Connection sent to ${first_name}`
+      //     : `Disconnected from ${first_name} on connectize`
+      // );
+    } else if (type === "company") {
+      await connectWithCompany(id, hasConnected);
     }
   };
 

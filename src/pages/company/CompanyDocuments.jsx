@@ -90,9 +90,7 @@ const CompanyDocuments = () => {
       for (let value in formik.values) {
         localStorage.removeItem(value);
       }
-      toast.success(formik.values["company_name"] + " onboarded successfully", {
-        id: toastId,
-      });
+      toast.dismiss(toastId);
       setNewCompanyName(newCompany.company_name);
       return true;
     }
@@ -144,7 +142,7 @@ const CompanyDocuments = () => {
         />
         <StepButton
           doStepChange={doStepChange}
-          nextStep={newCompanyName || ""}
+          nextStep={newCompanyName || "/"}
           stepText="Submit"
         />
       </div>

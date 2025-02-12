@@ -167,3 +167,17 @@ export const getOrCreateCompanyDocumentTypes = async (type, name) => {
     data: { name, type },
   });
 };
+
+
+export const connectWithCompany = async (id, hasConnected) => {
+  if (hasConnected) {
+    return await makeApiRequest({
+      url: `api/companies/${id}/unfollow/`,
+      method: "POST",
+    });
+  }
+  return await makeApiRequest({
+    url: `api/companies/${id}/follow/`,
+    method: "POST",
+  });
+};

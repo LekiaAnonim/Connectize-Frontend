@@ -49,7 +49,6 @@ const validationSchema = Yup.object().shape({
 function Home() {
   const { user: currentUser } = useAuth();
 
-  // useRedirect()
   const initialValues = {
     first_name:
       currentUser?.first_name || localStorage.getItem(first_nameKey) || "",

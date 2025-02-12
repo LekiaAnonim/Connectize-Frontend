@@ -1,6 +1,7 @@
 import { toast } from "sonner";
 import { goToLogin, makeApiRequest } from "../lib/helpers";
 import { capitalizeFirst } from "../lib/utils";
+import { getAllRepresentatives } from "./representatives";
 
 export const getAllUsers = async () => {
   const { results } = await makeApiRequest({
@@ -87,6 +88,31 @@ export const getSuggestedUsersForCurrentUser = async () => {
   );
 
   return allUsersInLocation;
+};
+
+export const getPeopleAssociatedForUser = async (thisUser) => {
+  if (!thisUser) return [];
+  const allUsers = await getAllUsers();
+
+  const representativesAssociated =
+    (await getAllRepresentatives({
+      company_id: thisUser?.companies?.[0],
+    })) || [];
+
+  const mutualConnectionsSet = new Set(
+    thisUser.followings.filter((following) =>
+      thisUser.followers.includes(following)
+    )
+  );
+
+  const allUsersAssociated = allUsers.filter(
+    (user) =>
+      thisUser.id !== user.id &&
+      user.first_name &&
+      mutualConnectionsSet.has(user.id)
+  );
+
+  return [...representativesAssociated, ...allUsersAssociated];
 };
 
 // get and create user

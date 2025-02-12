@@ -44,7 +44,11 @@ const UserProfile = ({ currentUser }) => {
     <div className="flex items-center gap-2">
       <Link to={`/co/${currentUser?.id}`}>
         <Avatar
-          name={`${currentUser?.first_name} ${currentUser?.last_name}`}
+          name={
+            currentUser?.first_name
+              ? `${currentUser?.first_name} ${currentUser?.last_name}`
+              : currentUser?.email
+          }
           src={currentUser?.avatar || ""}
           className={clsx(avatarStyle)}
           size="md"
@@ -56,12 +60,16 @@ const UserProfile = ({ currentUser }) => {
             to={`/co/${currentUser?.id}`}
             className="font-semibold text-sm line-clamp-1 break-all"
           >
-            {currentUser?.first_name} {currentUser?.last_name}
+            {currentUser?.first_name
+              ? `${currentUser?.first_name} ${currentUser?.last_name}`
+              : currentUser?.email.split("@")[0]}
           </Link>
           <VerifiedIcon color="black" />
         </div>
         <span className="text-[.75rem] text-gray-400 !-mt-0.5 block">
-          {capitalizeFirst(currentUser?.role || "")}{" "}
+          {currentUser?.role
+            ? capitalizeFirst(currentUser?.role || "")
+            : currentUser?.email}
         </span>
       </div>
     </div>
@@ -130,20 +138,30 @@ function ProductCategory() {
         ) : !categories?.length ? (
           <LightParagraph>No categories available</LightParagraph>
         ) : (
-          categories?.map((item, index) => (
+          <>
             <Link
-              to={
-                (pathname.startsWith("/services") ? "/services" : "/market") +
-                "?category=" +
-                item.name.toLowerCase()
-              }
-              key={index}
+              to={pathname.startsWith("/services") ? "/services" : "/market"}
+              key={"all"}
               className="flex items-center gap-2 p-2"
             >
               <span className="size-5 bg-dark rounded-full shrink-0" />
-              <span className="line-clamp-2">{item.name}</span>
+              <span className="line-clamp-2">All Categories</span>
             </Link>
-          ))
+            {categories?.map((item, index) => (
+              <Link
+                to={
+                  (pathname.startsWith("/services") ? "/services" : "/market") +
+                  "?category=" +
+                  item.name.toLowerCase()
+                }
+                key={index}
+                className="flex items-center gap-2 p-2"
+              >
+                <span className="size-5 bg-dark rounded-full shrink-0" />
+                <span className="line-clamp-2">{item.name}</span>
+              </Link>
+            ))}
+          </>
         )}
       </div>
     </section>
