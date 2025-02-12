@@ -1,9 +1,8 @@
 import React from "react";
-import { VerifiedIcon } from "../../../icon";
 
 import { useQuery } from "@tanstack/react-query";
 import {
-  getPeopleAssociatedForCurrentUser,
+  getPeopleAssociatedForUser,
   getSuggestedUsersForCurrentUser,
 } from "../../../api-services/users";
 import { PostCard, PostCardSkeleton } from "./DiscoverPostTabs";
@@ -12,7 +11,6 @@ import LightParagraph from "../../ParagraphText";
 import { Avatar } from "@chakra-ui/react";
 import { avatarStyle } from "../../ResponsiveNav";
 import { getServices } from "../../../api-services/services";
-import { motion } from "framer-motion";
 import clsx from "clsx";
 import Username from "../../Username";
 import SeeMoreLink from "../../SeeMoreLink";
@@ -20,11 +18,11 @@ import { useAuth } from "../../../context/userContext";
 
 const TopServiceSuggestions = () => {
   return (
-    <div className="h-fit w-full flex items-start flex-col sm:flex-row md:flex-col lg:flex-row xl:flex-col gap-4 lg:sticky lg:top-0 lg:right-4">
+    <section className="h-fit w-full flex items-start flex-col sm:flex-row md:flex-col lg:flex-row xl:flex-col gap-4 lg:sticky lg:top-0 lg:right-4">
       <TopServices />
 
       <Suggestions />
-    </div>
+    </section>
   );
 };
 
@@ -92,12 +90,10 @@ export function SuggestionList({ hasSeeMore, associated = false, thisUser }) {
   const { data: suggestedUsers = [], isLoading } = useQuery({
     queryKey: [associated ? "associatedUsers" : "suggestedUsers"],
     queryFn: associated
-      ? () => getPeopleAssociatedForCurrentUser(thisUser)
+      ? () => getPeopleAssociatedForUser(thisUser)
       : getSuggestedUsersForCurrentUser,
     enabled: !!currentUser,
   });
-
-  console.log(suggestedUsers);
 
   return (
     <section className="">

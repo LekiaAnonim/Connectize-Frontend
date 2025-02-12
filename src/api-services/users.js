@@ -90,7 +90,7 @@ export const getSuggestedUsersForCurrentUser = async () => {
   return allUsersInLocation;
 };
 
-export const getPeopleAssociatedForCurrentUser = async (thisUser) => {
+export const getPeopleAssociatedForUser = async (thisUser) => {
   if (!thisUser) return [];
   const allUsers = await getAllUsers();
 
