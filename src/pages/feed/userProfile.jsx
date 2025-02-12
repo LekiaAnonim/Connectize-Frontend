@@ -87,19 +87,39 @@ export default function UserProfile() {
             </ProfileSection>
             <ProfileSection title="about">
               <ul className="space-y-4 divide-y">
-                <ProfileAboutList
-                  Icon={PersonOutline}
-                  title="Gender"
-                  value={gender}
-                />
+                {currentUser?.id === Number(userId) && (
+                  <ProfileAboutList
+                    Icon={PersonOutline}
+                    title="Gender"
+                    value={
+                      gender ? (
+                        <>
+                          {gender}{" "}
+                          <Badge className="!text-[.55rem]">
+                            only visible to you
+                          </Badge>
+                        </>
+                      ) : (
+                        "N/A"
+                      )
+                    }
+                  />
+                )}
                 {currentUser?.id === Number(userId) && (
                   <ProfileAboutList
                     Icon={CalendarOutlined}
                     title="Date of Birth"
                     value={
-                      date_of_birth
-                        ? `${date_of_birth} (only visible to you)`
-                        : "N/A"
+                      date_of_birth ? (
+                        <>
+                          {date_of_birth}{" "}
+                          <Badge className="!text-[.55rem]">
+                            only visible to you
+                          </Badge>
+                        </>
+                      ) : (
+                        "N/A"
+                      )
                     }
                   />
                 )}

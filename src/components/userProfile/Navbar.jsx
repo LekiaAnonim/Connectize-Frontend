@@ -13,8 +13,11 @@ import { JoinedUserCompanyImages } from "../ResponsiveNav";
 import { Tooltip } from "@chakra-ui/react";
 import { NavigationSection } from "../NavigationSection";
 import NavbarDropdown from "../NavbarDropdown";
+import { CompanyUserType } from "../../lib/helpers/types";
+import { useAuth } from "../../context/userContext";
 
 const Navbar = () => {
+  const { user: currentUser } = useAuth();
   const weirdFlex = "flex w-full gap-4 md:!gap-6 items-center";
   const [showBottomNav, setShowBottomNav] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -47,7 +50,7 @@ const Navbar = () => {
             </div>
 
             <div className="flex items-center gap-3 xs:gap-5 md:gap-7 shrink-0">
-              <NavbarDropdown />
+              {currentUser?.user_type === CompanyUserType && <NavbarDropdown />}
               <NotificationPopOver />
               <JoinedUserCompanyImages />
             </div>
