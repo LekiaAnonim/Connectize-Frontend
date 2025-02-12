@@ -62,7 +62,9 @@ function DiscoverPosts({ searchArray, isSearch, searchLoading }) {
           <DiscoverPostSkeleton key={index} />
         ))
       ) : finalArray?.length < 1 ? (
-        <LightParagraph>No post found..</LightParagraph>
+        <LightParagraph>
+          {isSearch ? "No post found in search" : ""}
+        </LightParagraph>
       ) : (
         finalArray?.map((post, index) => (
           <DiscoverPostItem

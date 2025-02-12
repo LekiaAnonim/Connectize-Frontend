@@ -10,7 +10,6 @@ import { Avatar } from "@chakra-ui/react";
 import { avatarStyle } from "../../ResponsiveNav";
 import { getServices } from "../../../api-services/services";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import clsx from "clsx";
 import Username from "../../Username";
 import SeeMoreLink from "../../SeeMoreLink";
@@ -48,7 +47,7 @@ export function TopServices() {
       </div>
       <PostCardSkeleton />
     </section>
-  ) : (
+  ) : service ? (
     <section className="">
       <div className="p-3 sm:p-4 lg:!px-2">
         <HeadingText>Top Services</HeadingText>
@@ -64,6 +63,8 @@ export function TopServices() {
         verified={service?.featured}
       />
     </section>
+  ) : (
+    <></>
   );
 }
 
