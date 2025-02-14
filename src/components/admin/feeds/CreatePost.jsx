@@ -101,6 +101,9 @@ function CreatePost() {
       validImages.forEach((image) => {
         formData.append("images", image);
       });
+      if (selectedGif) {
+        formData.append("gif", selectedGif);
+      }
       const newPost = await createPost(formData);
 
       if (newPost.id) {
@@ -116,7 +119,7 @@ function CreatePost() {
     } finally {
       setIsLoading(false);
     }
-  }, [currentUser, message, validImages, setRefetchInterval]);
+  }, [currentUser, message, validImages, selectedGif, setRefetchInterval]);
 
   const renderEmojiGifPickers = useMemo(
     () => (
