@@ -113,6 +113,12 @@ function CreatePost() {
       if (selectedGif) {
         formData.append("gif", selectedGif);
       }
+
+      console.log(validImages);
+      validImages.forEach((image) => {
+        console.log("Image:", image, "Type:", typeof image);
+      });
+
       const newPost = await createPost(formData);
 
       if (newPost.id) {
@@ -163,7 +169,7 @@ function CreatePost() {
           type="text"
           ref={textareaRef}
           value={message}
-          style={{ lineHeight: "1.5" }}
+          style={{ lineHeight: "1.2" }}
           onChange={(e) => {
             const textarea = textareaRef.current;
             if (!textarea) return;
@@ -182,7 +188,7 @@ function CreatePost() {
           }}
           minLength={10}
           placeholder="What's happening?"
-          className="w-full pb-2 border-b border-gray-300 bg-transparent outline-none text-base resize-none transition-all duration-300 scrollbar-hidden placeholder:text-xl"
+          className="w-full border-b border-gray-300 bg-transparent outline-none text-base resize-none transition-all duration-300 scrollbar-hidden placeholder:text-xl bg-red-60"
         />
         <CustomErrorMessage errorMessage={errorMessage} />
       </div>

@@ -15,12 +15,8 @@ export const createPost = async (formData) => {
   const companies = await getCompanies();
   const company = companies?.[0];
 
-  console.log(formData.get("message"));
+  formData.append("company", company?.id);
 
-  if (!formData.get("message")) {
-    toast.info("Something went wrong. Please refresh page or contact support");
-    return;
-  }
   if (!company) {
     toast.info(
       "You have no company associated with your profile, please create one"
@@ -31,7 +27,7 @@ export const createPost = async (formData) => {
   const post = await makeApiRequest({
     url: `api/posts/`,
     method: "POST",
-    data: { ...formData, company: company?.id },
+    data: formData,
     contentType: "multipart/form-data",
   });
 

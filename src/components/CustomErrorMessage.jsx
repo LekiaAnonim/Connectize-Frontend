@@ -6,9 +6,10 @@ export default function CustomErrorMessage({ errorMessage }) {
     <>
       {errorMessage && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
           className="text-[#9e3818] text-xs mx-0.5"
+          key={errorMessage}
         >
           {errorMessage}
         </motion.div>
