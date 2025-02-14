@@ -16,6 +16,9 @@ export const createPost = async (formData) => {
   const companies = await getCompanies();
   const company = companies?.[0];
 
+  console.log(company, formData);
+  
+
   if (!company) {
     toast.info(
       "You have no company attributed with your profile, please create one"
