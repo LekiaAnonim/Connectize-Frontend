@@ -43,6 +43,7 @@ import ReusableModal from "../../custom/ResusableModal";
 import { SwiperSlide, Swiper } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { NAVIGATION_BUTTONS } from "../../../lib/slide_button";
+import { baseURL } from "../../../lib/helpers";
 
 function DiscoverPosts({ searchArray, isSearch, searchLoading }) {
   const { refetchInterval } = useCustomQuery();
@@ -283,16 +284,19 @@ export const DiscoverPostItem = ({
             onSwiper={(swiper) => (swiperRef.current = swiper)}
             modules={[Pagination]}
             pagination={{ clickable: true }}
-            slidesPerView={3}
+            slidesPerView={images.length > 3 ? 3 : images.length}
             spaceBetween={10}
             className="!z-0"
           >
             {images.map((src, index) => (
               <SwiperSlide
                 key={index}
-                className="h-[180px] md:h-[250px] rounded-md overflow-hidden"
+                className="h-[200px] md:h-[250px] rounded-md overflow-hidden"
               >
-                <PostImage src={src} key={index} />
+                <PostImage
+                  src={src.startsWith("http") ? src : baseURL + src}
+                  key={index}
+                />
               </SwiperSlide>
             ))}
           </Swiper>
