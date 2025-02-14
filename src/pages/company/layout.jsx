@@ -6,11 +6,12 @@ import LightParagraph from "../../components/ParagraphText";
 import { useAuth } from "../../context/userContext";
 import { UserType } from "../../lib/helpers/types";
 import Restricted from "../../components/Restricted";
+import useRedirect from "../../hooks/useRedirect";
 
 const CompanyLayout = () => {
   const { user: currentUser } = useAuth();
 
-  // useRedirect(currentUser?.user_type === UserType, `/co/${currentUser?.id}`);
+  useRedirect(currentUser?.user_type === UserType, `/co/${currentUser?.id}`);
 
   const { data: companies = [] } = useQuery({
     queryKey: ["companies"],

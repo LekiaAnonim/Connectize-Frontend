@@ -2,6 +2,7 @@ import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import Logo from "../../components/logo";
 import { getSession } from "../../lib/session";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 function AuthLayout({ redirectUrl = "/" }) {
   const session = getSession();
@@ -24,17 +25,14 @@ function AuthLayout({ redirectUrl = "/" }) {
         </section>
       </section>
 
-      <picture className="max-lg:hidden !w-[48%] shrink-0">
-        <img
-          src={`/images/${
-            pathname === "/login" ? "signin-image" : "signup-image"
-          }.png`}
-          alt={
-            pathname === "/login" ? " sign in connectize" : "sign up connectize"
-          }
+      <div className="max-lg:hidden !w-[48%] shrink-0 pointer-events-none">
+        <DotLottieReact
+          src="/lottie/authentication.lottie"
+          loop
+          autoplay
           className="size-full aspect-square"
         />
-      </picture>
+      </div>
     </main>
   );
 }

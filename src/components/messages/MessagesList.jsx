@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import HeadingText from "../HeadingText";
 import { useQuery } from "@tanstack/react-query";
 import { getMessagesForUser } from "../../api-services/messaging";
@@ -37,7 +37,7 @@ export default function MessagesList() {
   const messagesList = useMemo(() => {
     const uniqueRecipients = new Set();
     return allMessages?.filter((msg) => {
-      const recipient = msg?.recipient || msg?.sender;
+      const recipient = msg?.room_name;
       if (uniqueRecipients.has(recipient)) {
         return false;
       } else {
@@ -96,7 +96,7 @@ const MessagesListTile = React.memo(({ message, user }) => {
       </Link>
 
       <Link to={`/messages/${message?.room_name}`} className="flex-1">
-        <Username user={user} />
+        <Username user={user} noClick />
         <div className="line-clamp-2">
           <LightParagraph>{message?.content} </LightParagraph>
         </div>

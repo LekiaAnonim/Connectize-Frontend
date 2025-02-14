@@ -18,9 +18,12 @@ const ReusableModal = ({
   children,
   footerContent,
   size = "md",
+  primaryAction,
+  primaryText = "Proceed",
+  secondaryText = "Close",
 }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={size} >
+    <Modal isOpen={isOpen} onClose={onClose} size={size}>
       <ModalOverlay />
       <ModalContent className="rounded-lg shadow-lg !mx-2 max-h-[77vh]">
         {title && (
@@ -35,15 +38,29 @@ const ReusableModal = ({
         <ModalBody className="text-gray-700 overflow-y-auto scrollbar-hidden">
           {children}
         </ModalBody>
-        <ModalFooter className="flex justify-end space-x-2">
+        <ModalFooter className="flex justify-end space-x-3">
           {footerContent || (
-            <Button
-              colorScheme=""
-              onClick={onClose}
-              className="px-4 py-2 !bg-gold !text-black"
-            >
-              Close
-            </Button>
+            <>
+              <Button
+                colorScheme=""
+                onClick={onClose}
+                className="px-4 !border !border-gold !text-black !text-sm hover:!text-opacity-60"
+              >
+                {secondaryText}
+              </Button>
+              {primaryAction && (
+                <Button
+                  colorScheme=""
+                  onClick={() => {
+                    primaryAction();
+                    onClose();
+                  }}
+                  className="px-4 py-1 !bg-gold !text-black !text-sm hover:!opacity-60"
+                >
+                  {primaryText}
+                </Button>
+              )}
+            </>
           )}
         </ModalFooter>
       </ModalContent>

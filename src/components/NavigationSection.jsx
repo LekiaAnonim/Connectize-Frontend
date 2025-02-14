@@ -8,6 +8,8 @@ import clsx from "clsx";
 import { feedNavItems } from "../lib/data";
 import { LogoutOutlined } from "@ant-design/icons";
 import { ButtonWithTooltipIcon } from "./admin/feeds/DiscoverPosts";
+import ReusableModal from "./custom/ResusableModal";
+import LightParagraph from "./ParagraphText";
 
 export function NavigationSection({ hasHeader, isSmallNavigation = false }) {
   const { pathname } = useLocation();
@@ -15,6 +17,8 @@ export function NavigationSection({ hasHeader, isSmallNavigation = false }) {
   const { user: currentUser } = useAuth();
   const session = getSession();
   const [loading, setLoading] = useState(false);
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = async () => {
     setLoading(true);
@@ -67,27 +71,40 @@ export function NavigationSection({ hasHeader, isSmallNavigation = false }) {
         </li>
       ))}
       {currentUser && session && (
-        <li>
-          <button
-            className={clsx(
-              "flex gap-2 items-center transition-colors duration-300 p-2 rounded  hover:text-red-600 text-gray-600 disabled:cursor-not-allowed disabled:text-red-600",
-              {
-                "flex-col": hasHeader,
-              }
-            )}
-            onClick={handleLogout}
-            disabled={loading}
+        <>
+          <ReusableModal
+            onClose={() => setIsOpen(false)}
+            isOpen={isOpen}
+            primaryAction={handleLogout}
+            title="Are you sure you want logout?"
+            secondaryText="Cancel"
           >
-            <LogoutOutlined className="xs:text-xs" />
-            <span
-              className={clsx({
-                "text-[.65rem] max-sm:sr-only": hasHeader,
-              })}
+            <LightParagraph>
+              You are about to make your current session invalid
+            </LightParagraph>
+          </ReusableModal>
+          <li>
+            <button
+              className={clsx(
+                "flex gap-2 items-center transition-colors duration-300 p-2 rounded  hover:text-red-600 text-gray-600 disabled:cursor-not-allowed disabled:text-red-600",
+                {
+                  "flex-col": hasHeader,
+                }
+              )}
+              onClick={() => setIsOpen(true)}
+              disabled={loading}
             >
-              {loading ? "Logging out..." : "Logout"}
-            </span>
-          </button>
-        </li>
+              <LogoutOutlined className="xs:text-xs" />
+              <span
+                className={clsx({
+                  "text-[.65rem] max-sm:sr-only": hasHeader,
+                })}
+              >
+                {loading ? "Logging out..." : "Logout"}
+              </span>
+            </button>
+          </li>
+        </>
       )}
     </ul>
   );

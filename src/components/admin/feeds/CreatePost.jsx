@@ -2,12 +2,8 @@ import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { AlignmentIcon, GalleryIcon, GifIcon, SmileIcon } from "../../../icon";
 import { createPost } from "../../../api-services/posts";
 import { toast } from "sonner";
-import MoreOptions from "../../MoreOptions";
-import { useQuery } from "@tanstack/react-query";
-import { getCompanies } from "../../../api-services/companies";
-import { CloseButton, Select } from "@chakra-ui/react";
+import { CloseButton } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
 import EmojiPicker from "emoji-picker-react";
 import GifPicker from "../../GifPicker";
 import { largeFileText, unSupportedText } from "../listing/newListing";
@@ -40,17 +36,11 @@ const isImageSize = (files) => {
 function CreatePost() {
   const { setRefetchInterval } = useCustomQuery();
   const { user: currentUser } = useAuth();
-  const { data: companies } = useQuery({
-    queryKey: ["companies"],
-    queryFn: () => getCompanies(),
-  });
 
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [validImages, setValidImages] = useState([]);
-  const [companyId, setCompanyId] = useState(null);
-  const [needsFocus, setNeedsFocus] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showGifPicker, setShowGifPicker] = useState(false);
   const [selectedGif, setSelectedGif] = useState("");
@@ -104,20 +94,16 @@ function CreatePost() {
       return;
     }
 
-    // if (companyId < 1) {
-    //   setNeedsFocus(true);
-    //   toast.info("Please attach a company to your post");
-    //   return;
-    // }
-
     try {
       setIsLoading(true);
       const formData = new FormData();
-      formData.append("company", companyId);
       formData.append("body", message);
       validImages.forEach((image) => {
         formData.append("images", image);
       });
+      if (selectedGif) {
+        formData.append("gif", selectedGif);
+      }
       const newPost = await createPost(formData);
 
       if (newPost.id) {
@@ -132,9 +118,8 @@ function CreatePost() {
       console.error("Post error: ", error);
     } finally {
       setIsLoading(false);
-      setNeedsFocus(false);
     }
-  }, [currentUser, companyId, message, validImages, setRefetchInterval]);
+  }, [currentUser, message, validImages, selectedGif, setRefetchInterval]);
 
   const renderEmojiGifPickers = useMemo(
     () => (
@@ -209,7 +194,6 @@ function CreatePost() {
           />
         </div>
       )}
-
 
       <div className="mt-4 flex max-sm:flex-col sm:items-center justify-between max-sm:gap-4 md:gap-4 lg:gap-1">
         <div className="flex items-center gap-2 relative">

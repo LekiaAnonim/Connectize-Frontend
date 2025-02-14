@@ -84,7 +84,7 @@ function Signup() {
       placeholder: "Example@companymail.com",
       validate: true,
       helpText:
-        "Account created with non-professional emails like xyz@gmail.com etc. will have limited functionalities on connectize",
+        "Join Connectize with a professional email address. Accounts created with non-professional emails like example@gmail.com etc. will have limited functionalities on connectize",
     },
     {
       name: "password",
