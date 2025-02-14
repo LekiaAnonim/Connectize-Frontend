@@ -25,20 +25,14 @@ function AuthLayout({ redirectUrl = "/" }) {
         </section>
       </section>
 
-      <picture className="max-lg:hidden !w-[48%] shrink-0">
+      <div className="max-lg:hidden !w-[48%] shrink-0">
         <DotLottieReact
           src="/lottie/authentication.lottie"
           loop
           autoplay
           className="size-full aspect-square"
-          // src={`/images/${
-          //   pathname === "/login" ? "signin-image" : "signup-image"
-          // }.png`}
-          // alt={
-          //   pathname === "/login" ? " sign in connectize" : "sign up connectize"
-          // }
         />
-      </picture>
+      </div>
     </main>
   );
 }
