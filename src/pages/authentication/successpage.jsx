@@ -12,6 +12,7 @@ import {
 import HeadingText from "../../components/HeadingText";
 import { REGISTER_EMAIL_KEY } from "../../lib/helpers";
 import LightParagraph from "../../components/ParagraphText";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const SuccessPage = () => {
   const year = new Date().getFullYear();
@@ -20,7 +21,7 @@ const SuccessPage = () => {
     localStorage.getItem(RESET_PASSWORD_EMAIL_KEY) ||
     localStorage.getItem(REGISTER_EMAIL_KEY);
 
-  useRedirect(!hasSuccess, "/login");
+  // useRedirect(!hasSuccess, "/login");
 
   useEffect(() => {
     document.title = "Success Page | connectize";
@@ -68,17 +69,20 @@ const SuccessPage = () => {
 
   return (
     <main className="p-4 flex flex-col items-center text-center min-h-screen">
-      <header className="w-full self-start">
+      <header className="w-full self-start container">
         <Logo />
       </header>
       <section className="p-4 flex flex-col items-center justify-center max-w-lg gap-4">
-        <img
-          src="/images/passportThree.png"
-          alt="success tick"
-          className="w-24"
-        />
+        <div className="h-36 overflow-hidden flex items-center justify-center">
+          <DotLottieReact
+            src="/lottie/success.lottie"
+            // loop
+            autoplay
+            className="scale-[1.35]"
+          />
+        </div>
         <HeadingText>{getHeader()}</HeadingText>
-        <LightParagraph center >{getMessage()}</LightParagraph>
+        <LightParagraph center>{getMessage()}</LightParagraph>
         <Link
           to={getLink()}
           className="text-white no-underline btn-primary mt-2"
@@ -86,9 +90,9 @@ const SuccessPage = () => {
           {getLinkText()}
         </Link>
       </section>
-      <footer className="text-center py-5">
+      {/* <footer className="text-center py-5">
         ALL RIGHT RESERVED &copy; {year}
-      </footer>
+      </footer> */}
     </main>
   );
 };
