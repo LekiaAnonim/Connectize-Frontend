@@ -15,9 +15,9 @@ export const createPost = async (formData) => {
   const companies = await getCompanies();
   const company = companies?.[0];
 
-  console.log(formData);
+  console.log(formData.get("message"));
 
-  if (!formData.values) {
+  if (!formData.get("message")) {
     toast.info("Something went wrong. Please refresh page or contact support");
     return;
   }
