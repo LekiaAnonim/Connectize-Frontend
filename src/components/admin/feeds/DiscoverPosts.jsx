@@ -45,7 +45,12 @@ import { Pagination } from "swiper/modules";
 import { NAVIGATION_BUTTONS } from "../../../lib/slide_button";
 import { baseURL } from "../../../lib/helpers";
 
-function DiscoverPosts({ searchArray, isSearch, searchLoading }) {
+function DiscoverPosts({
+  searchArray,
+  isSearch,
+  searchLoading,
+  companyName = null,
+}) {
   const { refetchInterval } = useCustomQuery();
   const { data: posts, isLoading } = useQuery({
     queryKey: ["posts"],
@@ -53,7 +58,14 @@ function DiscoverPosts({ searchArray, isSearch, searchLoading }) {
     refetchInterval,
   });
 
-  const finalArray = isSearch ? searchArray : posts;
+  const finalArray = isSearch
+    ? searchArray
+    : companyName
+    ? posts.filter(
+        (post) =>
+          post.company.company_name.toLowerCase() === companyName.toLowerCase()
+      )
+    : posts;
   const postLoading = isSearch ? searchLoading : isLoading;
 
   return (

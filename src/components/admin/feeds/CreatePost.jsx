@@ -163,7 +163,7 @@ function CreatePost() {
   );
 
   return (
-    <div className="bg-white px-4 py-4 rounded border-b-[5px] border-gold relative">
+    <section className="bg-white w-full px-4 py-4 rounded border-b-[5px] border-gold relative">
       <div className="size-full">
         <textarea
           type="text"
@@ -243,7 +243,7 @@ function CreatePost() {
           {isLoading ? "Creating Post" : "Create Post"}
         </button>
       </div>
-    </div>
+    </section>
   );
 }
 

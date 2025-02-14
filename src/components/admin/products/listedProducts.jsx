@@ -3,6 +3,7 @@ import { Heart, StarFilledIcon, StarOutlinedIcon } from "../../../icon";
 import { ShareAltOutlined } from "@ant-design/icons";
 import { ButtonWithTooltipIcon } from "../feeds/DiscoverPosts";
 import { formatNumber, shareThis } from "../../../lib/utils";
+import LightParagraph from "../../ParagraphText";
 
 const ListedProducts = ({ company }) => {
   return (
@@ -14,17 +15,20 @@ const ListedProducts = ({ company }) => {
         </MoreOptions> */}
       </div>
       <section className="space-y-4">
-        {company.products.map((product) => {
-
-          return (
-            <ListedProduct
-              key={product.id}
-              title={product.title}
-              likes={product.likes.length || "0"}
-              src={product?.images?.[0]?.image}
-            />
-          );
-        })}
+        {company.products.length <= 0 ? (
+          <LightParagraph>No product yet...</LightParagraph>
+        ) : (
+          company.products.map((product) => {
+            return (
+              <ListedProduct
+                key={product.id}
+                title={product.title}
+                likes={product.likes.length || "0"}
+                src={product?.images?.[0]?.image}
+              />
+            );
+          })
+        )}
       </section>
     </section>
   );
