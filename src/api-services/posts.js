@@ -17,8 +17,11 @@ export const createPost = async (formData) => {
   const company = companies?.[0];
 
   console.log(company, formData);
-  
 
+  if (!formData) {
+    toast.info("Something went wrong. Please refresh page or contact support");
+    return;
+  }
   if (!company) {
     toast.info(
       "You have no company attributed with your profile, please create one"

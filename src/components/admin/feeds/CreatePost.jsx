@@ -94,12 +94,6 @@ function CreatePost() {
       return;
     }
 
-    // if (companyId < 1) {
-    //   setNeedsFocus(true);
-    //   toast.info("Please attach a company to your post");
-    //   return;
-    // }
-
     try {
       setIsLoading(true);
       const formData = new FormData();
