@@ -96,7 +96,7 @@ const MessagesListTile = React.memo(({ message, user }) => {
       </Link>
 
       <Link to={`/messages/${message?.room_name}`} className="flex-1">
-        <Username user={user} />
+        <Username user={user} noClick />
         <div className="line-clamp-2">
           <LightParagraph>{message?.content} </LightParagraph>
         </div>
