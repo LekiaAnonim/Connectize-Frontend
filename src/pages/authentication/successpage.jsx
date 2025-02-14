@@ -15,13 +15,13 @@ import LightParagraph from "../../components/ParagraphText";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const SuccessPage = () => {
-  const year = new Date().getFullYear();
+  // const year = new Date().getFullYear();
   const hasSuccess = localStorage.getItem(SUCCESS_TYPE_KEY);
   const email =
     localStorage.getItem(RESET_PASSWORD_EMAIL_KEY) ||
     localStorage.getItem(REGISTER_EMAIL_KEY);
 
-  // useRedirect(!hasSuccess, "/login");
+  useRedirect(!hasSuccess, "/login");
 
   useEffect(() => {
     document.title = "Success Page | connectize";
