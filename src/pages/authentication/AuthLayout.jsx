@@ -25,7 +25,7 @@ function AuthLayout({ redirectUrl = "/" }) {
         </section>
       </section>
 
-      <div className="max-lg:hidden !w-[48%] shrink-0">
+      <div className="max-lg:hidden !w-[48%] shrink-0 pointer-events-none">
         <DotLottieReact
           src="/lottie/authentication.lottie"
           loop
