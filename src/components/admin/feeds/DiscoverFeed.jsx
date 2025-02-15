@@ -25,20 +25,18 @@ const DiscoverFeed = () => {
       <div className="flex items-baseline gap-2">
         <h1 className="text-3xl font-semibold">Discover</h1>
         {currentUser &&
-          (currentUser?.is_first_time_user || companies.length > 1) && (
+          (currentUser?.is_first_time_user || companies.length <= 1) && (
             <Link
               to={"/update-profile"}
               className="hover:!no-underline !underline !text-gray-400 hover:!text-black font-semibold text-sm"
             >
-              {currentUser && currentUser?.is_first_time_user
+              {currentUser?.is_first_time_user
                 ? "Complete your profile"
-                : currentUser?.user_type === CompanyUserType
-                ? "Create Company"
-                : ""}
+                : "Create Company"}
             </Link>
           )}
       </div>
-      {currentUser?.user_type === CompanyUserType && <CreatePost />}
+      {currentUser?.user_type !== CompanyUserType && <CreatePost />}
       <DiscoverPostTabs />
       <DiscoverPosts />
     </section>

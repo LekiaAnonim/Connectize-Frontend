@@ -54,7 +54,7 @@ export const JoinedUserCompanyImages = () => {
   const [headingImages, setHeadingImages] = useState([]);
 
   useEffect(() => {
-    if (currentUser?.user_type === CompanyUserType) {
+    if (currentUser?.user_type !== CompanyUserType) {
       setHeadingImages((prev) => [
         {
           src: companies?.[0]?.logo || "/images/default-company-logo.png",

@@ -50,7 +50,7 @@ const Navbar = () => {
             </div>
 
             <div className="flex items-center gap-3 xs:gap-5 md:gap-7 shrink-0">
-              {currentUser?.user_type === CompanyUserType && <NavbarDropdown />}
+              {currentUser?.user_type !== CompanyUserType && <NavbarDropdown />}
               <NotificationPopOver />
               <JoinedUserCompanyImages />
             </div>

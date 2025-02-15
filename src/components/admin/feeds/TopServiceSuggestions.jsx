@@ -34,39 +34,37 @@ export function TopServices() {
     queryFn: getServices,
   });
 
-  // const getRandomNumber = () => {
-  //   const num = Math.floor(Math.random() * services?.length);
-
-  //   return num || 0;
-  // };
-
   const service = services?.[0];
 
-  return isLoading ? (
+  return (
     <section className="w-full">
-      <div className="p-3 sm:p-4 lg:!px-2">
-        <div className="w-1/3 h-7 rounded-md skeleton" />
-      </div>
-      <PostCardSkeleton />
-    </section>
-  ) : service ? (
-    <section className="">
-      <div className="p-3 sm:p-4 lg:!px-2">
-        <HeadingText>Recent Service</HeadingText>
-      </div>
+      {isLoading ? (
+        <>
+          <div className="p-3 sm:p-4 lg:!px-2">
+            <div className="w-1/3 h-7 rounded-md skeleton" />
+          </div>
+          <PostCardSkeleton />
+        </>
+      ) : service ? (
+        <>
+          <div className="p-3 sm:p-4 lg:!px-2">
+            <HeadingText>Recent Service</HeadingText>
+          </div>
 
-      <PostCard
-        whole={service}
-        companyName={service?.company}
-        logo={service?.avatar}
-        summary={service?.description}
-        url={"/services/" + service?.id}
-        title={service?.title}
-        verified={service?.featured}
-      />
+          <PostCard
+            whole={service}
+            companyName={service?.company}
+            logo={service?.avatar}
+            summary={service?.description}
+            url={"/services/" + service?.id}
+            title={service?.title}
+            verified={service?.featured}
+          />
+        </>
+      ) : (
+        <></>
+      )}
     </section>
-  ) : (
-    <></>
   );
 }
 
