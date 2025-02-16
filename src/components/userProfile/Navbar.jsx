@@ -50,7 +50,7 @@ const Navbar = () => {
             </div>
 
             <div className="flex items-center gap-3 xs:gap-5 md:gap-7 shrink-0">
-              {currentUser?.user_type !== CompanyUserType && <NavbarDropdown />}
+              {currentUser?.user_type === CompanyUserType && <NavbarDropdown />}
               <NotificationPopOver />
               <JoinedUserCompanyImages />
             </div>
@@ -62,7 +62,6 @@ const Navbar = () => {
         className="md:hidden bg-gold fixed bottom-0 left-0 w-full z-[99999]"
         initial={{ y: 0 }}
         animate={{ y: showBottomNav ? 0 : 100 }}
-        // transition={{ type: "spring", stiffness: 100 }}
       >
         <section className="container">
           <NavigationSection hasHeader isSmallNavigation />

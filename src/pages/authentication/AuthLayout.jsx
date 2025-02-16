@@ -23,7 +23,7 @@ function AuthLayout({ redirectUrl = "/" }) {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="flex gap-2"
+            className="flex flex-col-reverse gap-2"
           >
             <Logo />
 
@@ -31,12 +31,12 @@ function AuthLayout({ redirectUrl = "/" }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55 }}
-              className="max-w-screen-md text-2xl font-semibold"
+              className="max-w-screen-md text-3xl font-bold"
             >
               {pathname === "/login" ? (
                 <>
                   Connect, Collaborate and transact{" "}
-                  <span className="text-gold font-bold">with connectize</span>
+                  <span className="text-gold ">with connectize</span>
                 </>
               ) : pathname === "/signup" ? (
                 <>
