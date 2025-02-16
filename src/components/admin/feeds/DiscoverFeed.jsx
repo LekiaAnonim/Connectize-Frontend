@@ -36,7 +36,7 @@ const DiscoverFeed = () => {
             </Link>
           )}
       </div>
-      {currentUser?.user_type !== CompanyUserType && <CreatePost />}
+      {currentUser?.user_type === CompanyUserType && <CreatePost />}
       <DiscoverPostTabs />
       <DiscoverPosts />
     </section>
