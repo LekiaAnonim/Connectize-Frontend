@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 const DiscoverFeed = () => {
   const { user: currentUser, setUser } = useAuth();
 
-  const { data: companies = [] } = useQuery({
+  const { data: companies = [], isLoading } = useQuery({
     queryKey: ["companies"],
     queryFn: () => getCompanies(),
     enabled: !!currentUser,
@@ -24,7 +24,7 @@ const DiscoverFeed = () => {
     <section className="space-y-4">
       <div className="flex items-baseline gap-2">
         <h1 className="text-3xl font-semibold">Discover</h1>
-        {currentUser &&
+        {(currentUser || !isLoading) &&
           (currentUser?.is_first_time_user || companies.length <= 1) && (
             <Link
               to="/update-profile"
