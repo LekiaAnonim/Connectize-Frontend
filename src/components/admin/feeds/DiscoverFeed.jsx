@@ -27,7 +27,7 @@ const DiscoverFeed = () => {
         {currentUser &&
           (currentUser?.is_first_time_user || companies.length <= 1) && (
             <Link
-              to={"/update-profile"}
+              to="/update-profile"
               className="hover:!no-underline !underline !text-gray-400 hover:!text-black font-semibold text-sm"
             >
               {currentUser?.is_first_time_user
