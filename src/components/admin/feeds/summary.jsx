@@ -1,6 +1,4 @@
-import MoreOptions from "../../MoreOptions";
 import DiscoverPosts from "./DiscoverPosts";
-import RecommendedProducts from "../products/recommendedProducts";
 import HeadingText from "../../HeadingText";
 import LightParagraph from "../../ParagraphText";
 import CreatePost from "./CreatePost";
@@ -12,16 +10,17 @@ import CustomTabs from "../../custom/tabs";
 function Summary({ company }) {
   return (
     <section className="space-y-8 w-full md:col-span-2">
-      <div className="border-b pb-3">
+      <div className="border-b pb-3 w-full">
         <div className="flex pb-3 items-start justify-between">
           <HeadingText>Summary</HeadingText>
-          <MoreOptions>
+          {/* <MoreOptions>
             <div>more options</div>
-          </MoreOptions>
+          </MoreOptions> */}
         </div>
         <LightParagraph>
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-          dolore eu fugiat nulla pariatu
+          This is the summary of{" "}
+          <strong className="text-black">{company.company_name}'s</strong>{" "}
+          profile
         </LightParagraph>
       </div>
 
@@ -31,16 +30,16 @@ function Summary({ company }) {
 }
 
 function SummaryTabs({ company }) {
-  const tabsHeading = ["Activities", "Services", "Products", "Reviews"];
+  const tabsHeading = ["Activities", "Services", "Products"];
 
   const tabsPanels = [
-    <section className="space-y-6">
+    <section className="space-y-6 w-full shrink-0">
       {/* <div className="space-y-3">
               <h1 className="text-2xl font-semibold p-1">Activities</h1>
             </div> */}
       <CreatePost />
-      <RecommendedProducts />
-      <DiscoverPosts />
+      {/* <RecommendedProducts /> */}
+      <DiscoverPosts companyName={company.company_name} />
     </section>,
     <div className="grid gap-x-3 gap-y-4">
       {company?.services?.map((service, index) => (
@@ -69,7 +68,6 @@ function SummaryTabs({ company }) {
         />
       ))}
     </div>,
-    <Reviews />,
   ];
 
   return <CustomTabs tabsHeading={tabsHeading} tabsPanels={tabsPanels} />;

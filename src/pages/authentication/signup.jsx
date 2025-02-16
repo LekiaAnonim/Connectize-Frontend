@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { SUCCESS_TYPE_KEY } from "../../lib/data/authentication";
 import { REGISTER_EMAIL_KEY } from "../../lib/helpers";
 import HeadingText from "../../components/HeadingText";
+import LightParagraph from "../../components/ParagraphText";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -103,7 +104,12 @@ function Signup() {
   ];
   return (
     <section className="space-y-4">
-      <HeadingText>Create new account</HeadingText>
+      <div>
+        <HeadingText>Create new account</HeadingText>
+        <LightParagraph>
+          Connectize bridges the gap between interactions and transactions within the oil and gas industry.
+        </LightParagraph>
+      </div>
       <Form
         formik={formik}
         status={"none"}

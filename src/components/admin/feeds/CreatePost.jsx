@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import { AlignmentIcon, GalleryIcon, GifIcon, SmileIcon } from "../../../icon";
 import { createPost } from "../../../api-services/posts";
 import { toast } from "sonner";
@@ -12,6 +18,7 @@ import { useAuth } from "../../../context/userContext";
 
 import { motion } from "framer-motion";
 import ValidImages from "../../ValidImages";
+import CustomErrorMessage from "../../CustomErrorMessage";
 
 const isImageFile = (files) => {
   const imageTypes = [
@@ -44,6 +51,8 @@ function CreatePost() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showGifPicker, setShowGifPicker] = useState(false);
   const [selectedGif, setSelectedGif] = useState("");
+
+  const textareaRef = useRef(null);
 
   const handleFileChange = useCallback((event) => {
     const selectedFiles = Array.from(event.target.files);
@@ -104,6 +113,12 @@ function CreatePost() {
       if (selectedGif) {
         formData.append("gif", selectedGif);
       }
+
+      console.log(validImages);
+      validImages.forEach((image) => {
+        console.log("Image:", image, "Type:", typeof image);
+      });
+
       const newPost = await createPost(formData);
 
       if (newPost.id) {
@@ -148,12 +163,16 @@ function CreatePost() {
   );
 
   return (
-    <div className="bg-white px-4 py-4 rounded border-b-[5px] border-gold relative">
+    <section className="bg-white w-full px-4 py-4 rounded border-b-[5px] border-gold relative">
       <div className="size-full">
         <textarea
           type="text"
+          ref={textareaRef}
           value={message}
+          style={{ lineHeight: "1.2" }}
           onChange={(e) => {
+            const textarea = textareaRef.current;
+            if (!textarea) return;
             if (message.trim().length >= 10) {
               setErrorMessage(null);
             } else if (message.trim().length < 10) {
@@ -161,21 +180,17 @@ function CreatePost() {
                 "Post message must be at least 10 characters long"
               );
             }
-            setMessage(e.currentTarget.value);
+            setMessage(e.target.value);
+
+            // Auto-resize logic
+            textarea.style.height = "auto";
+            textarea.style.height = `${Math.min(textarea.scrollHeight, 160)}px`;
           }}
           minLength={10}
           placeholder="What's happening?"
-          className="w-full min-h-10 h-10 max-h-40 pb-2 border-b border-gray-300 bg-transparent focus:outline-0 text-base resize-no_ne transition-all duration-300 scrollbar-hidden scroll-smooth placeholder:text-lg"
+          className="w-full border-b border-gray-300 bg-transparent outline-none text-base resize-none transition-all duration-300 scrollbar-hidden placeholder:text-xl bg-red-60"
         />
-        {errorMessage && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-[#9e3818] text-xs mx-0.5"
-          >
-            {errorMessage}
-          </motion.div>
-        )}
+        <CustomErrorMessage errorMessage={errorMessage} />
       </div>
 
       {/* valid images */}
@@ -228,7 +243,7 @@ function CreatePost() {
           {isLoading ? "Creating Post" : "Create Post"}
         </button>
       </div>
-    </div>
+    </section>
   );
 }
 

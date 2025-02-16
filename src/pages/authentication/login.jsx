@@ -8,6 +8,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import HeadingText from "../../components/HeadingText";
 import { useAuth } from "../../context/userContext";
 import { getCurrentUser } from "../../api-services/users";
+import LightParagraph from "../../components/ParagraphText";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -93,7 +94,13 @@ function Login() {
 
   return (
     <section className="space-y-4">
-      <HeadingText>Login to your account</HeadingText>
+      <div>
+        <HeadingText>Login to your account</HeadingText>
+        <LightParagraph>
+          Connect, Collaborate and transact{" "}
+          <span className="text-gold">with connectize</span>
+        </LightParagraph>
+      </div>
       <Form
         formik={formik}
         status={"none"}
