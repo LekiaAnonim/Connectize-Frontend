@@ -92,25 +92,37 @@ export const getSuggestedUsersForCurrentUser = async () => {
 
 export const getPeopleAssociatedForUser = async (thisUser) => {
   if (!thisUser) return [];
-  const allUsers = await getAllUsers();
 
-  const representativesAssociated =
-    (await getAllRepresentatives({
-      company_id: thisUser?.companies?.[0],
-    })) || [];
+    const professionalEmailDomains = [
+      "gmail.com",
+      "yahoo.com",
+      "hotmail.com",
+      "aol.com",
+      "outlook.com",
+      "icloud.com",
+      "mail.com",
+      "zoho.com",
+    ];
 
-  const mutualConnectionsSet = new Set(
-    thisUser.followings.filter((following) =>
-      thisUser.followers.includes(following)
-    )
-  );
+    const allUsers = await getAllUsers();
 
-  const allUsersAssociated = allUsers.filter(
-    (user) =>
-      thisUser.id !== user.id &&
-      user.first_name &&
-      mutualConnectionsSet.has(user.id)
-  );
+    const representativesAssociated =
+      (await getAllRepresentatives({
+        company_id: thisUser?.companies?.[0],
+      })) || [];
+
+    const allUsersAssociated = allUsers.filter((user) => {
+      const userDomain = user.email.split("@")[1];
+      const thisUserDomain = thisUser.email.split("@")[1];
+      const isProfessionalEmail =
+        !professionalEmailDomains.includes(userDomain);
+      return (
+        thisUser.id !== user.id &&
+        user.first_name &&
+        isProfessionalEmail &&
+        userDomain === thisUserDomain
+      );
+    });
 
   return [...representativesAssociated, ...allUsersAssociated];
 };

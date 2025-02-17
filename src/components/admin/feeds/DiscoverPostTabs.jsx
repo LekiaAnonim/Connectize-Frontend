@@ -154,7 +154,7 @@ export const PostCard = ({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="p-4 lg:!px-3 bg-white rounded-md flex flex-col h-72"
+      className="p-4 lg:!px-3 !w-full bg-white rounded-md flex flex-col h-72 shrink-0"
     >
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-bold capitalize text-lg line-clamp-1">
@@ -199,7 +199,7 @@ export const PostCard = ({
         />
       )}
 
-      <div className="flex items-center justify-between mt-4 pt-3 border-t">
+      <div className="flex items-center justify-between gap-4 mt-4 pt-3 border-t">
         <div className="flex gap-2 items-center">
           <Link to={`/${companyName}`} className="relative">
             <Avatar

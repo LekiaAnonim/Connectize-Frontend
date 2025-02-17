@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { Heart } from "../../../icon";
 import { avatarStyle, ConJoinedImages } from "../../ResponsiveNav";
 import {
@@ -40,10 +40,7 @@ import TimeAgo from "../../TimeAgo";
 import CompanyName from "../../company/CompanyName";
 import LightParagraph from "../../ParagraphText";
 import ReusableModal from "../../custom/ResusableModal";
-import { SwiperSlide, Swiper } from "swiper/react";
-import { Pagination } from "swiper/modules";
-import { NAVIGATION_BUTTONS } from "../../../lib/slide_button";
-import { baseURL } from "../../../lib/helpers";
+import PostImageCollage from "../../PostImageCollage";
 
 function DiscoverPosts({
   searchArray,
@@ -102,7 +99,7 @@ export const DiscoverPostItem = ({
   const { setRefetchInterval } = useCustomQuery();
   const { user: currentUser } = useAuth();
 
-  const images = postItem?.images;
+
 
   const userHasLikedPost = postItem?.likes.find(
     (post) => post?.user?.id === currentUser?.id
@@ -159,17 +156,7 @@ export const DiscoverPostItem = ({
   const [editMessage, setEditMessage] = useState(postItem?.body);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const swiperRef = useRef(null);
 
-  // Memoized navigation handler
-  const handleNavigation = useCallback((action) => {
-    const swiperInstance = swiperRef.current;
-    if (swiperInstance) {
-      action === "prev"
-        ? swiperInstance.slidePrev()
-        : swiperInstance.slideNext();
-    }
-  }, []);
 
   return (
     <motion.article
@@ -290,53 +277,8 @@ export const DiscoverPostItem = ({
         isSinglePost={isSinglePost}
       />
 
-      {hasImage && (
-        <section className="space-y-2 md:space-y-5 mt-4">
-          <Swiper
-            onSwiper={(swiper) => (swiperRef.current = swiper)}
-            modules={[Pagination]}
-            pagination={{ clickable: true }}
-            slidesPerView={images.length > 3 ? 3 : images.length}
-            spaceBetween={10}
-            className="!z-0"
-          >
-            {images.map((src, index) => (
-              <SwiperSlide
-                key={index}
-                className="h-[200px] md:h-[250px] rounded-md overflow-hidden"
-              >
-                <PostImage
-                  src={src.startsWith("http") ? src : baseURL + src}
-                  key={index}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+      {hasImage && <PostImageCollage images={postItem.images} />}
 
-          {images?.length > 3 && (
-            <div className="flex gap-4 items-center justify-between">
-              <div className="flex text-xs gap-1 items-center">
-                <strong>
-                  {images?.length} image{images?.length > 1 ? "s" : ""}
-                </strong>
-              </div>
-              <div className="flex items-center">
-                {NAVIGATION_BUTTONS.map((button) => (
-                  <Button
-                    key={button.id}
-                    onClick={() => handleNavigation(button.action)}
-                    disabled={images?.length === 1}
-                    className="!bg-transparent hover:!text-custom_blue !text-gray-600 first:flex-row-reverse active:scale-95 !text-sm xs:!text-xs"
-                  >
-                    <span>{button.text}</span>
-                    {button.icon}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          )}
-        </section>
-      )}
       <div className="flex items-center gap-2 justify-between mt-4">
         <ConJoinedImages
           size={30}
@@ -387,33 +329,7 @@ export const DiscoverPostItem = ({
   );
 };
 
-const PostImage = ({ src }) => {
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <img
-        src={src}
-        className="!size-full block cursor-pointer"
-        alt="some images for post"
-        onClick={() => setOpen(true)}
-      />
 
-      <ReusableModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        size="xl"
-        footerContent={<></>}
-        title="Image"
-      >
-        <img
-          src={src}
-          className="size-full rounded-lg"
-          alt="some images for post"
-        />
-      </ReusableModal>
-    </>
-  );
-};
 
 const CommentSection = ({
   showCommentSection,

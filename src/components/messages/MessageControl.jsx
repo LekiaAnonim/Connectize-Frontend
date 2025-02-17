@@ -23,6 +23,7 @@ import { motion } from "framer-motion";
 import { messageUser } from "../../api-services/messaging";
 import ValidImages from "../ValidImages";
 import { useAuth } from "../../context/userContext";
+import CustomErrorMessage from "../CustomErrorMessage";
 
 const isImageSize = (files) => {
   const imageSize = 4 * 1024 * 1024; // 4MB
@@ -44,6 +45,7 @@ export default function MessageControl({ loading, recipientId, senderId }) {
   const [audioURL, setAudioURL] = useState(null);
   const [showScrollDown, setShowScrollDown] = useState(false);
   const chatContainerRef = useRef(null);
+  const textareaRef = useRef(null);
 
   const handleFileChange = useCallback((event) => {
     const selectedFiles = Array.from(event.target.files);
@@ -135,6 +137,20 @@ export default function MessageControl({ loading, recipientId, senderId }) {
     setMessage(e.target.value);
   }, []);
 
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter") {
+        if (e.shiftKey) {
+          setMessage((prevMessage) => prevMessage + "\n");
+        } else {
+          e.preventDefault();
+          handleSendMessage();
+        }
+      }
+    },
+    [handleSendMessage]
+  );
+
   const handleScroll = useCallback(() => {
     if (chatContainerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } =
@@ -157,6 +173,13 @@ export default function MessageControl({ loading, recipientId, senderId }) {
       return () => chatContainer.removeEventListener("scroll", handleScroll);
     }
   }, [handleScroll]);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [message]);
 
   return (
     <section className="bg-white p-2 px-4 rounded-md flex flex-col gap-2 transition-all duration-300">
@@ -194,11 +217,13 @@ export default function MessageControl({ loading, recipientId, senderId }) {
             }}
           />
         ) : (
-          <input
+          <textarea
+            ref={textareaRef}
             type="text"
             value={message}
             onChange={handleInputChange}
-            className="flex-1 text-sm border-0 outline-none placeholder:text-gray-400 disabled:cursor-not-allowed"
+            onKeyDown={handleKeyDown}
+            className="flex-1 text-sm border-0 outline-none placeholder:text-gray-400 disabled:cursor-not-allowed scrollbar-hidden resize-none bg-transparent max-h-10"
             placeholder="Type a message here..."
             disabled={loading}
           />
@@ -208,13 +233,13 @@ export default function MessageControl({ loading, recipientId, senderId }) {
             IconName={SmileFilled}
             onClick={() => setShowEmojiPicker(true)}
             tip="Emoji"
-            className="hover:!bg-gray-100 !text-black p-2 rounded-full"
+            className="hover:!bg-gray-100 !text-black p-2 rounded-full mx-2"
             disabled={loading}
           />
-          <VoiceNoteRecorderIcon
+          {/* <VoiceNoteRecorderIcon
             setAudioURL={setAudioURL}
             setAudioBlob={setAudioBlob}
-          />
+          /> */}
           <ButtonWithTooltipIcon
             IconName={PaperPlaneIcon}
             className="!bg-black !text-gray-300 p-1.5 rounded-full"
@@ -225,15 +250,7 @@ export default function MessageControl({ loading, recipientId, senderId }) {
           />
         </div>
       </section>
-      {errorMessage && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-[#9e3818] text-xs mx-0.5"
-        >
-          {errorMessage}
-        </motion.div>
-      )}
+      <CustomErrorMessage errorMessage={errorMessage} />
       {showScrollDown && (
         <button
           onClick={scrollToBottom}
@@ -246,7 +263,7 @@ export default function MessageControl({ loading, recipientId, senderId }) {
   );
 }
 
-const VoiceNoteRecorderIcon = ({ setAudioBlob, setAudioURL }) => {
+export const VoiceNoteRecorderIcon = ({ setAudioBlob, setAudioURL }) => {
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
