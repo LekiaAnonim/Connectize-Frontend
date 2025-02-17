@@ -47,8 +47,8 @@ export function TopServices() {
         </>
       ) : service ? (
         <>
-          <div className="p-3 sm:p-4 lg:!px-2">
-            <HeadingText>Recent Service</HeadingText>
+          <div className="px-3 sm:px-4 py-2 lg:!px-2">
+            <HeadingText weight="semibold">Recent Service</HeadingText>
           </div>
 
           <PostCard
