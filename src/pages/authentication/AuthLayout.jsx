@@ -24,6 +24,7 @@ function AuthLayout({ redirectUrl = "/" }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="flex flex-col-reverse gap-2"
+            key={pathname + "section"}
           >
             <Logo />
 
@@ -32,6 +33,7 @@ function AuthLayout({ redirectUrl = "/" }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55 }}
               className="max-w-screen-md text-3xl font-bold"
+              key={pathname + "heading"}
             >
               {pathname === "/login" ? (
                 <>
@@ -54,6 +56,7 @@ function AuthLayout({ redirectUrl = "/" }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}
             className="size-full mt-4"
+            key={pathname + "outlet"}
           >
             <Outlet />
           </motion.section>

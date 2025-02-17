@@ -296,28 +296,30 @@ export const DiscoverPostItem = ({
             onSwiper={(swiper) => (swiperRef.current = swiper)}
             modules={[Pagination]}
             pagination={{ clickable: true }}
-            slidesPerView={images.length > 3 ? 3 : images.length}
+            slidesPerView={Math.min(images.length, 3)}
+            centeredSlides={images.length < 3}
             spaceBetween={10}
             className="!z-0"
           >
             {images.map((src, index) => (
               <SwiperSlide
                 key={index}
-                className="h-[200px] md:h-[250px] rounded-md overflow-hidden"
+                className="h-auto max-h-[450px] md:max-h-[500px] rounded-md overflow-hidden"
               >
                 <PostImage
                   src={src.startsWith("http") ? src : baseURL + src}
+                  className="w-full h-full object-cover aspect-[4/3] md:aspect-[16/9] rounded-md"
                   key={index}
                 />
               </SwiperSlide>
             ))}
           </Swiper>
 
-          {images?.length > 3 && (
+          {images.length > 3 && (
             <div className="flex gap-4 items-center justify-between">
               <div className="flex text-xs gap-1 items-center">
                 <strong>
-                  {images?.length} image{images?.length > 1 ? "s" : ""}
+                  {images.length} image{images.length > 1 ? "s" : ""}
                 </strong>
               </div>
               <div className="flex items-center">
@@ -325,7 +327,7 @@ export const DiscoverPostItem = ({
                   <Button
                     key={button.id}
                     onClick={() => handleNavigation(button.action)}
-                    disabled={images?.length === 1}
+                    disabled={images.length === 1}
                     className="!bg-transparent hover:!text-custom_blue !text-gray-600 first:flex-row-reverse active:scale-95 !text-sm xs:!text-xs"
                   >
                     <span>{button.text}</span>
