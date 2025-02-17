@@ -86,6 +86,7 @@ const PostImageCollage = ({ images }) => {
           </div>
         }
         title={"Post image"}
+        size="xl"
       >
         <section className="space-y-2 md:space-y-5 mt-4">
           <Swiper
