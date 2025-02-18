@@ -464,8 +464,9 @@ export function ButtonWithTooltipIcon({
       label={loading ? "" : tip}
       fontSize="12"
       placement="auto"
+      
       className={clsx(
-        "!rounded-md !bg-white !text-custom_blue border mx-3 !text-[.925rem] !p-4",
+        "!rounded-md !bg-white !text-custom_blue border mx-3 text-sm",
         tooltipClassName
       )}
       hasArrow={hasArrow}

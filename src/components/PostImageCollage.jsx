@@ -5,6 +5,7 @@ import { NAVIGATION_BUTTONS } from "../lib/slide_button";
 import { Button } from "@chakra-ui/react";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Logo from "./logo";
 
 const getImageSrc = (src) => (src.startsWith("http") ? src : baseURL + src);
 
@@ -16,7 +17,7 @@ const getImageClassName = (images, index) => {
 
 const PostImageCollage = ({ images }) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const swiperRef = useRef(null);
 
   // Memoized navigation handler
@@ -26,10 +27,10 @@ const PostImageCollage = ({ images }) => {
       action === "prev"
         ? swiperInstance.slidePrev()
         : swiperInstance.slideNext();
+      setActiveSlideIndex(swiperInstance.activeIndex);
     }
   }, []);
   if (images.length <= 0) return <></>;
-
 
   return (
     <>
@@ -48,15 +49,15 @@ const PostImageCollage = ({ images }) => {
 
         {images.length > 3 && (
           <div
-            className="relative h-full flex text-white text-lg font-bold rounded-lg cursor-pointer overflow-hidden"
+            className="relative size-full flex text-white text-lg font-bold rounded-lg cursor-pointer overflow-hidden"
             onClick={() => setIsOpen(true)}
           >
-            <span className="z-10 size-full bg-black/40 hover:bg-black/70 transition-all duration-300 flex items-center justify-center">
+            <span className="z-10 size-full min-h-24 bg-black/40 hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
               +{images.length - 4}
             </span>
             <img
               src={getImageSrc(images[4])}
-              className="z-0 absolute rounded-md"
+              className="z-0 absolute rounded-md object-contain"
               alt="open more images"
             />
           </div>
@@ -69,7 +70,8 @@ const PostImageCollage = ({ images }) => {
           <div className="flex gap-4 items-center justify-between">
             <div className="flex text-xs gap-1 items-center">
               <strong>
-                {images.length} image{images.length > 1 ? "s" : ""}
+                {activeSlideIndex + 1} / {images.length - 4} image
+                {images.length > 1 ? "s" : ""}
               </strong>
             </div>
             <div className="flex items-center">
@@ -87,8 +89,8 @@ const PostImageCollage = ({ images }) => {
             </div>
           </div>
         }
-        title={"Post image"}
-        size="xl"
+        title={"Post Image"}
+        size="4xl"
       >
         <Swiper
           onSwiper={(swiper) => (swiperRef.current = swiper)}
@@ -102,7 +104,7 @@ const PostImageCollage = ({ images }) => {
           {images.slice(3, images.length - 1).map((src, index) => (
             <SwiperSlide
               key={index}
-              className="h-auto rounded-md overflow-hidden"
+              className="!h-auto rounded-md overflow-hidden"
             >
               <img
                 src={getImageSrc(src)}

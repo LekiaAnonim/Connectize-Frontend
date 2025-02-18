@@ -42,7 +42,7 @@ const Navbar = () => {
   return (
     <>
       <Headroom>
-        <nav className="w-full h-16 flex items-center bg-white z-[900]">
+        <nav className="w-full h-16 flex items-center bg-white z-[99999]">
           <section className="container w-full py-2 md:px-4 flex items-center justify-between !gap-2 lg:!gap-10 xl:!gap-14">
             <div className={weirdFlex}>
               <Logo size="50px" />
@@ -61,7 +61,7 @@ const Navbar = () => {
       <motion.nav
         className="md:hidden bg-gold fixed bottom-0 left-0 w-full z-[99999]"
         initial={{ y: 0 }}
-        animate={{ y: showBottomNav ? 0 : 100 }}
+        animate={{ y: showBottomNav ? 0 : 120 }}
       >
         <section className="container">
           <NavigationSection hasHeader isSmallNavigation />
