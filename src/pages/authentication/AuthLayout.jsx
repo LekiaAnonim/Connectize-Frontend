@@ -22,7 +22,7 @@ function AuthLayout({ redirectUrl = "/" }) {
           <motion.section
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.1 }}
             className="flex flex-col-reverse gap-2"
             key={pathname + "section"}
           >
@@ -31,14 +31,14 @@ function AuthLayout({ redirectUrl = "/" }) {
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.55 }}
-              className="max-w-screen-md text-3xl font-bold"
+              transition={{ delay: 0.4 }}
+              className="max-w-screen-md text-[1.9rem] leading-tight font-bold"
               key={pathname + "heading"}
             >
               {pathname === "/login" ? (
                 <>
-                  Connect, Collaborate and transact{" "}
-                  <span className="text-gold ">with connectize</span>
+                  Connect, Collaborate and Thrive{" "}
+                  <span className="text-gold ">with Connectize</span>
                 </>
               ) : pathname === "/signup" ? (
                 <>

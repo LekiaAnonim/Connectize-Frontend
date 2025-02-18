@@ -25,13 +25,13 @@ const ReusableModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} size={size}>
       <ModalOverlay />
-      <ModalContent className="rounded-lg shadow-lg !mx-2 max-h-[77vh]">
+      <ModalContent className="rounded-lg shadow-lg !mx-2 max-h-[77vh] md:max-h-[90vh]">
         {title && (
           <>
             <ModalHeader className="!text-lg !font-semibold text-gray-800">
               {title}
             </ModalHeader>
-            <Divider className="mb-2 mx-auto !w-[96%]" />
+            <Divider className="mb-0.5 mx-auto !w-[95%]" />
             <ModalCloseButton className="focus:!outline-none" />
           </>
         )}

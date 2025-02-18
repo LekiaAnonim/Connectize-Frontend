@@ -25,9 +25,16 @@ const DiscoverFeed = () => {
       <div className="flex items-baseline gap-2">
         <h1 className="text-3xl font-semibold">Discover</h1>
         {(currentUser || !isLoading) &&
+          currentUser?.user_type === CompanyUserType &&
           (currentUser?.is_first_time_user || companies.length < 1) && (
             <Link
-              to="/update-profile"
+              to={
+                currentUser?.is_first_time_user
+                  ? "/update-profile"
+                  : currentUser?.user_type === CompanyUserType
+                  ? "create-company"
+                  : ""
+              }
               className="hover:!no-underline !underline !text-gray-400 hover:!text-black font-semibold text-sm"
             >
               {currentUser?.is_first_time_user

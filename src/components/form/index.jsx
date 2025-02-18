@@ -38,7 +38,7 @@ export default function Form({
               // hasArrow
               tip={helpText}
               iconClassName="size-4 !text-gray-400 hover:!text-black"
-              
+              tooltipClassName="!p-3 !text-[.925rem]"
               IconName={QuestionMarkCircledIcon}
             />
           )}
