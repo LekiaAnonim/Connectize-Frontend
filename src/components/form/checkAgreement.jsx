@@ -15,8 +15,19 @@ export default function CheckAgreement({ formik }) {
           className="!text-[0.89rem] text-gray-500 font-[400]"
           htmlFor="terms"
         >
-          I agree to{" "}
-          <Link className="!text-black font-bold" to="/">
+          I agree to the{" "}
+          <Link
+            className="!text-black font-bold"
+            to="https://docs.google.com/document/d/13QlJVPv7qr6yNqBW_o4nl_mF8rpHdcEya_ewXOfS2L8/edit?tab=t.0"
+            target="_blank"
+          >
+            Privacy Policy,
+          </Link>{" "}
+          <Link
+            className="!text-black font-bold"
+            to="https://docs.google.com/document/d/1UEOgZLY2kVfJ8spCIChHCYKAuFMnBEbICQNFmkXpC7g/edit?tab=t.0#heading=h.37rn9v2y3s02"
+            target="_blank"
+          >
             Terms and Conditions
           </Link>
         </label>
