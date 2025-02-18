@@ -42,7 +42,7 @@ const Navbar = () => {
   return (
     <>
       <Headroom>
-        <nav className="w-full h-16 flex items-center bg-white">
+        <nav className="w-full h-16 flex items-center bg-white z-[900]">
           <section className="container w-full py-2 md:px-4 flex items-center justify-between !gap-2 lg:!gap-10 xl:!gap-14">
             <div className={weirdFlex}>
               <Logo size="50px" />

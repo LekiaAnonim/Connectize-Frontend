@@ -29,6 +29,8 @@ const PostImageCollage = ({ images }) => {
     }
   }, []);
   if (images.length <= 0) return <></>;
+
+
   return (
     <>
       <section
@@ -88,30 +90,28 @@ const PostImageCollage = ({ images }) => {
         title={"Post image"}
         size="xl"
       >
-        <section className="space-y-2 md:space-y-5 mt-4">
-          <Swiper
-            onSwiper={(swiper) => (swiperRef.current = swiper)}
-            modules={[Pagination]}
-            pagination={{ clickable: true }}
-            slidesPerView={1}
-            centeredSlides
-            spaceBetween={10}
-            className="!z-0"
-          >
-            {images.map((src, index) => (
-              <SwiperSlide
-                key={index}
-                className="h-auto max-h-[450px] md:max-h-[500px] rounded-md overflow-hidden"
-              >
-                <img
-                  src={getImageSrc(src)}
-                  className="!size-full block cursor-pointer"
-                  alt="Images for post"
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
+        <Swiper
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
+          modules={[Pagination]}
+          pagination={{ clickable: true }}
+          slidesPerView={1}
+          centeredSlides
+          spaceBetween={10}
+          className="!z-0"
+        >
+          {images.slice(3, images.length - 1).map((src, index) => (
+            <SwiperSlide
+              key={index}
+              className="h-auto rounded-md overflow-hidden"
+            >
+              <img
+                src={getImageSrc(src)}
+                className="!size-full block cursor-pointer"
+                alt="Images for post"
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </ReusableModal>
     </>
   );
