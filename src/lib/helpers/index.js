@@ -21,7 +21,7 @@ export function goToLogin() {
 export const baseURL =
   process.env.NODE_ENV === "development"
     ? "http://127.0.0.1:8000"
-    : "https://connectize.co";
+    : "https://about.connectize.co";
 axios.defaults.withCredentials = true;
 
 // Mutex for Refresh Token
