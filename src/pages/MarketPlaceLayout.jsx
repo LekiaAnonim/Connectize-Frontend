@@ -3,7 +3,6 @@ import Navbar from "../components/userProfile/Navbar";
 import Sidebar from "../components/admin/markets/sidebar";
 import { Outlet, useLocation } from "react-router-dom";
 import clsx from "clsx";
-import { IonContent, IonRefresher, IonRefresherContent } from "@ionic/react";
 
 const MarketPlaceLayout = () => {
   const { pathname } = useLocation();
