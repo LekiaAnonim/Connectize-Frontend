@@ -18,10 +18,12 @@ export function goToLogin() {
 }
 
 // Configure Axios Defaults
-export const baseURL =
-  process.env.NODE_ENV === "development"
-    ? "http://127.0.0.1:8000"
-    : "https://about.connectize.co";
+export const baseURL = "https://about.connectize.co";
+  // process.env.NODE_ENV === "development"
+  //   ? "http://127.0.0.1:8000"
+  //   :
+  // "https://about.connectize.co";
+    
 axios.defaults.withCredentials = true;
 
 // Mutex for Refresh Token
