@@ -26,7 +26,6 @@ import CompanyLayout from "./pages/company/layout";
 import CreateCompany from "./pages/company";
 import CompanyDocuments from "./pages/company/CompanyDocuments";
 import CompanyInformation from "./pages/company/CompanyInformation";
-import CompanyAdditionalInformation from "./pages/company/CompanyAdditionInformation";
 import SinglePostPage from "./pages/posts/singlePostPage";
 import FeedLayout from "./pages/FeedLayout";
 import VerifyAccount from "./pages/authentication/verify-account";
