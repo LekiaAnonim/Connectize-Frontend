@@ -1,7 +1,8 @@
 import React from "react";
 import HeadingText from "../../../components/HeadingText";
+import LightParagraph from "../../../components/ParagraphText";
 
-export default function Content({ array = [], activeSection }) {
+export default function Content({ array = [] }) {
   return (
     <section className="w-3/4 p-4">
       {array.map((item, index) => {
@@ -23,7 +24,7 @@ export default function Content({ array = [], activeSection }) {
                 <HeadingText heading="sub-heading">
                   {detail.heading}
                 </HeadingText>
-                <p className="text-gray-500">{detail.text}</p>
+                <LightParagraph>{detail.text}</LightParagraph>
               </div>
             ))}
           </section>
