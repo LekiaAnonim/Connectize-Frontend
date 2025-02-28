@@ -32,11 +32,6 @@ export default function ConnectButton({
     }
     if (type === "users") {
       await connectWithUser(id, hasConnected);
-      // toast.success(
-      //   connect
-      //     ? `Connection sent to ${first_name}`
-      //     : `Disconnected from ${first_name} on connectize`
-      // );
     } else if (type === "company") {
       await connectWithCompany(id, hasConnected);
     }
@@ -47,7 +42,7 @@ export default function ConnectButton({
       className="!bg-gold w-fit !px-10 !py-1.5 !h-fit !rounded-full transition-all duration-300 active:scale-95 !text-sm"
       onClick={handleConnect}
     >
-      {hasConnected ? "Disconnect" : "Connect"}
+      {hasConnected ? "Unlink" : "Connect"}
     </Button>
   );
 }
