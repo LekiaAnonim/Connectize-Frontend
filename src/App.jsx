@@ -41,6 +41,9 @@ import AcceptRepresentation from "./pages/representatives/AcceptRepresentation";
 import MessagesLayout from "./pages/messages/layout";
 import MessagingPage from "./pages/messages/messaging";
 import { NotificationItem } from "./components/notifications";
+import TermsAndConditions from "./pages/terms&policies/terms";
+import PrivacyPolicy from "./pages/terms&policies/policy";
+import TermsLayout from "./pages/terms&policies/termsLayout";
 
 function App() {
   return (
@@ -126,6 +129,13 @@ function App() {
           </Route>
 
           <Route path="/success" element={<SuccessPage />} />
+          <Route path="/" element={<TermsLayout />}>
+            <Route
+              path="/terms-and-conditions"
+              element={<TermsAndConditions />}
+            />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          </Route>
         </Route>
       </Routes>
     </>
