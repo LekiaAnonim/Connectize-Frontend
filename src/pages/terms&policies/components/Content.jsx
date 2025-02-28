@@ -13,7 +13,7 @@ export default function Content({ array = [], activeSection }) {
             <p className="text-sm text-gray-500 mb-4">
               Last Updated: {item.lastUpdated}
             </p>
-            <p className="text-gray-600 mb-4">{item.content}</p>
+            <p className="text-gray-500 mb-4">{item.content}</p>
             {item.details.map((detail, idx) => (
               <div
                 key={idx}

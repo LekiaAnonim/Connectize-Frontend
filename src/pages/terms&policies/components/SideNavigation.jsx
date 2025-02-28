@@ -18,12 +18,17 @@ export default function SideNavigation({
   }, [activeSection]);
 
   return (
-    <div>
-      <button className="md:hidden p-4" onClick={() => setIsOpen(!isOpen)}>
+    <div className="relative">
+      <button
+        className="md:hidden p-4 sticky"
+        onClick={() => setIsOpen(!isOpen)}
+      >
         ☰
       </button>
       <nav
-        className={`w-1/4 p-4 border-r ${isOpen ? "block" : "hidden"} md:block`}
+        className={`w-full p-4 border-r ${
+          isOpen ? "block" : "hidden"
+        } md:block`}
       >
         <ul>
           {array[0].details?.map((item, index) => {
