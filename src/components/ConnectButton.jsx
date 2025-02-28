@@ -39,7 +39,7 @@ export default function ConnectButton({
 
   return (
     <Button
-      className="!bg-gold w-fit !px-10 !py-1.5 !h-fit !rounded-full transition-all duration-300 active:scale-95 !text-sm"
+      className="!bg-gold w-fit !px-10 !py-1.5 !h-fit !rounded-full transition-all duration-300 active:scale-95 !text-sm hover:!bg-opacity-50"
       onClick={handleConnect}
     >
       {hasConnected ? "Unlink" : "Connect"}
