@@ -7,15 +7,16 @@ export default function SideNavigation({
   setActiveSection,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const formattedActiveSection = activeSection
+    .replace(/\s+/g, "-")
+    .toLowerCase();
 
   useEffect(() => {
-    const element = document.getElementById(
-      activeSection.replace(/\s+/g, "-").toLowerCase()
-    );
+    const element = document.getElementById(formattedActiveSection);
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, [activeSection]);
+  }, [formattedActiveSection]);
 
   return (
     <div className="relative">
@@ -32,17 +33,16 @@ export default function SideNavigation({
       >
         <ul>
           {array[0].details?.map((item, index) => {
-            console.log(item);
-
+            const heading = item.heading.replace(/\s+/g, "-").toLowerCase();
             return (
               <li key={index} className="mb-2">
                 <NavLink
-                  to={`#${item.heading.replace(/\s+/g, "-").toLowerCase()}`}
-                  className={({ isActive }) =>
-                    `block p-2 text-gray-700 hover:!text-gold text-xs ${
-                      isActive ? "font-bold" : ""
-                    }`
-                  }
+                  to={`#${heading}`}
+                  className={`block p-2 rounded-md text-gray-700 hover:!bg-gold text-xs ${
+                    formattedActiveSection === heading
+                      ? "font-semibold !bg-gold"
+                      : ""
+                  }`}
                   onClick={() => {
                     setActiveSection(item.heading);
                     setIsOpen(false);
